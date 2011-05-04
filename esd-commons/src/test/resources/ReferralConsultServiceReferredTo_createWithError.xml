@@ -1,0 +1,96 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns3:createReferralOrder xmlns:ns2="urn:hl7-org:v3"
+            xmlns:ns3="http://caehr.nci.nih.gov/services/ReferralConsult/2.0/">
+            
+         <patientIdentifier root="7.22.222.2.222222.22.2222.2" 
+              extension="1111" displayable="true" scope="OBJ" reliability="ISS"/>
+
+         <providerIdentifier root="7.22.222.2.222222.22.2222.2" 
+              extension="2222" displayable="true" scope="OBJ" reliability="ISS"/>
+           
+
+            <referralOrder>
+                <ns2:id reliability="ISS" scope="OBJ" displayable="true" extension="3333"
+                                   root="2.22.222.2.222222.22.2222.2"/>
+                <ns2:statusCode code="active"/>
+                <ns2:effectiveTime value="20100526124639.0203-0200"/>
+                <ns2:component>
+                <ns2:patientCareProvisionRequest>
+                    <ns2:id reliability="ISS" scope="OBJ" displayable="true" extension="123456"
+                            root="Thank you for all the fish."/>
+                    <ns2:code valueSetVersion="17/12/2008" codeSystemVersion="2009/08/01" codeSystemName="snomed-CT"
+                              codeSystem="2.16.840.1.113883.6.96" code="310072004" valueSet="2.16.840.1.113883.2.20.3.3">
+                        <ns2:displayName value="Male"/>
+                        <ns2:originalText compression="GZ" value="Live long and prosper. &lt;&lt;" mediaType="text/plain">
+                            <ns2:data>TGl2ZSBsb25nIGFuZCBwcm9zcGVyLiA8PA==</ns2:data>
+                            <ns2:description value="Male"/>
+                        </ns2:originalText>
+                    </ns2:code>
+                    <ns2:text compression="GZ" value="Live long and prosper. &lt;&lt;" mediaType="text/plain">
+                        <ns2:data>TGl2ZSBsb25nIGFuZCBwcm9zcGVyLiA8PA==</ns2:data>
+                        <ns2:description value="Male"/>
+                    </ns2:text>
+                    <ns2:statusCode code="active"/>
+                    <ns2:reasonCode>
+                        <ns2:item valueSetVersion="2010/06/01" codeSystemVersion="2009/08/01" codeSystemName="snomed-CT"
+                              codeSystem="2.16.840.1.113883.6.96" code="366889004">
+                            <ns2:displayName value="Male"/>
+                            <ns2:originalText compression="GZ" value="Live long and prosper. &lt;&lt;" mediaType="text/plain">
+                                <ns2:description value="Male"/>
+                            </ns2:originalText>
+                        </ns2:item>
+                    </ns2:reasonCode>
+                    <ns2:reason typeCode="RSON">
+                       <ns2:concernEvent classCode="CONC" moodCode="EVN">
+                                <ns2:id reliability="ISS" scope="OBJ" displayable="true" extension="123456"
+                                        root="Thank you for all the fish."/>
+
+                                <ns2:code valueSetVersion="17/12/2008"
+                                          valueSet="2.16.840.1.113883.2.20.3.89" codeSystemVersion=""
+                                          codeSystemName="LN" codeSystem="2.16.840.1.113883.6.1" code="DX">
+                                    <ns2:displayName value="Identifying Characteristics"/>
+                                </ns2:code>
+                           <ns2:text value="disorder"/>
+						   <ns2:statusCode code="active"/>
+				           <ns2:effectiveTime>
+		                      <ns2:low value="19100526124639.0203-0400"/>
+        		              <ns2:high value="20100526124639.0203-0200"/>
+						      <ns2:any value="20100526124639.0203-0200"/>        		                   
+				           </ns2:effectiveTime>
+                           <ns2:uncertaintyCode valueSetVersion="17/12/2008" codeSystemVersion="2009/08/01" codeSystemName="ActUncertainty"
+                              codeSystem="2.16.840.1.113883.5.1053" code="N"/>
+                           <ns2:value valueSetVersion="17/12/2008" codeSystemVersion="2009/08/01" codeSystemName="snomed-CT"
+                              codeSystem="2.16.840.1.113883.6.96" code="274945004"/>
+                       </ns2:concernEvent>
+                    </ns2:reason>
+
+                  <ns2:subject typeCode="SUBJ">
+                     <ns2:grouperIntent classCode="GROUPER" moodCode="INT">
+                        <ns2:id flavorId="II.BUS" reliability="ISS" scope="BUSN" extension="665544" root="9.99.222.2.222222.22.2222.2"/>
+                        <ns2:component2 typeCode="COMP">
+                           <ns2:sequenceNumber value="5"/>
+                           <ns2:pauseQuantity unit="h" value="24"/>
+                           <ns2:clusterIntent classCode="CLUSTER" moodCode="INT">
+                              <ns2:id flavorId="II.BUS" reliability="ISS" scope="BUSN" extension="34223" root="3.33.222.2.222222.22.2222.2"/>
+                              <ns2:code valueSetVersion="2010/06/01" valueSet="1.11.1111.11.11.1111" codeSystemVersion="2009/08/01" codeSystemName="snomed-CT" codeSystem="2.16.840.1.113883.6.96" code="413744002"/>
+                              <ns2:text value="Ignorance is a blessing"/>
+                              <ns2:effectiveTime unit="m" value="999999999999.9999"/>
+                           </ns2:clusterIntent>
+                        </ns2:component2>
+                        <ns2:componentOf typeCode="COMP">
+                           <ns2:workingListEvent classCode="LIST" moodCode="EVN">
+                              <ns2:code valueSetVersion="17/12/2008" valueSet="2.16.840.1.113883.2.20.3.17" codeSystemVersion="2009/08/01" codeSystemName="snomed-CT" codeSystem="2.16.840.1.113883.6.96" code="20135006"/>
+                           </ns2:workingListEvent>
+                        </ns2:componentOf>
+                     </ns2:grouperIntent>
+                  </ns2:subject>
+
+
+                    
+                </ns2:patientCareProvisionRequest>
+                 </ns2:component>
+            </referralOrder>
+        </ns3:createReferralOrder>
+    </soap:Body>
+</soap:Envelope>

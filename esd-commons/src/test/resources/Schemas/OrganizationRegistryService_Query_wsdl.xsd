@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema targetNamespace="http://caehr.nci.nih.gov/services/OrganizationRegistry/1.1/"
+            xmlns:Q1="urn:hl7-org:v3" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="urn:hl7-org:v3"
+                schemaLocation="../Schemas/Common_intermediate.xsd"/>
+
+    <xsd:element name="findOrganizationByExample">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="organization" type="Q1:PRPM_MT000007US.Organization"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="findOrganizationByExampleResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="organizations"
+                             type="Q1:PRPM_MT000008US.Organization" maxOccurs="unbounded"
+                             minOccurs="0"/>
+                <xsd:element name="responseEnvelope" type="Q1:COCT_MT990003US.ResponseEnvelope"></xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="findOrganization">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="organizationId" type="Q1:II"></xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="findOrganizationResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="organization"
+                             type="Q1:PRPM_MT000008US.Organization">
+                </xsd:element>
+                <xsd:element name="responseEnvelope" type="Q1:COCT_MT990003US.ResponseEnvelope"></xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
