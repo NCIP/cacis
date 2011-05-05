@@ -29,6 +29,7 @@
             <artifactId>liquibase-core</artifactId>
             <version>1.9.4</version>
         </dependency>
+        <!--needs to be on compile classpath as well-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
