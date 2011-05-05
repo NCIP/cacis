@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="urn:tolven-org:tpf:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:tolven-org:tpf:1.0 http://tolven.org/xsd/tpf.xsd"
+        id="gov.nih.nci.cacis.tolven.pcoplugin"
+        version="0.0.1" vendor="caCIS">
+    <!--
+        Any plugin mentioned in extensions below will need declaration in the requires element.
+        The most common plugins are already included. Add additional plugins as needed.
+    -->
+    <requires>
+        <import plugin-id="org.tolven.component.application"/>
+    </requires>
+
+    <runtime>
+        <library id="classes" path="tpf/classes/" type="code">
+            <export prefix="*"/>
+        </library>
+    </runtime>
+
+    <extension id="applications" plugin-id="org.tolven.component.application" point-id="applications">
+        <parameter id="dir" value="app"/>
+    </extension>
+
+</plugin>

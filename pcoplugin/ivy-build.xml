@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<project name="cacis-pcoplugin" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property file="${basedir}/local.properties"/>
+    <property file="${basedir}/default.properties"/>
+
+    <import file="${software.dir}/common/antfiles/build-ivy-common.xml"/>
+
+</project>

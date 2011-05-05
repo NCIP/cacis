@@ -1,0 +1,43 @@
+package patient
+// See http://wiki.tolven.org/doc/index.php/Plugin:org.tolven.component.tolvenejb#PlaceholderFacts
+// for details on the following annotation:
+//@use echr placeholders
+
+ /* Tolven */
+import java.util.*;
+import org.tolven.trim.*;
+import org.tolven.trim.ex.*;
+import org.tolven.doc.entity.*;
+import java.lang.Integer;
+import org.tolven.app.entity.MenuStructure;
+import org.tolven.app.entity.MenuData;
+import org.tolven.app.bean.Mode;
+import org.tolven.app.bean.Plan;
+import org.tolven.core.entity.Status;
+import org.tolven.model.Patient;
+
+global org.tolven.app.AppEvalAdaptor app;
+global Date now;
+
+/**
+ * **** Patient Placeholder update ************************
+ * TODO: ESD-2811 Change rule to call Java code to load new Trim when it is available
+ */
+rule "caCIS Load Trim"
+ when
+     $trim: TrimEx()
+     $msList: MenuStructure( path == "echr:patients:all" )
+     $msPatient: MenuStructure( role == "placeholder", path == "echr:patient" )
+     $mdPatient: MenuData( menuStructure == $msPatient )
+  then
+    II mdPatientII = $trim.getAct().getParticipations().get(0).getRole().getId().getIIS().get(0);
+    //populate menu data row for placeholder
+    $mdPatient.setString07(mdPatientII.getRoot());
+    $mdPatient.setString08(mdPatientII.getExtension());
+    MenuData mdPatientList = app.createReferenceMD( $mdPatient, $msList );
+    //populate menu data row for list item
+    mdPatientList.setString07(mdPatientII.getRoot());
+    mdPatientList.setString08(mdPatientII.getExtension());
+    app.getMenuBean().updateMenuData(mdPatientList);
+	app.info("in then - caCIS Place Patient on echr patients list");
+end

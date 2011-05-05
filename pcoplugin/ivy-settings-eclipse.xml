@@ -1,0 +1,5 @@
+<ivysettings>
+    <properties file="${ivy.settings.dir}/local.properties" override="false"/>
+    <properties file="${ivy.settings.dir}/default.properties" override="false"/>
+    <include file="${ivy.settings.dir}/../../software/common/ivy/ivy-caehr-esd-settings.xml"/>
+</ivysettings>
