@@ -29,8 +29,7 @@
             <version>5.3.1</version>
         </dependency>
 
-        <!--FixMe http://caehrorg.jira.com/browse/ESD-2825-->
-        <dependency>
+         <dependency>
             <groupId>org.tolven</groupId>
             <artifactId>tolven-devLib</artifactId>
             <version>1.0-SNAPSHOT</version>
