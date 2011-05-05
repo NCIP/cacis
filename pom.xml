@@ -12,6 +12,7 @@
 
     <modules>
         <module>esd-commons</module>
+        <module>nav</module>
         <module>tolven-commons</module>
     </modules>
     <packaging>pom</packaging>
