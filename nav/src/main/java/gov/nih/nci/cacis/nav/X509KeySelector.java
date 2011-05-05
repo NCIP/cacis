@@ -89,8 +89,6 @@ import javax.xml.crypto.dsig.keyinfo.KeyName;
 import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
 
-import org.jcp.xml.dsig.internal.dom.DOMRetrievalMethod;
-
 // TODO: This class should be improved/replaced, see http://caehrorg.jira.com/browse/ESD-2833
 
 // CHECKSTYLE:OFF
@@ -170,7 +168,6 @@ public class X509KeySelector extends KeySelector {
      */
     public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method,
             XMLCryptoContext context) throws KeySelectorException {
-
         SignatureMethod sm = (SignatureMethod) method;
 
         try {
@@ -207,9 +204,9 @@ public class X509KeySelector extends KeySelector {
                             CertificateFactory cf = CertificateFactory.getInstance("X.509");
                             X509Certificate cert = (X509Certificate) cf.generateCertificate(data.getOctetStream());
                             ksr = certSelect(cert, sm);
-                        } else if (rm.getType().equals(X509Data.TYPE)) {
-                            X509Data xd = (X509Data) ((DOMRetrievalMethod) rm).dereferenceAsXMLStructure(context);
-                            ksr = x509DataSelect(xd, sm);
+                            // } else if (rm.getType().equals(X509Data.TYPE)) {
+                            // X509Data xd = (X509Data) ((DOMRetrievalMethod) rm).dereferenceAsXMLStructure(context);
+                            // ksr = x509DataSelect(xd, sm);
                         } else {
                             // skip; keyinfo type is not supported
                             continue;
