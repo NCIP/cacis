@@ -2915,7 +2915,7 @@ dWN0dXJlZEJvZHk+Cgk8L2NvbXBvbmVudD4KPC9DbGluaWNhbERvY3VtZW50Pg==</outboundTempla
         <property name="binary">0</property>
         <property name="validateConnections">1</property>
         <property name="username">anonymous</property>
-        <property name="outputPattern">CDF-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
+        <property name="outputPattern">XCCD-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
         <property name="DataType">File Writer</property>
         <property name="FTPAnonymous">1</property>
         <property name="timeout">10000</property>
@@ -2924,7 +2924,7 @@ dWN0dXJlZEJvZHk+Cgk8L2NvbXBvbmVudD4KPC9DbGluaWNhbERvY3VtZW50Pg==</outboundTempla
         <property name="passive">1</property>
         <property name="password">anonymous</property>
         <property name="outputAppend">0</property>
-        <property name="host">${cdfOutputDir}</property>
+        <property name="host">${outputDir}</property>
       </properties>
       <transformer>
         <steps/>
@@ -2984,7 +2984,7 @@ Note 3: Please replace ${cdfOutputDir} with appropriate path(use forward slash).
 If possible, use build script to replace this value
 
 */
-globalChannelMap.put(&apos;cdfOutputDir&apos;,&apos;${cdfOutputDir}&apos;);
+globalChannelMap.put(&apos;outputDir&apos;,&apos;${xccdOutputDir}&apos;);
 
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
