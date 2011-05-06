@@ -21,7 +21,7 @@ This will create a trim-loader.jar file in the pco/trim-loader-client/target dir
 
 unzip trim-loader.jar
 
-4) Run the Trim loader (This requires tolven jboss to be running and contain a tolven account):
+4) Run the Trim loader (This requires tolven jboss to be running and requires the tolven app to contain a tolven account):
 java -jar trim-loader.jar <tolven-config-location> <tolven-user-id> <tolven-password> <tolven-account-id> <tolvenClient-config-file> <trim-file>
 
 Example:
