@@ -10,6 +10,9 @@
 
 	<artifactId>transformer</artifactId>
 	<packaging>jar</packaging>
+	
+	<name>transformer</name>
+    <url>http://maven.apache.org</url>
 
 	<dependencies>
 		<dependency>

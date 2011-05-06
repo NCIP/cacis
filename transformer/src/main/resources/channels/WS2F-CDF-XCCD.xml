@@ -13,21 +13,21 @@ to : XCCD - Exchange CCD&#xd;
   <enabled>true</enabled>
   <version>2.0.1.5164</version>
   <lastModified>
-    <time>1304621477713</time>
+    <time>1304701159921</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>26</revision>
+  <revision>27</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="receiverServiceName">Mirth</property>
-      <property name="host">0.0.0.0</property>
-      <property name="receiverUsernames">&lt;list/&gt;</property>
-      <property name="receiverResponseValue">None</property>
-      <property name="receiverClassName">com.mirth.connect.connectors.ws.DefaultAcceptMessage</property>
-      <property name="receiverPasswords">&lt;list/&gt;</property>
       <property name="port">9082</property>
       <property name="DataType">Web Service Listener</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
+      <property name="host">0.0.0.0</property>
+      <property name="receiverServiceName">Mirth</property>
+      <property name="receiverClassName">com.mirth.connect.connectors.ws.DefaultAcceptMessage</property>
+      <property name="receiverResponseValue">Destination 1</property>
+      <property name="receiverPasswords">&lt;list/&gt;</property>
     </properties>
     <transformer>
       <steps>
@@ -2913,16 +2913,16 @@ dWN0dXJlZEJvZHk+Cgk8L2NvbXBvbmVudD4KPC9DbGluaWNhbERvY3VtZW50Pg==</outboundTempla
         <property name="secure">1</property>
         <property name="scheme">file</property>
         <property name="binary">0</property>
-        <property name="validateConnections">1</property>
         <property name="username">anonymous</property>
         <property name="outputPattern">XCCD-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
+        <property name="validateConnections">1</property>
         <property name="DataType">File Writer</property>
         <property name="FTPAnonymous">1</property>
         <property name="timeout">10000</property>
         <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="passive">1</property>
         <property name="password">anonymous</property>
+        <property name="passive">1</property>
+        <property name="template">${message.encodedData}</property>
         <property name="outputAppend">0</property>
         <property name="host">${outputDir}</property>
       </properties>
@@ -2948,14 +2948,14 @@ dWN0dXJlZEJvZHk+Cgk8L2NvbXBvbmVudD4KPC9DbGluaWNhbERvY3VtZW50Pg==</outboundTempla
   </destinationConnectors>
   <properties>
     <property name="synchronous">true</property>
-    <property name="encryptData">false</property>
     <property name="clearGlobalChannelMap">true</property>
-    <property name="store_messages">true</property>
-    <property name="dont_store_filtered">true</property>
-    <property name="initialState">started</property>
-    <property name="max_message_age">3</property>
     <property name="transactional">false</property>
+    <property name="initialState">started</property>
+    <property name="dont_store_filtered">true</property>
     <property name="error_messages_only">false</property>
+    <property name="max_message_age">3</property>
+    <property name="store_messages">true</property>
+    <property name="encryptData">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
@@ -2980,7 +2980,7 @@ Once complete, these can be copied to here and and the setup step can be removed
 NOTE 2: There is also global script that applies to all channels,
 which can be imported/exported separately irrespective of channels
 
-Note 3: Please replace ${cdfOutputDir} with appropriate path(use forward slash). 
+Note 3: Please replace ${property-name}, where property-name=xccdOutputDir, with appropriate path(use forward slash). 
 If possible, use build script to replace this value
 
 */
