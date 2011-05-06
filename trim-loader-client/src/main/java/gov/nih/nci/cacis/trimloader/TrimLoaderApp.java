@@ -67,22 +67,22 @@ import java.io.IOException;
 import gov.nih.nci.cacis.common.tolven.TrimLoader;
 
 /**
- * This class is the entry point in the client jar (trim-loader.jar)
- * @author: Ram Bhattaru
- * @since:  Dec 21, 2010
+ * This class is the entry point for the Trim Loader Client.
+ *
+ * @author bpickeral
+ * @since May 6, 2011
+ *
  */
-
 public final class TrimLoaderApp {
 
     /**
      * singleton constuctor
      */
     private TrimLoaderApp() {
-        super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
+     * Entry point for the Trim Loader client.
      *
      * @param args arguments:
      * @throws IOException exception
