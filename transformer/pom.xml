@@ -10,7 +10,7 @@
 
 	<artifactId>transformer</artifactId>
 	<packaging>jar</packaging>
-	
+
 	<name>transformer</name>
 
 
@@ -34,12 +34,12 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
-				
+
 			</resource>
 			<resource>
 				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
-			
+
 			</resource>
 		</resources>
 		<plugins>
@@ -53,10 +53,35 @@
 				</configuration>
 				<executions>
 					<execution>
-						<phase>integration-test</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>cli</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*SystemTest.java</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>surefire-itest</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
+							<includes>
+								<include>**/*SystemTest.java</include>
+							</includes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
