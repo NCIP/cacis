@@ -13,6 +13,15 @@
 	
 	<name>transformer</name>
 
+
+
+	<properties>
+		<mirthConnect.cli>/Users/bhumphrey/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
+		<outputRootdir>${build.outputDirectory}</outputRootdir>
+		<cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
+		<xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>gov.nih.nci.cacis</groupId>
@@ -21,18 +30,36 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<filters>
-			<filter>default.properties</filter>
-		</filters>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+				
 			</resource>
 			<resource>
 				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
+			
 			</resource>
-		</resources>		
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>gov.nih.nci.cacis</groupId>
+				<artifactId>mirthconnect-maven-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<configuration>
+					<mirthConnect>${mirthConnect.cli}</mirthConnect>
+					<script>${build.outputDirectory}/deploy.mc</script>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>cli</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>
