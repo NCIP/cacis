@@ -14,7 +14,8 @@
         <module>esd-commons</module>
         <module>nav</module>
         <module>tolven-commons</module>
-	<module>trim-loader-client</module>
+		<module>trim-loader-client</module>
+		<module>transformer</module>
     </modules>
     <packaging>pom</packaging>
 
