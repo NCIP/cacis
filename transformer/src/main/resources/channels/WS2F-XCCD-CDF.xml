@@ -2923,7 +2923,7 @@ bGluaWNhbERvY3VtZW50Pg==</outboundTemplate>
         <property name="binary">0</property>
         <property name="validateConnections">1</property>
         <property name="username">anonymous</property>
-        <property name="outputPattern">CDF-${date.get(&apos;yyyy-M-d&apos;)}.xml</property>
+        <property name="outputPattern">CDF-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
         <property name="DataType">File Writer</property>
         <property name="FTPAnonymous">1</property>
         <property name="timeout">10000</property>
