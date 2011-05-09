@@ -100,9 +100,8 @@ public class MirthConnectCLIMojo extends AbstractMojo {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-     
+
         if (!script.exists()) {
             throw new MojoExecutionException("Unable to find script " + script);
         }
@@ -124,7 +123,8 @@ public class MirthConnectCLIMojo extends AbstractMojo {
         } catch (SecurityException e) {
             throw new MojoExecutionException("Does the user have permission to run the command line?" + mirthConnect, e);
         } catch (IOException e) {
-            throw new MojoExecutionException("Unable to find MirthConnect CLI, is it install at this location? " + mirthConnect, e);
+            throw new MojoExecutionException("Unable to find MirthConnect CLI, is it install at this location? "
+                    + mirthConnect, e);
         } catch (InterruptedException e) {
             throw new MojoExecutionException("Command line execution was interrupted ");
         } finally {
@@ -132,11 +132,10 @@ public class MirthConnectCLIMojo extends AbstractMojo {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    // eat this exceptiomn
+                    // eat this exception
                 }
             }
         }
 
     }
-
 }
