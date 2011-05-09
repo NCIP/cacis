@@ -27,6 +27,10 @@ java -jar trim-loader.jar <tolven-config-location> <tolven-user-id> <tolven-pass
 Example:
 java -jar trim-loader.jar /bpickeral/Applications/tolven/tolven-config/ tolven tolven 1045 tolvenClient-default.properties cacis-provider.trim.xml
 
+or
+
+java -jar trim-loader.jar /bpickeral/Applications/tolven/tolven-config/ tolven tolven 1045 tolvenClient-default.properties patient.trim.xml
+
 Note: The tolvenClient-default.properties cacis-provider.trim.xml are packaged with the trim-loader.jar and are located in the same directory as trim-loader.jar after step 3.
 
 
