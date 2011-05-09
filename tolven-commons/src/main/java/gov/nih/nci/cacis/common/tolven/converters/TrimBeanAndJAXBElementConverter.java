@@ -62,15 +62,14 @@ package gov.nih.nci.cacis.common.tolven.converters;
 
 import gov.nih.nci.cacis.common.tolven.util.ConverterUtil;
 import gov.nih.nci.cacis.common.tolven.util.Namespace;
-
-import javax.xml.bind.JAXBElement;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dozer.ConfigurableCustomConverter;
 import org.dozer.Mapper;
 import org.dozer.MapperAware;
 import org.dozer.MappingException;
+
+import javax.xml.bind.JAXBElement;
 
 /**
  * 

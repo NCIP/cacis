@@ -61,48 +61,17 @@
 
 package gov.nih.nci.cacis.common.schematron;
 
-import gov.nih.nci.cacis.common.service.ServiceException;
-import gov.nih.nci.cacis.common.service.enums.terminology.ActFaultValue;
-
 /**
  * @author: Ram Bhattaru
  * @since:  Dec 10, 2010
  */
-public class SchematronException extends ServiceException {
+public class SchematronException extends Exception {
 
-   /**
-     * Constructor for four member variables.
-     *
-     * @param code the code (i.e. an ActFaultValue enum value)
-     * @param message the message
-     * @param cause root cause
+    /**
+     * Constructor
+     * @param s Exception message
      */
-    public SchematronException(ActFaultValue code, String message, Throwable cause) {
-        super(code, message, cause);
-    }
-
-   /**
-     * Default Constructor with some default values.
-    */
-    public SchematronException() {
-       super(ActFaultValue.CRE10001, null, null);
-    }
-
-   /**
-     * Constructor for just the message to be passed in.
-     *
-     * @param message the message
-   */
-    public SchematronException(String message) {
-        super(ActFaultValue.CRE10001,message, null);
-    }
-
-   /**
-     *
-     * @param code code passed in (i.e. an ActFaultValue enum value)
-     * @param msg message to set
-   */
-    public SchematronException(ActFaultValue code, String msg) {
-        super(code, msg);
+    public SchematronException(String s) {
+        super(s);
     }
 }

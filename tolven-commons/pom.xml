@@ -15,6 +15,11 @@
     <url>http://maven.apache.org</url>
 
 
+    <properties>
+           <test.unit.branchrate>5</test.unit.branchrate>
+            <test.unit.linerate>8</test.unit.linerate>
+        </properties>
+
     <dependencies>
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>

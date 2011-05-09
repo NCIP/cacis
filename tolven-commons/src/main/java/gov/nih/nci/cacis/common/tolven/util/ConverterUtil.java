@@ -60,18 +60,17 @@
  */
 package gov.nih.nci.cacis.common.tolven.util;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+import org.dozer.MappingException;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
-import org.dozer.MappingException;
 
 /**
  * @author hniedner

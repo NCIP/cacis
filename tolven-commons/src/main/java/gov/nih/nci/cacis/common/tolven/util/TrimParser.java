@@ -60,19 +60,17 @@
 package gov.nih.nci.cacis.common.tolven.util;
 
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.tolven.trim.Trim;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.tolven.trim.Trim;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 
 /**
  * Utility class to parse trim xml to Trim instance object

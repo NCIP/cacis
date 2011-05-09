@@ -59,7 +59,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.common.tolven;
+package gov.nih.nci.cacis.common.tolven.client;
 
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 import org.apache.commons.logging.Log;

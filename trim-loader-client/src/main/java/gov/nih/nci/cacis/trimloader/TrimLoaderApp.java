@@ -62,9 +62,10 @@
 package gov.nih.nci.cacis.trimloader;
 
 
+import gov.nih.nci.cacis.common.tolven.client.TrimLoader;
+
 import java.io.IOException;
 
-import gov.nih.nci.cacis.common.tolven.TrimLoader;
 
 /**
  * This class is the entry point for the Trim Loader Client.
