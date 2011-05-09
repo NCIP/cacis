@@ -23,7 +23,10 @@
             <include name="hibernate3-1.0-SNAPSHOT.jar" />
             <include name="javassist-1.0-SNAPSHOT.jar" />
         </fileset>
-        <fileset id="esd-commons-jar" dir="${basedir}/../esd-commons/target">
+        <fileset id="tolven-commons-jar" dir="${basedir}/../tolven-commons/target">
+            <include name="tolven-commons-1.0.jar" />
+        </fileset>
+		<fileset id="esd-commons-jar" dir="${basedir}/../esd-commons/target">
             <include name="esd-commons-1.0.jar" />
         </fileset>
         <fileset id="tolven-jarsToInclude" dir="${lib}">
@@ -35,11 +38,12 @@
         <jar destfile="${build.dir}/trim-loader-client/trim-loader.jar" description="Create jar and MANIFEST.MF">
             <fileset dir="${build.classes.dir}" />
             <fileset refid="cacis-jarsToInclude" />
-            <fileset refid="esd-commons-jar" />
+			<fileset refid="esd-commons-jar" />
+            <fileset refid="tolven-commons-jar" />
             <fileset refid="tolven-jarsToInclude" />
             <manifest>
                 <attribute name="Main-Class" value="gov.nih.nci.cacis.trimloader.TrimLoaderApp" />
-                <attribute name="Class-Path" value="esd-commons-1.0.jar commons-logging-1.1.1.jar log4j-1.2.14.jar jbossall-client-1.0-SNAPSHOT.jar hibernate3-1.0-SNAPSHOT.jar javassist-1.0-SNAPSHOT.jar org.tolven.component.tolvenejb.devLib-1.0-SNAPSHOT.jar org.tolven.library.tolvencommon.devLib.jar org.tolven.library.javaee.javaee.jar" />
+                <attribute name="Class-Path" value="esd-commons-1.0.jar tolven-commons-1.0.jar commons-logging-1.1.1.jar log4j-1.2.14.jar jbossall-client-1.0-SNAPSHOT.jar hibernate3-1.0-SNAPSHOT.jar javassist-1.0-SNAPSHOT.jar org.tolven.component.tolvenejb.devLib-1.0-SNAPSHOT.jar org.tolven.library.tolvencommon.devLib.jar org.tolven.library.javaee.javaee.jar" />
             </manifest>
         </jar>
     </target>
