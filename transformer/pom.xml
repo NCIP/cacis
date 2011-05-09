@@ -1,90 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<artifactId>pco</artifactId>
-		<groupId>gov.nih.nci.cacis</groupId>
-		<version>1.0</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<artifactId>transformer</artifactId>
-	<packaging>jar</packaging>
+    <parent>
+        <artifactId>pco</artifactId>
+        <groupId>gov.nih.nci.cacis</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-	<name>transformer</name>
+    <artifactId>transformer</artifactId>
+    <packaging>jar</packaging>
+
+    <name>transformer</name>
 
 
+    <properties>
+        <mirthConnect.cli>/Users/bhumphrey/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
+        <outputRootdir>${build.outputDirectory}</outputRootdir>
+        <cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
+    </properties>
 
-	<properties>
-		<mirthConnect.cli>/Users/bhumphrey/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
-		<outputRootdir>${build.outputDirectory}</outputRootdir>
-		<cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
-		<xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
-	</properties>
+    <dependencies>
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>esd-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
 
-	<dependencies>
-		<dependency>
-			<groupId>gov.nih.nci.cacis</groupId>
-			<artifactId>esd-commons</artifactId>
-			<version>1.0</version>
-		</dependency>
-	</dependencies>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
 
-			</resource>
-			<resource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>gov.nih.nci.cacis</groupId>
+                <artifactId>mirthconnect-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <mirthConnect>${mirthConnect.cli}</mirthConnect>
+                    <script>${build.outputDirectory}/deploy.mc</script>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>cli</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>gov.nih.nci.cacis</groupId>
-				<artifactId>mirthconnect-maven-plugin</artifactId>
-				<version>1.0-SNAPSHOT</version>
-				<configuration>
-					<mirthConnect>${mirthConnect.cli}</mirthConnect>
-					<script>${build.outputDirectory}/deploy.mc</script>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>cli</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>**/*SystemTest.java</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>surefire-itest</id>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<excludes>
-								<exclude>none</exclude>
-							</excludes>
-							<includes>
-								<include>**/*SystemTest.java</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    </build>
 </project>

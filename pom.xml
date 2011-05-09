@@ -15,7 +15,9 @@
         <module>nav</module>
         <module>tolven-commons</module>
 		<module>trim-loader-client</module>
-		<module>transformer</module>
+
+		<!-- Blocked by http://caehrorg.jira.com/browse/ESD-2825
+		<module>transformer</module>-->
     </modules>
     <packaging>pom</packaging>
 
@@ -28,6 +30,7 @@
         <jboss.server.version>4.2.2.GA</jboss.server.version>
 
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
+
         <logger.level>WARN</logger.level>
     </properties>
 
@@ -103,6 +106,7 @@
                         <phase>process-test-classes</phase>
                     </execution>
                 </executions>
+
             </plugin>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
@@ -125,20 +129,33 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <!--ToDo http://caehrorg.jira.com/browse/ESD-2829-->
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>cobertura-maven-plugin</artifactId>-->
-                <!--<version>2.2</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>clean</goal>-->
-                            <!--<goal>check</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                    <check>
+                        <totalBranchRate>${test.unit.branchrate}</totalBranchRate>
+                        <totalLineRate>${test.unit.linerate}</totalLineRate>
+                        <packageLineRate>0</packageLineRate>
+                        <packageBranchRate>0</packageBranchRate>
+                        <branchRate>0</branchRate>
+                        <lineRate>0</lineRate>
+                    </check>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>clean</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
