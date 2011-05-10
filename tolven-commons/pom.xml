@@ -12,7 +12,6 @@
     <packaging>jar</packaging>
 
     <name>tolven-commons</name>
-    <url>http://maven.apache.org</url>
 
 
     <properties>
@@ -34,6 +33,13 @@
             <version>5.3.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.tolven</groupId>
+            <artifactId>tolven-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/org.tolven.library.tolvencommon.devLib-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
          <dependency>
             <groupId>org.tolven</groupId>
             <artifactId>tolven-devLib</artifactId>

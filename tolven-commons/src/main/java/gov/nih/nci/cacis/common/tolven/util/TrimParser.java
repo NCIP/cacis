@@ -164,7 +164,7 @@ public final class TrimParser {
      * @return JAXBContext
      * @throws JAXBException exception
      */
-    public static JAXBContext setupJAXBContext() throws JAXBException {
+    public static synchronized JAXBContext setupJAXBContext() throws JAXBException {
         if (jc == null) { // NOPMD
             jc = JAXBContext.newInstance(TRIM_PACKAGE);
         }

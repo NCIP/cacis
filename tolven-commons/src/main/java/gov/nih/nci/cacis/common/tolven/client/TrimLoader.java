@@ -260,7 +260,7 @@ public class TrimLoader extends TolvenLoadClient {
      * @return JAXBContext
      * @throws JAXBException exception
      */
-    private static JAXBContext setupJAXBContext() throws JAXBException {
+    private static synchronized JAXBContext setupJAXBContext() throws JAXBException {
         if (jc == null) { // NOPMD
             jc = JAXBContext.newInstance(TRIM_PACKAGE);
         }

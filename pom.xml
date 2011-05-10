@@ -156,27 +156,48 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <excludeFilterFile>
+                        http://caehrorg.jira.com/svn/ESD/trunk/software/static_analysis/caEhrFindBugsConfig.xml
+                    </excludeFilterFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <repositories>
+        <repository>
+            <id>cbiit</id>
+            <url>https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk</url>
+        </repository>
+        <repository>
+            <id>CBIIT Public Repositories</id>
+            <url>https://ncimvn.nci.nih.gov/nexus/content/groups/public/</url>
+        </repository>
         <repository>
             <id>openehealth.releases</id>
             <name>Open eHealth Maven Repository</name>
             <url>http://repo.openehealth.org/maven2/releases</url>
         </repository>
         <repository>
-            <id>openehealth.snapshots</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/snapshots</url>
+            <id>CBIIT 3rd Party</id>
+            <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty</url>
         </repository>
         <repository>
             <id>jboss</id>
             <url>http://repository.jboss.com/maven2</url>
-        </repository>
-        <repository>
-            <id>cbiit</id>
-            <url>https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk</url>
         </repository>
     </repositories>
 
