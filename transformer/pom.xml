@@ -16,10 +16,10 @@
 
 
     <properties>
-        <mirthConnect.cli>/Users/bhumphrey/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
-        <outputRootdir>${build.outputDirectory}</outputRootdir>
-        <cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
-        <xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
+        <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
+        <outputRootdir>${user.home}</outputRootdir>
+        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
     </properties>
 
     <dependencies>
@@ -60,6 +60,31 @@
                     </execution>
                 </executions>
             </plugin>
+            	<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*SystemTest.java</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>surefire-itest</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
+							<includes>
+								<include>**/*SystemTest.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
         </plugins>
 
     </build>
