@@ -137,7 +137,7 @@
                     </configLocation>
 					<excludeRoots>
 						<excludeRoot>target/generated-sources/stubs</excludeRoot>
-						<excludeRoot>target/generated-sources/groovy-stubs</excludeRoot>
+						<excludeRoot>target/generated-sources/groovy-stubs/main</excludeRoot>
 					</excludeRoots>
                 </configuration>
             </plugin>
@@ -152,7 +152,7 @@
 					</rulesets>
 					<excludeRoots>
 						<excludeRoot>target/generated-sources/stubs</excludeRoot>
-						<excludeRoot>target/generated-sources/groovy-stubs</excludeRoot>
+						<excludeRoot>target/generated-sources/groovy-stubs/main</excludeRoot>
 					</excludeRoots>
                 </configuration>
                 <executions>
