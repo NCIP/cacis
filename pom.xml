@@ -15,6 +15,7 @@
         <module>nav</module>
         <module>tolven-commons</module>
 		<module>trim-loader-client</module>
+		<module>validation</module>
 
 		<!-- Blocked by http://caehrorg.jira.com/browse/ESD-2825
 		<module>transformer</module>-->
@@ -37,7 +38,19 @@
     <scm>
         <url>http://caehrorg.jira.com/svn/ESD</url>
     </scm>
-
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.openehealth.ipf</groupId>
+				<artifactId>ipf</artifactId>
+				<version>2.2.3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
@@ -63,6 +76,39 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
+		
+		<dependency>
+			<groupId>org.openehealth.ipf.platform-camel</groupId>
+			<artifactId>platform-camel-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-spring-javaconfig</artifactId>
+		    <version>2.7.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.camel</groupId>
+		  <artifactId>camel-test</artifactId>
+		  <version>2.7.1</version>
+		  <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jetty</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>cglib</groupId>
+		    <artifactId>cglib</artifactId>
+		    <version>2.2</version>
+		</dependency>
+		
     </dependencies>
     <build>
         <plugins>
@@ -89,6 +135,10 @@
                     <configLocation>
                         http://caehrorg.jira.com/svn/ESD/trunk/software/static_analysis/caEhrCheckstyleConfig.xml
                     </configLocation>
+					<excludeRoots>
+						<excludeRoot>target/generated-sources/stubs</excludeRoot>
+						<excludeRoot>target/generated-sources/groovy-stubs</excludeRoot>
+					</excludeRoots>
                 </configuration>
             </plugin>
             <plugin>
@@ -96,6 +146,14 @@
                 <version>2.5</version>
                 <configuration>
                     <targetJdk>1.6</targetJdk>
+					<rulesets>						
+						<!-- Custom remote rule set accessed via a URL -->
+						<ruleset>http://caehrorg.jira.com/svn/ESD/trunk/software/static_analysis/caEhrPmdConfig.xml</ruleset>
+					</rulesets>
+					<excludeRoots>
+						<excludeRoot>target/generated-sources/stubs</excludeRoot>
+						<excludeRoot>target/generated-sources/groovy-stubs</excludeRoot>
+					</excludeRoots>
                 </configuration>
                 <executions>
                     <execution>
@@ -106,7 +164,7 @@
                         <phase>process-test-classes</phase>
                     </execution>
                 </executions>
-
+				
             </plugin>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
