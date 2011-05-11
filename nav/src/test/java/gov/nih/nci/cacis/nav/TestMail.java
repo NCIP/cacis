@@ -94,24 +94,38 @@ import org.junit.Test;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 
+/**
+ * Tests sending/receiving mail
+ * @author joshua.phillips@semanticbits.com
+ *
+ */
 public class TestMail {
 
     private static final int SMTP_PORT = 3025;
     private static final int POP3_PORT = 3110;
 
     private GreenMail server;
-
+    
+    /**
+     * starts GreenMain server for testing
+     */
     @Before
     public void setUp() {
         server = new GreenMail();
         server.start();
     }
-
+    
+    /**
+     * stops GreenMain server after testing
+     */
     @After
     public void tearDown() {
         server.stop();
     }
-
+    
+    /**
+     * Tests sending mail
+     */
     @Test
     public void testSendMessage() {
         try {
@@ -120,92 +134,92 @@ public class TestMail {
 
             assertTrue(server.waitForIncomingEmail(5000, 1));
 
-            Message[] messages = server.getReceivedMessages();
+            final Message[] messages = server.getReceivedMessages();
             assertEquals(1, messages.length);
 
         } catch (Exception e) {
-            e.printStackTrace();
             fail("Unexpected exception: " + e);
         }
 
     }
-
+    
+    /**
+     * tests receiving mail
+     */
     @Test
     public void testRetrieveMessage() {
         try {
 
-            String email = "another.one@somewhere.com";
-            String login = "another.one";
-            String password = "secret";
+            final String email = "another.one@somewhere.com";
+            final String login = "another.one";
+            final String password = "secret";
 
-            MimeMessage msg = createMessage();
-            GreenMailUser user = server.setUser(email, login, password);
+            final MimeMessage msg = createMessage();
+            final GreenMailUser user = server.setUser(email, login, password);
             user.deliver(msg);
             assertEquals(1, server.getReceivedMessages().length);
 
-            Properties props = new Properties();
-            props.setProperty("mail.pop3.port", "" + POP3_PORT);
-            Session session = Session.getInstance(props, null);
+            final Properties props = new Properties();
+            props.setProperty("mail.pop3.port", String.valueOf(POP3_PORT));
+            final Session session = Session.getInstance(props, null);
             session.setDebug(true);
 
-            Store store = session.getStore("pop3");
+            final Store store = session.getStore("pop3");
             store.connect("localhost", login, password);
-            Folder folder = store.getFolder("INBOX");
+            final Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_ONLY);
 
-            Message[] messages = folder.getMessages();
+            final Message[] messages = folder.getMessages();
             assertTrue(messages != null);
             assertTrue(messages.length == 1);
 
-            Multipart mp = (Multipart) msg.getContent();
+            final Multipart mp = (Multipart) msg.getContent();
             assertTrue(mp.getCount() == 2);
 
-            Part part = mp.getBodyPart(1);
-            Writer writer = new StringWriter();
-            char[] buffer = new char[1024];
-            Reader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
+            final Part part = mp.getBodyPart(1);
+            final Writer writer = new StringWriter();
+            final char[] buffer = new char[1024];
+            final Reader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
             int n = -1;
-            while ((n = reader.read(buffer)) != -1) {
+            while ((n = reader.read(buffer)) != -1) { //NOPMD
                 writer.write(buffer, 0, n);
             }
-            System.out.println(writer.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) { //NOPMD
             fail("Unexpected exception: " + e);
         }
     }
 
-    private MimeMessage createMessage() throws Exception {
+    private MimeMessage createMessage() throws Exception { //NOPMD
 
-        String from = "some.one@somewhere.com";
-        String to = "another.one@somewhere.com";
-        String subject = "Notification of Document Availability";
+        final String from = "some.one@somewhere.com";
+        final String to = "another.one@somewhere.com";
+        final String subject = "Notification of Document Availability";
 
-        Properties mailProps = new Properties();
-        Session session = Session.getInstance(mailProps, null);
+        final Properties mailProps = new Properties();
+        final Session session = Session.getInstance(mailProps, null);
         mailProps.setProperty("mail.smtp.host", "localhost");
-        mailProps.setProperty("mail.smtp.port", "" + SMTP_PORT);
+        mailProps.setProperty("mail.smtp.port", String.valueOf(SMTP_PORT));
         mailProps.setProperty("mail.smtp.sendpartial", "true");
         session.setDebug(true);
 
-        MimeMessage msg = new MimeMessage(session);
+        final MimeMessage msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(from));
         msg.setSubject(subject);
         msg.setSentDate(new Date());
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
-        MimeBodyPart mbp1 = new MimeBodyPart();
+        final MimeBodyPart mbp1 = new MimeBodyPart();
         mbp1.setText("Instructions to the user.");
         mbp1.setHeader("Content-Type", "text/plain");
 
-        MimeBodyPart mbp2 = new MimeBodyPart();
-        ClassLoader cl = TestMail.class.getClassLoader();
-        URLDataSource ds = new URLDataSource(cl.getResource("notification_gen.xml"));
+        final MimeBodyPart mbp2 = new MimeBodyPart();
+        final ClassLoader cl = TestMail.class.getClassLoader();
+        final URLDataSource ds = new URLDataSource(cl.getResource("notification_gen.xml"));
         mbp2.setDataHandler(new DataHandler(ds));
         mbp2.setFileName("IHEXDSNAV-" + UUID.randomUUID() + ".xml");
         mbp2.setHeader("Content-Type", "application/xml; charset=UTF-8");
 
-        Multipart mp = new MimeMultipart();
+        final Multipart mp = new MimeMultipart();
         mp.addBodyPart(mbp1);
         mp.addBodyPart(mbp2);
 

@@ -77,10 +77,10 @@ public class MapDocumentRegistryRegistry implements DocumentRegistryRegistry {
     private Map<String, String> map = new HashMap<String, String>();
 
     /**
-     * Default constructor
+     * Default constructor - empty constructor
      */
     public MapDocumentRegistryRegistry() {
-
+        //empty constructor
     }
 
     /**
@@ -89,7 +89,7 @@ public class MapDocumentRegistryRegistry implements DocumentRegistryRegistry {
      * @param map the Map
      */
     public MapDocumentRegistryRegistry(Map<String, String> map) {
-        setMap(map);
+        this.map = map;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class MapDocumentRegistryRegistry implements DocumentRegistryRegistry {
             try {
                 url = new URL(getMap().get(documentId));
             } catch (MalformedURLException e) {
-                throw new RuntimeException("Bad registry URL: " + e.getMessage(), e);
+                throw new RuntimeException("Bad registry URL: " + e.getMessage(), e); //NOPMD
             }
         }
         return url;

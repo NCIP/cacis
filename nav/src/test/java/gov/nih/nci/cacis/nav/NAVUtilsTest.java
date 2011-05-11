@@ -72,26 +72,43 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+/**
+ * Tests for Navutils
+ * @author joshua.phillips@semanticbits.com
+ *
+ */
 public class NAVUtilsTest {
 
-    Document sig;
-
+    private Document sig;
+    
+    /**
+     * Setup sig document
+     * @throws Exception - error thrown 
+     */
     @Before
     public void setUp() throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
+        final DocumentBuilder db = dbf.newDocumentBuilder();
         sig = db.parse(NAVUtilsTest.class.getClassLoader().getResourceAsStream("notification_gen.xml"));
     }
 
+    /**
+     * Tests registry id
+     * @throws Exception - error thrown 
+     */
     @Test
     public void testGetRegistryId() throws Exception {
         assertEquals(NAVUtils.getRegistryId(sig), "urn:oid:1.3.983249923.1234.3");
     }
-
+    
+    /**
+     * Tests document ids
+     * @throws Exception - error thrown 
+     */
     @Test
     public void testGetDocumentIds() throws Exception {
-        List<String> ids = NAVUtils.getDocumentIds(sig);
+        final List<String> ids = NAVUtils.getDocumentIds(sig);
         assertTrue(ids.size() == 1);
         assertEquals(ids.get(0), "urn:oid:1.3.345245354.435345");
     }

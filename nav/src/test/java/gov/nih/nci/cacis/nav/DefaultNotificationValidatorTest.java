@@ -77,24 +77,27 @@ import org.w3c.dom.Document;
  * 
  */
 public class DefaultNotificationValidatorTest {
-
+    
+    /**
+     * Test validate digital signature
+     * 
+     * @throws Exception - error thrown
+     */
     @Test
     public void testValidateDigitalSignature() throws Exception {
 
-        ClassLoader cl = DefaultNotificationValidatorTest.class.getClassLoader();
+        final ClassLoader cl = DefaultNotificationValidatorTest.class.getClassLoader();
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(cl.getResourceAsStream("notification_gen.xml"));
+        final DocumentBuilder db = dbf.newDocumentBuilder();
+        final Document doc = db.parse(cl.getResourceAsStream("notification_gen.xml"));
 
-        KeyStore ks = KeyStore.getInstance("JKS");
+        final KeyStore ks = KeyStore.getInstance("JKS");
         ks.load(cl.getResourceAsStream("keystore.jks"), "changeit".toCharArray());
-        KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry("nav_test",
-                new KeyStore.PasswordProtection("changeit".toCharArray()));
-
-        KeySelector keySelector = new X509KeySelector(ks);
-        DefaultNotificationValidator v = new DefaultNotificationValidator(keySelector);
+        
+        final KeySelector keySelector = new X509KeySelector(ks);
+        final DefaultNotificationValidator v = new DefaultNotificationValidator(keySelector);
         v.validateDigitalSignature(doc.getDocumentElement());
 
     }

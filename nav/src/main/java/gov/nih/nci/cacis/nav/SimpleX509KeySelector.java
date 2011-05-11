@@ -89,16 +89,16 @@ public class SimpleX509KeySelector extends KeySelector {
      */
     public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method,
             XMLCryptoContext context) throws KeySelectorException {
-        Iterator ki = keyInfo.getContent().iterator();
+        final Iterator ki = keyInfo.getContent().iterator();
         while (ki.hasNext()) {
-            XMLStructure info = (XMLStructure) ki.next();
+            final XMLStructure info = (XMLStructure) ki.next();
             if (!(info instanceof X509Data)) {
                 continue;
             }
-            X509Data x509Data = (X509Data) info;
-            Iterator xi = x509Data.getContent().iterator();
+            final X509Data x509Data = (X509Data) info;
+            final Iterator xi = x509Data.getContent().iterator();
             while (xi.hasNext()) {
-                Object o = xi.next();
+                final Object o = xi.next();
                 if (!(o instanceof X509Certificate)) {
                     continue;
                 }
@@ -117,8 +117,14 @@ public class SimpleX509KeySelector extends KeySelector {
         }
         throw new KeySelectorException("No key found!");
     }
-
-    static boolean algEquals(String algURI, String algName) {
+    
+    /**
+     * Checks for supports alg
+     * @param algURI - algorithm URI
+     * @param algName - algorith name
+     * @return boolean 
+     */
+    public static boolean algEquals(String algURI, String algName) {
         if ((algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1))
                 || (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1))) {
             return true;

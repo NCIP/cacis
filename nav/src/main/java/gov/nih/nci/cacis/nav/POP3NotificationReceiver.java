@@ -107,7 +107,7 @@ public class POP3NotificationReceiver implements NotificationReceiver {
      * The name of the POP3 folder that should be checked
      */
     private String folder;
-
+  
     /**
      * Takes parameters need to configure retrieval from a POP3 service
      * 
@@ -120,19 +120,22 @@ public class POP3NotificationReceiver implements NotificationReceiver {
      */
     public POP3NotificationReceiver(Properties props, String host, String mailbox, String login, String password,
             String folder) {
-        setHost(host);
-        setProps(props);
-        setMailbox(mailbox);
-        setLogin(login);
-        setPassword(password);
-        setFolder(folder);
+        super();
+        this.props = props;
+        this.host = host;
+        this.mailbox = mailbox;
+        this.login = login;
+        this.password = password;
+        this.folder = folder;
     }
+
+
 
     /**
      * Default constructor
      */
     public POP3NotificationReceiver() {
-
+        //empty constructor
     }
 
     @Override
@@ -141,10 +144,10 @@ public class POP3NotificationReceiver implements NotificationReceiver {
         Message[] messages = null;
 
         try {
-            Session session = Session.getInstance(getProps(), null);
-            Store store = session.getStore(POP3);
+            final Session session = Session.getInstance(getProps(), null);
+            final Store store = session.getStore(POP3);
             store.connect(getHost(), getLogin(), getPassword());
-            Folder f = store.getFolder(getFolder());
+            final Folder f = store.getFolder(getFolder());
             f.open(Folder.READ_ONLY);
             messages = f.getMessages();
             // CHECKSTYLE:OFF

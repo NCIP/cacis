@@ -84,7 +84,7 @@ public class DefaultNotificationValidator implements NotificationValidator {
      * @param keySelector selects the key for validating the signature
      */
     public DefaultNotificationValidator(KeySelector keySelector) {
-        setKeySelector(keySelector);
+        this.keySelector = keySelector;
     }
 
     @Override
@@ -136,16 +136,16 @@ public class DefaultNotificationValidator implements NotificationValidator {
 
         boolean valid = false;
         try {
-            DOMValidateContext valContext = new DOMValidateContext(getKeySelector(), sig);
-            XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
-            XMLSignature signature = fac.unmarshalXMLSignature(valContext);
+            final DOMValidateContext valContext = new DOMValidateContext(getKeySelector(), sig);
+            final XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
+            final XMLSignature signature = fac.unmarshalXMLSignature(valContext);
 
             // We cannot validate the References to documents in the XDS. So,
             // we can't do "core" validation. We can only validate the Signature
             // and the Reference to the Manifest.
 
             // First check the signature
-            boolean sigValid = signature.getSignatureValue().validate(valContext);
+            final boolean sigValid = signature.getSignatureValue().validate(valContext);
             // boolean refValid = false;
             // List<Reference> refs = signature.getSignedInfo().getReferences();
             // if(refs.size() == 1){
@@ -154,7 +154,6 @@ public class DefaultNotificationValidator implements NotificationValidator {
             // }
             // valid = sigValid && refValid;
             valid = sigValid;
-            // TODO: the re
 
             // CHECKSTYLE:OFF
         } catch (Exception ex) {
@@ -178,7 +177,7 @@ public class DefaultNotificationValidator implements NotificationValidator {
     /**
      * @param keySelector the keySelector to set
      */
-
+    
     public void setKeySelector(KeySelector keySelector) {
 
         this.keySelector = keySelector;

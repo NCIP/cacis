@@ -98,6 +98,8 @@ import javax.xml.crypto.dsig.keyinfo.X509Data;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -114,65 +116,69 @@ import com.icegreen.greenmail.util.GreenMail;
  */
 public class NAVSystemTest {
 
+    private static final String CHANGEIT = "changeit";
+    
+    private static final Log LOG = LogFactory.getLog(NAVSystemTest.class);
+
     /**
      * This isn't much of a test. Rather, it is just some sample code for building the Signature.
      * 
      * @throws Exception
      */
     @Test
-    public void testBuildSampleNotification() throws Exception {
+    public void testBuildSampleNotification() throws Exception { //NOPMD
 
-        String notificationId = UUID.randomUUID().toString();
-        String signatureId = notificationId;
-        String recommendedRegistry = "urn:oid:1.3.983249923.1234.3";
-        String docId = "urn:oid:1.3.345245354.435345";
-        String docPath = "sample_exchangeCCD.xml";
+        final String notificationId = UUID.randomUUID().toString();
+        final String signatureId = notificationId;
+        final String recommendedRegistry = "urn:oid:1.3.983249923.1234.3";
+        final String docId = "urn:oid:1.3.345245354.435345";
+        final String docPath = "sample_exchangeCCD.xml";
 
         // Build the document into which the Signature will be inserted.
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
-        Document doc = dbf.newDocumentBuilder().newDocument();
-        Element root = doc.createElement("root");
+        final Document doc = dbf.newDocumentBuilder().newDocument();
+        final Element root = doc.createElement("root");
         doc.appendChild(root);
 
         // Build the Signature
 
-        XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
+        final XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
 
-        List siRefs = Collections.singletonList(fac.newReference("#IHEManifest", fac.newDigestMethod(DigestMethod.SHA1,
+        final List siRefs = Collections.singletonList(fac.newReference("#IHEManifest", fac.newDigestMethod(DigestMethod.SHA1,
                 null), null, "http://www.w3.org/2000/09/xmldsig#Manifest", null));
 
-        SignedInfo si = fac.newSignedInfo(fac.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE,
+        final SignedInfo si = fac.newSignedInfo(fac.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE,
                 (C14NMethodParameterSpec) null), fac.newSignatureMethod(SignatureMethod.RSA_SHA1, null), siRefs);
 
-        List objectContent = new ArrayList();
+        final List objectContent = new ArrayList();
 
-        Text recRegText = doc.createTextNode(recommendedRegistry);
-        SignatureProperty recRegProp = fac.newSignatureProperty(
+        final Text recRegText = doc.createTextNode(recommendedRegistry);
+        final  SignatureProperty recRegProp = fac.newSignatureProperty(
                 Collections.singletonList(new DOMStructure(recRegText)), signatureId, "recommendedRegistry");
         objectContent.add(fac.newSignatureProperties(Collections.singletonList(recRegProp), null));
 
-        List manRefs = Collections.singletonList(fac.newReference(docId, fac.newDigestMethod(DigestMethod.SHA1, null),
+        final List manRefs = Collections.singletonList(fac.newReference(docId, fac.newDigestMethod(DigestMethod.SHA1, null),
                 null, null, null));
         objectContent.add(fac.newManifest(manRefs, "IHEManifest"));
 
-        XMLObject object = fac.newXMLObject(objectContent, null, null, null);
+        final XMLObject object = fac.newXMLObject(objectContent, null, null, null);
 
-        ClassLoader cl = NAVSystemTest.class.getClassLoader();
-        KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(cl.getResourceAsStream("keystore.jks"), "changeit".toCharArray());
-        KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry("nav_test",
-                new KeyStore.PasswordProtection("changeit".toCharArray()));
-        X509Certificate cert = (X509Certificate) keyEntry.getCertificate();
-        KeyInfoFactory kif = fac.getKeyInfoFactory();
-        List x509Content = new ArrayList();
+        final ClassLoader cl = NAVSystemTest.class.getClassLoader();
+        final KeyStore ks = KeyStore.getInstance("JKS");
+        ks.load(cl.getResourceAsStream("keystore.jks"), CHANGEIT.toCharArray());
+        final KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry("nav_test",
+                new KeyStore.PasswordProtection(CHANGEIT.toCharArray()));
+        final X509Certificate cert = (X509Certificate) keyEntry.getCertificate();
+        final KeyInfoFactory kif = fac.getKeyInfoFactory();
+        final List x509Content = new ArrayList();
         x509Content.add(cert.getSubjectX500Principal().getName());
         x509Content.add(cert);
-        X509Data xd = kif.newX509Data(x509Content);
-        KeyInfo ki = kif.newKeyInfo(Collections.singletonList(xd));
-        DOMSignContext dsc = new DOMSignContext(keyEntry.getPrivateKey(), doc.getDocumentElement());
-        dsc.setURIDereferencer(new FileURIDereferencer(docPath, dsc.getURIDereferencer()));
-        XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), null, null);
+        final X509Data xd = kif.newX509Data(x509Content);
+        final KeyInfo ki = kif.newKeyInfo(Collections.singletonList(xd));
+        final DOMSignContext dsc = new DOMSignContext(keyEntry.getPrivateKey(), doc.getDocumentElement());
+        dsc.setURIDereferencer(new FileURIDereferencer(docPath));
+        final XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), null, null);
         signature.sign(dsc);
 
         // Print the Signature to file
@@ -190,72 +196,68 @@ public class NAVSystemTest {
     @Test
     public void testNotificationReceiver() {
 
-        GreenMail server = new GreenMail();
+        final GreenMail server = new GreenMail();
 
         try {
 
-            String regId = "urn:oid:1.3.983249923.1234.3";
-            URL regUrl = new URL("http://some.host/someXDSService");
-            String docId = "urn:oid:1.3.345245354.435345";
+            final String regId = "urn:oid:1.3.983249923.1234.3";
+            final URL regUrl = new URL("http://some.host/someXDSService");
+            final String docId = "urn:oid:1.3.345245354.435345";
 
             server.start();
 
-            Properties props = new Properties();
-            props.setProperty("mail.pop3.port", "" + POP3NotificationReceiverTest.POP3_PORT);
-
+            final Properties props = new Properties();
+            props.setProperty("mail.pop3.port", String.valueOf(POP3NotificationReceiverTest.POP3_PORT));
             // Populate the email and receive via POP3
-            NotificationReceiver r = POP3NotificationReceiverTest.getNotificationReceiver(server, props);
-            Message[] messages = r.receive();
+            final NotificationReceiver r = POP3NotificationReceiverTest.getNotificationReceiver(server, props);
+            final Message[] messages = r.receive();
             assertTrue(messages != null);
             assertTrue(messages.length == 1);
 
             // Validate the message, including cryptographic validation
-            ClassLoader cl = NAVSystemTest.class.getClassLoader();
-            KeyStore ks = KeyStore.getInstance("JKS");
-            ks.load(cl.getResourceAsStream("keystore.jks"), "changeit".toCharArray());
-            KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry("nav_test",
-                    new KeyStore.PasswordProtection("changeit".toCharArray()));
-            NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks));
+            final ClassLoader cl = NAVSystemTest.class.getClassLoader();
+            final KeyStore ks = KeyStore.getInstance("JKS");
+            ks.load(cl.getResourceAsStream("keystore.jks"), CHANGEIT.toCharArray());
+            
+            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks));
             v.validate(messages[0]);
 
             // Pull out the registry and document IDs
-            Document sig = NAVUtils.getSignature(messages[0]);
+            final Document sig = NAVUtils.getSignature(messages[0]);
             assertEquals(NAVUtils.getRegistryId(sig), regId);
-            List<String> ids = NAVUtils.getDocumentIds(sig);
+            final List<String> ids = NAVUtils.getDocumentIds(sig);
             assertTrue(ids.size() == 1);
             assertEquals(ids.get(0), docId);
 
             // Resolve the registry ID to URL
-            Map<String, String> mappings = new HashMap<String, String>();
+            final Map<String, String> mappings = new HashMap<String, String>();
             mappings.put(regId, regUrl.toString());
-            MapDocumentRegistryRegistry regReg = new MapDocumentRegistryRegistry(mappings);
+            final MapDocumentRegistryRegistry regReg = new MapDocumentRegistryRegistry(mappings);
             assertEquals(regReg.lookup(regId), regUrl);
 
-        } catch (Exception ex) {
+        } catch (Exception ex) { //NOPMD
             fail("Unexpected error: " + ex.getMessage());
         } finally {
             try {
                 server.stop();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception e) { //NOPMD
+                LOG.debug("Error on server stop", e);
             }
         }
     }
 
     class FileURIDereferencer implements URIDereferencer {
 
-        String path;
-        URIDereferencer derefer;
+        private final String path;
 
-        FileURIDereferencer(String path, URIDereferencer derefer) {
+        FileURIDereferencer(String path) {
             this.path = path;
-            this.derefer = derefer;
         }
 
         @Override
         public Data dereference(URIReference ref, XMLCryptoContext ctx) throws URIReferenceException {
             if (ref.getURI().startsWith("urn:")) {
-                ClassLoader cl = FileURIDereferencer.class.getClassLoader();
+                final ClassLoader cl = FileURIDereferencer.class.getClassLoader();
                 return new OctetStreamData(cl.getResourceAsStream(path));
             }
             return null;

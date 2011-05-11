@@ -168,64 +168,81 @@ public class X509KeySelector extends KeySelector {
      */
     public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method,
             XMLCryptoContext context) throws KeySelectorException {
-        SignatureMethod sm = (SignatureMethod) method;
-
+        final SignatureMethod sm = (SignatureMethod) method;
+        KeySelectorResult ksr = null;
         try {
             // return null if keyinfo is null or keystore is empty
             if (keyInfo == null || ks.size() == 0) {
                 return new SimpleKeySelectorResult(null);
             }
-
-            // Iterate through KeyInfo types
-            Iterator i = keyInfo.getContent().iterator();
-            while (i.hasNext()) {
-                XMLStructure kiType = (XMLStructure) i.next();
-                // check X509Data
-                if (kiType instanceof X509Data) {
-                    X509Data xd = (X509Data) kiType;
-                    KeySelectorResult ksr = x509DataSelect(xd, sm);
-                    if (ksr != null) {
-                        return ksr;
-                    }
-                    // check KeyName
-                } else if (kiType instanceof KeyName) {
-                    KeyName kn = (KeyName) kiType;
-                    Certificate cert = ks.getCertificate(kn.getName());
-                    if (cert != null && algEquals(sm.getAlgorithm(), cert.getPublicKey().getAlgorithm())) {
-                        return new SimpleKeySelectorResult(cert.getPublicKey());
-                    }
-                    // check RetrievalMethod
-                } else if (kiType instanceof RetrievalMethod) {
-                    RetrievalMethod rm = (RetrievalMethod) kiType;
-                    try {
-                        KeySelectorResult ksr = null;
-                        if (rm.getType().equals(X509Data.RAW_X509_CERTIFICATE_TYPE)) {
-                            OctetStreamData data = (OctetStreamData) rm.dereference(context);
-                            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                            X509Certificate cert = (X509Certificate) cf.generateCertificate(data.getOctetStream());
-                            ksr = certSelect(cert, sm);
-                            // } else if (rm.getType().equals(X509Data.TYPE)) {
-                            // X509Data xd = (X509Data) ((DOMRetrievalMethod) rm).dereferenceAsXMLStructure(context);
-                            // ksr = x509DataSelect(xd, sm);
-                        } else {
-                            // skip; keyinfo type is not supported
-                            continue;
-                        }
-                        if (ksr != null) {
-                            return ksr;
-                        }
-                    } catch (Exception e) {
-                        throw new KeySelectorException(e);
-                    }
-                }
-            }
+            ksr = getKeySelectorResult(keyInfo, sm, context);
         } catch (KeyStoreException kse) {
             // throw exception if keystore is uninitialized
             throw new KeySelectorException(kse);
         }
-
+        
+        if(ksr == null) {
+            new SimpleKeySelectorResult(null);
+        }
         // return null since no match could be found
-        return new SimpleKeySelectorResult(null);
+        return ksr;
+    }
+    
+    private KeySelectorResult getKeySelectorResult(KeyInfo keyInfo, SignatureMethod sm,
+            XMLCryptoContext context) throws KeyStoreException, KeySelectorException {
+        KeySelectorResult ksr = null;
+        // Iterate through KeyInfo types
+        final Iterator i = keyInfo.getContent().iterator();            
+        while (i.hasNext()) {
+            final XMLStructure kiType = (XMLStructure) i.next();
+            // check X509Data
+            if (kiType instanceof X509Data) {
+                ksr = getX509Type(kiType, sm);
+                // check KeyName
+            } else if (kiType instanceof KeyName) {
+                ksr = getForKeyName(kiType, sm);
+                // check RetrievalMethod
+            } else if (kiType instanceof RetrievalMethod) {
+                ksr = getForRetrievalMethod(kiType, sm, context);
+            }
+        }
+        return ksr;
+    }
+
+    private KeySelectorResult getX509Type(XMLStructure kiType, SignatureMethod sm) throws KeyStoreException,
+            KeySelectorException {
+        final X509Data xd = (X509Data) kiType;
+        return x509DataSelect(xd, sm);
+    }
+
+    private KeySelectorResult getForKeyName(XMLStructure kiType, SignatureMethod sm) throws KeyStoreException {
+        final KeyName kn = (KeyName) kiType;
+        final Certificate cert = ks.getCertificate(kn.getName());
+        if (cert != null && algEquals(sm.getAlgorithm(), cert.getPublicKey().getAlgorithm())) {
+            return new SimpleKeySelectorResult(cert.getPublicKey());
+        }
+        return null;
+    }
+
+    private KeySelectorResult getForRetrievalMethod(XMLStructure kiType, SignatureMethod sm, XMLCryptoContext context)
+            throws KeySelectorException {
+        final RetrievalMethod rm = (RetrievalMethod) kiType;
+        KeySelectorResult ksr = null;
+        try {
+
+            if (rm.getType().equals(X509Data.RAW_X509_CERTIFICATE_TYPE)) {
+                final OctetStreamData data = (OctetStreamData) rm.dereference(context);
+                final CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                final X509Certificate cert = (X509Certificate) cf.generateCertificate(data.getOctetStream());
+                ksr = certSelect(cert, sm);
+                // } else if (rm.getType().equals(X509Data.TYPE)) {
+                // X509Data xd = (X509Data) ((DOMRetrievalMethod) rm).dereferenceAsXMLStructure(context);
+                // ksr = x509DataSelect(xd, sm);
+            }
+        } catch (Exception e) {
+            throw new KeySelectorException(e);
+        }
+        return ksr;
     }
 
     /**
@@ -234,10 +251,10 @@ public class X509KeySelector extends KeySelector {
      * @return a KeySelectorResult containing the cert's public key if there is a match; otherwise null
      */
     private KeySelectorResult keyStoreSelect(CertSelector cs) throws KeyStoreException { // NOPMD
-        Enumeration aliases = ks.aliases();
+        final Enumeration<String> aliases = ks.aliases();
         while (aliases.hasMoreElements()) {
-            String alias = (String) aliases.nextElement();
-            Certificate cert = ks.getCertificate(alias);
+            final String alias = (String) aliases.nextElement();
+            final Certificate cert = ks.getCertificate(alias);
             if (cert != null && cs.match(cert)) {
                 return new SimpleKeySelectorResult(cert.getPublicKey());
             }
@@ -253,13 +270,13 @@ public class X509KeySelector extends KeySelector {
      */
     private KeySelectorResult certSelect(X509Certificate xcert, SignatureMethod sm) throws KeyStoreException {
         // skip non-signer certs
-        boolean[] keyUsage = xcert.getKeyUsage();
-        if (keyUsage != null && keyUsage[0] == false) {
+        final boolean[] keyUsage = xcert.getKeyUsage();
+        if (keyUsage != null && !keyUsage[0]) {
             return null;
         }
-        String alias = ks.getCertificateAlias(xcert);
+        final String alias = ks.getCertificateAlias(xcert);
         if (alias != null) {
-            PublicKey pk = ks.getCertificate(alias).getPublicKey();
+            final PublicKey pk = ks.getCertificate(alias).getPublicKey();
             // make sure algorithm is compatible with method
             if (algEquals(sm.getAlgorithm(), pk.getAlgorithm())) {
                 return new SimpleKeySelectorResult(pk);
@@ -302,13 +319,8 @@ public class X509KeySelector extends KeySelector {
      */
     // @@@FIXME: this should also work for key types other than DSA/RSA
     private boolean algEquals(String algURI, String algName) {
-        if (algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1)) {
-            return true;
-        } else if (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1))
+                || (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1));
     }
 
     /**
@@ -324,17 +336,17 @@ public class X509KeySelector extends KeySelector {
 
         // JAP: removing
         // String algOID = getPKAlgorithmOID(sm.getAlgorithm());
-        X509CertSelector subjectcs = new X509CertSelector();
+        final X509CertSelector subjectcs = new X509CertSelector();
         // try {
         // subjectcs.setSubjectPublicKeyAlgID(algOID);
         // } catch (IOException ioe) {
         // throw new KeySelectorException(ioe);
         // }
 
-        Collection certs = new ArrayList();
-        Iterator xi = xd.getContent().iterator();
+        final Collection certs = new ArrayList();
+        final Iterator xi = xd.getContent().iterator();
         while (xi.hasNext()) {
-            Object o = xi.next();
+            final Object o = xi.next();
             /*
              * // check X509IssuerSerial if (o instanceof X509IssuerSerial) { X509IssuerSerial xis = (X509IssuerSerial)
              * o; try { subjectcs.setSerialNumber(xis.getSerialNumber()); String issuer = new
@@ -342,20 +354,7 @@ public class X509KeySelector extends KeySelector {
              * new String(issuer.toCharArray(), 0, issuer.length() - 1); } subjectcs.setIssuer(issuer); } catch
              * (IOException ioe) { throw new KeySelectorException(ioe); } // check X509SubjectName } else
              */
-            if (o instanceof String) {
-                String sn = (String) o;
-                try {
-                    String subject = new X500Principal(sn).getName();
-                    // strip off newline
-                    if (subject.endsWith("\n")) {
-                        subject = new String(subject.toCharArray(), 0, subject.length() - 1);
-                    }
-                    subjectcs.setSubject(subject);
-                } catch (IOException ioe) {
-                    throw new KeySelectorException(ioe);
-                }
-                // check X509SKI
-            }
+            fillSubjectCS(o, subjectcs);
             /*
              * else if (o instanceof byte[]) { byte[] ski = (byte[]) o; // DER-encode ski - required by X509CertSelector
              * byte[] encodedSki = new byte[ski.length + 2]; encodedSki[0] = 0x04; // OCTET STRING tag value
@@ -363,30 +362,52 @@ public class X509KeySelector extends KeySelector {
              * subjectcs.setSubjectKeyIdentifier(encodedSki); }
              */
 
-            else if (o instanceof X509Certificate) {
-                certs.add((X509Certificate) o);
-                // check X509CRL
-                // not supported: should use CertPath API
-            } else {
-                // skip all other entries
-                continue;
-            }
+            fillCerts(o, certs);
         }
-        KeySelectorResult ksr = keyStoreSelect(subjectcs);
+        return getKeySelectorResultFromSubjectsAndCerts(subjectcs, certs);
+    }
+    
+    private KeySelectorResult getKeySelectorResultFromSubjectsAndCerts(X509CertSelector subjectcs, Collection certs) throws KeyStoreException {
+        final KeySelectorResult ksr = keyStoreSelect(subjectcs);
         if (ksr != null) {
             return ksr;
         }
         if (!certs.isEmpty() && !trusted) {
             // try to find public key in certs in X509Data
-            Iterator i = certs.iterator();
+            final Iterator i = certs.iterator();
             while (i.hasNext()) {
-                X509Certificate cert = (X509Certificate) i.next();
+                final X509Certificate cert = (X509Certificate) i.next();
                 if (subjectcs.match(cert)) {
                     return new SimpleKeySelectorResult(cert.getPublicKey());
                 }
             }
         }
         return null;
+    }
+    
+    private void fillSubjectCS(Object o, X509CertSelector subjectcs) throws KeySelectorException {
+        if (o instanceof String) {
+            final String sn = (String) o;
+            try {
+                String subject = new X500Principal(sn).getName();
+                // strip off newline
+                if (subject.endsWith("\n")) {
+                    subject = new String(subject.toCharArray(), 0, subject.length() - 1);
+                }
+                subjectcs.setSubject(subject);
+            } catch (IOException ioe) {
+                throw new KeySelectorException(ioe);
+            }
+            // check X509SKI
+        }
+    }
+    
+    private void fillCerts(Object o, Collection certs) {
+        if (o instanceof X509Certificate) {
+            certs.add((X509Certificate) o);
+            // check X509CRL
+            // not supported: should use CertPath API
+        }
     }
 }
 // CHECKSTYLE:ON

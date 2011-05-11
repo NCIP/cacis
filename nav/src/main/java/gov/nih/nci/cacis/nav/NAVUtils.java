@@ -109,11 +109,11 @@ public final class NAVUtils {
      * @return the Document
      * @throws Exception on error
      */
-    public static Document getSignature(Message message) throws Exception {
-        Multipart content = (Multipart) message.getContent();
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    public static Document getSignature(Message message) throws Exception { //NOPMD
+        final Multipart content = (Multipart) message.getContent();
+        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
+        final DocumentBuilder db = dbf.newDocumentBuilder();
         return db.parse(content.getBodyPart(1).getInputStream());
     }
 
@@ -124,12 +124,12 @@ public final class NAVUtils {
      * @return the registry ID
      * @throws Exception on error
      */
-    public static String getRegistryId(Document sig) throws Exception {
+    public static String getRegistryId(Document sig) throws Exception { //NOPMD
 
-        XPathFactory fac = XPathFactory.newInstance();
-        XPath xpath = fac.newXPath();
-        XPathExpression exp = xpath.compile(GET_REG_ID_EXP);
-        Node node = (Node) exp.evaluate(sig, XPathConstants.NODE);
+        final XPathFactory fac = XPathFactory.newInstance();
+        final XPath xpath = fac.newXPath();
+        final XPathExpression exp = xpath.compile(GET_REG_ID_EXP);
+        final Node node = (Node) exp.evaluate(sig, XPathConstants.NODE);
         return node.getTextContent();
     }
 
@@ -140,15 +140,15 @@ public final class NAVUtils {
      * @return the document IDs
      * @throws Exception on error
      */
-    public static List<String> getDocumentIds(Document sig) throws Exception {
-        List<String> ids = new ArrayList<String>();
+    public static List<String> getDocumentIds(Document sig) throws Exception { //NOPMD
+        final List<String> ids = new ArrayList<String>();
 
-        XPathFactory fac = XPathFactory.newInstance();
-        XPath xpath = fac.newXPath();
-        XPathExpression exp = xpath.compile(GET_DOC_IDS_EXP);
-        NodeList nl = (NodeList) exp.evaluate(sig, XPathConstants.NODESET);
+        final XPathFactory fac = XPathFactory.newInstance();
+        final XPath xpath = fac.newXPath();
+        final XPathExpression exp = xpath.compile(GET_DOC_IDS_EXP);
+        final NodeList nl = (NodeList) exp.evaluate(sig, XPathConstants.NODESET);
         for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
+            final Node node = nl.item(i);
             ids.add(node.getNodeValue());
         }
         return ids;

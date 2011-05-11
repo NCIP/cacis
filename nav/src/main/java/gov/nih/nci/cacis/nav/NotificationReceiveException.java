@@ -94,7 +94,7 @@ public class NotificationReceiveException extends Exception {
      * Default constructor
      */
     public NotificationReceiveException() {
-
+        //empty constructor
     }
 
     /**

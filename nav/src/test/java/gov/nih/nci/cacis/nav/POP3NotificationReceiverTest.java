@@ -84,79 +84,107 @@ import org.junit.Test;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 
+/**
+ * Tests for POP3NotificationReceiver
+ * 
+ * @author joshua.phillips@semanticbits.com
+ * 
+ */
 public class POP3NotificationReceiverTest {
 
+    /**
+     * Constant POP3_PORT
+     */
     public static final int POP3_PORT = 3110;
 
     private GreenMail server;
 
+    /**
+     * starts GreenMain server for testing
+     */
     @Before
     public void setUp() {
         server = new GreenMail();
         server.start();
     }
 
+    /**
+     * stops GreenMain server after testing
+     */
     @After
     public void tearDown() {
         server.stop();
     }
 
+    /**
+     * Tests POP3 mail receiving
+     * 
+     * @throws Exception - error thrown
+     */
     @Test
     public void testReceive() throws Exception {
 
-        Properties props = new Properties();
-        props.setProperty("mail.pop3.port", "" + POP3_PORT);
+        final Properties props = new Properties();
+        props.setProperty("mail.pop3.port", String.valueOf(POP3_PORT));
 
         // Receive it using POP3
-        NotificationReceiver r = getNotificationReceiver(server, props);
+        final NotificationReceiver r = getNotificationReceiver(server, props);
         assertEquals(1, server.getReceivedMessages().length);
 
-        Message[] messages = r.receive();
+        final Message[] messages = r.receive();
 
         assertTrue(messages != null);
         assertTrue(messages.length == 1);
 
     }
 
-    public static NotificationReceiver getNotificationReceiver(GreenMail server, Properties props) throws Exception {
-        String host = "localhost";
-        String mailbox = "another.one@somewhere.com";
-        String login = "another.one";
-        String password = "secret";
-        String folder = "INBOX";
-        String recipient = "some.one@somewhere.com";
-        String subject = "Notification of Document Availability";
+    /**
+     * constructs notification receiver
+     * 
+     * @param server - greenmail server
+     * @param props - properties
+     * @return NotificationReceiver isntance
+     * @throws Exception
+     */
+    public static NotificationReceiver getNotificationReceiver(GreenMail server, Properties props) throws Exception { // NOPMD
+        final String host = "localhost";
+        final String mailbox = "another.one@somewhere.com";
+        final String login = "another.one";
+        final String password = "secret";
+        final String folder = "INBOX";
+        final String recipient = "some.one@somewhere.com";
+        final String subject = "Notification of Document Availability";
 
         // Construct a message
-        Session session = Session.getInstance(props, null);
-        MimeMessage msg = new MimeMessage(session);
+        final Session session = Session.getInstance(props, null);
+        final MimeMessage msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(mailbox));
         msg.setSubject(subject);
         msg.setSentDate(new Date());
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 
         // The readable part
-        MimeBodyPart mbp1 = new MimeBodyPart();
+        final MimeBodyPart mbp1 = new MimeBodyPart();
         mbp1.setText("Instructions to the user.");
         mbp1.setHeader("Content-Type", "text/plain");
 
         // The notification
-        MimeBodyPart mbp2 = new MimeBodyPart();
-        ClassLoader cl = POP3NotificationReceiverTest.class.getClassLoader();
-        URLDataSource ds = new URLDataSource(cl.getResource("notification_gen.xml"));
+        final MimeBodyPart mbp2 = new MimeBodyPart();
+        final ClassLoader cl = POP3NotificationReceiverTest.class.getClassLoader();
+        final URLDataSource ds = new URLDataSource(cl.getResource("notification_gen.xml"));
         mbp2.setDataHandler(new DataHandler(ds));
         mbp2.setFileName("IHEXDSNAV-" + UUID.randomUUID() + ".xml");
         mbp2.setHeader("Content-Type", "application/xml; charset=UTF-8");
 
         // Combine the parts
-        Multipart mp = new MimeMultipart();
+        final Multipart mp = new MimeMultipart();
         mp.addBodyPart(mbp1);
         mp.addBodyPart(mbp2);
         msg.setContent(mp);
         msg.setSentDate(new Date());
 
         // Put it in the mailbox
-        GreenMailUser user = server.setUser(mailbox, login, password);
+        final GreenMailUser user = server.setUser(mailbox, login, password);
         user.deliver(msg);
 
         return new POP3NotificationReceiver(props, host, mailbox, login, password, folder);
