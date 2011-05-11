@@ -60,9 +60,6 @@
  */
 package gov.nih.nci.cacis.nav;
 
-import java.security.KeyStore;
-
-import javax.xml.crypto.KeySelector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -77,7 +74,7 @@ import org.w3c.dom.Document;
  * 
  */
 public class DefaultNotificationValidatorTest {
-    
+
     /**
      * Test validate digital signature
      * 
@@ -93,11 +90,7 @@ public class DefaultNotificationValidatorTest {
         final DocumentBuilder db = dbf.newDocumentBuilder();
         final Document doc = db.parse(cl.getResourceAsStream("notification_gen.xml"));
 
-        final KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(cl.getResourceAsStream("keystore.jks"), "changeit".toCharArray());
-        
-        final KeySelector keySelector = new X509KeySelector(ks);
-        final DefaultNotificationValidator v = new DefaultNotificationValidator(keySelector);
+        final DefaultNotificationValidator v = new DefaultNotificationValidator(new SimpleX509KeySelector());
         v.validateDigitalSignature(doc.getDocumentElement());
 
     }

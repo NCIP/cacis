@@ -76,7 +76,9 @@ import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
 
 /**
- * Should not be used in production
+ * TODO: Should not be used in production.
+ * 
+ * Copied from http://java.sun.com/developer/technicalArticles/xml/dig_signature_api/
  * 
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @since May 5, 2011
@@ -117,14 +119,8 @@ public class SimpleX509KeySelector extends KeySelector {
         }
         throw new KeySelectorException("No key found!");
     }
-    
-    /**
-     * Checks for supports alg
-     * @param algURI - algorithm URI
-     * @param algName - algorith name
-     * @return boolean 
-     */
-    public static boolean algEquals(String algURI, String algName) {
+
+    private static boolean algEquals(String algURI, String algName) {
         if ((algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1))
                 || (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1))) {
             return true;

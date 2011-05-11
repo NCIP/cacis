@@ -76,7 +76,7 @@ public class NotificationReceiveException extends Exception {
      * 
      * @param cause the cause of the exception
      */
-    public NotificationReceiveException(Exception cause) {
+    public NotificationReceiveException(Throwable cause) {
         super(cause);
     }
 
@@ -86,7 +86,7 @@ public class NotificationReceiveException extends Exception {
      * @param msg a message
      * @param cause the cause
      */
-    public NotificationReceiveException(String msg, Exception cause) {
+    public NotificationReceiveException(String msg, Throwable cause) {
         super(msg, cause);
     }
 

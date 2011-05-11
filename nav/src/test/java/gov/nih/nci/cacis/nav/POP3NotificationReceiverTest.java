@@ -144,9 +144,11 @@ public class POP3NotificationReceiverTest {
      * @param server - greenmail server
      * @param props - properties
      * @return NotificationReceiver isntance
-     * @throws Exception
+     * @throws Exception on error
      */
+    // CHECKSTYLE:OFF
     public static NotificationReceiver getNotificationReceiver(GreenMail server, Properties props) throws Exception { // NOPMD
+        // CHECKSTYLE:ON
         final String host = "localhost";
         final String mailbox = "another.one@somewhere.com";
         final String login = "another.one";

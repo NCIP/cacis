@@ -83,7 +83,7 @@ public class NotificationValidationException extends Exception {
      * 
      * @param cause the cause
      */
-    public NotificationValidationException(Exception cause) {
+    public NotificationValidationException(Throwable cause) {
         super(cause);
     }
 
@@ -93,7 +93,7 @@ public class NotificationValidationException extends Exception {
      * @param msg a message
      * @param cause the cause
      */
-    public NotificationValidationException(String msg, Exception cause) {
+    public NotificationValidationException(String msg, Throwable cause) {
         super(msg, cause);
     }
 

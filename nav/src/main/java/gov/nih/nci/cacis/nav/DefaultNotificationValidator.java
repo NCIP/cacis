@@ -141,19 +141,8 @@ public class DefaultNotificationValidator implements NotificationValidator {
             final XMLSignature signature = fac.unmarshalXMLSignature(valContext);
 
             // We cannot validate the References to documents in the XDS. So,
-            // we can't do "core" validation. We can only validate the Signature
-            // and the Reference to the Manifest.
-
-            // First check the signature
-            final boolean sigValid = signature.getSignatureValue().validate(valContext);
-            // boolean refValid = false;
-            // List<Reference> refs = signature.getSignedInfo().getReferences();
-            // if(refs.size() == 1){
-            // Reference r = refs.get(0);
-            // refValid = refs.get(0).validate(valContext);
-            // }
-            // valid = sigValid && refValid;
-            valid = sigValid;
+            // we can't do "core" validation. We can only validate the Signature itself.
+            valid = signature.getSignatureValue().validate(valContext);
 
             // CHECKSTYLE:OFF
         } catch (Exception ex) {

@@ -65,45 +65,20 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.net.URL;
-import java.security.KeyStore;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
 
 import javax.mail.Message;
-import javax.xml.crypto.Data;
-import javax.xml.crypto.OctetStreamData;
-import javax.xml.crypto.URIDereferencer;
-import javax.xml.crypto.URIReference;
-import javax.xml.crypto.URIReferenceException;
-import javax.xml.crypto.XMLCryptoContext;
-import javax.xml.crypto.dom.DOMStructure;
-import javax.xml.crypto.dsig.CanonicalizationMethod;
 import javax.xml.crypto.dsig.DigestMethod;
 import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.crypto.dsig.SignatureProperty;
-import javax.xml.crypto.dsig.SignedInfo;
-import javax.xml.crypto.dsig.XMLObject;
-import javax.xml.crypto.dsig.XMLSignature;
-import javax.xml.crypto.dsig.XMLSignatureFactory;
-import javax.xml.crypto.dsig.dom.DOMSignContext;
-import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
-import javax.xml.crypto.dsig.keyinfo.X509Data;
-import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
-import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 import com.icegreen.greenmail.util.GreenMail;
 
@@ -116,77 +91,59 @@ import com.icegreen.greenmail.util.GreenMail;
  */
 public class NAVSystemTest {
 
-    private static final String CHANGEIT = "changeit";
-    
-    private static final Log LOG = LogFactory.getLog(NAVSystemTest.class);
+    private static final String SMTP_PORT = "3025";
+
+    private GreenMail server;
+    private String regId;
+    private String docId1;
+    private String docId2;
 
     /**
-     * This isn't much of a test. Rather, it is just some sample code for building the Signature.
      * 
-     * @throws Exception
+     */
+    @Before
+    public void setUp() {
+        regId = "urn:oid:1.3.983249923.1234.3";
+        docId1 = "urn:oid:1.3.345245354.435345";
+        docId2 = "urn:oid:1.3.345245354.435346";
+        server = new GreenMail();
+        server.start();
+    }
+
+    /**
+     * 
+     */
+    @After
+    public void tearDown() {
+        server.stop();
+    }
+
+    /**
+     * 
+     * @throws Exception on error
      */
     @Test
-    public void testBuildSampleNotification() throws Exception { //NOPMD
+    public void testNotificationSender() throws Exception {
+        Map<String, String> map = new HashMap<String, String>(); // NOPMD
+        map.put(docId1, "sample_exchangeCCD.xml");
+        map.put(docId2, "purchase_order.xml");
+        final XDSDocumentResolver xdsDocResolver = new MockXDSDocumentResolver(regId, map);
+        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
+                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
 
-        final String notificationId = UUID.randomUUID().toString();
-        final String signatureId = notificationId;
-        final String recommendedRegistry = "urn:oid:1.3.983249923.1234.3";
-        final String docId = "urn:oid:1.3.345245354.435345";
-        final String docPath = "sample_exchangeCCD.xml";
+        final Properties props = new Properties();
+        props.setProperty("mail.smtp.port", SMTP_PORT);
 
-        // Build the document into which the Signature will be inserted.
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        final Document doc = dbf.newDocumentBuilder().newDocument();
-        final Element root = doc.createElement("root");
-        doc.appendChild(root);
+        final String mailbox = "another.one@somewhere.com";
+        final String to = "some.one@somewhere.com";
+        final String subject = "Notification of Document Availability";
+        final String instructions = "Instructions to the user.";
 
-        // Build the Signature
+        final NotificationSender sender = new SMTPNotificationSender(sigBuilder, props, subject, mailbox, to,
+                instructions);
+        sender.send(new ArrayList<String>(map.keySet()));
 
-        final XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
-
-        final List siRefs = Collections.singletonList(fac.newReference("#IHEManifest", fac.newDigestMethod(DigestMethod.SHA1,
-                null), null, "http://www.w3.org/2000/09/xmldsig#Manifest", null));
-
-        final SignedInfo si = fac.newSignedInfo(fac.newCanonicalizationMethod(CanonicalizationMethod.INCLUSIVE,
-                (C14NMethodParameterSpec) null), fac.newSignatureMethod(SignatureMethod.RSA_SHA1, null), siRefs);
-
-        final List objectContent = new ArrayList();
-
-        final Text recRegText = doc.createTextNode(recommendedRegistry);
-        final  SignatureProperty recRegProp = fac.newSignatureProperty(
-                Collections.singletonList(new DOMStructure(recRegText)), signatureId, "recommendedRegistry");
-        objectContent.add(fac.newSignatureProperties(Collections.singletonList(recRegProp), null));
-
-        final List manRefs = Collections.singletonList(fac.newReference(docId, fac.newDigestMethod(DigestMethod.SHA1, null),
-                null, null, null));
-        objectContent.add(fac.newManifest(manRefs, "IHEManifest"));
-
-        final XMLObject object = fac.newXMLObject(objectContent, null, null, null);
-
-        final ClassLoader cl = NAVSystemTest.class.getClassLoader();
-        final KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(cl.getResourceAsStream("keystore.jks"), CHANGEIT.toCharArray());
-        final KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry("nav_test",
-                new KeyStore.PasswordProtection(CHANGEIT.toCharArray()));
-        final X509Certificate cert = (X509Certificate) keyEntry.getCertificate();
-        final KeyInfoFactory kif = fac.getKeyInfoFactory();
-        final List x509Content = new ArrayList();
-        x509Content.add(cert.getSubjectX500Principal().getName());
-        x509Content.add(cert);
-        final X509Data xd = kif.newX509Data(x509Content);
-        final KeyInfo ki = kif.newKeyInfo(Collections.singletonList(xd));
-        final DOMSignContext dsc = new DOMSignContext(keyEntry.getPrivateKey(), doc.getDocumentElement());
-        dsc.setURIDereferencer(new FileURIDereferencer(docPath));
-        final XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), null, null);
-        signature.sign(dsc);
-
-        // Print the Signature to file
-        // TransformerFactory tf = TransformerFactory.newInstance();
-        // Transformer trans = tf.newTransformer();
-        // trans.transform(new DOMSource(doc.getDocumentElement().getFirstChild()), new StreamResult(new
-        // FileOutputStream(
-        // "src/test/resources/notification_gen.xml")));
+        assertTrue(server.getReceivedMessages().length == 1);
 
     }
 
@@ -196,38 +153,28 @@ public class NAVSystemTest {
     @Test
     public void testNotificationReceiver() {
 
-        final GreenMail server = new GreenMail();
-
         try {
-
-            final String regId = "urn:oid:1.3.983249923.1234.3";
-            final URL regUrl = new URL("http://some.host/someXDSService");
-            final String docId = "urn:oid:1.3.345245354.435345";
-
-            server.start();
+            URL regUrl = new URL("http://some.host/someXDSService"); // NOPMD
 
             final Properties props = new Properties();
-            props.setProperty("mail.pop3.port", String.valueOf(POP3NotificationReceiverTest.POP3_PORT));
+            props.setProperty("mail.pop3.port", "" + POP3NotificationReceiverTest.POP3_PORT); // NOPMD
+
             // Populate the email and receive via POP3
             final NotificationReceiver r = POP3NotificationReceiverTest.getNotificationReceiver(server, props);
             final Message[] messages = r.receive();
             assertTrue(messages != null);
             assertTrue(messages.length == 1);
 
-            // Validate the message, including cryptographic validation
-            final ClassLoader cl = NAVSystemTest.class.getClassLoader();
-            final KeyStore ks = KeyStore.getInstance("JKS");
-            ks.load(cl.getResourceAsStream("keystore.jks"), CHANGEIT.toCharArray());
-            
-            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks));
+            final NotificationValidator v = new DefaultNotificationValidator(new SimpleX509KeySelector());
             v.validate(messages[0]);
 
             // Pull out the registry and document IDs
             final Document sig = NAVUtils.getSignature(messages[0]);
             assertEquals(NAVUtils.getRegistryId(sig), regId);
             final List<String> ids = NAVUtils.getDocumentIds(sig);
-            assertTrue(ids.size() == 1);
-            assertEquals(ids.get(0), docId);
+            assertTrue(ids.size() == 2);
+            assertEquals(ids.get(0), docId1);
+            assertEquals(ids.get(1), docId2);
 
             // Resolve the registry ID to URL
             final Map<String, String> mappings = new HashMap<String, String>();
@@ -235,33 +182,11 @@ public class NAVSystemTest {
             final MapDocumentRegistryRegistry regReg = new MapDocumentRegistryRegistry(mappings);
             assertEquals(regReg.lookup(regId), regUrl);
 
-        } catch (Exception ex) { //NOPMD
+            // CHECKSTYLE:OFF
+        } catch (Exception ex) {
+            // CHECKSTYLE:ON
             fail("Unexpected error: " + ex.getMessage());
-        } finally {
-            try {
-                server.stop();
-            } catch (Exception e) { //NOPMD
-                LOG.debug("Error on server stop", e);
-            }
+
         }
-    }
-
-    class FileURIDereferencer implements URIDereferencer {
-
-        private final String path;
-
-        FileURIDereferencer(String path) {
-            this.path = path;
-        }
-
-        @Override
-        public Data dereference(URIReference ref, XMLCryptoContext ctx) throws URIReferenceException {
-            if (ref.getURI().startsWith("urn:")) {
-                final ClassLoader cl = FileURIDereferencer.class.getClassLoader();
-                return new OctetStreamData(cl.getResourceAsStream(path));
-            }
-            return null;
-        }
-
     }
 }

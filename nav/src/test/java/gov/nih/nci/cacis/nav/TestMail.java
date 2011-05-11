@@ -96,8 +96,9 @@ import com.icegreen.greenmail.util.GreenMail;
 
 /**
  * Tests sending/receiving mail
+ * 
  * @author joshua.phillips@semanticbits.com
- *
+ * 
  */
 public class TestMail {
 
@@ -105,7 +106,7 @@ public class TestMail {
     private static final int POP3_PORT = 3110;
 
     private GreenMail server;
-    
+
     /**
      * starts GreenMain server for testing
      */
@@ -114,7 +115,7 @@ public class TestMail {
         server = new GreenMail();
         server.start();
     }
-    
+
     /**
      * stops GreenMain server after testing
      */
@@ -122,7 +123,7 @@ public class TestMail {
     public void tearDown() {
         server.stop();
     }
-    
+
     /**
      * Tests sending mail
      */
@@ -136,13 +137,14 @@ public class TestMail {
 
             final Message[] messages = server.getReceivedMessages();
             assertEquals(1, messages.length);
-
+            // CHECKSTYLE:OFF
         } catch (Exception e) {
+            // CHECKSTYLE:ON
             fail("Unexpected exception: " + e);
         }
 
     }
-    
+
     /**
      * tests receiving mail
      */
@@ -181,15 +183,17 @@ public class TestMail {
             final char[] buffer = new char[1024];
             final Reader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
             int n = -1;
-            while ((n = reader.read(buffer)) != -1) { //NOPMD
+            while ((n = reader.read(buffer)) != -1) { // NOPMD
                 writer.write(buffer, 0, n);
             }
-        } catch (Exception e) { //NOPMD
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON
             fail("Unexpected exception: " + e);
         }
     }
 
-    private MimeMessage createMessage() throws Exception { //NOPMD
+    private MimeMessage createMessage() throws Exception { // NOPMD
 
         final String from = "some.one@somewhere.com";
         final String to = "another.one@somewhere.com";
