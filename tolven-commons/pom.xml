@@ -15,9 +15,9 @@
 
 
     <properties>
-           <test.unit.branchrate>5</test.unit.branchrate>
-            <test.unit.linerate>8</test.unit.linerate>
-        </properties>
+        <test.unit.branchrate>5</test.unit.branchrate>
+        <test.unit.linerate>8</test.unit.linerate>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -34,32 +34,25 @@
         </dependency>
 
         <dependency>
-            <groupId>org.tolven</groupId>
-            <artifactId>tolven-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/org.tolven.library.tolvencommon.devLib-1.0-SNAPSHOT.jar</systemPath>
+            <groupId>org.tolven.library.tolvencommon</groupId>
+            <artifactId>devLib</artifactId>
+            <version>0.0.12</version>
         </dependency>
-         <dependency>
-            <groupId>org.tolven</groupId>
-            <artifactId>tolven-devLib</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/org.tolven.component.tolvenweb.devLib-1.0-SNAPSHOT.jar</systemPath>
+
+        <dependency>
+            <groupId>org.tolven.component.tolvenweb</groupId>
+            <artifactId>devLib</artifactId>
+            <version>0.0.76</version>
         </dependency>
         <dependency>
-            <groupId>org.tolven</groupId>
-            <artifactId>tolven-ejb-devLib</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/org.tolven.component.tolvenejb.devLib-1.0-SNAPSHOT.jar</systemPath>
+            <groupId>org.tolven.component.tolvenejb</groupId>
+            <artifactId>devLib</artifactId>
+            <version>0.0.1</version>
         </dependency>
         <dependency>
-            <groupId>org.tolven</groupId>
-            <artifactId>tolven-javee</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/org.tolven.library.javaee.javaee-1.0-SNAPSHOT.jar</systemPath>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>5</version>
         </dependency>
     </dependencies>
 </project>
