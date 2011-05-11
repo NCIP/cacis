@@ -204,9 +204,10 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
         }
         doc.appendChild(doc.createElement(SIGNATURE_CONTAINER));
 
+        final String signatureId = UUID.randomUUID().toString();
         final XMLSignatureFactory fac = getXMLSignatureFactory();
         final SignedInfo si = handleSignedInfo(fac);
-        final SignatureProperties sigProps = buildSignatureProperties(doc, fac);
+        final SignatureProperties sigProps = buildSignatureProperties(doc, fac, signatureId);
         final XMLObject object = handleXMLObject(fac, documentIds, sigProps);
         final KeyInfo ki = handleKeyInfo(fac);
         final Key signingKey = handleSigningKey();
@@ -214,7 +215,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
         final DOMSignContext dsc = new DOMSignContext(signingKey, doc.getDocumentElement());
         dsc.setURIDereferencer(uriDeref);
 
-        final XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), null, null);
+        final XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), signatureId, null);
 
         try {
             signature.sign(dsc);
@@ -442,12 +443,13 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
      * 
      * @param doc the parent Document
      * @param fac the XMLSignatureFactory on error
+     * @param signatureId the Signature ID to which the properties will refer
      * @return the SignatureProperties on error
      */
-    protected SignatureProperties buildSignatureProperties(Document doc, XMLSignatureFactory fac) {
+    protected SignatureProperties buildSignatureProperties(Document doc, XMLSignatureFactory fac, String signatureId) {
         final Text recRegText = doc.createTextNode(getDocumentResolver().getRecommendedRegistry());
         final SignatureProperty recRegProp = fac.newSignatureProperty(
-                Collections.singletonList(new DOMStructure(recRegText)), UUID.randomUUID().toString(),
+                Collections.singletonList(new DOMStructure(recRegText)), signatureId,
                 RECOMMENDED_REGISTRY_ELEMENT);
         return fac.newSignatureProperties(Collections.singletonList(recRegProp), null);
 

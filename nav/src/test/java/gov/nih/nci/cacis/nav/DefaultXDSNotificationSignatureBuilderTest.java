@@ -99,7 +99,7 @@ public class DefaultXDSNotificationSignatureBuilderTest {
         final XDSDocumentResolver xdsDocResolver = new MockXDSDocumentResolver(regId, map);
 
         final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
+                SignatureMethod.RSA_SHA1, DigestMethod.SHA256, "JKS", "keystore.jks", "changeit", "nav_test");
 
         final Node sig = sigBuilder.buildSignature(new ArrayList<String>(map.keySet()));
 
@@ -109,6 +109,8 @@ public class DefaultXDSNotificationSignatureBuilderTest {
         final TransformerFactory tf = TransformerFactory.newInstance();
         final Transformer trans = tf.newTransformer();
         trans.transform(new DOMSource(sig), new StreamResult(System.out));
+        // trans.transform(new DOMSource(sig), new StreamResult(new FileOutputStream(
+        // "src/test/resources/notification_gen.xml")));
     }
 
 }

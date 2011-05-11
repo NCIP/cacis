@@ -175,8 +175,8 @@ public class SignatureTest {
         objectContent.add(fac.newSignatureProperties(Collections.singletonList(recRegProp), null));
 
         final List<Reference> manRefs = new ArrayList<Reference>();
-        manRefs.add(fac.newReference(docId1, fac.newDigestMethod(DigestMethod.SHA1, null), null, null, null));
-        manRefs.add(fac.newReference(docId2, fac.newDigestMethod(DigestMethod.SHA1, null), null, null, null));
+        manRefs.add(fac.newReference(docId1, fac.newDigestMethod(DigestMethod.SHA256, null), null, null, null));
+        manRefs.add(fac.newReference(docId2, fac.newDigestMethod(DigestMethod.SHA256, null), null, null, null));
 
         objectContent.add(fac.newManifest(manRefs, "IHEManifest"));
 
@@ -198,7 +198,7 @@ public class SignatureTest {
         final DOMSignContext dsc = new DOMSignContext(keyEntry.getPrivateKey(), doc.getDocumentElement());
         dsc.setURIDereferencer(uriDeref);
 
-        final XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), null, null);
+        final XMLSignature signature = fac.newXMLSignature(si, ki, Collections.singletonList(object), signatureId, null);
 
         signature.sign(dsc);
 
