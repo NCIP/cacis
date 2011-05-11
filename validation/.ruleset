@@ -7,7 +7,7 @@
 
     <description>caEHR ESD PMD Rules</description>
 	
-	<exclude-pattern>.*/target/generated/.*</exclude-pattern>
+	<exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
 	
     <!-- Basic Rules -->
     <rule ref="rulesets/basic.xml">
