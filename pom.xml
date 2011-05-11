@@ -133,7 +133,7 @@
                 </executions>
                 <configuration>
                     <configLocation>
-                        http://caehrorg.jira.com/svn/ESD/trunk/software/static_analysis/caEhrCheckstyleConfig.xml
+                        http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrCheckstyleConfig.xml
                     </configLocation>
 					<excludeRoots>
 						<excludeRoot>target/generated-sources/stubs</excludeRoot>
@@ -148,7 +148,7 @@
                     <targetJdk>1.6</targetJdk>
 					<rulesets>						
 						<!-- Custom remote rule set accessed via a URL -->
-						<ruleset>http://caehrorg.jira.com/svn/ESD/trunk/software/static_analysis/caEhrPmdConfig.xml</ruleset>
+						<ruleset>http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrPmdConfig.xml</ruleset>
 					</rulesets>
 					<excludeRoots>
 						<excludeRoot>target/generated-sources/stubs</excludeRoot>
@@ -220,9 +220,7 @@
                 <version>2.3.2</version>
                 <configuration>
                     <xmlOutput>true</xmlOutput>
-                    <excludeFilterFile>
-                        http://caehrorg.jira.com/svn/ESD/trunk/software/static_analysis/caEhrFindBugsConfig.xml
-                    </excludeFilterFile>
+                    <excludeFilterFile>http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrFindBugsConfig.xml</excludeFilterFile>
                 </configuration>
                 <executions>
                     <execution>
