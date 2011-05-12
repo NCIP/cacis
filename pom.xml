@@ -15,6 +15,7 @@
         <module>nav</module>
         <module>tolven-commons</module>
 		<module>trim-loader-client</module>
+        <module>pcoplugin</module>
 		<module>validation</module>
 
 		<!-- Blocked by http://caehrorg.jira.com/browse/ESD-2825

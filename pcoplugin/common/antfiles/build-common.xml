@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<project name="cacis-esd:common"
+         basedir="."
+         xmlns="antlib:org.apache.tools.ant">
+
+   <!--should have been already defined-->
+    <property name="src.dir" value="${basedir}/src/main"/>
+    <property name="src.java.dir" value="${src.dir}/java"/>
+    <property name="javadocs.dir" value="${pcoplugin.dir}/target/reports/javadoc"/>
+    <property name="build.dir" value="${basedir}/target"/>
+
+    <import file="tolven/build-ivy-common.xml"/>
+
+    <target name="prepare"/>
+
+</project>

@@ -20,5 +20,8 @@
     <extension id="applications" plugin-id="org.tolven.component.application" point-id="applications">
         <parameter id="dir" value="app"/>
     </extension>
+    <extension-point id="devLib" extension-multiplicity="none">
+        <parameter-def id="jar" default-value="devLib.jar" />
+    </extension-point>
 
 </plugin>

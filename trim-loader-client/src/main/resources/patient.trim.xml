@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <trim xmlns="urn:tolven-org:trim:4.0">
-    <name>reg/evn/pcoplugin</name>
+    <name>reg/evn/patient</name>
     <description>New Person</description>
     <page>newPatient.xhtml</page>
     <drilldown>patientDD.xhtml</drilldown>

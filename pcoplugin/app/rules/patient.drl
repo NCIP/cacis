@@ -21,7 +21,7 @@ global Date now;
 
 /**
  * **** Patient Placeholder update ************************
- * TODO: ESD-2811 Change rule to call Java code to load new Trim when it is available
+ * TODO: ESD-2811 Change rule to call PCO Semantic Adapter
  */
 rule "caCIS Load Trim"
  when
@@ -39,5 +39,5 @@ rule "caCIS Load Trim"
     mdPatientList.setString07(mdPatientII.getRoot());
     mdPatientList.setString08(mdPatientII.getExtension());
     app.getMenuBean().updateMenuData(mdPatientList);
-	app.info("in then - caCIS Place Patient on echr patients list");
+	app.info("caCIS Calling Mock Semantic adapter.");
 end

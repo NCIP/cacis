@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="buildCommon">
+
+    <!--
+     ****Do not change**** the properties below but rather, create default.properties - a file which will not be touched by Tolven
+     in which you can override these properties as needed. For example, it would be common to change
+     tolvenConfig.location as well as the installation.location property  (in the separate build.properties file).
+     -->
+    <property name="admin.user" value="admin"/>
+    <property name="admin.password" value="sysadmin"/>
+    <property name="tolvenConfig.location" value="c:/tolven-config"/>
+    <property name="respositoryLocal.location" value="${tolvenConfig.location}/repositoryLocal"/>
+    <property name="installation.location" value="c:/tolven-RC1"/>
+    <property name="xslt.processor.classpath" value="c:/saxon/saxon9he.jar"/>
+    <property name="temp.dir.path" value="/tmp"/>
+    <property name="tolven.admin.userid" value="admin"/>
+    <property name="tolven.admin.password" value="sysadmin"/>
+
+    <!--
+     The tpf classpath is from the installation folder and only contains the TPF boot jar which must be used to
+     update devLib
+     -->
+    <path id="tpf.classpath">
+        <fileset dir="${installation.location}/pluginLib">
+            <include name="tpf-boot.jar"/>
+        </fileset>
+    </path>
+
+    <target name="tolven:configPhase2"
+            description="Runs Tolven configPhase2. Updates the Tolven database, indexes and LDAP schemas ">
+        <run.tolven.plugin plugin.name="org.tolven.component.ldap.init,org.tolven.component.database.init"/>
+    </target>
+
+    <target name="tolven:configPhase3" description="Runs Tolven configPhase3. Updates applicaiton metadata">
+        <run.tolven.plugin plugin.name="org.tolven.component.application"/>
+    </target>
+
+    <target name="tolven:repositoryInit" description="Runs Tolven configPhase3. Updates applicaiton metadata">
+        <java classname="org.tolven.plugin.boot.TPFBoot"
+              fork="true" classpathref="tpf.classpath">
+            <arg line="-getPlugins"/>
+            <jvmarg value="-Djava.io.tmpdir=${temp.dir.path}"/>
+            <sysproperty key="TOLVEN_CONFIG_DIR" value="${tolvenConfig.location}"/>
+            <env key="TOLVEN_CONFIG_DIR" value="${tolvenConfig.location}"/>
+        </java>
+    </target>
+
+    <macrodef name="run.tolven.plugin">
+        <attribute name="plugin.name"/>
+
+        <sequential>
+            <java classname="org.tolven.plugin.boot.TPFBoot"
+                  fork="true" classpathref="tpf.classpath">
+                <arg line="-plugin @{plugin.name}"/>
+                <jvmarg value="-Djava.io.tmpdir=${temp.dir.path}"/>
+                <sysproperty key="TOLVEN_CONFIG_DIR" value="${tolvenConfig.location}"/>
+                <env key="TOLVEN_CONFIG_DIR" value="${tolvenConfig.location}"/>
+                <env key="TOLVEN_USER" value="${tolven.admin.userid}"/>
+                <env key="TOLVEN_PASSWORD" value="${tolven.admin.password}"/>
+
+            </java>
+        </sequential>
+    </macrodef>
+</project>

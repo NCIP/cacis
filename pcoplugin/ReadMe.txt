@@ -3,9 +3,13 @@ sample PCO Trim
 
 Build and Deploy Instructions
 ==========================================================
-The ReadMe is currently a work in progress as the build will be drastically changing
-to use Maven instead of ant.
+
+Copy example.local.properties to local.properties to override local properties including tolven locations.
 
 Use the following to build the current basic build for the plugin:
-ant ivy:publish
-ant pre-commit
+
+1) Run the following from the pco directory:
+mvn clean install
+
+2) Run the following from pco/pcoplugin:
+mvn gov.nih.nci.cacis:pcoplugin:build-pcoplugin

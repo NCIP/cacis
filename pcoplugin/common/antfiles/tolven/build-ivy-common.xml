@@ -1,0 +1,151 @@
+<project name="cacis-esd:ivy-common"
+         xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="antlib:org.apache.ivy.ant
+         antlib:org.apache.ivy.ant">
+    <!--
+    	Reusable targets for Ivy resolution and publishing. this file is imported by projects and not to be used directly.
+
+    	Expected properties:
+	    pcoplugin.dir - path to software directory of caEHR project
+    	ext.dir - path to the ext/lib directory of importing project, which should have a subdirectory
+    	   called "static_analysis" where dependency jars for PMD, Checkstyle, Findbugs, Simian should be located
+        build.dir - path to the build/target directory of the importing project. for publishing, should have a
+        jars subdirectory where the artifacts to be published are located
+    -->
+    <dirname property="common.antfiles.dir" file="${ant.file.cacis-esd:ivy}"/>
+    <!-- ******************************************************************* -->
+    <!-- ** IVY TARGETS AND DEPENDENCY PATHS                              ** -->
+    <!-- ******************************************************************* -->
+    <property file="${common.antfiles.dir}/ivy.properties"/>
+
+    <!--might be overridden. These are defaults which will work in most cases-->
+    <property name="pcoplugin.dir" value="${basedir}"/>
+    <property name="build.dir" value="${basedir}/target"/>
+
+    <property name="ivy.jar.dir" value="${pcoplugin.dir}/common/lib"/>
+    <property name="common.dir" value="${pcoplugin.dir}/common"/>
+
+    <property name="bda.build.dir" value="${pcoplugin.dir}/build"/>
+    <!-- include global properties from the BDA build -->
+    <property file="${bda.build.dir}/project.properties"/>
+
+    <path id="ivy.lib.path">
+        <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant"
+                    classpathref="ivy.lib.path"/>
+
+    <property name="ivy.settings.file" location="${common.dir}/ivy/ivy-caehr-esd-settings.xml"/>
+    <property name="ivy.def.file" location="ivy.xml"/>
+    <ivy:settings file="${ivy.settings.file}"/>
+    <ivy:info file="${ivy.def.file}"/>
+
+    <property name="ivy.project.repo" location="${pcoplugin.dir}/local-ivy-repo"/>
+
+    <property name="project.build.file" value="${basedir}/src/main/scripts/build-pcoplugin.build.xml"/>
+    <property name="project.build.all.target" value="all"
+              description="The ant target in the project's main build file that should be called to do a complete build"/>
+    <property name="project.build.clean.target" value="clean"
+              description="The ant target in the project's main build file that should be called to do clean the project"/>
+    <property name="project.build.javadoc.target" value="javadoc"
+              description="The ant target in the project's main build file that should be called to create javadoc for the project"/>
+    <property name="project.build.pre-commit.target" value="pre-commit"
+              description="The ant target in the project's main build file that should be called to run pre-commit for the project"/>
+    <property name="project.build.static-analysis.target" value="static-analysis"
+              description="The ant target in the project's main build file that should be called to run static analysis for the project"/>
+
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <property name="ivy.resolved.artifacts.dir" location="${ext.dir}"
+              description="The directoy in which resolved dependencies should be placed"/>
+    <property name="ivy.resolved.artifacts.pattern"
+              value="${ivy.resolved.artifacts.dir}/[conf]/[artifact]-[revision].[ext]"
+              description="The Ivy pattern used to determine how resolved dependencies should be copied into the project"/>
+    <property name="ivy.generated.artifacts.dir" location="${build.dir}"
+              description="The directoy in which artifacts are created"/>
+    <property name="ivy.generated.artifacts.pattern" value="${ivy.generated.artifacts.dir}/[type]s/[artifact].[ext]"
+              description="The ivy pattern used to locate generated artifacts"/>
+
+    <property name="ivy.resolve.configuations" value="${ivy.public.configurations}" description="A comma separated list
+                                                    of public configurations that should be resolved (defaults to public scope)"/>
+
+
+
+    <target name="ivy:init">
+        <property name="ivy.dep.file" value="${ivy.def.file}"/>
+        <property name="ivy.initialized" location="true"/>
+    </target>
+
+    <target name="ivy:clean-artifacts" depends="ivy:init" unless="no.ivy.clean">
+        <delete dir="${ivy.resolved.artifacts.dir}"/>
+    </target>
+
+    <target name="ivy:clean" depends="ivy:clean-artifacts">
+        <echo message="Will clean project"/>
+
+        <ant antfile="${project.build.file}" target="${project.build.clean.target}" inheritall="false"
+             inheritrefs="false"/>
+    </target>
+
+
+    <!-- ==================================================================================
+       ivyPublish: Will publish the files to a repository
+   ======================================================================================= -->
+    <macrodef name="ivyPublish">
+        <attribute name="artifactspattern"/>
+        <attribute name="resolver"/>
+        <attribute name="pubrevision"/>
+        <attribute name="status"/>
+        <sequential>
+            <tstamp>
+                <format property="now" pattern="yyyyMMddHHmmss"/>
+            </tstamp>
+            <ivy:publish artifactspattern="@{artifactspattern}"
+                         resolver="@{resolver}"
+                         status="@{status}"
+                         pubrevision="@{pubrevision}"
+                         forcedeliver="true"
+                         pubdate="${now}"
+                         overwrite="true" settingsRef="ivy.instance"/>
+        </sequential>
+    </macrodef>
+
+    <target name="ivy:setup" depends="ivy:init">
+        <ivy:resolve conf="${ivy.public.configurations}"/>
+        <ivy:retrieve conf="${ivy.public.configurations}" pattern="${ivy.resolved.artifacts.pattern}" sync="true"/>
+        <!--This generates an IVY DI report-->
+        <ivy:report todir="${ivy.resolved.artifacts.dir}" graph="false"/>
+    </target>
+
+
+    <target name="ivy:build-project" depends="ivy:setup">
+        <ant antfile="${project.build.file}" target="${project.build.all.target}" inheritall="false"
+             inheritrefs="false"/>
+    </target>
+
+
+    <target name="ivy:publish" depends="ivy:build-project"
+            description="--> publish this project in the integration repository">
+        <echo message="Executing in ${ant.project.name}"/>
+        <ivyPublish artifactspattern="${build.dir}/jars/[artifact].[ext]"
+                    resolver="local-integration-repo"
+                    pubrevision="${cacis-esd.project.version}"
+                    status="integration"/>
+
+    </target>
+
+    <target name="ivy:javadoc">
+        <ant antfile="${project.build.file}" target="${project.build.javadoc.target}" inheritall="false"
+             inheritrefs="false"/>
+    </target>
+
+     <target name="ivy:pre-commit">
+        <ant antfile="${project.build.file}" target="${project.build.pre-commit.target}" inheritall="false"
+             inheritrefs="false"/>
+    </target>
+
+    <target name="ivy:static-analysis">
+           <ant antfile="${project.build.file}" target="${project.build.static-analysis.target}" inheritall="false"
+                inheritrefs="false"/>
+       </target>
+
+</project>
