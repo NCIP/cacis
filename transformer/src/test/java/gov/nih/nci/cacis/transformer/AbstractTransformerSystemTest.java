@@ -303,7 +303,7 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      * @param res
      */
     private boolean isResponseValid(final Object[] res) {
-        return ((String) res[0]).startsWith(SUCCESS_MSG);
+        return res != null && res[0] != null && ((String) res[0]).startsWith(SUCCESS_MSG);
     }
 
 }
