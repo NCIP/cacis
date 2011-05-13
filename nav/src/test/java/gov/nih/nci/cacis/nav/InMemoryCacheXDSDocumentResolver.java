@@ -60,59 +60,83 @@
 
 package gov.nih.nci.cacis.nav;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.xml.crypto.dsig.DigestMethod;
-import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.junit.Test;
-import org.w3c.dom.Node;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since May 10, 2011
+ * XDS document resolver backed by InMemoryCache
+ * 
+ * @author vinodh.rc@semanticbits.com
+ * @since May 13, 2011
  * 
  */
 
-public class DefaultXDSNotificationSignatureBuilderTest {
+public class InMemoryCacheXDSDocumentResolver implements XDSDocumentResolver {
 
+    private String recommendedRegistry;
+    private InMemoryCacheDocumentHolder docCache;
+
+    
     /**
      * 
-     * @throws Exception on error
+     * @param recommendedRegistry - String identifier for the recommended registry
+     * @param docCache - Instance of InMemoryCacheDocumentHolder
      */
-    @Test
-    public void testBuildNotificationSignature() throws Exception {
-        final String regId = "urn:oid:1.3.983249923.1234.3";
-        final String docId1 = "urn:oid:1.3.345245354.435345";
-        final String docId2 = "urn:oid:1.3.345245354.435346";
-        
-        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
-        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
-        docCache.putDocument(docId2, new File("purchase_order.xml"));
-        
-        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
-        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA256, "JKS", "keystore.jks", "changeit", "nav_test");
-        
-        final String[] keys = { docId1, docId2 };
-        final Node sig = sigBuilder.buildSignature(new ArrayList<String>(Arrays.asList(keys)));
+    public InMemoryCacheXDSDocumentResolver(String recommendedRegistry, InMemoryCacheDocumentHolder docCache) {
+        this.docCache = docCache;
+        this.recommendedRegistry = recommendedRegistry;
+    }
 
-        assertNotNull(sig);
+    /*
+     * (non-Javadoc) {@inheritDoc}
+     */
 
-        // Test to see if it can be transformed without error
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        final Transformer trans = tf.newTransformer();
-        trans.transform(new DOMSource(sig), new StreamResult(System.out));
-        // trans.transform(new DOMSource(sig), new StreamResult(new FileOutputStream(
-        // "src/test/resources/notification_gen.xml")));
+    @Override
+    public InputStream resolve(String documentId) throws XDSDocumentResolutionException {
+        InputStream in = null;
+        if (getDocCache().containsDocument(documentId)) {
+            try {
+                in = getDocCache().getDocument(documentId);
+            } catch (IOException e) {
+                throw new XDSDocumentResolutionException(
+                        "Error retrieving the document for the id, " + documentId, e);
+            }
+        }
+        return in;
+
+    }
+
+    /*
+     * (non-Javadoc) {@inheritDoc}
+     */
+
+    /**
+     * @return the docCache
+     */
+    public InMemoryCacheDocumentHolder getDocCache() {
+        return docCache;
+    }
+
+    /**
+     * @param docCache the docCache to set
+     */
+    public void setDocCache(InMemoryCacheDocumentHolder docCache) {
+        this.docCache = docCache;
+    }
+
+    @Override
+    public String getRecommendedRegistry() {
+        return recommendedRegistry;
+
+    }
+
+    /**
+     * @param recommendedRegistry the recommendedRegistry to set
+     */
+
+    public void setRecommendedRegistry(String recommendedRegistry) {
+
+        this.recommendedRegistry = recommendedRegistry;
     }
 
 }

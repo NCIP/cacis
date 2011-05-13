@@ -64,8 +64,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,10 +126,11 @@ public class NAVSystemTest {
      */
     @Test
     public void testNotificationSender() throws Exception {
-        Map<String, String> map = new HashMap<String, String>(); // NOPMD
-        map.put(docId1, "sample_exchangeCCD.xml");
-        map.put(docId2, "purchase_order.xml");
-        final XDSDocumentResolver xdsDocResolver = new MockXDSDocumentResolver(regId, map);
+        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
+        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
+        docCache.putDocument(docId2, new File("purchase_order.xml"));
+        
+        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
         final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
                 SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
 
@@ -141,7 +144,8 @@ public class NAVSystemTest {
 
         final NotificationSender sender = new SMTPNotificationSender(sigBuilder, props, subject, mailbox, to,
                 instructions);
-        sender.send(new ArrayList<String>(map.keySet()));
+        final String[] keys = { docId1, docId2 };
+        sender.send(new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
 
