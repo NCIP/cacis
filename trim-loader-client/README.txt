@@ -15,7 +15,7 @@ Note: esd-commons-1.0.jar is required in the cacis-esd/esd-commons/target direct
 2) Run the Maven plugin from pco/trim-loader-client:
 mvn gov.nih.nci.cacis:trim-loader-client:build-trim-loader
 
-This will create a trim-loader.jar file in the pco/trim-loader-client/target directory
+This will create a trim-loader.jar file in the pco/trim-loader-client/target/trim-loader-client directory.
 
 3) Unzip the trim-loader.jar to the same directory of trim-loader.jar, this can be in any directory (the target directory is fine) :
 
