@@ -58,22 +58,25 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.service;
+package gov.nih.nci.cacis.sa.service;
 
-import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
-import gov.nih.nci.cacis.sa.SemanticAdapterConfig;
+import javax.jws.WebService;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * Service Implementation.
+ * @author bpickeral
+ * @since May 18, 2011
  */
-public class ShareClinicalDataServer  extends AbstractBusTestServer {
-        /**
-         * Default static ADDRESS to the local deployment
-         */
-        public static final String ADDRESS = "http://localhost:8178/ShareClinicalData";
+@WebService(endpointInterface = "gov.nih.nci.cacis.sa.service.ShareClinicalDataWs")
+public class ShareCanonicalDataWsImpl implements ShareCanonicalDataWs {
 
-        public ShareClinicalDataServer() {
-            super("shareClinicalDataWs", ADDRESS, SemanticAdapterConfig.class, true);
-        }
+    /**
+     * Receive operation
+     * @param trim input
+     * @return output
+     */
+    public String recieve(String trim) {
+        return "Received trim message";
     }
+}
 

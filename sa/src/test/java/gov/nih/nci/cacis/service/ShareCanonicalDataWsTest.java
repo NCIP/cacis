@@ -60,20 +60,49 @@
  */
 package gov.nih.nci.cacis.service;
 
-import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
-import gov.nih.nci.cacis.sa.SemanticAdapterConfig;
+import gov.nih.nci.cacis.sa.service.ShareCanonicalDataWs;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * @author bpickeral
+ * @since May 18, 2011
  */
-public class ShareClinicalDataServer  extends AbstractBusTestServer {
-        /**
-         * Default static ADDRESS to the local deployment
-         */
-        public static final String ADDRESS = "http://localhost:8178/ShareClinicalData";
+public class ShareCanonicalDataWsTest extends AbstractBusClientServerTestBase {
 
-        public ShareClinicalDataServer() {
-            super("shareClinicalDataWs", ADDRESS, SemanticAdapterConfig.class, true);
+    private JaxWsProxyFactoryBean factory;
+    private ShareCanonicalDataWs service;
+
+    /**
+     * start test servers
+     */
+    @BeforeClass
+    public  static void startServers() {
+        assertTrue("Could not launch server",
+                launchServer(ShareCanonicalDataServer.class, true));
+    }
+
+    @Before
+    public void init() {
+        if (factory == null) {
+            factory = new JaxWsProxyFactoryBean();
+            factory.setServiceClass(ShareCanonicalDataWs.class);
+            //        tolven service URL.
+            //        Todo change to using a property
+            factory.setAddress(ShareCanonicalDataServer.ADDRESS);
+            service = (ShareCanonicalDataWs) factory.create();
         }
     }
 
+
+    @Test
+    public void invoke() {
+        String response = service.recieve("Sample");
+        assertNotNull(response);
+
+    }
+
+}

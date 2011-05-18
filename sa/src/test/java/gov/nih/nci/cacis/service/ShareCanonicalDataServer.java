@@ -64,16 +64,17 @@ import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
 import gov.nih.nci.cacis.sa.SemanticAdapterConfig;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * @author bpickeral
+ * @since May 18, 2011
  */
-public class ShareClinicalDataServer  extends AbstractBusTestServer {
+public class ShareCanonicalDataServer  extends AbstractBusTestServer {
         /**
          * Default static ADDRESS to the local deployment
          */
-        public static final String ADDRESS = "http://localhost:8178/ShareClinicalData";
+        public static final String ADDRESS = "http://localhost:8178/ShareCanonicalData";
 
-        public ShareClinicalDataServer() {
-            super("shareClinicalDataWs", ADDRESS, SemanticAdapterConfig.class, true);
+        public ShareCanonicalDataServer() {
+            super("shareCanonicalDataWs", ADDRESS, SemanticAdapterConfig.class, true);
         }
     }
 

@@ -8,7 +8,7 @@
 <web-app>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>gov.nih.nci.cacis.sa.ShareClinicalDataConfig</param-value>
+		<param-value>gov.nih.nci.cacis.sa.SemanticAdapterConfig</param-value>
 	</context-param>
 
 	<listener>
