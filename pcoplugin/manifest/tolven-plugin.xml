@@ -11,12 +11,6 @@
         <import plugin-id="org.tolven.component.application"/>
     </requires>
 
-    <runtime>
-        <library id="classes" path="tpf/classes/" type="code">
-            <export prefix="*"/>
-        </library>
-    </runtime>
-
     <extension id="applications" plugin-id="org.tolven.component.application" point-id="applications">
         <parameter id="dir" value="app"/>
     </extension>
