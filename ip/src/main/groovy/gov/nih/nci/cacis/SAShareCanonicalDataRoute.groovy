@@ -58,22 +58,18 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.sa.service;
+package gov.nih.nci.cacis
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import org.apache.camel.spring.SpringRouteBuilder
 
 /**
- * Web service interface for ShareClinicalData
+ * @author kherm manav.kher@semanticbits.com
  */
-@WebService(targetNamespace = "http://sa.cacis.nci.nih.gov", name = "ShareClinicalData")
-public interface ShareClinicalDataWs {
-    /**
-     *
-     * @param text input
-     * @return output
-     */
-    @WebMethod
-     String recieve(String text);
-}
+class SAShareCanonicalDataRoute extends SpringRouteBuilder {
+  @Override
+  void configure() {
+    errorHandler(noErrorHandler())
 
+    from('cxf:bean:shareCanonicalData').to("log:info")
+  }
+}

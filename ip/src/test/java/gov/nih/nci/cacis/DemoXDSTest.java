@@ -58,22 +58,97 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.sa.service;
+package gov.nih.nci.cacis;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.openehealth.ipf.tutorials.xds.ContentUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import java.util.UUID;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
- * Web service interface for ShareClinicalData
+ * @author kherm manav.kher@semanticbits.com
  */
-@WebService(targetNamespace = "http://sa.cacis.nci.nih.gov", name = "ShareClinicalData")
-public interface ShareClinicalDataWs {
-    /**
-     *
-     * @param text input
-     * @return output
-     */
-    @WebMethod
-     String recieve(String text);
-}
+@RunWith(SpringJUnit4ClassRunner.class)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
+@ContextConfiguration(locations = {"/demo-xds-context.xml"})
 
+/**
+ * Test with the demo repo that comes with Openehealth IPF
+ */
+public class DemoXDSTest extends StandardTestContainer {
+    @Autowired
+    private ProducerTemplate producerTemplate;
+
+//    IHE profiles http://repo.openehealth.org/confluence/display/ipf2/IHE+Support+aggregator+page
+    private String xds43Uri = "xds-iti43://localhost:" + getPort() + "/xds-iti43";
+    private String xds42Uri = "xds-iti42://localhost:" + getPort() + "/xds-iti42";
+    private String xds41Uri = "xds-iti41://localhost:" + getPort() + "/xds-iti41";
+
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        startServer(new CXFServlet(), "demo-xds-context.xml", false, 8999);
+    }
+
+
+    @Test
+    public void storeAndRetrieve() throws Exception {
+        ProvideAndRegisterDocumentSet documentSet = SampleData.createProvideAndRegisterDocumentSet();
+
+        Document document = documentSet.getDocuments().get(0);
+        DocumentEntry docEntry = document.getDocumentEntry();
+
+        docEntry.getPatientId().setId(UUID.randomUUID().toString());
+        docEntry.setUniqueId("4.3.2.1");
+        docEntry.setHash(ContentUtils.sha1(document.getDataHandler()).toString());
+        docEntry.setSize(Long.parseLong(ContentUtils.size(document.getDataHandler()).toString()));
+
+        Response response = (Response) send(xds41Uri, documentSet, Response.class);
+        assertEquals(response.toString(), Status.SUCCESS, response.getStatus());
+
+        RetrieveDocumentSet retrieve = new RetrieveDocumentSet();
+        RetrieveDocument doc1 = new RetrieveDocument();
+        doc1.setDocumentUniqueId("4.3.2.1");
+        doc1.setRepositoryUniqueId("something");
+        retrieve.getDocuments().add(doc1);
+
+        RetrievedDocumentSet retrieveResponse = (RetrievedDocumentSet) send(xds43Uri, retrieve, RetrievedDocumentSet.class);
+        assertEquals(retrieveResponse.toString(), Status.SUCCESS, retrieveResponse.getStatus());
+    }
+
+
+    @Test
+    public void register() {
+        RegisterDocumentSet registerDocumentSet = SampleData.createRegisterDocumentSet();
+        DocumentEntry docEntry = registerDocumentSet.getDocumentEntries().get(0);
+        docEntry.getPatientId().setId(UUID.randomUUID().toString());
+        docEntry.setUniqueId("5.3.2.1");
+
+
+        Response registerResponse = (Response) send(xds42Uri, registerDocumentSet, Response.class);
+        assertEquals(registerResponse.toString(), Status.SUCCESS, registerResponse.getStatus());
+
+    }
+}

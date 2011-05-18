@@ -17,9 +17,8 @@
         <module>pcoplugin</module>
         <module>validation</module>
         <module>sa</module>
-
-        <!-- Blocked by http://caehrorg.jira.com/browse/ESD-2825
-          <module>transformer</module>-->
+        <module>ip</module>
+        <!--<module>transformer</module>-->
     </modules>
     <packaging>pom</packaging>
 
@@ -28,11 +27,12 @@
 
         <compileSource>1.6</compileSource>
         <spring.version>3.0.2.RELEASE</spring.version>
-        <cxf.version>2.3.1</cxf.version>
+        <cxf.version>2.3.2</cxf.version>
         <jboss.server.version>4.2.2.GA</jboss.server.version>
-
+        <ipf.version>2.3-m1</ipf.version>
+        <apache.camel.version>2.6.0</apache.camel.version>
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
-
+        <gmaven.version>1.2</gmaven.version>
         <logger.level>WARN</logger.level>
     </properties>
 
@@ -41,16 +41,16 @@
     </scm>
 
     <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.openehealth.ipf</groupId>
-                <artifactId>ipf</artifactId>
-                <version>2.2.3</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+              <dependencies>
+                  <dependency>
+                      <groupId>org.openehealth.ipf</groupId>
+                      <artifactId>ipf</artifactId>
+                         <version>${ipf.version}</version>
+                      <type>pom</type>
+                      <scope>import</scope>
+                  </dependency>
+              </dependencies>
+          </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -75,17 +75,17 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
-            <version>2.2.3</version>
+            <version>${ipf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-javaconfig</artifactId>
-            <version>2.7.1</version>
+            <version>${apache.camel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty</artifactId>
-            <version>2.7.1</version>
+            <version>${apache.camel.version}</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test</artifactId>
-            <version>2.7.1</version>
+            <version>${apache.camel.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -206,6 +206,7 @@
                     <excludes>
                         <exclude>**/Abstract*.java</exclude>
                         <exclude>**/Base*.java</exclude>
+                        <exclude>**/*IntegrationTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

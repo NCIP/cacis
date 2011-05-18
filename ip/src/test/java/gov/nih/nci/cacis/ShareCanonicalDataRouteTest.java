@@ -58,22 +58,43 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.sa.service;
+package gov.nih.nci.cacis;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 /**
- * Web service interface for ShareClinicalData
+ * @author kherm manav.kher@semanticbits.com
  */
-@WebService(targetNamespace = "http://sa.cacis.nci.nih.gov", name = "ShareClinicalData")
-public interface ShareClinicalDataWs {
-    /**
-     *
-     * @param text input
-     * @return output
-     */
-    @WebMethod
-     String recieve(String text);
-}
+@RunWith(SpringJUnit4ClassRunner.class)
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
+@ContextConfiguration(locations = {"/sa-context.xml"})
+public class ShareCanonicalDataRouteTest  extends StandardTestContainer {
 
+    @Autowired
+        private ProducerTemplate producerTemplate;
+
+        private String shareCanonicalService = "http://localhost:9003/sa/shareCanonicalData";
+
+        @BeforeClass
+        public static void setUp() throws Exception {
+            startServer(new CXFServlet(), "sa-context.xml", false, 8999);
+        }
+
+
+    @Test
+    public void sendMessage() {
+        //Implement Me
+
+    }
+}
