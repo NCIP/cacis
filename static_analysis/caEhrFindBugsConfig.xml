@@ -9,7 +9,9 @@
 	    <Bug code="EI,EI2" />	
 	</Match>
 	
-	<Match> <Method name="&lt;clinit&gt;" /> <Bug pattern="DM_NUMBER_CTOR" /> </Match> 
+	<Match> <Method name="&lt;clinit&gt;" /> <Bug pattern="DM_NUMBER_CTOR" /> </Match>
+	
+	<Match> <Method name="~.*invoke.*" /><Bug pattern="DM_NUMBER_CTOR" /> </Match> 
 	
 </FindBugsFilter>
 
