@@ -13,7 +13,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ip</artifactId>
     <name>Integration Platform</name>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
+
+    <properties>
+        <jboss.home>${JBOSS_HOME}</jboss.home>
+        <jboss.home.deploy.dir>${JBOSS_HOME}/server/tolven</jboss.home.deploy.dir>
+    </properties>
 
 
     <dependencies>
@@ -81,6 +86,14 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+            	<groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>ip-${pom.version}</warName>
+                    <outputDirectory>${jboss.home.deploy.dir}</outputDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,0 +1,14 @@
+<profilesXml>
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <jboss.home>${JBOSS_HOME}</jboss.home>
+                <jboss.home.deploy.dir>${JBOSS_HOME}/server/tolven/deploy</jboss.home.deploy.dir>
+                </properties>
+        </profile>
+    </profiles>
+</profilesXml>
