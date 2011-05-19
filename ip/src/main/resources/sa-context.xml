@@ -11,8 +11,8 @@
     <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-    <cxf:cxfEndpoint id="shareCanonicalData"
-                     address="http://localhost:9003/sa/shareCanonicalData"
+    <cxf:cxfEndpoint id="shareClinicalData"
+                     address="/sa/shareClinicalData"
                      serviceClass="gov.nih.nci.cacis.sa.service.ShareClinicalDataWs"/>
 
 
@@ -22,7 +22,7 @@
 
 
     <bean id="saRouteBuilder"
-          class="gov.nih.nci.cacis.SAShareCanonicalDataRoute">
+          class="gov.nih.nci.cacis.SAShareClinicalDataRoute">
     </bean>
 
 

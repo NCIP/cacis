@@ -21,7 +21,7 @@
     <!-- all our webservices are mapped under this URI pattern -->
     <servlet-mapping>
         <servlet-name>CXFServlet</servlet-name>
-        <url-pattern>/webservices/*</url-pattern>
+        <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

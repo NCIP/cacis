@@ -91,7 +91,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             	<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>ip-${pom.version}</warName>
+                    <warName>cacis-ip</warName>
                     <outputDirectory>${jboss.home.deploy.dir}</outputDirectory>
                 </configuration>
             </plugin>
