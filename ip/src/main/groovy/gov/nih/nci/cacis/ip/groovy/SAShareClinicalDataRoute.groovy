@@ -58,22 +58,21 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.service;
+package gov.nih.nci.cacis.ip.groovy
 
-import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
-import gov.nih.nci.cacis.sa.SemanticAdapterConfig;
+import org.apache.camel.spring.SpringRouteBuilder;
 
 /**
+ * Route between semantic adapter's share clinical data
  * @author kherm manav.kher@semanticbits.com
  */
-public class ShareClinicalDataServer  extends AbstractBusTestServer {
-        /**
-         * Default static ADDRESS to the local deployment
-         */
-        public static final String ADDRESS = "http://localhost:8178/ShareClinicalData";
-
-        public ShareClinicalDataServer() {
-            super("shareClinicalDataWs", ADDRESS, SemanticAdapterConfig.class, true);
-        }
-    }
-
+class SAShareClinicalDataRoute extends SpringRouteBuilder {
+  @Override
+  void configure() {
+    errorHandler(noErrorHandler())
+    
+    //TODO: We need to add translate step to transform the PCO trim to CDF
+    //i suppose it will just be another route to MC
+    from('cxf:bean:shareClinicalData').to("cxf:bean:shareCanonicalData")
+  }
+}

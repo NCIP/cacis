@@ -58,23 +58,22 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.sa.service;
+package gov.nih.nci.cacis.ip.groovy
 
-import javax.jws.WebService;
+import org.apache.camel.spring.SpringRouteBuilder;
+
 
 /**
- * Service Implementation
+ * Route between semantic adapter's share clinical data
+ * @author kherm manav.kher@semanticbits.com
  */
-@WebService(endpointInterface = "gov.nih.nci.cacis.sa.service.ShareClinicalDataWs")
-public class ShareClinicalDataWsImpl implements ShareClinicalDataWs {
-
-    /**
-     * Receive operation
-     * @param trim input
-     * @return output
-     */
-    public String recieve(String trim) {
-        return "Received trim message";
-    }
+class ShareCanonicalDataRoute extends SpringRouteBuilder {
+  @Override
+  void configure() {
+    errorHandler(noErrorHandler())
+    
+    //TODO: We need to add validate the CDF before sending it to correct persistence
+    //for now routing it to log    
+    from('cxf:bean:shareCanonicalData').to("log:info")
+  }
 }
-

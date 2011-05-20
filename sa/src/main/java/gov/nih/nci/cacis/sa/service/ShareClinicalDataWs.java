@@ -64,16 +64,19 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 /**
- * Web service interface for ShareClinicalData
+ * Web service interface for ShareClinicalData.
+ *
+ * @author bpickeral
+ * @since May 18, 2011
  */
 @WebService(targetNamespace = "http://sa.cacis.nci.nih.gov", name = "ShareClinicalData")
 public interface ShareClinicalDataWs {
+
     /**
      *
      * @param text input
      * @return output
      */
     @WebMethod
-     String recieve(String text);
+    String recieve(String text);
 }
-

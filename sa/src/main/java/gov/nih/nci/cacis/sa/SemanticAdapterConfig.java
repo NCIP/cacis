@@ -60,38 +60,12 @@
  */
 package gov.nih.nci.cacis.sa;
 
-import gov.nih.nci.cacis.sa.service.ShareCanonicalDataWs;
-import gov.nih.nci.cacis.sa.service.ShareCanonicalDataWsImpl;
-import gov.nih.nci.cacis.sa.service.ShareClinicalDataWs;
-import gov.nih.nci.cacis.sa.service.ShareClinicalDataWsImpl;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author kherm manav.kher@semanticbits.com
  */
 @Configuration
-@ImportResource("classpath:sa-beans.xml")
 public class SemanticAdapterConfig {
 
-    /**
-     * shareClinicalData Web Service
-     * @return ShareClinicalDataWs web service
-     */
-    @Bean
-    public ShareClinicalDataWs shareClinicalDataWs() {
-        return new ShareClinicalDataWsImpl();
-
-    }
-
-    /**
-     * shareCanonicalData Web Service
-     * @return ShareCanonicalDataWs web service
-     */
-    @Bean
-    public ShareCanonicalDataWs shareCanonicalDataWs() {
-        return new ShareCanonicalDataWsImpl();
-
-    }
 }

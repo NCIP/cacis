@@ -17,7 +17,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 
     <properties>
         <jboss.home>${JBOSS_HOME}</jboss.home>
-        <jboss.home.deploy.dir>${JBOSS_HOME}/server/tolven</jboss.home.deploy.dir>
+        <jboss.home.deploy.dir>${jboss.home}/server/tolven/deploy</jboss.home.deploy.dir>
     </properties>
 
 

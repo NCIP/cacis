@@ -58,28 +58,36 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis;
+package gov.nih.nci.cacis.ip;
 
-import org.apache.camel.spring.Main;
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+import gov.nih.nci.cacis.sa.SemanticAdapterConfig;
+
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 
 /**
- * Sample Server
+ * @author kherm manav.kher@semanticbits.com
  */
-public final class SampleServer {
-
+@Configuration
+@Import({SemanticAdapterConfig.class})
+@ImportResource("classpath:ip-context.xml")
+public class IPTestConfig {
+    
     /**
-     * Private constructor
+     * Loads properties from classpath:"cacis-provider-registry.properties location
+     * 
+     * @return the property place holder configures
      */
-    private SampleServer() {
-
-    }
-    /**
-     * main method
-     * @param args arguments
-     * @throws Exception exception
-     */
-    public static void main(String[] args) throws Exception { //NOPMD    Main.main throws Exception
-        Main.main("-ac", "/sa-context.xml");
+    @Bean
+    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        final CommonsPropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer(
+                "cacis-ip-test", "cacis-ip-test.properties");
+        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        return configurer;
     }
     
 }

@@ -1,0 +1,67 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+        xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/cxf 
+http://camel.apache.org/schema/cxf/camel-cxf.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd"> 
+
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    
+    <!-- enable processing of annotations such as @Autowired and @Configuration -->
+    <context:annotation-config/>
+    
+    <!-- Service endpoints -->
+    <cxf:cxfEndpoint id="shareClinicalData"
+                     address="${url-prefix}/ShareClinicalData"
+                     serviceClass="gov.nih.nci.cacis.sa.service.ShareClinicalDataWs"/>
+
+    <cxf:cxfEndpoint id="shareCanonicalData"
+                     address="${url-prefix}/ShareCanonicalData"
+                     serviceClass="gov.nih.nci.cacis.ip.service.ShareCanonicalDataWs"/>
+
+	<!-- CamelContext -->
+    <camel:camelContext id="camelContext">
+        <camel:routeBuilder ref="shareClinicalDataRouteBuilder"/>
+        <camel:routeBuilder ref="shareCanonicalDataRouteBuilder"/>
+    </camel:camelContext>
+    
+    <!-- model extensions -->
+    <bean id="coreModelExtension" 
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+    </bean>
+    
+    <!-- Configure Route model extender -->
+    <bean id="routeModelExtender" 
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
+            <list>
+                <ref bean="coreModelExtension" />
+            </list>
+        </property>
+    </bean>
+	
+	<!-- Route builders -->
+    <bean id="shareClinicalDataRouteBuilder" depends-on="routeModelExtender"
+          class="gov.nih.nci.cacis.ip.groovy.SAShareClinicalDataRoute">
+    </bean>
+    
+    <bean id="shareCanonicalDataRouteBuilder" depends-on="routeModelExtender"
+          class="gov.nih.nci.cacis.ip.groovy.ShareCanonicalDataRoute">
+    </bean>
+
+
+    </beans>
