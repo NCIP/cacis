@@ -16,8 +16,7 @@
 
 
     <properties>
-        <!-- <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli> -->
-		<mirthConnect.cli>C:/Mirth Connect/Mirth Connect CLI.exe</mirthConnect.cli> 
+        <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
         <outputRootdir>${user.home}</outputRootdir>
         <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
         <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
