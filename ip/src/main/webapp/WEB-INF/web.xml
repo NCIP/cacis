@@ -6,7 +6,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:sa-context.xml</param-value>
+        <param-value>classpath:ip-context.xml</param-value>
     </context-param>
     <!-- the listener that kick-starts Spring -->
     <listener>
