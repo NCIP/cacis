@@ -57,7 +57,6 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package gov.nih.nci.cacis.nav;
 
 import java.io.ByteArrayInputStream;
@@ -76,8 +75,6 @@ import javax.activation.DataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -90,57 +87,79 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.w3c.dom.Node;
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since May 10, 2011
+ * @author <a href="mailto:monish.dombla@semanticbits.com">Monish Dombla</a>
+ * @since May 20, 2011
  * 
  */
+public class NotificationSenderImpl implements NotificationSender {
 
-public class SMTPNotificationSender implements NotificationSender {
-
+    private JavaMailSenderImpl mailSender;
     private XDSNotificationSignatureBuilder signatureBuilder;
     private Properties mailProperties;
     private String subject;
     private String to;
     private String from;
     private String instructions;
+    private String userName;
+    private String host;
+    private int port;
+    private String protocol;
 
     /**
      * Default constructor
      */
-    public SMTPNotificationSender() { // NOPMD
-
+    public NotificationSenderImpl() { // NOPMD
+        mailSender = new JavaMailSenderImpl();
     }
 
     /**
      * Parameterized constructor.
      * 
-     * @param signatureBuilder the XDSNotificationSignatureBuilder
-     * @param mailProperties Java mail properties
-     * @param subject the subject
-     * @param to the to address
-     * @param from the from address
-     * @param instructions instructions to the user
+     * @param signatureBuilder
+     * @param mailProperties
+     * @param subject
+     * @param to
+     * @param from
+     * @param instructions
      */
-    public SMTPNotificationSender(XDSNotificationSignatureBuilder signatureBuilder, Properties mailProperties,
-            String subject, String to, String from, String instructions) {
+    @SuppressWarnings({ "PMD.ExcessiveParameterList" })
+ // CHECKSTYLE:OFF
+    public NotificationSenderImpl(XDSNotificationSignatureBuilder signatureBuilder, 
+                                        Properties mailProperties,
+                                        String subject,
+                                        String to,
+                                        String from,
+                                        String instructions,
+                                        String userName,
+                                        String password,
+                                        String host,
+                                        int port,
+                                        String protocol) { // NOPMD
+        
         this.signatureBuilder = signatureBuilder;
-        this.mailProperties = mailProperties;
         this.subject = subject;
         this.to = to;
         this.from = from;
         this.instructions = instructions;
+        mailSender = new JavaMailSenderImpl();
+        mailSender.setJavaMailProperties(mailProperties);
+        mailSender.setUsername(userName);
+        mailSender.setPassword(password);
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        if(StringUtils.isNotEmpty(protocol)){
+            mailSender.setProtocol(protocol);
+        }
     }
-
-    /*
-     * (non-Javadoc) {@inheritDoc}
-     */
-
+ // CHECKSTYLE:ON
+    
     @Override
     public void send(List<String> documentIds) throws NotificationSendException {
-
         Node sig = null;
         try {
             sig = getSignatureBuilder().buildSignature(documentIds);
@@ -163,13 +182,13 @@ public class SMTPNotificationSender implements NotificationSender {
         } catch (TransformerFactoryConfigurationError e) {
             throw new NotificationSendException(e);
         }
-
     }
 
     private void sendEmail(Node sig) throws AddressException, MessagingException, TransformerConfigurationException,
-            TransformerException, TransformerFactoryConfigurationError, UnsupportedEncodingException {
-        final Session session = Session.getInstance(getMailProperties(), null);
-        final MimeMessage msg = new MimeMessage(session);
+            TransformerException, TransformerFactoryConfigurationError, UnsupportedEncodingException { // NOPMD
+        
+        final MimeMessage msg = mailSender.createMimeMessage();
+        
         msg.setFrom(new InternetAddress(getFrom()));
         msg.setSubject(getSubject());
         msg.setSentDate(new Date());
@@ -224,115 +243,190 @@ public class SMTPNotificationSender implements NotificationSender {
         msg.setContent(mp);
         msg.setSentDate(new Date());
 
-        Transport.send(msg);
+        mailSender.send(msg);
+
     }
 
-    /**
-     * @return the signatureBuilder
+    
+    /** 
+     * @return the mailSender 
      */
+    public JavaMailSenderImpl getMailSender() {
+        return mailSender;
+    }
 
+    
+    /** 
+     * @param mailSender the mailSender to set
+     */
+    public void setMailSender(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    
+    /** 
+     * @return the signatureBuilder 
+     */
     public XDSNotificationSignatureBuilder getSignatureBuilder() {
-
         return signatureBuilder;
     }
 
-    /**
+    
+    /** 
      * @param signatureBuilder the signatureBuilder to set
      */
-
     public void setSignatureBuilder(XDSNotificationSignatureBuilder signatureBuilder) {
-
         this.signatureBuilder = signatureBuilder;
     }
 
-    /**
-     * @return the mailProperties
+    
+    /** 
+     * @return the mailProperties 
      */
-
     public Properties getMailProperties() {
-
         return mailProperties;
     }
 
-    /**
+    
+    /** 
      * @param mailProperties the mailProperties to set
      */
-
     public void setMailProperties(Properties mailProperties) {
-
         this.mailProperties = mailProperties;
+        mailSender.setJavaMailProperties(mailProperties);
     }
 
-    /**
-     * @return the subject
+    
+    /** 
+     * @return the subject 
      */
-
     public String getSubject() {
-
         return subject;
     }
 
-    /**
+    
+    /** 
      * @param subject the subject to set
      */
-
     public void setSubject(String subject) {
-
         this.subject = subject;
     }
 
-    /**
-     * @return the to
+    
+    /** 
+     * @return the to 
      */
-
     public String getTo() {
-
         return to;
     }
 
-    /**
+    
+    /** 
      * @param to the to to set
      */
-
     public void setTo(String to) {
-
         this.to = to;
     }
 
-    /**
-     * @return the from
+    
+    /** 
+     * @return the from 
      */
-
     public String getFrom() {
-
         return from;
     }
 
-    /**
+    
+    /** 
      * @param from the from to set
      */
-
     public void setFrom(String from) {
-
         this.from = from;
     }
 
-    /**
-     * @return the instructions
+    
+    /** 
+     * @return the instructions 
      */
-
     public String getInstructions() {
-
         return instructions;
     }
 
-    /**
+    
+    /** 
      * @param instructions the instructions to set
      */
-
     public void setInstructions(String instructions) {
-
         this.instructions = instructions;
     }
 
+    
+    /** 
+     * @return the userName 
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    
+    /** 
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+        mailSender.setUsername(userName);
+    }
+
+    
+    /** 
+     * @return the host 
+     */
+    public String getHost() {
+        return host;
+    }
+
+    
+    /** 
+     * @param host the host to set
+     */
+    public void setHost(String host) {
+        this.host = host;
+        mailSender.setHost(host);
+    }
+
+    
+    /** 
+     * @return the port 
+     */
+    public int getPort() {
+        return port;
+    }
+
+    
+    /** 
+     * @param port the port to set
+     */
+    public void setPort(int port) {
+        this.port = port;
+        mailSender.setPort(port);
+    }
+
+    
+    /** 
+     * @return the protocol 
+     */
+    public String getProtocol() {
+        return protocol;
+    }
+
+    
+    /** 
+     * @param protocol the protocol to set
+     */
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+        if (StringUtils.isNotEmpty(protocol)) {
+            mailSender.setProtocol(protocol);
+        }
+    }
 }

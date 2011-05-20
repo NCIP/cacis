@@ -82,6 +82,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import com.icegreen.greenmail.user.GreenMailUser;
+import com.icegreen.greenmail.util.DummySSLSocketFactory;
 import com.icegreen.greenmail.util.GreenMail;
 
 /**
@@ -125,7 +127,7 @@ public class NAVSystemTest {
      * @throws Exception on error
      */
     @Test
-    public void testNotificationSender() throws Exception {
+    public void testNotificationSenderNonSecure() throws Exception {
         final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
         docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
         docCache.putDocument(docId2, new File("purchase_order.xml"));
@@ -135,21 +137,125 @@ public class NAVSystemTest {
                 SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
 
         final Properties props = new Properties();
-        props.setProperty("mail.smtp.port", SMTP_PORT);
+        props.setProperty("mail.debug", "true");
 
         final String mailbox = "another.one@somewhere.com";
         final String to = "some.one@somewhere.com";
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
 
-        final NotificationSender sender = new SMTPNotificationSender(sigBuilder, props, subject, mailbox, to,
-                instructions);
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, 
+                props, subject, mailbox, to,instructions,
+                "",
+                "",
+                server.getSmtp().getBindTo(),
+                server.getSmtp().getPort(),
+                server.getSmtp().getProtocol());
+
         final String[] keys = { docId1, docId2 };
         sender.send(new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
 
     }
+    
+    
+
+    /**
+     * 
+     * @throws Exception on error
+     */
+    @Test
+    public void testNotificationSenderWithSMTPAndTLS() throws Exception {
+        
+        final String email = "another.one@somewhere.com";
+        final String login = "another.one";
+        final String password = "secret";
+
+        final GreenMailUser user = server.setUser(email, login, password);
+        
+        final Properties props = new Properties();
+        props.setProperty("mail.smtp.auth", "true");
+        props.setProperty("mail.smtp.starttls.enable", "true");
+        props.setProperty("mail.debug", "true");
+     
+        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
+        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
+        docCache.putDocument(docId2, new File("purchase_order.xml"));
+        
+        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
+        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
+                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
+
+        final String mailbox = "another.one@somewhere.com";
+        final String to = "some.one@somewhere.com";
+        final String subject = "Notification of Document Availability";
+        final String instructions = "Instructions to the user.";
+
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, 
+                                                props, subject, mailbox, to,instructions,
+                                                user.getLogin(),
+                                                user.getPassword(),
+                                                server.getSmtp().getBindTo(),
+                                                server.getSmtp().getPort(),
+                                                server.getSmtp().getProtocol());
+        final String[] keys = { docId1, docId2 };
+        
+        sender.send(new ArrayList<String>(Arrays.asList(keys)));
+
+        assertTrue(server.getReceivedMessages().length == 1);
+     
+    }   
+    
+    
+    /**
+     * 
+     * @throws Exception on error
+     */
+    @Test
+    public void testNotificationSenderWithSMTPSAndSSL() throws Exception {
+        
+        final String email = "another.one@somewhere.com";
+        final String login = "another.one";
+        final String password = "secret";
+
+        final GreenMailUser user = server.setUser(email, login, password);
+        
+        final Properties props = new Properties();
+        
+        props.setProperty("mail.smtps.auth", "true");
+        props.setProperty("mail.smtps.starttls.enable", "true");
+        props.setProperty("mail.smtps.socketFactory.class", DummySSLSocketFactory.class.getName());
+        props.setProperty("mail.debug", "true");
+     
+        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
+        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
+        docCache.putDocument(docId2, new File("purchase_order.xml"));
+        
+        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
+        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
+                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
+
+        final String mailbox = "another.one@somewhere.com";
+        final String to = "some.one@somewhere.com";
+        final String subject = "Notification of Document Availability";
+        final String instructions = "Instructions to the user.";
+
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, 
+                                                props, subject, mailbox, to,instructions,
+                                                user.getLogin(),
+                                                user.getPassword(),
+                                                server.getSmtps().getBindTo(),
+                                                server.getSmtps().getPort(),
+                                                server.getSmtps().getProtocol());
+        final String[] keys = { docId1, docId2 };
+        
+        sender.send(new ArrayList<String>(Arrays.asList(keys)));
+
+        assertTrue(server.getReceivedMessages().length == 1);
+     
+    }    
+    
 
     /**
      * Tests all NAV receiver components
