@@ -68,9 +68,9 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author bhumphrey
  */
-public class XCCDToCDFTransformerSystemTest extends AbstractTransformerSystemTest {
+public class XCCDToCDFTransformerIntegrationTest extends AbstractTransformerSystemTest {
 
-    static final Log LOG = LogFactory.getLog(XCCDToCDFTransformerSystemTest.class);
+    static final Log LOG = LogFactory.getLog(XCCDToCDFTransformerIntegrationTest.class);
 
     /**
      * @param invalidMessage

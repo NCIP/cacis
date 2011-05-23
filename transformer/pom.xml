@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pco</artifactId>
         <groupId>gov.nih.nci.cacis</groupId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,6 +29,7 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
     <build>
         <resources>
             <resource>
@@ -42,50 +43,33 @@
 
             </resource>
         </resources>
-        <plugins>
-            <plugin>
-                <groupId>gov.nih.nci.cacis</groupId>
-                <artifactId>mirthconnect-maven-plugin</artifactId>
-                <version>1.0</version>
-                <configuration>
-                    <mirthConnect>${mirthConnect.cli}</mirthConnect>
-                    <script>${build.outputDirectory}/deploy.mc</script>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>cli</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            	<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>**/*SystemTest.java</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>surefire-itest</id>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<excludes>
-								<exclude>none</exclude>
-							</excludes>
-							<includes>
-								<include>**/*SystemTest.java</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-        </plugins>
 
     </build>
+
+    <profiles>
+        <profile>
+            <id>cacis-ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>gov.nih.nci.cacis</groupId>
+                        <artifactId>mirthconnect-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <configuration>
+                            <mirthConnect>${mirthConnect.cli}</mirthConnect>
+                            <script>${build.outputDirectory}/deploy.mc</script>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>cli</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
