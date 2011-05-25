@@ -60,19 +60,23 @@
  */
 package gov.nih.nci.cacis.ip.routes
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.spring.SpringRouteBuilder;
+
 
 /**
- * Route between semantic adapter's share clinical data
- * @author kherm manav.kher@semanticbits.com
+ * Route to receive canonical data at ip end and validate it and store it
+ * @author vinodh.rc@semanticbits.com
  */
 class ShareCanonicalDataRoute extends SpringRouteBuilder {
-  @Override
-  void configure() {
-    errorHandler(noErrorHandler())
-
-    //TODO: We need to add validate the CDF before sending it to correct persistence
-    //for now routing it to log    
-    from('cxf:bean:shareCanonicalData').to("log:info")
-  }
+    @Override
+    void configure() {
+        errorHandler(noErrorHandler())
+        
+        //TODO: We need to add validate the CDF before sending it to correct persistence
+        //for now routing it to log    
+        from('cxf:bean:shareCanonicalData')
+                .routeId('cxf:bean:shareCanonicalData')
+                .processRef('canonicalDataProcessor')
+                .to("log:info")
+    }
 }

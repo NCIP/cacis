@@ -86,9 +86,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
  *
  */
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
-public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
+public class ShareCanonicalDataRouteCamelTest extends CamelSpringTestSupport {
             
-    @Produce(uri = "cxf://bean:shareClinicalData")
+    @Produce(uri = "cxf://bean:shareCanonicalData")
     private ProducerTemplate producerTemplate;
 
     /**
@@ -97,14 +97,14 @@ public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
      */
     public void setUp() throws Exception { //NOPMD
         super.setUp();
-        final RouteDefinition rd = context.getRouteDefinition("cxf:bean:shareClinicalData");
+        final RouteDefinition rd = context.getRouteDefinition("cxf:bean:shareCanonicalData");
         // advice the first route using the inlined route builder
         rd.adviceWith(context, new RouteBuilder() {
 
             @Override
             public void configure() throws Exception { //NOPMD
                 // intercept sending to the mirth connect and mock it
-                interceptSendToEndpoint("cxf:bean:mcClinicalData2CanonicalDataWS").skipSendToOriginalEndpoint().to("mock:result");
+                interceptSendToEndpoint("log:info").skipSendToOriginalEndpoint().to("mock:result");
             }
         });
     }
@@ -118,6 +118,7 @@ public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
         context.stop();
     }
     
+    
     /**
      * Tests by passing a known valid message 
      * and asserts that the message is received correctly at target end
@@ -126,17 +127,17 @@ public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
     @Test
     public void testMessage() throws Exception {
         
-        final URL trimFileURL = getClass().getClassLoader().getResource("sample-pco-trim.xml");
-        
-        final File trimFile = new File(trimFileURL.toURI());
-        final String trimContent = FileUtils.readFileToString(trimFile);
+        final URL cdfFileURL = getClass().getClassLoader().getResource("sample-cdf.xml");
+
+        final File cdfFile = new File(cdfFileURL.toURI());
+        final String cdfContent = FileUtils.readFileToString(cdfFile);
         
         final MockEndpoint ep = getMockEndpoint("mock:result");
         ep.expectedMessageCount(1);
-        ep.expectedBodiesReceived(trimContent);
+        ep.expectedBodiesReceived(cdfContent);
                
         final List<Object> contents = new MessageContentsList();
-        contents.add(trimContent);
+        contents.add(cdfContent);
         producerTemplate.requestBody(contents);
 
         assertMockEndpointsSatisfied();

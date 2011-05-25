@@ -3,10 +3,14 @@
 
     <display-name>Integration Platform</display-name>
     <description>Integration Platform</description>
-
+	
+	<context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:ip-context.xml</param-value>
+        <param-value>gov.nih.nci.cacis.ip.IPConfig</param-value>
     </context-param>
     <!-- the listener that kick-starts Spring -->
     <listener>

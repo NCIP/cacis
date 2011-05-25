@@ -60,19 +60,23 @@
  */
 package gov.nih.nci.cacis.ip.routes
 
-import org.apache.camel.spring.SpringRouteBuilder
+import gov.nih.nci.cacis.ip.service.ShareClinicalDataWsMessageProcessor;
+
+import org.apache.camel.spring.SpringRouteBuilder;
+
 
 /**
- * Route between semantic adapter's share clinical data
- * @author kherm manav.kher@semanticbits.com
+ * Route between semantic adapter's share clinical data to MC transformer
+ * @author vinodh.rc@semanticbits.com
  */
 class SAShareClinicalDataRoute extends SpringRouteBuilder {
-  @Override
-  void configure() {
-    errorHandler(noErrorHandler())
-
-    //TODO: We need to add translate step to transform the PCO trim to CDF
-    //i suppose it will just be another route to MC
-    from('cxf:bean:shareClinicalData').to("cxf:bean:shareCanonicalData")
-  }
+    
+    @Override
+    void configure() {
+        errorHandler(noErrorHandler())
+        from('cxf:bean:shareClinicalData')
+                .routeId('cxf:bean:shareClinicalData')
+                .processRef('clinicalDataProcessor')
+                .to('cxf:bean:mcClinicalData2CanonicalDataWS')   
+    }
 }

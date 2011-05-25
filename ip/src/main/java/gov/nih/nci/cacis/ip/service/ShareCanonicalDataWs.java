@@ -61,6 +61,7 @@
 package gov.nih.nci.cacis.ip.service;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -74,6 +75,6 @@ public interface ShareCanonicalDataWs {
      * @return output
      */
     @WebMethod
-    String recieve(String text);
+    String recieve(@WebParam(name = "text")String text);
 }
 

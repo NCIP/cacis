@@ -1,5 +1,4 @@
-/**
- * The software subject to this notice and license includes both human readable source code form and machine readable,
+/** The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
  * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
  * To the extent government employees are authors, any rights in such works shall be subject to Title 17 of the United
@@ -58,93 +57,30 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.service;
+package gov.nih.nci.cacis.ip.service;
 
-import gov.nih.nci.cacis.ip.IPTestConfig;
-
-import java.io.File;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.model.RouteDefinition;
-import org.apache.camel.test.junit4.CamelSpringTestSupport;
-import org.apache.commons.io.FileUtils;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import org.apache.camel.Processor;
 import org.apache.cxf.message.MessageContentsList;
-import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 /**
- * Test class to test the ShareClinicalData route builder 
+ * Processor to process the canonical data before sending in the route
  * @author vinodh.rc@semanticbits.com
  *
  */
-@TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
-public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
-            
-    @Produce(uri = "cxf://bean:shareClinicalData")
-    private ProducerTemplate producerTemplate;
-
-    /**
-     * setup method for JUnit4 tests
-     * @throws Exception - exception thrown
-     */
-    public void setUp() throws Exception { //NOPMD
-        super.setUp();
-        final RouteDefinition rd = context.getRouteDefinition("cxf:bean:shareClinicalData");
-        // advice the first route using the inlined route builder
-        rd.adviceWith(context, new RouteBuilder() {
-
-            @Override
-            public void configure() throws Exception { //NOPMD
-                // intercept sending to the mirth connect and mock it
-                interceptSendToEndpoint("cxf:bean:mcClinicalData2CanonicalDataWS").skipSendToOriginalEndpoint().to("mock:result");
-            }
-        });
-    }
-    
-    /**
-     * teardown method for JUnit4 tests
-     * @throws Exception - exception thrown
-     */
-    public void tearDown() throws Exception { //NOPMD
-        producerTemplate.stop();
-        context.stop();
-    }
-    
-    /**
-     * Tests by passing a known valid message 
-     * and asserts that the message is received correctly at target end
-     * @throws Exception - error thrown
-     */
-    @Test
-    public void testMessage() throws Exception {
-        
-        final URL trimFileURL = getClass().getClassLoader().getResource("sample-pco-trim.xml");
-        
-        final File trimFile = new File(trimFileURL.toURI());
-        final String trimContent = FileUtils.readFileToString(trimFile);
-        
-        final MockEndpoint ep = getMockEndpoint("mock:result");
-        ep.expectedMessageCount(1);
-        ep.expectedBodiesReceived(trimContent);
-               
-        final List<Object> contents = new MessageContentsList();
-        contents.add(trimContent);
-        producerTemplate.requestBody(contents);
-
-        assertMockEndpointsSatisfied();
-    }
+public class ShareCanonicalDataWsMessageProcessor implements Processor {
     
     @Override
-    protected AbstractApplicationContext createApplicationContext() {
-        return new AnnotationConfigApplicationContext(IPTestConfig.class);
-    }
-
+    public void  process(Exchange exchange) throws Exception { //NOPMD
+        final String canonicalData = (String)exchange.getIn().getBody(List.class).get(0);
+        
+        final List<Object> contents = new MessageContentsList();
+        contents.add(canonicalData); 
+        final Message outMsg = exchange.getOut();
+        outMsg.setBody(contents, List.class); 
+        outMsg.setHeader(Exchange.CONTENT_TYPE, "application/xml");
+    }    
 }
