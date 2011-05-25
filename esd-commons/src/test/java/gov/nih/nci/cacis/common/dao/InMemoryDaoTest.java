@@ -58,22 +58,31 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.groovy
+package gov.nih.nci.cacis.common.dao;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
 /**
- * Route between semantic adapter's share clinical data
  * @author kherm manav.kher@semanticbits.com
  */
-class ShareCanonicalDataRoute extends SpringRouteBuilder {
-  @Override
-  void configure() {
-    errorHandler(noErrorHandler())
-    
-    //TODO: We need to add validate the CDF before sending it to correct persistence
-    //for now routing it to log    
-    from('cxf:bean:shareCanonicalData').to("log:info")
-  }
+public class InMemoryDaoTest {
+
+    @Test
+    public void saveStrings() {
+        InMemoryDao<String> dao = new InMemoryDao<String>();
+        Long id = dao.save(new String());
+        assertNotNull(id);
+
+        Long id2 = dao.save(new String("something else"));
+        assertNotSame(id, id2);
+
+        assertEquals(2, dao.getAll().size());
+
+        dao.replace(id, dao.getById(id2));
+        assertEquals(dao.getById(id), dao.getById(id2));
+    }
 }

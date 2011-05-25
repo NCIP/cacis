@@ -58,21 +58,57 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.groovy
+package gov.nih.nci.cacis.common.dao;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import java.util.List;
 
 /**
- * Route between semantic adapter's share clinical data
- * @author kherm manav.kher@semanticbits.com
+ * @param <T> Type parameter
  */
-class SAShareClinicalDataRoute extends SpringRouteBuilder {
-  @Override
-  void configure() {
-    errorHandler(noErrorHandler())
-    
-    //TODO: We need to add translate step to transform the PCO trim to CDF
-    //i suppose it will just be another route to MC
-    from('cxf:bean:shareClinicalData').to("cxf:bean:shareCanonicalData")
-  }
+public interface Dao<T> {
+
+    /**
+     * Retrieve all entities of the entity type served by this dao.
+     *
+     * @return list of the entities, empty list if none.
+     */
+    List<T> getAll();
+
+    /**
+     * Save the given entity in the persistent store.
+     *
+     * @param entity entity to save. It must not be yet persistent
+     * @return II id of the saved entity within repository (II.extention is table id in case of database, ordinal number
+     *         in case of in-memory structure)
+     */
+    Long save(T entity);
+
+    /**
+     * Retrieve an entity by a given internal id.
+     *
+     * @param id the internal identifier of the entity
+     * @return the entity
+     */
+    T getById(Long id);
+
+    /**
+     * Remove the entity from persistent store
+     *
+     * @param id - the external identifier of the entity
+     */
+    void delete(Long id);
+
+    /**
+     * Replace the entity in the data store
+     *
+     * @param id     identifier of the entity
+     * @param entity the new entity
+     */
+    void replace(Long id, T entity);
+
+    /**
+     * Delete all entitites from the data store
+     */
+    void deleteAll();
 }
+
