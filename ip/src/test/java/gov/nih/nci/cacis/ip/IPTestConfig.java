@@ -74,7 +74,7 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Configuration
 @Import({SemanticAdapterConfig.class})
-@ImportResource("classpath:ip-context.xml")
+@ImportResource({"classpath:ip-context-test.xml","classpath:ip-context.xml"})
 public class IPTestConfig {
     
     /**
