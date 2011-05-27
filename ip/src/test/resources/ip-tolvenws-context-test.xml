@@ -1,0 +1,94 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:http="http://cxf.apache.org/transports/http/configuration"
+    xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+    xmlns:sec="http://cxf.apache.org/configuration/security"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/cxf 
+http://camel.apache.org/schema/cxf/camel-cxf.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://cxf.apache.org/configuration/security
+http://cxf.apache.org/schemas/configuration/security.xsd
+http://cxf.apache.org/transports/http/configuration
+http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	<!--
+		enable processing of annotations such as @Autowired and @Configuration
+	-->
+	<context:annotation-config />
+
+	<bean id="camelTracer" class="org.apache.camel.processor.interceptor.Tracer">
+	  <property name="traceOutExchanges" value="true" />
+	</bean>
+	
+	<bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+	  <property name="showOutBody" value="true" />
+	  <property name="showOutBodyType" value="true" />
+	</bean>	
+	
+	<!-- Message processors -->
+	<bean id = "trimDataProcessor" class="gov.nih.nci.cacis.ip.service.TrimDataProcessor" />
+	
+	<!-- CamelContext -->
+	<camel:camelContext id="camelContext" trace="false">	
+		<camel:routeBuilder ref="trimSubmissionRouteBuilder" />
+	</camel:camelContext>
+
+	<!-- model extensions -->
+	<bean id="coreModelExtension"
+		class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+	</bean>
+
+	<!-- Configure Route model extender -->
+	<bean id="routeModelExtender"
+		class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+		<property name="routeModelExtensions">
+			<list>
+				<ref bean="coreModelExtension" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Routes -->
+	<bean id="trimSubmissionRouteBuilder" depends-on="routeModelExtender"
+		class="gov.nih.nci.cacis.ip.routes.TrimSubmissionRoute">
+	</bean>
+	
+	<http-conf:conduit name="*.http-conduit">
+   		<http-conf:tlsClientParameters disableCNCheck="true">
+   		</http-conf:tlsClientParameters>
+		<http:authorization>
+	     	<sec:UserName>${pcoTolvenUserName}</sec:UserName>
+	     	<sec:Password>${pcoTolvenPassword}</sec:Password>
+	  	</http:authorization>
+ 	</http-conf:conduit>
+ 
+ 	<!--Tolven WebSerice Endpoint  -->	
+	<cxf:cxfEndpoint id="pcoTolvenDocumentServiceEndpoint"
+                     address="${pcoTolvenDocumentServiceWSAddress}"
+                     wsdlURL="${pcoTolvenDocumentServiceWSAddress}?wsdl"
+                     serviceName="s:DocumentService"
+                     endpointName="s:DocumentPort"
+                     xmlns:s="http://tolven.org/document">
+		<cxf:properties>
+			<entry key="dataFormat" value="PAYLOAD"/>
+			<entry key="defaultOperationName" value="queueMessage"/>
+			<entry key="mtom-enabled" value="true"/>
+		</cxf:properties>
+		              
+    </cxf:cxfEndpoint>
+	 
+</beans>
