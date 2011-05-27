@@ -70,11 +70,11 @@ import javax.jws.WebService;
  * @author bpickeral
  * @since May 18, 2011
  */
-@WebService(targetNamespace = "http://sa.cacis.nci.nih.gov", name = "ShareClinicalData")
+@WebService(targetNamespace = "http://sa.cacis.nci.nih.gov", name = "ShareClinicalData",
+        serviceName = "ShareClinicalData")
 public interface ShareClinicalDataWs {
 
     /**
-     *
      * @param text input
      * @return output
      */

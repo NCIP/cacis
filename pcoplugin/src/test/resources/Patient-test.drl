@@ -28,26 +28,20 @@ global java.io.PrintStream out;
 rule "caCIS Load Trim"
  when
      $trim: TrimEx()
+     $address: String()
      $msList: MenuStructure( path == "echr:patients:all" )
      $msPatient: MenuStructure( role == "placeholder", path == "echr:patient" )
      $mdPatient: MenuData( menuStructure == $msPatient )
+
   then
     II mdPatientII = $trim.getAct().getParticipations().get(0).getRole().getId().getIIS().get(0);
     //populate menu data row for placeholder
     $mdPatient.setString07(mdPatientII.getRoot());
     $mdPatient.setString08(mdPatientII.getExtension());
 
-    MenuData mdPatientList = app.createReferenceMD( $mdPatient, $msList );
-    //populate menu data row for list item
-    mdPatientList.setString07(mdPatientII.getRoot());
-    mdPatientList.setString08(mdPatientII.getExtension());
-    app.getMenuBean().updateMenuData(mdPatientList);
-	app.info("caCIS Calling Mock Semantic adapter.");
-
   try {
 
-    URL wsdlURL = new URL("http://localhost:8080/ShareClinicalData?wsdl");
-
+    URL wsdlURL = new URL($address);
     QName SERVICE_NAME = new QName("http://sa.cacis.nci.nih.gov", "ShareClinicalData");
     Service service = Service.create(wsdlURL, SERVICE_NAME);
     ShareClinicalDataWs client = service.getPort(ShareClinicalDataWs.class);

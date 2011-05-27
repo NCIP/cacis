@@ -14,11 +14,36 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>semantic-adapter-ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>tolven-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>4.0.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-core</artifactId>
+            <version>4.0.7</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-script-ant</artifactId>
             <version>2.0.10</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -40,6 +65,9 @@
                     <goalPrefix>build-pcoplugin</goalPrefix>
                 </configuration>
             </plugin>
+
+
         </plugins>
+
     </build>
 </project>
