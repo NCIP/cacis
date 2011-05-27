@@ -61,6 +61,7 @@
 package gov.nih.nci.cacis.sa.service;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -78,5 +79,5 @@ public interface ShareClinicalDataWs {
      * @return output
      */
     @WebMethod
-    String recieve(String text);
+    String recieve(@WebParam(name = "text") String text);
 }

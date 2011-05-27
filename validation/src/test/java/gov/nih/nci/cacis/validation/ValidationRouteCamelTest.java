@@ -60,12 +60,14 @@
  */
 package gov.nih.nci.cacis.validation;
 
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+
 import java.io.File;
-import java.io.FileInputStream;
 
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.test.junit4.CamelSpringTestSupport;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -75,6 +77,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+
 /**
  * Test class to test the validation route builder 
  * @author vinodh.rc@semanticbits.com
@@ -82,12 +85,12 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
  */
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class ValidationRouteCamelTest extends CamelSpringTestSupport {
-
+    
     private String validationReport;
     private String reportMsgForSuccess;
     private String reportMsgForFailure;
     
-    @Produce(uri = "direct:input1")
+    @Produce(uri = "direct:cdf:validation:start")
     private ProducerTemplate producerTemplate;
 
     /**
@@ -96,52 +99,68 @@ public class ValidationRouteCamelTest extends CamelSpringTestSupport {
      */
     public void setUp() throws Exception { //NOPMD
         super.setUp();
-        // TODO: need to get it from spring placeholder
-        validationReport = "file://target?fileName=output.txt";
+        
+        final CommonsPropertyPlaceholderConfigurer props = 
+            (CommonsPropertyPlaceholderConfigurer) applicationContext.getBean(CommonsPropertyPlaceholderConfigurer.class);
+        
+        validationReport = props.getProperty("schematron.cdf.validation.report");
+        
         reportMsgForSuccess = "";
         final File failureMsgFile = new File(getClass().getClassLoader().getResource("schematron-test-fail-output.txt")
                 .toURI());
         reportMsgForFailure = FileUtils.readFileToString(failureMsgFile);
-
+        
+        final RouteDefinition rd = context.getRouteDefinition("direct:cdf:validation:extractresult");
         // advice the first route using the inlined route builder
-        context.getRouteDefinitions().get(1).adviceWith(context, new RouteBuilder() {
+        rd.adviceWith(context, new RouteBuilder() {
 
             @Override
             public void configure() throws Exception { //NOPMD
                 // intercept sending to mock:foo and do something else
-                interceptSendToEndpoint(validationReport).skipSendToOriginalEndpoint().to("mock:result");
+                interceptSendToEndpoint(validationReport)
+                .skipSendToOriginalEndpoint().to("mock:result");
             }
         });
     }
     
     /**
+     * teardown method for JUnit4 tests
+     * @throws Exception - exception thrown
+     */
+    public void tearDown() throws Exception { //NOPMD
+        producerTemplate.stop();
+        context.stop();
+    }
+    
+    /**
      * Tests by passing a known valid message and asserts the validation success report
-     * @throws Exception - error thrown
+     * @throws InterruptedException - error thrown
      */
     @Test
-    public void testValidMessage() throws Exception {
+    public void validatingWithValidMessage() throws InterruptedException {
         final MockEndpoint ep = getMockEndpoint("mock:result");
         ep.expectedMessageCount(1);
         ep.expectedBodiesReceived(reportMsgForSuccess);
-
-        producerTemplate.requestBody("direct:input1", new FileInputStream("src/test/resources/schematron-test.xml"));
+        
+        producerTemplate.requestBody(
+                getClass().getClassLoader().getResourceAsStream("schematron-test.xml"));
 
         assertMockEndpointsSatisfied();
     }
     
     /**
      * Tests by passing a known invalid message and asserts the validation failure report
-     * @throws Exception - error thrown
+     * @throws InterruptedException - error thrown
      */
     @Test
-    public void testInvalidMessage() throws Exception {
+    public void validatingWithInvalidMessage() throws InterruptedException {
 
         final MockEndpoint ep = getMockEndpoint("mock:result");
         ep.expectedMessageCount(1);
         ep.expectedBodiesReceived(reportMsgForFailure);
 
-        producerTemplate.requestBody("direct:input1",
-                new FileInputStream("src/test/resources/schematron-test-fail.xml"));
+        producerTemplate.requestBody(
+                getClass().getClassLoader().getResourceAsStream("schematron-test-fail.xml"));
 
         assertMockEndpointsSatisfied();
     }

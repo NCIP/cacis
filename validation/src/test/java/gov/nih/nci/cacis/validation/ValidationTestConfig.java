@@ -74,20 +74,20 @@ import org.springframework.context.annotation.ImportResource;
  * @since May 05, 2011
  */
 @Configuration
-@ImportResource("classpath:context.xml")
+@ImportResource( { "classpath:cacis-validation-context.xml", "classpath:cacis-validation-context-test.xml" })
 public class ValidationTestConfig {
 
     /**
-     * Loads properties from classpath:"cacis-provider-registry.properties location
+     * Loads properties from classpath:"cacis-validation-test.properties location
      * 
      * @return the property place holder configures
      */
-    @Bean
+    @Bean( name = "cacis-validation-test")
     public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
         final CommonsPropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer(
                 "cacis-validation-test", "cacis-validation-test.properties");
         configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
-
+        configurer.setIgnoreUnresolvablePlaceholders(true);
         return configurer;
     }
 }

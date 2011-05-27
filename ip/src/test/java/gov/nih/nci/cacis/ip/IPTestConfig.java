@@ -62,6 +62,7 @@ package gov.nih.nci.cacis.ip;
 
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 import gov.nih.nci.cacis.sa.SemanticAdapterConfig;
+import gov.nih.nci.cacis.validation.ValidationConfig;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -73,20 +74,21 @@ import org.springframework.context.annotation.ImportResource;
  * @author kherm manav.kher@semanticbits.com
  */
 @Configuration
-@Import({SemanticAdapterConfig.class})
+@Import({SemanticAdapterConfig.class, ValidationConfig.class})
 @ImportResource({"classpath:ip-context-test.xml","classpath:ip-context.xml"})
 public class IPTestConfig {
     
     /**
-     * Loads properties from classpath:"cacis-provider-registry.properties location
+     * Loads properties from classpath:"cacis-ip-test.properties location
      * 
      * @return the property place holder configures
      */
-    @Bean
+    @Bean( name = "cacis-ip-test")
     public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
         final CommonsPropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer(
                 "cacis-ip-test", "cacis-ip-test.properties");
         configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
         return configurer;
     }
     

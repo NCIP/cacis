@@ -60,6 +60,7 @@
  */
 package gov.nih.nci.cacis.service;
 
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 import gov.nih.nci.cacis.ip.IPTestConfig;
 
 import java.io.File;
@@ -87,6 +88,10 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
  */
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class ShareCanonicalDataRouteCamelTest extends CamelSpringTestSupport {
+    
+    private String validationRouteEP;
+    private RouteDefinition rd1;
+    private RouteDefinition rd2;
             
     @Produce(uri = "cxf://bean:shareCanonicalData")
     private ProducerTemplate producerTemplate;
@@ -97,16 +102,13 @@ public class ShareCanonicalDataRouteCamelTest extends CamelSpringTestSupport {
      */
     public void setUp() throws Exception { //NOPMD
         super.setUp();
-        final RouteDefinition rd = context.getRouteDefinition("cxf:bean:shareCanonicalData");
-        // advice the first route using the inlined route builder
-        rd.adviceWith(context, new RouteBuilder() {
-
-            @Override
-            public void configure() throws Exception { //NOPMD
-                // intercept sending to the mirth connect and mock it
-                interceptSendToEndpoint("log:info").skipSendToOriginalEndpoint().to("mock:result");
-            }
-        });
+        
+        CommonsPropertyPlaceholderConfigurer propsCfg = 
+            (CommonsPropertyPlaceholderConfigurer) applicationContext.getBean("cacis-ip-test");
+        validationRouteEP = propsCfg.getProperty("validation.route.endpoint");
+        
+        rd2 = context.getRouteDefinition(validationRouteEP);
+        rd1 = context.getRouteDefinition("cxf:bean:shareCanonicalData");
     }
     
     /**
@@ -120,26 +122,78 @@ public class ShareCanonicalDataRouteCamelTest extends CamelSpringTestSupport {
     
     
     /**
-     * Tests by passing a known valid message 
+     * Tests by webservice route receiving a message
      * and asserts that the message is received correctly at target end
      * @throws Exception - error thrown
      */
     @Test
-    public void testMessage() throws Exception {
+    public void checkingMessageReceived() throws Exception {
         
+        // advice the first route using the inlined route builder for testing
+        rd1.adviceWith(context, new RouteBuilder() {
+
+            @Override
+            public void configure() throws Exception { //NOPMD
+                // intercept sending to the validation route and mock it
+                interceptSendToEndpoint("direct:cdf:validation:start")
+                    .skipSendToOriginalEndpoint().to("mock:result1");
+            }
+        });
+        
+                
         final URL cdfFileURL = getClass().getClassLoader().getResource("sample-cdf.xml");
+//        final URL cdfFileURL = getClass().getClassLoader().getResource("schematron-test-fail.xml");
 
         final File cdfFile = new File(cdfFileURL.toURI());
         final String cdfContent = FileUtils.readFileToString(cdfFile);
         
-        final MockEndpoint ep = getMockEndpoint("mock:result");
+        final MockEndpoint ep = getMockEndpoint("mock:result1");
         ep.expectedMessageCount(1);
         ep.expectedBodiesReceived(cdfContent);
                
         final List<Object> contents = new MessageContentsList();
         contents.add(cdfContent);
         producerTemplate.requestBody(contents);
+        
+        assertMockEndpointsSatisfied();
+    }
+    
+    /**
+     * TODO: Need to fix this test
+     * 
+     * Tests by passing a known valid message 
+     * and asserts that the validation report
+     * @throws Exception - error thrown
+     */
+    //@Test
+    public void checkingValidMessageReceived() throws Exception {
+        
+        rd2.adviceWith(context, new RouteBuilder() {
 
+            @Override
+            public void configure() throws Exception { //NOPMD
+                // intercept sending to the mirth connect and mock it
+                interceptSendToEndpoint("log:info")
+                    .skipSendToOriginalEndpoint().to("mock:result2");
+            }
+        });
+        
+        final URL cdfFileURL = getClass().getClassLoader().getResource("sample-cdf.xml");
+//        final URL cdfFileURL = getClass().getClassLoader().getResource("schematron-test-fail.xml");
+        
+        final String reportForValidMsg = "";
+
+        final File cdfFile = new File(cdfFileURL.toURI());
+        final String cdfContent = FileUtils.readFileToString(cdfFile);
+        
+        final MockEndpoint ep = getMockEndpoint("mock:result2");
+        ep.expectedMessageCount(1);
+        ep.expectedBodiesReceived(reportForValidMsg);
+               
+        final List<Object> contents = new MessageContentsList();
+        contents.add(cdfContent);
+        producerTemplate.requestBody(contents);
+        
         assertMockEndpointsSatisfied();
     }
     

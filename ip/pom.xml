@@ -40,6 +40,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 			<artifactId>semantic-adapter-ws</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>gov.nih.nci.cacis</groupId>
+			<artifactId>validation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.openehealth.ipf.platform-camel</groupId>

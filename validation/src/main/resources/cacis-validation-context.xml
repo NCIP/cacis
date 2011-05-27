@@ -15,12 +15,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
 	
 	<!-- enable processing of annotations such as @Autowired and @Configuration -->
     <context:annotation-config/>
-    
-    <camel:camelContext id="camelContext">
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="validationRouteBuilder" depends-on="validationRouteModelExtender"
         class="gov.nih.nci.cacis.validation.ValidationRouteBuilder">
     </bean>
 
@@ -28,15 +24,15 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="gov.nih.nci.cacis.validation.ValidationModelExtension">
     </bean>
 
-    <bean id="coreModelExtension" 
+    <bean id="validationCoreModelExtension" 
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
-    <bean id="routeModelExtender" 
+    <bean id="validationRouteModelExtender" 
         class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
         <property name="routeModelExtensions">
             <list>
-                <ref bean="coreModelExtension" />
+                <ref bean="validationCoreModelExtension" />
                 <ref bean="validationModelExtension" />
             </list>
         </property>

@@ -83,11 +83,13 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
         
-        from('direct:input1')
+        from('direct:cdf:validation:start')
+                .routeId('direct:cdf:validation:start')
                 .transmogrify().schematron().staticParams(rulesXML)
-                .to('direct:input2')
+                .to('direct:cdf:validation:extractresult')
         
-        from('direct:input2')
+        from('direct:cdf:validation:extractresult')
+                .routeId('direct:cdf:validation:extractresult')
                 .transmogrify().xslt().staticParams(extractFailuresXSL)
                 .to(validationReport)
     }

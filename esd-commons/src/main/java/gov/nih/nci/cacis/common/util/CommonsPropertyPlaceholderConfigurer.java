@@ -1,5 +1,7 @@
 package gov.nih.nci.cacis.common.util;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
  * @since Feb 02,2011
  */
 public final class CommonsPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
+    
+    private final Properties props;
 
     /**
      *
@@ -23,7 +27,20 @@ public final class CommonsPropertyPlaceholderConfigurer extends PropertyPlacehol
      */
     public CommonsPropertyPlaceholderConfigurer(String projectName, String propertyFileName) {
         super();
-        this.setProperties(CommonsPropertyLoaderUtil.loadProperties(projectName, propertyFileName));
+        props = CommonsPropertyLoaderUtil.loadProperties(projectName, propertyFileName);
+        this.setProperties(props);
+    }
+    
+    /**
+     * Get property method to get the property value programmatically
+     * @param key String representing the key
+     * @return String value of the property
+     */
+    public String getProperty(String key ) {
+        if ( props == null ) {
+            return null;
+        }
+        return props.getProperty(key);
     }
 
 }
