@@ -34,6 +34,7 @@
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
         <gmaven.version>1.2</gmaven.version>
         <logger.level>WARN</logger.level>
+		<skip.static.analysis>false</skip.static.analysis>
     </properties>
 
     <scm>
@@ -174,6 +175,7 @@
                     </execution>
                 </executions>
                 <configuration>
+					<skip>${skip.static.analysis}</skip>
                     <configLocation>
                         http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrCheckstyleConfig.xml
                     </configLocation>
@@ -187,6 +189,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
+					<skip>${skip.static.analysis}</skip>
                     <targetJdk>1.6</targetJdk>
                     <rulesets>
                         <!-- Custom remote rule set accessed via a URL -->
@@ -262,6 +265,7 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
+					<skip>${skip.static.analysis}</skip>
                     <xmlOutput>true</xmlOutput>
                     <excludeFilterFile>
                         http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrFindBugsConfig.xml

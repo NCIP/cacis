@@ -159,13 +159,12 @@ public class ShareCanonicalDataRouteCamelTest extends CamelSpringTestSupport {
     }
     
     /**
-     * TODO: Need to fix this test
-     * 
+     *  
      * Tests by passing a known valid message 
-     * and asserts that the validation report
+     * and asserts the validation report
      * @throws Exception - error thrown
      */
-    //@Test
+    @Test
     public void checkingValidMessageReceived() throws Exception {
         
         rd2.adviceWith(context, new RouteBuilder() {
@@ -179,16 +178,57 @@ public class ShareCanonicalDataRouteCamelTest extends CamelSpringTestSupport {
         });
         
         final URL cdfFileURL = getClass().getClassLoader().getResource("sample-cdf.xml");
-//        final URL cdfFileURL = getClass().getClassLoader().getResource("schematron-test-fail.xml");
         
-        final String reportForValidMsg = "";
+        final File cdfFile = new File(cdfFileURL.toURI());
+        final String cdfContent = FileUtils.readFileToString(cdfFile);
+        
+        final MockEndpoint ep = getMockEndpoint("mock:result2");
+        ep.expectedMessageCount(1);
+        ep.expectedBodiesReceived("");
+               
+        final List<Object> contents = new MessageContentsList();
+        contents.add(cdfContent);
+        producerTemplate.requestBody(contents);
+        
+        assertMockEndpointsSatisfied();
+    }
+    
+    /**
+     * TODO: Need to fix this test
+     * 
+     * Tests by passing a known invalid message 
+     * and asserts the validation report
+     * @throws Exception - error thrown
+     */
+    @Test
+    public void checkingInValidMessageReceived() throws Exception {
+        
+        rd2.adviceWith(context, new RouteBuilder() {
+
+            @Override
+            public void configure() throws Exception { //NOPMD
+                // intercept sending to the mirth connect and mock it
+                interceptSendToEndpoint("log:info")
+                    .skipSendToOriginalEndpoint().to("mock:result2");
+            }
+        });
+        
+        //TODO - to use correct CDF message with errors and correct rules
+        //for now, using the placeholders
+        
+        final File failureMsgFile = new File(
+                getClass().getClassLoader().getResource("schematron-test-fail-output.txt").toURI());
+        
+        final String reportMsgForFailure = FileUtils.readFileToString(failureMsgFile);
+        
+        final URL cdfFileURL = getClass().getClassLoader().getResource("schematron-test-fail.xml");
 
         final File cdfFile = new File(cdfFileURL.toURI());
         final String cdfContent = FileUtils.readFileToString(cdfFile);
         
         final MockEndpoint ep = getMockEndpoint("mock:result2");
         ep.expectedMessageCount(1);
-        ep.expectedBodiesReceived(reportForValidMsg);
+        ep.expectedBodiesReceived(reportMsgForFailure);
                
         final List<Object> contents = new MessageContentsList();
         contents.add(cdfContent);
