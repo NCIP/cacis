@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
  */
 
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
-public class BaseTrimSubmissionRouteIntegrationTest extends CamelSpringTestSupport {
+public class BaseTrimSubmissionRouteTest extends CamelSpringTestSupport {
     
     @Produce(uri = "direct:submit:pcotrim")
     private ProducerTemplate producerTemplate;
