@@ -63,31 +63,33 @@ package gov.nih.nci.cacis.validation
 
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
- * 
+ *
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since May 9, 2011 
+ * @since May 9, 2011
  *
  */
+@Component
 class ValidationRouteBuilder extends SpringRouteBuilder {
-	
+
 	@Value('${schematron.cdf.rules.xml}')
 	private String rulesXML;
-	
+
 	@Value('${schematron.extract.failures.xsl}')
 	private String extractFailuresXSL;
-	
+
 	@Value('${schematron.cdf.validation.report}')
 	private String validationReport;
-    
+
     void configure() {
-        
+
         from('direct:cdf:validation:start')
                 .routeId('direct:cdf:validation:start')
                 .transmogrify().schematron().staticParams(rulesXML)
                 .to('direct:cdf:validation:extractresult')
-        
+
         from('direct:cdf:validation:extractresult')
                 .routeId('direct:cdf:validation:extractresult')
                 .transmogrify().xslt().staticParams(extractFailuresXSL)

@@ -116,12 +116,12 @@
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon-dom</artifactId>
-            <version>9.1.0.1</version>
+            <version>9.1.0.8</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>9.1.0.1</version>
+            <version>9.1.0.8</version>
         </dependency>
 
         <!--test dependencies -->
@@ -346,6 +346,11 @@
             <id>jboss</id>
             <url>http://repository.jboss.com/maven2</url>
         </repository>
+        <repository>
+            <id>jboss depreciated</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/deprecated/</url>
+        </repository>
+        
     </repositories>
 
     <pluginRepositories>
