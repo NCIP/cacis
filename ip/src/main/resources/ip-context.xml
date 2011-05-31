@@ -3,22 +3,22 @@
 	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:cxf="http://camel.apache.org/schema/cxf"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
-http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd
-http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang
 http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
-http://camel.apache.org/schema/cxf 
+http://camel.apache.org/schema/cxf
 http://camel.apache.org/schema/cxf/camel-cxf.xsd
-http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring-2.6.0.xsd">
 
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-	
+
 	<!--
 		enable processing of annotations such as @Autowired and @Configuration
 	-->
@@ -26,27 +26,29 @@ http://camel.apache.org/schema/spring/camel-spring-2.6.0.xsd">
 
 	<!-- Service endpoints -->
 	<cxf:cxfEndpoint id="shareClinicalData" address="${url-prefix}/ShareClinicalData"
-		serviceClass="gov.nih.nci.cacis.sa.service.ShareClinicalDataWs">		
+		serviceClass="gov.nih.nci.cacis.sa.service.ShareClinicalDataWs">
 	</cxf:cxfEndpoint>
 
 	<cxf:cxfEndpoint id="shareCanonicalData" address="${url-prefix}/ShareCanonicalData"
 		serviceClass="gov.nih.nci.cacis.ip.service.ShareCanonicalDataWs">
 	</cxf:cxfEndpoint>
-	
+
 	<cxf:cxfEndpoint id="mcClinicalData2CanonicalDataWS" address="${mcClinicalData2CanonicalDataWSUrl}/services/Mirth"
 		serviceClass="com.mirth.connect.connectors.ws.DefaultAcceptMessage">
 	</cxf:cxfEndpoint>
-	
+
 	<!-- Message processors -->
 	<bean id = "clinicalDataProcessor" class="gov.nih.nci.cacis.ip.service.ShareClinicalDataWsMessageProcessor" />
 	<bean id = "canonicalDataProcessor" class="gov.nih.nci.cacis.ip.service.ShareCanonicalDataWsMessageProcessor" />
-	
-	<!-- CamelContext -->
-	<camel:camelContext id="camelContext">	
-		<camel:routeBuilder ref="shareClinicalDataRouteBuilder" /> 
-		<camel:routeBuilder ref="shareCanonicalDataRouteBuilder" />
-		<camel:routeBuilder ref="validationRouteBuilder" />	
-	</camel:camelContext>
+
+	<!-- enable Spring @Component scan -->
+    <context:component-scan base-package="org.apache.camel.spring.issues.contextscan"/>
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <!-- and then let Camel use those @Component scanned route builders -->
+        <contextScan/>
+    </camelContext>
+
 
 	<!-- model extensions -->
 	<bean id="coreModelExtension"
@@ -73,5 +75,5 @@ http://camel.apache.org/schema/spring/camel-spring-2.6.0.xsd">
 	</bean>
 
 	 <bean id="inMemoryDao" class="gov.nih.nci.cacis.common.dao.InMemoryDao"/>
-	 
+
 </beans>

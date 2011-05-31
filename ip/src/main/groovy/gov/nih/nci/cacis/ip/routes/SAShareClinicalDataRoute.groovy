@@ -63,20 +63,22 @@ package gov.nih.nci.cacis.ip.routes
 import gov.nih.nci.cacis.ip.service.ShareClinicalDataWsMessageProcessor;
 
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.springframework.stereotype.Component;
 
 
 /**
  * Route between semantic adapter's share clinical data to MC transformer
  * @author vinodh.rc@semanticbits.com
  */
+@Component
 class SAShareClinicalDataRoute extends SpringRouteBuilder {
-    
+
     @Override
     void configure() {
         errorHandler(noErrorHandler())
         from('cxf:bean:shareClinicalData')
                 .routeId('cxf:bean:shareClinicalData')
                 .processRef('clinicalDataProcessor')
-                .to('cxf:bean:mcClinicalData2CanonicalDataWS')   
+                .to('cxf:bean:mcClinicalData2CanonicalDataWS')
     }
 }

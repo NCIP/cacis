@@ -113,6 +113,16 @@
           <artifactId>spring-context-support</artifactId>
           <version>${spring.version}</version>
       	</dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon-dom</artifactId>
+            <version>9.1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>9.1.0.1</version>
+        </dependency>
 
         <!--test dependencies -->
         <dependency>

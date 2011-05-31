@@ -62,28 +62,30 @@ package gov.nih.nci.cacis.ip.routes
 
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * Route to receive canonical data at ip end and validate it and store it
  * @author vinodh.rc@semanticbits.com
  */
+@Component
 class ShareCanonicalDataRoute extends SpringRouteBuilder {
-    
+
     @Value('${validation.route.endpoint}')
     private String validationRouteEP;
-    
+
     @Override
     void configure() {
-        errorHandler(noErrorHandler())        
-        
+        errorHandler(noErrorHandler())
+
         //TODO: We need to add validate the CDF before sending it to correct persistence
-        //for now routing it to log    
+        //for now routing it to log
         from('cxf:bean:shareCanonicalData')
                 .routeId('cxf:bean:shareCanonicalData')
                 .processRef('canonicalDataProcessor')
                 .to('direct:cdf:validation:start')
-                
-        //Routing validation route 
+
+        //Routing validation route
         from(validationRouteEP)
                 .routeId(validationRouteEP)
                 .to("log:info")
