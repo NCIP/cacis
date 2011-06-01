@@ -328,27 +328,63 @@
         <repository>
             <id>cbiit</id>
             <url>https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>CBIIT Public Repositories</id>
             <url>https://ncimvn.nci.nih.gov/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>openehealth.releases</id>
             <name>Open eHealth Maven Repository</name>
             <url>http://repo.openehealth.org/maven2/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>CBIIT 3rd Party</id>
             <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>jboss</id>
             <url>http://repository.jboss.com/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>jboss depreciated</id>
             <url>https://repository.jboss.org/nexus/content/repositories/deprecated/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         
     </repositories>
@@ -357,6 +393,12 @@
         <pluginRepository>
             <id>maven</id>
             <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </pluginRepository>
     </pluginRepositories>
 
