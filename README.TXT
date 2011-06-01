@@ -34,12 +34,16 @@ To configure and build individual sub-projects
 look at the instructions of the sub-projects
 
 For eg. The configuration and build instructions
-for the Semantic Adapter are in
-/pco/sa/ReadMe.txt
+for the Integration Platform are in
+/pco/ip/ReadMe.txt
 
-
-sub-projects have their own Maven pom file to build 
+Note - sub-projects have their own Maven pom file to build
 and run tests/static analysis on the individual projects.
+
+Note - Not all projects will need to be built directly.
+That is they don't produce any deployable artifacts, and
+only provide dependencies for other sub-projects
+
 
 ====================================================
 Repositories

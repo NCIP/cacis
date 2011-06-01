@@ -37,9 +37,99 @@
 		<skip.static.analysis>false</skip.static.analysis>
     </properties>
 
+    <organization>
+        <name>National Cancer Institue - Center for Bioinformatics and Information Technology (NCI CBIIT)</name>
+        <url>http://ncicb.nci.nih.gov/</url>
+    </organization>
+
     <scm>
         <url>http://caehrorg.jira.com/svn/ESD</url>
     </scm>
+
+
+    <developers>
+        <developer>
+            <id>parnellt</id>
+            <name>Todd C. Parnell</name>
+            <email>tparnell@5amsolutions.com</email>
+            <organization>5amsolutions</organization>
+            <organizationUrl>http://www.5amsolutions.com</organizationUrl>
+            <roles>
+                <role>DSL</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>phillipsj</id>
+            <name>Joshua Phillips</name>
+            <email>joshua.phillips@semanticbits.com</email>
+            <organization>SemanticBits</organization>
+            <organizationUrl>http://www.semanticbits.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>vinodrc</id>
+            <name>Vinodh Chandrasekaran</name>
+            <email>vinodh.rc@semanticbits.com</email>
+            <organization>SemanticBits</organization>
+            <organizationUrl>http://www.semanticbits.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>kherm</id>
+            <name>Manav Kher</name>
+            <email>manav.kher@semanticbits.com</email>
+            <organization>SemanticBits</organization>
+            <organizationUrl>http://www.semanticbits.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>pickeralbl</id>
+            <name>Brian Pickeral</name>
+            <email>bpickeral@5amsolutions.com</email>
+            <organization>5amsolutions</organization>
+            <organizationUrl>http://www.5amsolutions.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>domblam</id>
+            <name>Monish Dombla</name>
+            <email>monish.dombla@semanticbits.com</email>
+            <organization>SemanticBits</organization>
+            <organizationUrl>http://www.semanticbits.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>rashmi</id>
+            <name>Rashmi Srinivasa</name>
+            <email>rsrinivasa@5amsolutions.com</email>
+            <organization>5amsolutions</organization>
+            <organizationUrl>http://www.5amsolutions.com</organizationUrl>
+            <roles>
+                <role>Delivery Manager</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>humphreyb</id>
+            <name>Brian Humphrey</name>
+            <email>bhumphrey@5amsolutions.com</email>
+            <organization>5amsolutions</organization>
+            <organizationUrl>http://www.5amsolutions.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <distributionManagement>
         <!-- use the following if you're NOT using a snapshot version. -->
@@ -116,12 +206,12 @@
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon-dom</artifactId>
-            <version>9.1.0.8</version>
+            <version>9.1.0.1</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>9.1.0.8</version>
+            <version>9.1.0.1</version>
         </dependency>
 
         <!--test dependencies -->
@@ -310,7 +400,8 @@
                                 </goals>
                                 <configuration>
                                     <excludes>
-                                        <exclude>none</exclude>
+                                        <exclude>**/Abstract*.java</exclude>
+                                        <exclude>**/Base*.java</exclude>
                                     </excludes>
                                     <includes>
                                         <include>**/*IntegrationTest.java</include>
@@ -368,25 +459,9 @@
         </repository>
         <repository>
             <id>jboss</id>
-            <url>http://repository.jboss.com/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
         </repository>
-        <repository>
-            <id>jboss depreciated</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/deprecated/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        
+
     </repositories>
 
     <pluginRepositories>
