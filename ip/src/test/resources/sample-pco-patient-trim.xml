@@ -64,7 +64,7 @@
                     <II>
                         <label>Medical Record Number</label>
                         <root>MRN</root>
-                        <extension>0005</extension>
+                        <extension>0001</extension>
                     </II>
                 </id>
                 <statusCode>active</statusCode>
@@ -87,17 +87,17 @@
                             <part>
 <label>First Name</label>
 <type>GIV</type>
-<ST>Sarah</ST>
+<ST>Linda</ST>
                             </part>
                             <part>
 <label>Middle Name</label>
 <type>GIV</type>
-<ST>M</ST>
+<ST>W</ST>
                             </part>
                             <part>
 <label>Last Name</label>
 <type>FAM</type>
-<ST>Williams</ST>
+<ST>Warren</ST>
                             </part>
                             <part>
 <label>Suffix</label>
