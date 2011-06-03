@@ -12,6 +12,18 @@
 
     <name>PCO Plugin</name>
 
+    <properties>
+		<tolven.jboss.protocol>http</tolven.jboss.protocol>
+		<tolven.jboss.hostname>localhost</tolven.jboss.hostname>
+		<tolven.jboss.port>8080</tolven.jboss.port>
+		<tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
+		<tolven.jboss.configuration>tolven</tolven.jboss.configuration>
+		<tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
+		<tolven.jboss.id>jboss42x</tolven.jboss.id>
+		<tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
+		<!--5 minutes-->
+ 		<cargo.timeout>300000</cargo.timeout>
+	 </properties>
 
     <dependencies>
 
@@ -65,9 +77,37 @@
                     <goalPrefix>build-pcoplugin</goalPrefix>
                 </configuration>
             </plugin>
-
-
+            
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                	<wait>false</wait>
+		        	<container>
+		          		<containerId>${tolven.jboss.id}</containerId>
+		          		<type>installed</type>
+		          		<home>${tolven.jboss.location}</home>
+		          		<log>${tolven.jboss.server}/log/server.log</log>
+		          		<output>${tolven.jboss.server}/log/cargo.log</output>
+		          		<systemProperties>
+		          			<java.awt.headless>true</java.awt.headless>
+		          			<tolven.messaging.clustered>false</tolven.messaging.clustered>
+		          		</systemProperties>
+		        	</container>
+		        	<configuration>
+		        		<type>existing</type>
+		        		<home>${tolven.jboss.server}</home>
+		          		<properties>
+		            		<cargo.jboss.configuration>${tolven.jboss.configuration}</cargo.jboss.configuration>
+		            		<cargo.servlet.port>${tolven.jboss.port}</cargo.servlet.port>
+		            		<cargo.hostname>${tolven.jboss.hostname}</cargo.hostname>
+		            		<cargo.protocol>${tolven.jboss.protocol}</cargo.protocol>
+		            		<cargo.logging>high</cargo.logging>
+		          		</properties>
+		        	</configuration>
+      			</configuration>
+            </plugin>		            
         </plugins>
-
     </build>
 </project>
