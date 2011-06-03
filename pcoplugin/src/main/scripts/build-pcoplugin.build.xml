@@ -14,7 +14,7 @@
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <!-- Using jars directory as we do not have a war file -->
-    <property name="target.dir" value="${build.dir}"/>
+    <property name="target.dir" value="${basedir}/target"/>
 
     <property name="ext.dir" value="${basedir}/ext"/>
     <property name="ext.compile.dir" value="${ext.dir}/compile"/>

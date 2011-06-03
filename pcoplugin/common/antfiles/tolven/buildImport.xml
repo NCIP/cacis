@@ -85,16 +85,13 @@
 
     <!-- Build one section, also add source/classes to the devLib -->
     <target name="buildSection">
-        <!--&lt;!&ndash; If a lib folder already exists, this does nothing &ndash;&gt;-->
-    	<!--<delete dir="${section}/lib"/>-->
-    	<!--<mkdir dir="${section}/lib"/>    	-->
-        <!-- As soon as erroronmissingdir in zipfileset is supported, the following line can be removed-->
         <mkdir dir="${buildFolder}/${section}/classes"/>
-    	<!-- Copy lib jars -->
-        <!--<antcall target="libSection">-->
-            <!--<param name="section" value="${section}"/>-->
-        <!--</antcall>-->
-        <!-- Compile -->
+
+        <!--copy maven build classes-->
+        <copy toDir="${buildFolder}/${section}/classes">
+            <fileset dir="${target.dir}/classes"/>
+        </copy>
+
         <antcall target="compileSection">
             <param name="section" value="${section}"/>
         </antcall>

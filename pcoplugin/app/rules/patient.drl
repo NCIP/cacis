@@ -14,7 +14,7 @@ import org.tolven.app.bean.Plan;
 import org.tolven.core.entity.Status;
 import org.tolven.model.Patient;
 
-import gov.nih.nci.cacis.common.tolven.util.ParseTRIMEx;
+import gov.nih.nci.cacis.pcoplugin.tolven.ParseTRIMEx;
 
 import java.net.URL;
 import javax.xml.ws.Service;
@@ -58,7 +58,8 @@ rule "caCIS Load Trim"
     out.println( "Sent information to SA" );
 
     }catch (Exception e) {
-                throw new RuntimeException("Could not share Clinical Data with Semantic Adapter", e);
+              // ignore the exception
+              //throw new RuntimeException("Could not share Clinical Data with Semantic Adapter", e);
     }
 
 end
