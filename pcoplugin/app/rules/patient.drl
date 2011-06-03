@@ -58,7 +58,8 @@ rule "caCIS Load Trim"
     out.println( "Sent information to SA" );
 
     }catch (Exception e) {
-              // ignore the exception
+                app.info( "Could not post TRIM to caCIS ShareClinicalData service");
+              // don't throw exception and fail the trim processing
               //throw new RuntimeException("Could not share Clinical Data with Semantic Adapter", e);
     }
 
