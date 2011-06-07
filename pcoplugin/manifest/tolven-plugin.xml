@@ -9,13 +9,23 @@
     -->
     <requires>
         <import plugin-id="org.tolven.component.application"/>
+        <import plugin-id="org.tolven.component.tolvenear"/>
     </requires>
+
+    <extension id="saWSModule" plugin-id="org.tolven.component.tolvenear" point-id="ejbModuleProduct">
+        <parameter id="jar" value="semantic-adapter-ws-1.0-SNAPSHOT.jar"/>
+    </extension>
+
+    <extension id="tcModule" plugin-id="org.tolven.component.tolvenear" point-id="ejbModuleProduct">
+        <parameter id="jar" value="tolven-commons-1.0-SNAPSHOT.jar"/>
+    </extension>
 
     <extension id="applications" plugin-id="org.tolven.component.application" point-id="applications">
         <parameter id="dir" value="app"/>
     </extension>
+
     <extension-point id="devLib" extension-multiplicity="none">
-        <parameter-def id="jar" default-value="devLib.jar" />
+        <parameter-def id="jar" default-value="devLib.jar"/>
     </extension-point>
 
 </plugin>

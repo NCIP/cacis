@@ -1,4 +1,7 @@
-package test;
+package patient
+// See http://wiki.tolven.org/doc/index.php/Plugin:org.tolven.component.tolvenejb#PlaceholderFacts
+// for details on the following annotation:
+//@use echr placeholders
 
 import java.util.*;
    /* Tolven */
@@ -14,7 +17,7 @@ import org.tolven.app.bean.Plan;
 import org.tolven.core.entity.Status;
 import org.tolven.model.Patient;
 
-import gov.nih.nci.cacis.pcoplugin.tolven.ParseTRIMEx;
+import gov.nih.nci.cacis.common.tolven.util.ParseTRIMEx;
 
 import java.net.URL;
 import javax.xml.ws.Service;

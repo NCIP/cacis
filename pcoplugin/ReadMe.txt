@@ -12,7 +12,7 @@ Use the following to build the current basic build for the plugin:
 mvn clean install
 
 2) Run the following from pco/pcoplugin:
-mvn gov.nih.nci.cacis:pcoplugin:build-pcoplugin
+ant -f build-pcoplugin.build.xml deploy-to-local-repository
 
 gov.nih.nci.cacis.tolven.pcoplugin-0.0.1.zip should now be in your local tolven repository.  You now need to deploy the tolven plugin.
 

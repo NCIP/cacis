@@ -6,6 +6,7 @@
         </activation>
         <properties>
             <maven.surefire.excludes>**/external/**</maven.surefire.excludes>
+            <tolven.plugin.version>0.0.1</tolven.plugin.version>
         </properties>
     </profile>
 </profiles>

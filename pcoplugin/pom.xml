@@ -13,6 +13,8 @@
     <name>PCO Plugin</name>
 
     <properties>
+        <tolven.plugin.version>0.0.1</tolven.plugin.version>
+        
 		<tolven.jboss.protocol>http</tolven.jboss.protocol>
 		<tolven.jboss.hostname>localhost</tolven.jboss.hostname>
 		<tolven.jboss.port>8080</tolven.jboss.port>
@@ -31,11 +33,13 @@
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>semantic-adapter-ws</artifactId>
             <version>${project.version}</version>
+            <scope>runtime provided</scope>
         </dependency>
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>tolven-commons</artifactId>
             <version>${project.version}</version>
+            <scope>runtime provided</scope>
         </dependency>
         <dependency>
             <groupId>org.drools</groupId>
@@ -50,32 +54,50 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-script-ant</artifactId>
-            <version>2.0.10</version>
-        </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <version>2.7</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
 
-                <!-- Add the Ant plugin tools -->
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.plugin-tools</groupId>
-                        <artifactId>maven-plugin-tools-ant</artifactId>
-                        <version>2.7</version>
-                    </dependency>
-                </dependencies>
+                <executions>
+                    <execution>
+                        <id>make-devLib-assembly</id>
+                        <!-- this is used for inheritance merges -->
+                        <phase>package</phase>
+                        <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/tolven-plugin-devLib.xml</descriptor>
+                            </descriptors>
+                            <finalName>devLib</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-plugin-assembly</id>
+                        <!-- this is used for inheritance merges -->
+                        <phase>package</phase>
+                        <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
 
-                <configuration>
-                    <goalPrefix>build-pcoplugin</goalPrefix>
-                </configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/tolven-plugin.xml</descriptor>
+                            </descriptors>
+                            <finalName>gov.nih.nci.cacis.tolven.pcoplugin-${tolven.plugin.version}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             
             <plugin>
@@ -109,5 +131,6 @@
       			</configuration>
             </plugin>		            
         </plugins>
+
     </build>
 </project>
