@@ -9,12 +9,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pcoplugin</artifactId>
     <packaging>maven-plugin</packaging>
+    <url>../../pcoplugin/target/site</url>
 
     <name>PCO Plugin</name>
 
     <properties>
         <tolven.plugin.version>0.0.1</tolven.plugin.version>
-        
+
 		<tolven.jboss.protocol>http</tolven.jboss.protocol>
 		<tolven.jboss.hostname>localhost</tolven.jboss.hostname>
 		<tolven.jboss.port>8080</tolven.jboss.port>
@@ -99,7 +100,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
@@ -129,7 +130,7 @@
 		          		</properties>
 		        	</configuration>
       			</configuration>
-            </plugin>		            
+            </plugin>
         </plugins>
 
     </build>

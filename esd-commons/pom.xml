@@ -11,6 +11,8 @@
 
     <artifactId>esd-commons</artifactId>
     <packaging>jar</packaging>
+    <name>esd-commons</name>
+    <url>../../esd-commons/target/site</url>
 
     <properties>
         <test.unit.branchrate>0</test.unit.branchrate>

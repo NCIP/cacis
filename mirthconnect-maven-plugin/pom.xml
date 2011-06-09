@@ -15,7 +15,7 @@
 	<packaging>maven-plugin</packaging>
 
 	<name>mirthconnect-maven-plugin Maven Mojo</name>
-
+	<url>../../mirthconnect-maven-plugin/target/site</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
@@ -30,7 +30,7 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<skip>true</skip> <!-- mojos will always fail with: Got an exception - java.lang.IllegalArgumentException: 
+					<skip>true</skip> <!-- mojos will always fail with: Got an exception - java.lang.IllegalArgumentException:
 						the name [goal] is not a valid Javadoc tag name -->
 				</configuration>
 			</plugin>

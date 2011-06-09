@@ -12,6 +12,7 @@
     <packaging>jar</packaging>
 
     <name>validation</name>
+    <url>../../validation/target/site</url>
 
     <dependencies>
         <dependency>
@@ -100,5 +101,5 @@
             </plugin>
         </plugins>
     </build>
-
+    
 </project>

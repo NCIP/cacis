@@ -14,12 +14,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 	<artifactId>ip</artifactId>
 	<name>Integration Platform</name>
 	<packaging>war</packaging>
+	<url>../../ip/target/site</url>
 
 	<properties>
 		<jboss.home>${JBOSS_HOME}</jboss.home>
 		<jboss.home.deploy.dir>${jboss.home}/server/tolven/deploy</jboss.home.deploy.dir>
 	</properties>
-
 
 	<dependencies>
 
