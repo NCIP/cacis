@@ -1,5 +1,4 @@
-This project is a tolven plugin that will be used to call the Semantic Adapter (not yet implemented).
-Currently, pcoplugin contains a single rule to load a patient into the patient list when a patient Trim is loaded.
+This project is a tolven plugin that contains a rule that will call the semantic adapter when a patient Trim is loaded into Tolven.
 
 Build and Deploy Instructions
 ==========================================================
