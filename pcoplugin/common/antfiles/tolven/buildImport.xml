@@ -35,10 +35,18 @@
         <echo message="${zipFileName}"/>
         <copy toDir="${respositoryLocal.location}/plugins"
               flatten="true" preservelastmodified="true">
-            <fileset dir="${build.dir}">
+            <fileset dir="${target.dir}">
                 <include name="${zipFileName}"/>
             </fileset>
         </copy>
+		<!-- copy cacis tolven appserver properties -->
+		<copy toDir="${tolvenConfig.location}"
+              flatten="true" preservelastmodified="true">
+            <fileset dir="${target.dir}/classes">
+                <include name="cacis.tolven.appserver.properties.xml"/>
+            </fileset>
+        </copy>
+		
         <java fork="true" failonerror="true" classname="org.tolven.plugin.boot.TPFBoot"
               classpathref="compile.cp">
             <env key="TOLVEN_CONFIG_DIR" value="${tolvenConfig.location}"/>

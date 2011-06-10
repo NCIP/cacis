@@ -23,6 +23,15 @@ http://camel.apache.org/schema/spring/camel-spring-2.6.0.xsd">
 		enable processing of annotations such as @Autowired and @Configuration
 	-->
 	<context:annotation-config />
+	
+	<bean id="camelTracer" class="org.apache.camel.processor.interceptor.Tracer">
+	  <property name="traceOutExchanges" value="true" />
+	</bean>
+	
+	<bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+	  <property name="showOutBody" value="true" />
+	  <property name="showOutBodyType" value="true" />
+	</bean>	
 
 	<!-- Service endpoints -->
 	<cxf:cxfEndpoint id="shareClinicalData" address="${url-prefix}/ShareClinicalData"
@@ -44,7 +53,7 @@ http://camel.apache.org/schema/spring/camel-spring-2.6.0.xsd">
 	<!-- enable Spring @Component scan -->
     <context:component-scan base-package="org.apache.camel.spring.issues.contextscan"/>
 
-    <camelContext xmlns="http://camel.apache.org/schema/spring">
+    <camelContext xmlns="http://camel.apache.org/schema/spring" trace="${enable.camel.route.trace}">
         <!-- and then let Camel use those @Component scanned route builders -->
         <contextScan/>
     </camelContext>

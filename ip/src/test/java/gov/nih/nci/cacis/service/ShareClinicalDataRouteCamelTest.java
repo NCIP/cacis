@@ -97,7 +97,7 @@ public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
      */
     public void setUp() throws Exception { //NOPMD
         super.setUp();
-        final RouteDefinition rd = context.getRouteDefinition("cxf:bean:shareClinicalData");
+        final RouteDefinition rd = context.getRouteDefinition("direct:sa:clinicaldata:step1");
         // advice the first route using the inlined route builder
         rd.adviceWith(context, new RouteBuilder() {
 
@@ -137,7 +137,13 @@ public class ShareClinicalDataRouteCamelTest extends CamelSpringTestSupport {
                
         final List<Object> contents = new MessageContentsList();
         contents.add(trimContent);
-        producerTemplate.requestBody(contents);
+        final List response = (List)producerTemplate.requestBody(contents);
+        System.out.println("response >>>>> " + response);
+        
+        assertFalse(response.isEmpty());
+        final Object result = response.get(0);
+        assertTrue(result instanceof String);
+        assertTrue( ((String)result).startsWith("Received"));
 
         assertMockEndpointsSatisfied();
     }

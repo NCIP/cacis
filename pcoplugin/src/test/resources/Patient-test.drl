@@ -52,7 +52,7 @@ rule "caCIS Load Trim"
     out.println( "Sent information to SA" );
 
     }catch (Exception e) {
-                throw new RuntimeException("Could not share Clinical Data with Semantic Adapter", e);
+         throw new RuntimeException("Could not share Clinical Data with Semantic Adapter", e);
     }
 
 end

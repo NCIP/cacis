@@ -78,9 +78,9 @@ public class ShareClinicalDataWsMessageProcessor implements Processor {
         final String clinicalData = (String)exchange.getIn().getBody(List.class).get(0);
         
         final List<Object> contents = new MessageContentsList();
-        contents.add(clinicalData); 
+        contents.add(clinicalData);
         final Message outMsg = exchange.getOut();
         outMsg.setBody(contents, List.class); 
-        outMsg.setHeader(Exchange.CONTENT_TYPE, "application/xml");
+        outMsg.setHeader(Exchange.CONTENT_TYPE, "text/xml");
     }    
 }

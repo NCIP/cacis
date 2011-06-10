@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.util.Date;
 
 /**
+ * Test for patient rule 
  * @author kherm manav.kher@semanticbits.com
  */
 public class PatientDRLTest extends AbstractBusClientServerTestBase {
@@ -32,13 +33,19 @@ public class PatientDRLTest extends AbstractBusClientServerTestBase {
     private AccountMenuStructure msPatient;
     private AccountMenuStructure msPatientList;
 
-
+    /**
+     * Setup to launch inmemory services for testing
+     */
     @BeforeClass
     public static void startServers() {
         assertTrue("Could not launch server",
                 launchServer(SemanticAdapterServer.class, true));
     }
-
+    
+    /**
+     * Tests patient rule
+     * @throws Exception - error thrown
+     */
     @Test
     public void patientRule() throws Exception {
         RuleBase ruleBase = openRuleBase("Patient-test.drl", AssertBehaviour.EQUALITY);
@@ -95,12 +102,19 @@ public class PatientDRLTest extends AbstractBusClientServerTestBase {
                 MockShareClinicalDataWs.wasCalled);
     }
 
-
+    
+    /**
+     * Load RuleBase
+     * @param ruleFile - test rule file in the classpath
+     * @param assertBehaviour - AssertBehaviour
+     * @return instance of RuleBase
+     * @throws Exception - error thrown
+     */
     public RuleBase openRuleBase(String ruleFile, AssertBehaviour assertBehaviour) throws Exception {
         //read in the source
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assertFalse(classLoader == null);
-        InputStream inputStream = classLoader.getResourceAsStream(ruleFile);
+        InputStream inputStream = classLoader.getResourceAsStream(ruleFile);        
         assertFalse(inputStream == null);
         Reader source = new InputStreamReader(inputStream);
 

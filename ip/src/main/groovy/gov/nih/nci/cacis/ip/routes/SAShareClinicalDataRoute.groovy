@@ -67,7 +67,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * Route between semantic adapter's share clinical data to MC transformer
+ * Route between semantic adapter's processing
  * @author vinodh.rc@semanticbits.com
  */
 @Component
@@ -76,9 +76,26 @@ class SAShareClinicalDataRoute extends SpringRouteBuilder {
     @Override
     void configure() {
         errorHandler(noErrorHandler())
+                
         from('cxf:bean:shareClinicalData')
-                .routeId('cxf:bean:shareClinicalData')
-                .processRef('clinicalDataProcessor')
-                .to('cxf:bean:mcClinicalData2CanonicalDataWS')
+            .routeId('cxf:bean:shareClinicalData')
+            .processRef('clinicalDataProcessor')
+            .multicast()
+            .to('direct:sa:clinicaldata:step1', 'direct:sa:clinicaldata:step2');
+        
+        //route it to MC for transformation 
+        from('direct:sa:clinicaldata:step1')
+            .routeId('direct:sa:clinicaldata:step1')
+            .onCompletion()
+                .inOnly('cxf:bean:mcClinicalData2CanonicalDataWS')
+            .end()
+            .to('log:output');
+
+        //return proper response 
+        from('direct:sa:clinicaldata:step2')
+            .routeId('direct:sa:clinicaldata:step2')
+            .transform().simple('Received clinical data. Sending it for processing.');
+        
+        
     }
 }

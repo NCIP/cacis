@@ -8,15 +8,16 @@
         The most common plugins are already included. Add additional plugins as needed.
     -->
     <requires>
-        <import plugin-id="org.tolven.component.application"/>
+		<import plugin-id="org.tolven.component.application"/>
         <import plugin-id="org.tolven.component.tolvenear"/>
+		
     </requires>
-
-    <extension id="saWSModule" plugin-id="org.tolven.component.tolvenear" point-id="ejbModuleProduct">
+	
+    <extension id="saWSModule" plugin-id="org.tolven.component.tolvenear" point-id="javaModuleProduct">
         <parameter id="jar" value="semantic-adapter-ws-1.0-SNAPSHOT.jar"/>
     </extension>
 
-    <extension id="tcModule" plugin-id="org.tolven.component.tolvenear" point-id="ejbModuleProduct">
+    <extension id="tcModule" plugin-id="org.tolven.component.tolvenear" point-id="javaModuleProduct">
         <parameter id="jar" value="tolven-commons-1.0-SNAPSHOT.jar"/>
     </extension>
 
