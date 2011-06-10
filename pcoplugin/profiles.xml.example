@@ -10,6 +10,9 @@
             <tolven.plugin.version>0.0.1</tolven.plugin.version>
 
              <tolven.installation.location>${user.home}/tolven-install</tolven.installation.location>
+             <tolven.release.location>${tolven.installation.location}/tolven-RC1</tolven.release.location>
+	         <tolven.config.dir>${tolven.installation.location}/tolven-config</tolven.config.dir>
+             
              <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
         </properties>
     </profile>
