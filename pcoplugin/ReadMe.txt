@@ -4,17 +4,12 @@ Currently, pcoplugin contains a single rule to load a patient into the patient l
 Build and Deploy Instructions
 ==========================================================
 
-Copy example.local.properties to local.properties to override local properties including tolven locations.
+Copy profiles.xml.example to profiles.xml to override local properties including tolven locations.
 
 Use the following to build the current basic build for the plugin:
 
 1) Run the following from the pco directory:
 mvn clean install
-
-2) Run the following from pco/pcoplugin:
-ant -f build-pcoplugin.build.xml deploy-to-local-repository
-
-gov.nih.nci.cacis.tolven.pcoplugin-0.0.1.zip should now be in your local tolven repository.  You now need to deploy the tolven plugin.
 
 Install Tolven Plugin
 ========================================================
@@ -31,7 +26,6 @@ ${TOLVEN_INSTALL}/tolven-RC1/repositoryInit.sh
 
 This command copies the Tolven plug-in from the local
 repository to the runtime Tolven repository
-
 
 Deploy Tolven Plugin
 ========================================================
