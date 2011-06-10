@@ -29,7 +29,7 @@
 
         <!--NOTE: customize this property for your tolven install location-->
         <tolven.installation.location>${user.home}/tolven-install</tolven.installation.location>
-        <tolven.release.location>${tolven.installation.location}/tolven-rc1</tolven.release.location>
+        <tolven.release.location>${tolven.installation.location}/tolven-RC1</tolven.release.location>
         <tolven.config.dir>${tolven.installation.location}/tolven-config</tolven.config.dir>
 
         <cargo.timeout>300000</cargo.timeout>
