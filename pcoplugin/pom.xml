@@ -16,16 +16,25 @@
     <properties>
         <tolven.plugin.version>0.0.1</tolven.plugin.version>
 
-		<tolven.jboss.protocol>http</tolven.jboss.protocol>
-		<tolven.jboss.hostname>localhost</tolven.jboss.hostname>
-		<tolven.jboss.port>8080</tolven.jboss.port>
-		<tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
-		<tolven.jboss.configuration>tolven</tolven.jboss.configuration>
-		<tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
-		<tolven.jboss.id>jboss42x</tolven.jboss.id>
-		<tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
-		<!--5 minutes-->
- 		<cargo.timeout>300000</cargo.timeout>
+        <tolven.jboss.protocol>http</tolven.jboss.protocol>
+        <tolven.jboss.hostname>localhost</tolven.jboss.hostname>
+        <tolven.jboss.port>8080</tolven.jboss.port>
+        <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
+        <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
+
+        <!--NOTE: customize this property for your tolven JBOSS location-->
+        <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
+        <tolven.jboss.id>jboss42x</tolven.jboss.id>
+        <tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
+
+        <!--NOTE: customize this property for your tolven install location-->
+        <tolven.installation.location>${user.home}//Transcend/tolven</tolven.installation.location>
+        <tolven.release.location>${tolven.installation.location}/tolven-rc1</tolven.release.location>
+        <tolven.config.dir>${tolven.installation.location}/tolven-config</tolven.config.dir>
+
+        <cargo.timeout>300000</cargo.timeout>
+        <temp.dir.path>/tmp</temp.dir.path>
+        <skip.pcoplugin.deploy>false</skip.pcoplugin.deploy>
 	 </properties>
 
     <dependencies>
@@ -100,38 +109,236 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--deploy the tolven plugin-->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-pcoplugin-to-localRepo</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${tolven.config.dir}/repositoryLocal/plugins</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target</directory>
+                                    <includes>
+                                        <include>*pcoplugin*.zip</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.1.0</version>
-                <configuration>
-                	<wait>false</wait>
-		        	<container>
-		          		<containerId>${tolven.jboss.id}</containerId>
-		          		<type>installed</type>
-		          		<home>${tolven.jboss.location}</home>
-		          		<log>${tolven.jboss.server}/log/server.log</log>
-		          		<output>${tolven.jboss.server}/log/cargo.log</output>
-		          		<systemProperties>
-		          			<java.awt.headless>true</java.awt.headless>
-		          			<tolven.messaging.clustered>false</tolven.messaging.clustered>
-		          		</systemProperties>
-		        	</container>
-		        	<configuration>
-		        		<type>existing</type>
-		        		<home>${tolven.jboss.server}</home>
-		          		<properties>
-		            		<cargo.jboss.configuration>${tolven.jboss.configuration}</cargo.jboss.configuration>
-		            		<cargo.servlet.port>${tolven.jboss.port}</cargo.servlet.port>
-		            		<cargo.hostname>${tolven.jboss.hostname}</cargo.hostname>
-		            		<cargo.protocol>${tolven.jboss.protocol}</cargo.protocol>
-		            		<cargo.logging>high</cargo.logging>
-		          		</properties>
-		        	</configuration>
-      			</configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <id>genMetadata</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.pcoplugin.deploy}</skip>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <argument>${tolven.release.location}/pluginLib/tpf-boot.jar</argument>
+                                <argument>org.tolven.plugin.boot.TPFBoot</argument>
+                                <argument>-genMetadata</argument>
+                                <argument>-plugins</argument>
+                                <argument>${tolven.config.dir}/repositoryLocal/plugins</argument>
+                                <argument>-liburl</argument>
+                                <argument>file:///${tolven.config.dir}/repositoryLocal</argument>
+                                <argument>-outdir</argument>
+                                <argument>${tolven.config.dir}/repositoryLocal</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
-
     </build>
+
+    <profiles>
+        <profile>
+            <id>cacis-ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <id>copy-pcoplugin-to-localRepo-1</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${tolven.config.dir}/repositoryLocal/plugins</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${build.directory}</directory>
+                                            <includes>
+                                                <include>*plugin*.zip</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                    <overwrite>true</overwrite>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <skip>${skip.pcoplugin.deploy}</skip>
+                            <wait>false</wait>
+                            <container>
+                                <containerId>${tolven.jboss.id}</containerId>
+                                <type>installed</type>
+                                <home>${tolven.jboss.location}</home>
+                                <log>${tolven.jboss.server}/log/server.log</log>
+                                <output>${tolven.jboss.server}/log/cargo.log</output>
+                                <append>false</append>
+                                <systemProperties>
+                                    <java.awt.headless>true</java.awt.headless>
+                                    <tolven.messaging.clustered>false</tolven.messaging.clustered>
+                                </systemProperties>
+                            </container>
+                            <configuration>
+                                <type>existing</type>
+                                <home>${tolven.jboss.server}</home>
+                                <properties>
+                                    <cargo.jboss.configuration>${tolven.jboss.configuration}</cargo.jboss.configuration>
+                                    <cargo.servlet.port>${tolven.jboss.port}</cargo.servlet.port>
+                                    <cargo.hostname>${tolven.jboss.hostname}</cargo.hostname>
+                                    <cargo.protocol>${tolven.jboss.protocol}</cargo.protocol>
+                                    <cargo.logging>high</cargo.logging>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>genMetadata</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.pcoplugin.deploy}</skip>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <argument>${tolven.release.location}/pluginLib/tpf-boot.jar</argument>
+                                        <argument>org.tolven.plugin.boot.TPFBoot</argument>
+                                        <argument>-genMetadata</argument>
+                                        <argument>-plugins</argument>
+                                        <argument>${tolven.config.dir}/repositoryLocal/plugins</argument>
+                                        <argument>-liburl</argument>
+                                        <argument>file:///${tolven.config.dir}/repositoryLocal</argument>
+                                        <argument>-outdir</argument>
+                                        <argument>${tolven.config.dir}/repositoryLocal</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>repositoryInit</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.pcoplugin.deploy}</skip>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <argument>${tolven.release.location}/pluginLib/tpf-boot.jar</argument>
+                                        <argument>org.tolven.plugin.boot.TPFBoot</argument>
+                                        <argument>-getPlugins</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>configPhase1</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.pcoplugin.deploy}</skip>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <argument>${tolven.release.location}/pluginLib/tpf-boot.jar</argument>
+                                        <argument>-Djava.io.tmpdir=${temp.dir.path}</argument>
+                                        <argument>org.tolven.plugin.boot.TPFBoot</argument>
+                                        <argument>-plugin</argument>
+                                        <argument>org.tolven.assembler,org.tolven.deploy</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution >
+                            <execution>
+                                <id>configPhase3</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.pcoplugin.deploy}</skip>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <argument>${tolven.release.location}/pluginLib/tpf-boot.jar</argument>
+                                        <argument>-Djava.io.tmpdir=${temp.dir.path}</argument>
+                                        <argument>org.tolven.plugin.boot.TPFBoot</argument>
+                                        <argument>-plugin</argument>
+                                        <argument>org.tolven.component.application</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

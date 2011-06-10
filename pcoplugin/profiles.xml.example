@@ -1,3 +1,4 @@
+<profilesXml>
 <profiles>
     <profile>
         <id>local</id>
@@ -7,6 +8,10 @@
         <properties>
             <maven.surefire.excludes>**/external/**</maven.surefire.excludes>
             <tolven.plugin.version>0.0.1</tolven.plugin.version>
+
+             <tolven.installation.location>${user.home}/tolven-install</tolven.installation.location>
+             <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
         </properties>
     </profile>
 </profiles>
+</profilesXml>
