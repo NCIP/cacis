@@ -34,7 +34,24 @@
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
         <gmaven.version>1.2</gmaven.version>
         <logger.level>WARN</logger.level>
-		<skip.static.analysis>false</skip.static.analysis>
+        <skip.static.analysis>false</skip.static.analysis>
+
+        <!--integration tests-->
+        <!--skip starting JBoss by default. Individual sub-projects can override-->
+        <skip.cargo.container>true</skip.cargo.container>
+        <!--NOTE - customize this property to your JBOSS location-->
+        <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
+        <tolven.jboss.id>jboss42x</tolven.jboss.id>
+        <tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
+
+        <tolven.jboss.protocol>http</tolven.jboss.protocol>
+        <tolven.jboss.hostname>localhost</tolven.jboss.hostname>
+        <tolven.jboss.port>8080</tolven.jboss.port>
+        <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
+        <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
+
+        <cargo.timeout>300000</cargo.timeout>
+
     </properties>
 
     <organization>
@@ -145,24 +162,24 @@
             <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-    
+
     <reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
             <plugin>
                 <!-- Disabled features w/in the 2.1 plugin to speed up the report generation -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.2</version>
             </plugin>
-		</plugins>
+        </plugins>
     </reporting>
 
 
@@ -218,11 +235,11 @@
             <artifactId>cglib</artifactId>
             <version>2.2</version>
         </dependency>
-		<dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-context-support</artifactId>
-          <version>${spring.version}</version>
-      	</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon-dom</artifactId>
@@ -295,7 +312,7 @@
                     </execution>
                 </executions>
                 <configuration>
-					<skip>${skip.static.analysis}</skip>
+                    <skip>${skip.static.analysis}</skip>
                     <configLocation>
                         http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrCheckstyleConfig.xml
                     </configLocation>
@@ -309,7 +326,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
-					<skip>${skip.static.analysis}</skip>
+                    <skip>${skip.static.analysis}</skip>
                     <targetJdk>1.6</targetJdk>
                     <rulesets>
                         <!-- Custom remote rule set accessed via a URL -->
@@ -384,7 +401,7 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-					<skip>${skip.static.analysis}</skip>
+                    <skip>${skip.static.analysis}</skip>
                     <xmlOutput>true</xmlOutput>
                     <excludeFilterFile>
                         http://caehrorg.jira.com/svn/ESD/trunk/pco/static_analysis/caEhrFindBugsConfig.xml
@@ -428,6 +445,58 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+
+                    <!--start/stop jboss for integration tests-->
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.1.0</version>
+
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <skip>${skip.cargo.container}</skip>
+                            <wait>false</wait>
+                            <container>
+                                <containerId>${tolven.jboss.id}</containerId>
+                                <type>installed</type>
+                                <home>${tolven.jboss.location}</home>
+                                <log>${tolven.jboss.server}/log/server.log</log>
+                                <output>${tolven.jboss.server}/log/cargo.log</output>
+                                <append>false</append>
+                                <systemProperties>
+                                    <java.awt.headless>true</java.awt.headless>
+                                    <tolven.messaging.clustered>false</tolven.messaging.clustered>
+                                </systemProperties>
+                            </container>
+                            <configuration>
+                                <type>existing</type>
+                                <home>${tolven.jboss.server}</home>
+                                <properties>
+                                    <cargo.jboss.configuration>${tolven.jboss.configuration}</cargo.jboss.configuration>
+                                    <cargo.servlet.port>${tolven.jboss.port}</cargo.servlet.port>
+                                    <cargo.hostname>${tolven.jboss.hostname}</cargo.hostname>
+                                    <cargo.protocol>${tolven.jboss.protocol}</cargo.protocol>
+                                    <cargo.logging>high</cargo.logging>
+                                </properties>
+                            </configuration>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

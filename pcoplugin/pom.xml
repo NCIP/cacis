@@ -15,27 +15,15 @@
 
     <properties>
         <tolven.plugin.version>0.0.1</tolven.plugin.version>
-
-        <tolven.jboss.protocol>http</tolven.jboss.protocol>
-        <tolven.jboss.hostname>localhost</tolven.jboss.hostname>
-        <tolven.jboss.port>8080</tolven.jboss.port>
-        <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
-        <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
-
-        <!--NOTE: customize this property for your tolven JBOSS location-->
-        <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
-        <tolven.jboss.id>jboss42x</tolven.jboss.id>
-        <tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
+        <temp.dir.path>/tmp</temp.dir.path>
+        <skip.pcoplugin.deploy>false</skip.pcoplugin.deploy>
+        <skip.cargo.container>false</skip.cargo.container>
 
         <!--NOTE: customize this property for your tolven install location-->
         <tolven.installation.location>${user.home}/tolven-install</tolven.installation.location>
         <tolven.release.location>${tolven.installation.location}/tolven-RC1</tolven.release.location>
         <tolven.config.dir>${tolven.installation.location}/tolven-config</tolven.config.dir>
-
-        <cargo.timeout>300000</cargo.timeout>
-        <temp.dir.path>/tmp</temp.dir.path>
-        <skip.pcoplugin.deploy>false</skip.pcoplugin.deploy>
-	 </properties>
+    </properties>
 
     <dependencies>
 
@@ -201,56 +189,6 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-
-                        <configuration>
-                            <skip>${skip.pcoplugin.deploy}</skip>
-                            <wait>false</wait>
-                            <container>
-                                <containerId>${tolven.jboss.id}</containerId>
-                                <type>installed</type>
-                                <home>${tolven.jboss.location}</home>
-                                <log>${tolven.jboss.server}/log/server.log</log>
-                                <output>${tolven.jboss.server}/log/cargo.log</output>
-                                <append>false</append>
-                                <systemProperties>
-                                    <java.awt.headless>true</java.awt.headless>
-                                    <tolven.messaging.clustered>false</tolven.messaging.clustered>
-                                </systemProperties>
-                            </container>
-                            <configuration>
-                                <type>existing</type>
-                                <home>${tolven.jboss.server}</home>
-                                <properties>
-                                    <cargo.jboss.configuration>${tolven.jboss.configuration}</cargo.jboss.configuration>
-                                    <cargo.servlet.port>${tolven.jboss.port}</cargo.servlet.port>
-                                    <cargo.hostname>${tolven.jboss.hostname}</cargo.hostname>
-                                    <cargo.protocol>${tolven.jboss.protocol}</cargo.protocol>
-                                    <cargo.logging>high</cargo.logging>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.1.1</version>
@@ -313,7 +251,7 @@
                                         <argument>org.tolven.assembler,org.tolven.deploy</argument>
                                     </arguments>
                                 </configuration>
-                            </execution >
+                            </execution>
                             <execution>
                                 <id>configPhase3</id>
                                 <phase>pre-integration-test</phase>

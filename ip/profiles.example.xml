@@ -5,10 +5,27 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>cacis-ci</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
             <properties>
-                <jboss.home>${JBOSS_HOME}</jboss.home>
-                <jboss.home.deploy.dir>${JBOSS_HOME}/server/tolven/deploy</jboss.home.deploy.dir>
-                </properties>
+                <tolven.jboss.protocol>http</tolven.jboss.protocol>
+                <tolven.jboss.hostname>localhost</tolven.jboss.hostname>
+                <tolven.jboss.port>8080</tolven.jboss.port>
+                <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}
+                </tolven.jboss.url>
+                <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
+
+                <!--NOTE: customize this property for your tolven JBOSS location-->
+                <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
+                <tolven.jboss.id>jboss42x</tolven.jboss.id>
+                <tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
+
+            </properties>
         </profile>
     </profiles>
 </profilesXml>
