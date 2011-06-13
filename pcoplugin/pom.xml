@@ -23,6 +23,7 @@
         <tolven.installation.location>${user.home}/tolven-install</tolven.installation.location>
         <tolven.release.location>${tolven.installation.location}/tolven-RC1</tolven.release.location>
         <tolven.config.dir>${tolven.installation.location}/tolven-config</tolven.config.dir>
+		<pco.semanticadapter.url>http://localhost:8080/cacis-ip/ws/ShareClinicalData</pco.semanticadapter.url>
     </properties>
 
     <dependencies>
@@ -55,6 +56,15 @@
     </dependencies>
 
     <build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+				  <include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -115,6 +125,25 @@
                                     <directory>target</directory>
                                     <includes>
                                         <include>*pcoplugin*.zip</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+					<execution>
+                        <id>copy-tolven-properties-to-configdir</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${tolven.config.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target/classes</directory>
+                                    <includes>
+                                        <include>cacis.tolven.appserver.properties.xml</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -185,6 +214,25 @@
                                     <overwrite>true</overwrite>
                                 </configuration>
                             </execution>
+							<execution>
+								<id>copy-tolven-properties-to-configdir-1</id>
+								<phase>install</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${tolven.config.dir}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>target/classes</directory>
+											<includes>
+												<include>cacis.tolven.appserver.properties.xml</include>
+											</includes>
+										</resource>
+									</resources>
+									<overwrite>true</overwrite>
+								</configuration>
+							</execution>
                         </executions>
                     </plugin>
 
@@ -271,7 +319,26 @@
                                     </arguments>
                                 </configuration>
                             </execution>
-
+							<execution>
+                                <id>load-tolven-appserver-properties</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skip.pcoplugin.deploy}</skip>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <argument>${tolven.release.location}/pluginLib/tpf-boot.jar</argument>
+                                        <argument>-Djava.io.tmpdir=${temp.dir.path}</argument>
+                                        <argument>org.tolven.plugin.boot.TPFBoot</argument>
+                                        <argument>-plugin</argument>
+                                        <argument>org.tolven.appserverproperties</argument>
+										<argument>-load</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
 

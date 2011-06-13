@@ -51,6 +51,6 @@
 <!-- default tolven properties - end -->
 
 <!-- cacis tolven properties - start -->
-<entry key="sa.ws.url">http://localhost:8080/cacis-ip/ws/ShareClinicalData</entry>
+<entry key="sa.ws.url">${pco.semanticadapter.url}</entry>
 <!-- cacis tolven properties - end -->
 </properties>

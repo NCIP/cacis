@@ -65,6 +65,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -147,11 +148,12 @@ public class TestMail {
 
     /**
      * tests receiving mail
+     * @throws IOException - io exception thrown
      */
     @Test
-    public void testRetrieveMessage() {
+    public void testRetrieveMessage() throws IOException {
+        Reader reader = null;
         try {
-
             final String email = "another.one@somewhere.com";
             final String login = "another.one";
             final String password = "secret";
@@ -181,7 +183,7 @@ public class TestMail {
             final Part part = mp.getBodyPart(1);
             final Writer writer = new StringWriter();
             final char[] buffer = new char[1024];
-            final Reader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
             int n = -1;
             while ((n = reader.read(buffer)) != -1) { // NOPMD
                 writer.write(buffer, 0, n);
@@ -190,6 +192,10 @@ public class TestMail {
         } catch (Exception e) { // NOPMD
             // CHECKSTYLE:ON
             fail("Unexpected exception: " + e);
+        } finally {
+            if(reader != null ) {
+                reader.close();
+            }
         }
     }
 

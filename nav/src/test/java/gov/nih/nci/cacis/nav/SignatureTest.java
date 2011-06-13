@@ -65,6 +65,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -184,7 +186,9 @@ public class SignatureTest {
         final XMLObject object = fac.newXMLObject(objectContent, null, null, null);
 
         final KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(new FileInputStream("src/test/resources/keystore.jks"), "changeit".toCharArray());
+        final InputStream is = new FileInputStream("src/test/resources/keystore.jks");
+        ks.load( is, "changeit".toCharArray());
+        closeInputStream(is);
         final KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry("nav_test",
                 new KeyStore.PasswordProtection("changeit".toCharArray()));
         final X509Certificate cert = (X509Certificate) keyEntry.getCertificate();
@@ -237,6 +241,12 @@ public class SignatureTest {
         signature2 = fac.unmarshalXMLSignature(valContext);
         valContext.setURIDereferencer(uriDeref);
         assertTrue(signature2.validate(valContext));
+    }
+    
+    private void closeInputStream(InputStream is) throws IOException {
+        if ( is != null ) {
+            is.close();
+        }
     }
 
 }

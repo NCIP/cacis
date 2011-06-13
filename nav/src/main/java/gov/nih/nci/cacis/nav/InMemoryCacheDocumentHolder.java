@@ -61,12 +61,12 @@ package gov.nih.nci.cacis.nav;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.io.CachedOutputStream;
 
@@ -167,7 +167,8 @@ public class InMemoryCacheDocumentHolder {
         if (docFile == null || !docFile.exists()) {
             return;
         }
-        final InputStream docIn = new FileInputStream(docFile);
+        final byte[] docContent = FileUtils.readFileToByteArray(docFile);
+        final InputStream docIn = new ByteArrayInputStream(docContent);
         putDocument(docId, docIn);
     }
 
@@ -186,8 +187,8 @@ public class InMemoryCacheDocumentHolder {
 
         if (tempCacheDir != null) {
             final File cacheDir = new File(tempCacheDir);
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
+            if (!cacheDir.exists() && cacheDir.mkdirs() ) {
+                    throw new IOException("Unable to create cache dir, " + cacheDir.getAbsolutePath());
             }
             cos.setOutputDir(cacheDir);
         }
