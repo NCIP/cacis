@@ -128,6 +128,7 @@ public class SignatureTest {
         final String docId2 = "urn:oid:1.3.345245354.435346";
         final String docPath1 = "src/test/resources/sample_exchangeCCD.xml";
         final String docPath2 = "src/test/resources/purchase_order.xml";
+        final String docPath3 = "src/test/resources/purchase_order_bad.xml";
         final String docOut = "target/sig_detached.xml";
 
         final Map<String, String> derefMap = new HashMap<String, String>();
@@ -226,6 +227,15 @@ public class SignatureTest {
         valContext.setURIDereferencer(uriDeref);
 
         // ...then it will validate.
+        assertTrue(signature2.validate(valContext));
+        
+        // However, even if we modify a referenced document, it will still
+        // validate. This is because Reference elements within a Manifest
+        // have to be validated in an application-specific manner. See
+        // http://www.w3.org/TR/xmldsig-core/#sec-Manifest
+        derefMap.put(docId2, docPath3);
+        signature2 = fac.unmarshalXMLSignature(valContext);
+        valContext.setURIDereferencer(uriDeref);
         assertTrue(signature2.validate(valContext));
     }
 

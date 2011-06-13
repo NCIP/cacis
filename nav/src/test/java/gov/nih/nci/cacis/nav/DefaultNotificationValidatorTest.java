@@ -60,6 +60,8 @@
  */
 package gov.nih.nci.cacis.nav;
 
+import static org.junit.Assert.*;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -83,6 +85,13 @@ public class DefaultNotificationValidatorTest {
     @Test
     public void testValidateDigitalSignature() throws Exception {
 
+        final String recommendedRegistry = "urn:oid:1.3.983249923.1234.3";
+        final String docId1 = "urn:oid:1.3.345245354.435345";
+        final String docId2 = "urn:oid:1.3.345245354.435346";
+        final String docPath1 = "sample_exchangeCCD.xml";
+        final String docPath2 = "purchase_order.xml";
+        final String docPath3 = "purchase_order_bad.xml";
+
         final ClassLoader cl = DefaultNotificationValidatorTest.class.getClassLoader();
 
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -90,9 +99,23 @@ public class DefaultNotificationValidatorTest {
         final DocumentBuilder db = dbf.newDocumentBuilder();
         final Document doc = db.parse(cl.getResourceAsStream("notification_gen.xml"));
 
-        final DefaultNotificationValidator v = new DefaultNotificationValidator(new SimpleX509KeySelector());
-        v.validateDigitalSignature(doc.getDocumentElement());
+        final DefaultNotificationValidator v = new DefaultNotificationValidator(new SimpleX509KeySelector(),
+                new DefaultDocumentReferenceValidator());
+        v.validateDigitalSignature(doc.getDocumentElement(), null);
 
+        final InMemoryCacheDocumentHolder h = new InMemoryCacheDocumentHolder();
+        h.putDocument(docId1, cl.getResourceAsStream(docPath1));
+        h.putDocument(docId2, cl.getResourceAsStream(docPath2));
+        final XDSDocumentResolver r = new InMemoryCacheXDSDocumentResolver(recommendedRegistry, h);
+        v.validateDigitalSignature(doc, r);
+
+        h.removeDocument(docId2);
+        h.putDocument(docId2, cl.getResourceAsStream(docPath3));
+        try {
+            v.validateDigitalSignature(doc, r);
+            fail("Should've failed validation of modified document");
+        } catch (NotificationValidationException ex) {
+            assertTrue(true);
+        }
     }
-
 }

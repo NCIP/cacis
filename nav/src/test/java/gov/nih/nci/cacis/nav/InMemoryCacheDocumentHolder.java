@@ -125,7 +125,7 @@ public class InMemoryCacheDocumentHolder {
     public boolean containsDocument(String docId) {
         return docMap.containsKey(docId);
     }
-    
+
     /**
      * Adds the document to the in memory cache with the docId as the key
      * 
@@ -134,13 +134,13 @@ public class InMemoryCacheDocumentHolder {
      * @throws IOException - thrown if any IO error happens
      */
     public void putDocument(String docId, String docContent) throws IOException {
-        if ( StringUtils.isEmpty(docContent) ) {
+        if (StringUtils.isEmpty(docContent)) {
             return;
-        }        
+        }
         final InputStream docIn = new ByteArrayInputStream(docContent.getBytes());
         putDocument(docId, docIn);
     }
-    
+
     /**
      * Adds the document to the in memory cache with the docId as the key
      * 
@@ -149,13 +149,13 @@ public class InMemoryCacheDocumentHolder {
      * @throws IOException - thrown if any IO error happens
      */
     public void putDocument(String docId, byte[] docContent) throws IOException {
-        if ( docContent == null ) {
+        if (docContent == null) {
             return;
-        }        
+        }
         final InputStream docIn = new ByteArrayInputStream(docContent);
         putDocument(docId, docIn);
     }
-    
+
     /**
      * Adds the document to the in memory cache with the docId as the key
      * 
@@ -163,14 +163,14 @@ public class InMemoryCacheDocumentHolder {
      * @param docFile - File instance representing the document
      * @throws IOException - thrown if any IO error happens
      */
-    public void putDocument(String docId, File docFile) throws IOException { 
-        if ( docFile == null || !docFile.exists() ) {
+    public void putDocument(String docId, File docFile) throws IOException {
+        if (docFile == null || !docFile.exists()) {
             return;
         }
         final InputStream docIn = new FileInputStream(docFile);
         putDocument(docId, docIn);
     }
-    
+
     /**
      * Adds the document to the in memory cache with the docId as the key
      * 
@@ -184,11 +184,13 @@ public class InMemoryCacheDocumentHolder {
         }
         final CachedOutputStream cos = new CachedOutputStream(cacheThreshold);
 
-        final File cacheDir = new File(tempCacheDir);
-        if (!cacheDir.exists()) {
-            cacheDir.mkdirs();
+        if (tempCacheDir != null) {
+            final File cacheDir = new File(tempCacheDir);
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            cos.setOutputDir(cacheDir);
         }
-        cos.setOutputDir(cacheDir);
 
         CachedOutputStream.copyStream(docIn, cos, 1024);
 

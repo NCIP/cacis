@@ -60,6 +60,8 @@
  */
 package gov.nih.nci.cacis.nav;
 
+import java.util.List;
+
 import javax.mail.Message;
 import javax.xml.crypto.KeySelector;
 import javax.xml.crypto.dsig.XMLSignature;
@@ -78,13 +80,17 @@ public class DefaultNotificationValidator implements NotificationValidator {
 
     private KeySelector keySelector;
 
+    private DocumentReferenceValidator documentReferenceValidator;
+
     /**
      * Takes a KeySelector
      * 
      * @param keySelector selects the key for validating the signature
+     * @param documentReferenceValidator resolves and validates digest on referenced documents
      */
-    public DefaultNotificationValidator(KeySelector keySelector) {
+    public DefaultNotificationValidator(KeySelector keySelector, DocumentReferenceValidator documentReferenceValidator) {
         this.keySelector = keySelector;
+        this.documentReferenceValidator = documentReferenceValidator;
     }
 
     @Override
@@ -115,7 +121,7 @@ public class DefaultNotificationValidator implements NotificationValidator {
             // CHECKSTYLE:ON
             throw new NotificationValidationException("Error getting signature from message: " + ex.getMessage(), ex);
         }
-        validateDigitalSignature(sig);
+        validateDigitalSignature(sig, null);
 
         /*
          * Validate against the IHE ITI Digital Signature Profile - SignatureProperties element contains -
@@ -126,22 +132,25 @@ public class DefaultNotificationValidator implements NotificationValidator {
 
     }
 
-    /**
-     * Validates the signature element using the Java XML Digital Signature API
+    /*
+     * (non-Javadoc)
      * 
-     * @param sig the Signature element
-     * @throws NotificationValidationException - on error
+     * @see gov.nih.nci.cacis.nav.NotificationValidator#validateDigitalSignature()
      */
-    protected void validateDigitalSignature(Node sig) throws NotificationValidationException {
+    @Override
+    public void validateDigitalSignature(Node sig, final XDSDocumentResolver resolver)
+            throws NotificationValidationException {
 
         boolean valid = false;
+
         try {
             final DOMValidateContext valContext = new DOMValidateContext(getKeySelector(), sig);
             final XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM");
             final XMLSignature signature = fac.unmarshalXMLSignature(valContext);
 
-            // We cannot validate the References to documents in the XDS. So,
-            // we can't do "core" validation. We can only validate the Signature itself.
+            // We cannot validate the References to documents in the XDS without
+            // first retrieving them. So, for now, we can't do "core" validation.
+            // We can only validate the Signature itself.
             valid = signature.getSignatureValue().validate(valContext);
 
             // CHECKSTYLE:OFF
@@ -151,6 +160,28 @@ public class DefaultNotificationValidator implements NotificationValidator {
         }
         if (!valid) {
             throw new NotificationValidationException("Signature validation failed");
+        }
+
+        if (resolver != null) {
+            // Now we can validate the references
+
+            List<Node> refEls;
+            try {
+                refEls = NAVUtils.getDocumentReferences(sig);
+                // CHECKSTYLE:OFF
+            } catch (Exception ex) {
+                // CHECKSTYLE:ON
+                throw new NotificationValidationException("Error retrieving document reference elements: "
+                        + ex.getMessage(), ex);
+            }
+
+            for (Node referenceEl : refEls) {
+                try {
+                    getDocumentReferenceValidator().validate(referenceEl, resolver);
+                } catch (DocumentReferenceValidationException ex) {
+                    throw new NotificationValidationException(ex);
+                }
+            }
         }
     }
 
@@ -166,10 +197,28 @@ public class DefaultNotificationValidator implements NotificationValidator {
     /**
      * @param keySelector the keySelector to set
      */
-    
+
     public void setKeySelector(KeySelector keySelector) {
 
         this.keySelector = keySelector;
+    }
+
+    /**
+     * @return the documentReferenceValidator
+     */
+
+    public DocumentReferenceValidator getDocumentReferenceValidator() {
+
+        return documentReferenceValidator;
+    }
+
+    /**
+     * @param documentReferenceValidator the documentReferenceValidator to set
+     */
+
+    public void setDocumentReferenceValidator(DocumentReferenceValidator documentReferenceValidator) {
+
+        this.documentReferenceValidator = documentReferenceValidator;
     }
 
 }

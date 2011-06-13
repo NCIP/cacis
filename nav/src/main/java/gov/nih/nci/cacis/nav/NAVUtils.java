@@ -60,21 +60,27 @@
  */
 package gov.nih.nci.cacis.nav;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Provides a set of utility operations for NAV-related messages.
@@ -98,6 +104,27 @@ public final class NAVUtils {
     public static final String GET_DOC_IDS_EXP = "/*[local-name()='Signature']/*[local-name()='Object']"
             + "/*[local-name()='Manifest']/*[local-name()='Reference']/@URI";
 
+    /**
+     * XPath expression to retrieve a single document ID from a Reference element
+     */
+    public static final String GET_DOC_ID_EXP = "@URI";
+
+    /**
+     * XPath expression to retrieve the digest method algorithm used on a Reference element
+     */
+    public static final String GET_DIG_ALG_EXP = "*[local-name()='DigestMethod']/@Algorithm";
+
+    /**
+     * XPath expression to retrieve the digest value of a Reference element
+     */
+    public static final String GET_DIG_VAL_EXP = "*[local-name()='DigestValue']";
+
+    /**
+     * XPath expression to retrieve document reference elements
+     */
+    public static final String GET_DOC_REFS_EXP = "/*[local-name()='Signature']/*[local-name()='Object']"
+            + "/*[local-name()='Manifest']/*[local-name()='Reference']";
+
     private NAVUtils() {
 
     }
@@ -107,9 +134,13 @@ public final class NAVUtils {
      * 
      * @param message the multipart MIME email message
      * @return the Document
-     * @throws Exception on error
+     * @throws MessagingException on error getting email content
+     * @throws IOException on communication error
+     * @throws ParserConfigurationException on XML parser configuration error
+     * @throws SAXException on XML parsing error
      */
-    public static Document getSignature(Message message) throws Exception { //NOPMD
+    public static Document getSignature(Message message) throws IOException, MessagingException,
+            ParserConfigurationException, SAXException {
         final Multipart content = (Multipart) message.getContent();
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -122,15 +153,10 @@ public final class NAVUtils {
      * 
      * @param sig the Signature element
      * @return the registry ID
-     * @throws Exception on error
+     * @throws XPathExpressionException on XPath evaluation error
      */
-    public static String getRegistryId(Document sig) throws Exception { //NOPMD
-
-        final XPathFactory fac = XPathFactory.newInstance();
-        final XPath xpath = fac.newXPath();
-        final XPathExpression exp = xpath.compile(GET_REG_ID_EXP);
-        final Node node = (Node) exp.evaluate(sig, XPathConstants.NODE);
-        return node.getTextContent();
+    public static String getRegistryId(Document sig) throws XPathExpressionException {
+        return getNodeValue(sig, GET_REG_ID_EXP);
     }
 
     /**
@@ -138,19 +164,83 @@ public final class NAVUtils {
      * 
      * @param sig the Signature element
      * @return the document IDs
-     * @throws Exception on error
+     * @throws XPathExpressionException on XPath evaluation error
+     * @throws DOMException on DOM manipulation erro
      */
-    public static List<String> getDocumentIds(Document sig) throws Exception { //NOPMD
-        final List<String> ids = new ArrayList<String>();
+    public static List<String> getDocumentIds(Document sig) throws DOMException, XPathExpressionException {
+        return getNodeValues(sig, GET_DOC_IDS_EXP);
+    }
 
+    /**
+     * Returns value of the Algorithm attribute of the DigestMethod node
+     * 
+     * @param reference the Reference node
+     * @return the value
+     * @throws XPathExpressionException on XPath evaluation error
+     */
+    public static String getDigestAlgorithm(Node reference) throws XPathExpressionException {
+        return getNodeValue(reference, GET_DIG_ALG_EXP);
+    }
+
+    /**
+     * Returns the value of DigestValue node
+     * 
+     * @param reference the Reference node
+     * @return the value
+     * @throws XPathExpressionException on XPath evaluation error
+     */
+    public static String getDigestValue(Node reference) throws XPathExpressionException {
+        return getNodeValue(reference, GET_DIG_VAL_EXP);
+    }
+
+    /**
+     * Returns the value of the Id attribute on the Reference node
+     * 
+     * @param reference the Reference node
+     * @return the value
+     * @throws XPathExpressionException on XPath evaluation error
+     */
+    public static String getDocumentId(Node reference) throws XPathExpressionException {
+        return getNodeValue(reference, GET_DOC_ID_EXP);
+    }
+
+    /**
+     * Returns a List of Reference elements from the Manifest
+     * 
+     * @param sig the signature node
+     * @return the List
+     * @throws XPathExpressionException on XPath evaluation error
+     */
+    public static List<Node> getDocumentReferences(Node sig) throws XPathExpressionException {
+        return getNodes(sig, GET_DOC_REFS_EXP);
+    }
+
+    private static String getNodeValue(Node node, String expStr) throws XPathExpressionException {
         final XPathFactory fac = XPathFactory.newInstance();
         final XPath xpath = fac.newXPath();
-        final XPathExpression exp = xpath.compile(GET_DOC_IDS_EXP);
-        final NodeList nl = (NodeList) exp.evaluate(sig, XPathConstants.NODESET);
-        for (int i = 0; i < nl.getLength(); i++) {
-            final Node node = nl.item(i);
-            ids.add(node.getNodeValue());
-        }
-        return ids;
+        final XPathExpression exp = xpath.compile(expStr);
+        final Node selected = (Node) exp.evaluate(node, XPathConstants.NODE);
+        return selected.getTextContent();
     }
+
+    private static List<String> getNodeValues(Node node, String expStr) throws DOMException, XPathExpressionException {
+        final List<String> values = new ArrayList<String>();
+        for (Node selected : getNodes(node, expStr)) {
+            values.add(selected.getNodeValue());
+        }
+        return values;
+    }
+
+    private static List<Node> getNodes(Node node, String expStr) throws XPathExpressionException {
+        final List<Node> nodes = new ArrayList<Node>();
+        final XPathFactory fac = XPathFactory.newInstance();
+        final XPath xpath = fac.newXPath();
+        final XPathExpression exp = xpath.compile(expStr);
+        final NodeList nl = (NodeList) exp.evaluate(node, XPathConstants.NODESET);
+        for (int i = 0; i < nl.getLength(); i++) {
+            nodes.add(nl.item(i));
+        }
+        return nodes;
+    }
+
 }

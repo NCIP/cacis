@@ -64,7 +64,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,12 +94,16 @@ import com.icegreen.greenmail.util.GreenMail;
  */
 public class NAVSystemTest {
 
-    private static final String SMTP_PORT = "3025";
+    private static final String TRUE = "true";
+    private static final String EMAIL1 = "another.one@somewhere.com";
+    private static final String EMAIL2 = "some.one@somewhere.com";
 
     private GreenMail server;
     private String regId;
     private String docId1;
     private String docId2;
+    private String docPath1;
+    private String docPath2;
 
     /**
      * 
@@ -110,6 +113,8 @@ public class NAVSystemTest {
         regId = "urn:oid:1.3.983249923.1234.3";
         docId1 = "urn:oid:1.3.345245354.435345";
         docId2 = "urn:oid:1.3.345245354.435346";
+        docPath1 = "sample_exchangeCCD.xml";
+        docPath2 = "purchase_order.xml";
         server = new GreenMail();
         server.start();
     }
@@ -128,29 +133,22 @@ public class NAVSystemTest {
      */
     @Test
     public void testNotificationSenderNonSecure() throws Exception {
-        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
-        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
-        docCache.putDocument(docId2, new File("purchase_order.xml"));
-        
-        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
-        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
+
+        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
+                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit",
+                "nav_test");
 
         final Properties props = new Properties();
-        props.setProperty("mail.debug", "true");
+        // props.setProperty("mail.debug", TRUE);
 
-        final String mailbox = "another.one@somewhere.com";
-        final String to = "some.one@somewhere.com";
+        final String mailbox = EMAIL1;
+        final String to = EMAIL2;
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
 
-        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, 
-                props, subject, mailbox, to,instructions,
-                "",
-                "",
-                server.getSmtp().getBindTo(),
-                server.getSmtp().getPort(),
-                server.getSmtp().getProtocol());
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, to,
+                instructions, "", "", server.getSmtp().getBindTo(), server.getSmtp().getPort(), server.getSmtp()
+                        .getProtocol());
 
         final String[] keys = { docId1, docId2 };
         sender.send(new ArrayList<String>(Arrays.asList(keys)));
@@ -158,8 +156,6 @@ public class NAVSystemTest {
         assertTrue(server.getReceivedMessages().length == 1);
 
     }
-    
-    
 
     /**
      * 
@@ -167,95 +163,77 @@ public class NAVSystemTest {
      */
     @Test
     public void testNotificationSenderWithSMTPAndTLS() throws Exception {
-        
-        final String email = "another.one@somewhere.com";
+
+        final String email = EMAIL1;
         final String login = "another.one";
         final String password = "secret";
 
         final GreenMailUser user = server.setUser(email, login, password);
-        
-        final Properties props = new Properties();
-        props.setProperty("mail.smtp.auth", "true");
-        props.setProperty("mail.smtp.starttls.enable", "true");
-        props.setProperty("mail.debug", "true");
-     
-        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
-        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
-        docCache.putDocument(docId2, new File("purchase_order.xml"));
-        
-        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
-        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
 
-        final String mailbox = "another.one@somewhere.com";
-        final String to = "some.one@somewhere.com";
+        final Properties props = new Properties();
+        props.setProperty("mail.smtp.auth", TRUE);
+        props.setProperty("mail.smtp.starttls.enable", TRUE);
+        // props.setProperty("mail.debug", TRUE);
+
+        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
+                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit",
+                "nav_test");
+
+        final String mailbox = EMAIL1;
+        final String to = EMAIL2;
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
 
-        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, 
-                                                props, subject, mailbox, to,instructions,
-                                                user.getLogin(),
-                                                user.getPassword(),
-                                                server.getSmtp().getBindTo(),
-                                                server.getSmtp().getPort(),
-                                                server.getSmtp().getProtocol());
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, to,
+                instructions, user.getLogin(), user.getPassword(), server.getSmtp().getBindTo(), server.getSmtp()
+                        .getPort(), server.getSmtp().getProtocol());
         final String[] keys = { docId1, docId2 };
-        
+
         sender.send(new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
-     
-    }   
-    
-    
+
+    }
+
     /**
      * 
      * @throws Exception on error
      */
     @Test
     public void testNotificationSenderWithSMTPSAndSSL() throws Exception {
-        
-        final String email = "another.one@somewhere.com";
+
+        final String email = EMAIL1;
         final String login = "another.one";
         final String password = "secret";
 
         final GreenMailUser user = server.setUser(email, login, password);
-        
-        final Properties props = new Properties();
-        
-        props.setProperty("mail.smtps.auth", "true");
-        props.setProperty("mail.smtps.starttls.enable", "true");
-        props.setProperty("mail.smtps.socketFactory.class", DummySSLSocketFactory.class.getName());
-        props.setProperty("mail.debug", "true");
-     
-        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
-        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
-        docCache.putDocument(docId2, new File("purchase_order.xml"));
-        
-        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
-        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit", "nav_test");
 
-        final String mailbox = "another.one@somewhere.com";
-        final String to = "some.one@somewhere.com";
+        final Properties props = new Properties();
+
+        props.setProperty("mail.smtps.auth", TRUE);
+        props.setProperty("mail.smtps.starttls.enable", TRUE);
+        props.setProperty("mail.smtps.socketFactory.class", DummySSLSocketFactory.class.getName());
+        // props.setProperty("mail.debug", TRUE);
+
+        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
+                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit",
+                "nav_test");
+
+        final String mailbox = EMAIL1;
+        final String to = EMAIL2;
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
 
-        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, 
-                                                props, subject, mailbox, to,instructions,
-                                                user.getLogin(),
-                                                user.getPassword(),
-                                                server.getSmtps().getBindTo(),
-                                                server.getSmtps().getPort(),
-                                                server.getSmtps().getProtocol());
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, to,
+                instructions, user.getLogin(), user.getPassword(), server.getSmtps().getBindTo(), server.getSmtps()
+                        .getPort(), server.getSmtps().getProtocol());
         final String[] keys = { docId1, docId2 };
-        
+
         sender.send(new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
-     
-    }    
-    
+
+    }
 
     /**
      * Tests all NAV receiver components
@@ -275,8 +253,13 @@ public class NAVSystemTest {
             assertTrue(messages != null);
             assertTrue(messages.length == 1);
 
-            final NotificationValidator v = new DefaultNotificationValidator(new SimpleX509KeySelector());
+            // Do validation of the message, prior to resolving
+            final NotificationValidator v = new DefaultNotificationValidator(new SimpleX509KeySelector(),
+                    new DefaultDocumentReferenceValidator());
             v.validate(messages[0]);
+
+            // Now resolve and validate the documents
+            v.validateDigitalSignature(NAVUtils.getSignature(messages[0]), getDocumentResolver());
 
             // Pull out the registry and document IDs
             final Document sig = NAVUtils.getSignature(messages[0]);
@@ -298,5 +281,14 @@ public class NAVSystemTest {
             fail("Unexpected error: " + ex.getMessage());
 
         }
+
+    }
+
+    private XDSDocumentResolver getDocumentResolver() throws Exception { // NOPMD
+        final ClassLoader cl = NAVSystemTest.class.getClassLoader();
+        final InMemoryCacheDocumentHolder h = new InMemoryCacheDocumentHolder();
+        h.putDocument(docId1, cl.getResourceAsStream(docPath1));
+        h.putDocument(docId2, cl.getResourceAsStream(docPath2));
+        return new InMemoryCacheXDSDocumentResolver(regId, h);
     }
 }
