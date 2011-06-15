@@ -1,0 +1,15 @@
+http\://datawarehouse.cacis.nci.nih.gov/ClinicalDataWarehouse=gov.nih.nci.cacis.datawarehouse.stubs
+http\://datawarehouse.cacis.nci.nih.gov/ClinicalDataWarehouse/bindings=gov.nih.nci.cacis.datawarehouse.stubs.bindings
+http\://datawarehouse.cacis.nci.nih.gov/ClinicalDataWarehouse/service=gov.nih.nci.cacis.datawarehouse.stubs.service
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
+http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
+
+http\://datawarehouse.cacis.nci.nih.gov/ClinicalDataWarehouse/types=gov.nih.nci.cacis.datawarehouse.stubs.types
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
+
+
