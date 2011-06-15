@@ -89,11 +89,13 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  * 
  */
 public abstract class ClinicalDataWarehouseResourceBase extends ReflectionResource implements Resource
+                                                  ,SecureResource
                                                   {
 
 	static final Log logger = LogFactory.getLog(ClinicalDataWarehouseResourceBase.class);
 
 	private ClinicalDataWarehouseResourceConfiguration configuration;
+	private ResourceSecurityDescriptor desc;
 
 	// this can be used to cancel the registration renewal
     private AdvertisementClient registrationClient;
@@ -114,6 +116,7 @@ public abstract class ClinicalDataWarehouseResourceBase extends ReflectionResour
                            
         // Call the super initialize on the ReflectionResource                  
 	    super.initialize(resourceBean,resourceElementQName,id);
+		this.desc = null;
 
 		// this loads the metadata from XML files if this is the main service
 		populateResourceProperties();
@@ -130,7 +133,22 @@ public abstract class ClinicalDataWarehouseResourceBase extends ReflectionResour
 	
 
 
-	  
+	
+    /**
+     * Sets the security descriptor for this resource.  The default resource
+     * security will be null so it will fall back to method level then service
+     * level security.  If you want to protect this particular instance of this
+     * resource then provide a resource security descriptor to this resource
+     * through this method.
+     */
+	public void setSecurityDescriptor(ResourceSecurityDescriptor desc) {
+		this.desc = desc;
+	}
+	
+	
+	public ResourceSecurityDescriptor getSecurityDescriptor() {
+		return this.desc;
+	}  
 
 	
 	public ClinicalDataWarehouseResourceConfiguration getConfiguration() {

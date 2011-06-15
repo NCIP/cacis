@@ -5,10 +5,17 @@
       <none />
     </auth-method>
   </method>
+  <authz value="clinicaldatawarehouse:gov.nih.nci.cacis.datawarehouse.service.globus.ClinicalDataWarehouseAuthorization" />
   <auth-method>
-    <none />
+    <GSITransport>
+      <protection-level>
+        <privacy />
+      </protection-level>
+    </GSITransport>
   </auth-method>
-  <authz value="none" />
+  <run-as>
+    <system-identity />
+  </run-as>
   <method name="getMultipleResourceProperties">
     <auth-method>
       <none />
@@ -23,18 +30,6 @@
     <auth-method>
       <none />
     </auth-method>
-  </method>
-  <method name="query">
-    <auth-method>
-      <GSITransport>
-        <protection-level>
-          <privacy />
-        </protection-level>
-      </GSITransport>
-    </auth-method>
-    <run-as>
-      <system-identity />
-    </run-as>
   </method>
 </securityConfig>
 

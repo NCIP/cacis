@@ -138,22 +138,40 @@
       <ns13:RunAsMode xsi:type="ns13:RunAsMode">System</ns13:RunAsMode>
       <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication">No</ns13:AnonymousClients>
       <ns13:MethodAuthorization xsi:type="ns13:MethodAuthorization">
-       <ns13:NoAuthorization xsi:type="ns13:NoAuthorization"/>
+       <ns13:IntroducePDPAuthorization xsi:type="ns13:IntroducePDPAuthorization"/>
       </ns13:MethodAuthorization>
      </ns13:MethodSecurity>
-     <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension"/>
+     <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+      <ns14:Extension extensionType="AUTHORIZATION" name="enforce_auth" xsi:type="ns14:ExtensionType"/>
+     </ns14:Extensions>
     </ns4:Method>
    </ns4:Methods>
    <ns15:ResourcePropertiesList xsi:type="ns15:ResourcePropertiesListType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns16:ServiceSecurity xsi:type="ns16:ServiceSecurity" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns16:SecuritySetting xsi:type="ns16:SecuritySetting">Custom</ns16:SecuritySetting>
+    <ns16:TransportLevelSecurity xsi:type="ns16:TransportLevelSecurity">
+     <ns16:CommunicationMethod xsi:type="ns16:CommunicationMethod">Privacy</ns16:CommunicationMethod>
+    </ns16:TransportLevelSecurity>
+    <ns16:RunAsMode xsi:type="ns16:RunAsMode">System</ns16:RunAsMode>
+    <ns16:AnonymousClients xsi:type="ns16:AnonymousCommunication">No</ns16:AnonymousClients>
+    <ns16:ServiceAuthorization xsi:type="ns16:ServiceAuthorization">
+     <ns16:IntroducePDPAuthorization xsi:type="ns16:IntroducePDPAuthorization"/>
+    </ns16:ServiceAuthorization>
+   </ns16:ServiceSecurity>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
     <ns3:Identifiable xsi:type="ns3:Identifiable"/>
+    <ns3:Secure xsi:type="ns3:Secure"/>
     <ns3:ResourcePropertyManagement xsi:type="ns3:ResourcePropertyManagement"/>
    </ns3:ResourceFrameworkOptions>
+   <ns17:Extensions xsi:type="ns17:ExtensionsType" xmlns:ns17="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+    <ns17:Extension extensionType="AUTHORIZATION" name="enforce_auth" xsi:type="ns17:ExtensionType"/>
+   </ns17:Extensions>
   </ns3:Service>
  </ns3:Services>
- <ns16:Extensions xsi:type="ns16:ExtensionsType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns16:Extension name="cagrid_metadata" version="1.4" xsi:type="ns16:ExtensionType"/>
- </ns16:Extensions>
+ <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns18:Extension name="cagrid_metadata" version="1.4" xsi:type="ns18:ExtensionType"/>
+ </ns18:Extensions>
 </ns1:ServiceDescription>
