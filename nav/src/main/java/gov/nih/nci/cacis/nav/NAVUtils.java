@@ -128,6 +128,30 @@ public final class NAVUtils {
     private NAVUtils() {
 
     }
+    
+    /**
+     * Returns the message content as Multipar, if it is,
+     * Otherwise, throws NotificationValidationException
+     * @param message Message instance
+     * @return instance of Multipart
+     * @throws NotificationValidationException - validation error thrown
+     */
+    public static Multipart getMessageContent(Message message) throws NotificationValidationException {
+        Object content = null;
+        try {
+            content = message.getContent();
+            if ( !(content instanceof Multipart) ) {
+                throw new NotificationValidationException("Message content is not a valid multipart content!");
+            }
+        } catch (IOException e) {
+            throw new NotificationValidationException("Error getting message content", e);
+        } catch (MessagingException e) {
+            throw new NotificationValidationException("Error getting message content", e);
+        }
+        
+        return (Multipart)content;
+    }    
+   
 
     /**
      * Returns a Document representing the notification (Signature) element.
@@ -155,7 +179,7 @@ public final class NAVUtils {
      * @return the registry ID
      * @throws XPathExpressionException on XPath evaluation error
      */
-    public static String getRegistryId(Document sig) throws XPathExpressionException {
+    public static String getRegistryId(Node sig) throws XPathExpressionException {
         return getNodeValue(sig, GET_REG_ID_EXP);
     }
 
@@ -167,7 +191,7 @@ public final class NAVUtils {
      * @throws XPathExpressionException on XPath evaluation error
      * @throws DOMException on DOM manipulation erro
      */
-    public static List<String> getDocumentIds(Document sig) throws DOMException, XPathExpressionException {
+    public static List<String> getDocumentIds(Node sig) throws DOMException, XPathExpressionException {
         return getNodeValues(sig, GET_DOC_IDS_EXP);
     }
 

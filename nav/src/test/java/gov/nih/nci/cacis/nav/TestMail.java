@@ -193,7 +193,7 @@ public class TestMail {
             // CHECKSTYLE:ON
             fail("Unexpected exception: " + e);
         } finally {
-            if(reader != null ) {
+            if ( reader != null ) {
                 reader.close();
             }
         }
