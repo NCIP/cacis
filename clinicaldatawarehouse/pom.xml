@@ -1,0 +1,139 @@
+<project>
+	<parent>
+		<artifactId>pco</artifactId>
+		<groupId>gov.nih.nci.cacis</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>clinicaldatawarehouse</artifactId>
+	<url>../../clinicaldatawarehouse/target/site</url>
+	<packaging>jar</packaging>
+	<name>ClinicalDataWarehouse</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.7.0</version>
+					</dependency>
+				</dependencies>
+
+				<executions>
+					<execution>
+						<id>all</id>
+						<phase>compile</phase>
+						<configuration>
+							<target>
+								<ant antfile="build.xml">
+									<target name="all"/>
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>deployTomcat</id>
+						<phase>install</phase>
+						<configuration>
+							<target>
+								<ant antfile="build.xml">
+									<target name="deployTomcat"/>
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>					
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+<!-- Un-comment profiles section once CI is installed with caGRID-1.4 & secure tomcat container -->	
+<!-- 
+	<profiles>
+		<profile>
+			<id>cacis-ci</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.6</version>
+						<dependencies>
+							<dependency>
+								<groupId>ant-contrib</groupId>
+								<artifactId>ant-contrib</artifactId>
+								<version>1.0b3</version>
+								<exclusions>
+									<exclusion>
+										<groupId>ant</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant</artifactId>
+								<version>1.7.0</version>
+							</dependency>
+						</dependencies>
+
+						<executions>
+							<execution>
+								<id>all</id>
+								<phase>compile</phase>
+								<configuration>
+									<target>
+										<ant antfile="build.xml">
+											<target name="all"/>
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>deployTomcat</id>
+								<phase>install</phase>
+								<configuration>
+									<target>
+										<ant antfile="build.xml">
+											<target name="deployTomcat"/>
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+ -->	
+</project>    
