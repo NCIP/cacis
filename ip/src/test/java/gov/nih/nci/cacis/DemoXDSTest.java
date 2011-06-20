@@ -109,7 +109,7 @@ public class DemoXDSTest extends StandardTestContainer {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        startServer(new CXFServlet(), "demo-xds-context.xml", false, 8999);
+        startServer(new CXFServlet(), "demo-xds-context.xml", false, 18999);
     }
 
 
