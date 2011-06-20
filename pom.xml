@@ -35,6 +35,7 @@
         <gmaven.version>1.2</gmaven.version>
         <logger.level>WARN</logger.level>
         <skip.static.analysis>false</skip.static.analysis>
+        <cargo.timeout>300000</cargo.timeout>
 
         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
@@ -50,8 +51,8 @@
         <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
         <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
 
-        <cargo.timeout>300000</cargo.timeout>
-
+        <!--URI to publish maven site-->
+        <maven.site.url>file:///${tolven.jboss.server}/deploy/${project.name}</maven.site.url>
     </properties>
 
     <organization>
@@ -423,6 +424,12 @@
             <!--CI Profile. Will run the integration tests (needs external
              services and applications)-->
             <id>cacis-ci</id>
+            <distributionManagement>
+                <site>
+                    <id>cacis-ci-site</id>
+                    <url>${maven.site.url}</url>
+                </site>
+            </distributionManagement>
             <build>
                 <plugins>
                     <plugin>
