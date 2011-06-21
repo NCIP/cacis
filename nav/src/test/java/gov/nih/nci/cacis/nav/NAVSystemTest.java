@@ -63,7 +63,6 @@ package gov.nih.nci.cacis.nav;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -78,12 +77,14 @@ import java.util.Properties;
 import javax.mail.Message;
 import javax.xml.crypto.dsig.DigestMethod;
 import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Document;
 
 import com.icegreen.greenmail.user.GreenMailUser;
@@ -97,7 +98,12 @@ import com.icegreen.greenmail.util.GreenMail;
  * @since May 5, 2011
  *
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
 public class NAVSystemTest {
+
+    @Autowired
+    private CertSelectorFactory factory;
 
     private static final String TRUE = "true";
     private static final String EMAIL1 = "another.one@somewhere.com";
@@ -267,7 +273,7 @@ public class NAVSystemTest {
 
             ks.load( is, "changeit".toCharArray());
 
-            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks),
+            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks, factory),
                     new DefaultDocumentReferenceValidator());
             v.validate(messages[0]);
 

@@ -60,19 +60,16 @@
  */
 package gov.nih.nci.cacis.nav;
 
-import java.io.IOException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.PublicKey;
-import java.security.cert.Certificate;
 import java.security.cert.CertSelector;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.security.cert.X509CertSelector;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import javax.security.auth.x500.X500Principal;
 import javax.xml.crypto.AlgorithmMethod;
 import javax.xml.crypto.KeySelector;
 import javax.xml.crypto.KeySelectorException;
@@ -108,17 +105,21 @@ public class X509KeySelector extends KeySelector {
 
     private final KeyStore ks;
 
+    private final CertSelectorFactory certSelectorFactory;
+
     /**
      * Creates a trusted <code>X509KeySelector</code>.
      *
      * @param keyStore the keystore
+     * @param certSelectorFactory the CertSelectorFactory
      * @throws KeyStoreException if the keystore has not been initialized
      */
-    public X509KeySelector(KeyStore keyStore) throws KeyStoreException {
-        if (keyStore == null) {
-            throw new NullPointerException("keyStore is null");
+    public X509KeySelector(KeyStore keyStore, CertSelectorFactory certSelectorFactory) throws KeyStoreException {
+        if (keyStore == null || certSelectorFactory == null) {
+            throw new NullPointerException("keyStore and CertSelectorFactory can not be null");
         }
         this.ks = keyStore;
+        this.certSelectorFactory = certSelectorFactory;
         // Throw Exception if KeyStore has not been initialized
         this.ks.size();
     }
@@ -193,27 +194,10 @@ public class X509KeySelector extends KeySelector {
             // Make sure the algorithm is compatible
             // with the method.
             if (algEquals(method.getAlgorithm(), key.getAlgorithm())) {
-                return keyStoreSelect(getCertSelector(xcert));
+                return keyStoreSelect(certSelectorFactory.createCertSelector(xcert));
             }
         }
         throw new KeySelectorException("No matching X509SubjectName found!");
-    }
-
-    /**
-     * Generates the X509CertSelector used for finding the KeyStore.
-     * @param xcert X.509 certificate
-     * @return X509CertSelector to be used in finding the KeyStore
-     * @throws KeySelectorException on error when getting the CertSelector
-     */
-    public X509CertSelector getCertSelector(X509Certificate xcert) throws KeySelectorException {
-        final X500Principal xPrincipal = xcert.getIssuerX500Principal();
-        final X509CertSelector subjectcs = new X509CertSelector();
-        try {
-            subjectcs.setIssuer(xPrincipal.getName());
-        } catch (IOException ioe) {
-            throw new KeySelectorException(ioe);
-        }
-        return subjectcs;
     }
 
     /**
