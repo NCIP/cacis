@@ -14,7 +14,6 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <artifactId>cacis-ip</artifactId>
     <name>Integration Platform</name>
     <packaging>war</packaging>
-    <url>../../ip/target/site</url>
 
     <properties>
         <skip.cargo.container>false</skip.cargo.container>

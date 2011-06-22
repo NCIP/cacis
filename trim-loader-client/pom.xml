@@ -9,9 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>trim-loader-client</artifactId>
     <packaging>maven-plugin</packaging>
-
     <name>Trim Loader</name>
-    <url>../../trim-loader-client/target/site</url>
 
     <properties>
         <tolvenConfig.location>/Users/bpickeral/Documents/util/tolven-RC1/tolven-config</tolvenConfig.location>

@@ -52,7 +52,7 @@
         <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
 
         <!--URI to publish maven site-->
-        <maven.site.url>file:///${tolven.jboss.server}/deploy/${project.name}</maven.site.url>
+        <maven.site.url>file:///${user.home}/cacis-site</maven.site.url>
     </properties>
 
     <organization>
@@ -162,6 +162,10 @@
             <name>CBIIT Snapshot Repository</name>
             <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
+        <site>
+              <id>cacis-ci-site</id>
+              <url>${maven.site.url}</url>
+         </site>
     </distributionManagement>
 
     <reporting>
@@ -169,16 +173,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8</version>
             </plugin>
             <plugin>
                 <!-- Disabled features w/in the 2.1 plugin to speed up the report generation -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.4</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -361,7 +367,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -434,12 +440,6 @@
             <!--CI Profile. Will run the integration tests (needs external
              services and applications)-->
             <id>cacis-ci</id>
-            <distributionManagement>
-                <site>
-                    <id>cacis-ci-site</id>
-                    <url>${maven.site.url}</url>
-                </site>
-            </distributionManagement>
             <build>
                 <plugins>
                     <plugin>

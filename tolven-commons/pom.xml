@@ -10,9 +10,7 @@
 
     <artifactId>tolven-commons</artifactId>
     <packaging>jar</packaging>
-
     <name>tolven-commons</name>
-    <url>../../tolven-commons/target/site</url>
 
     <properties>
         <test.unit.branchrate>5</test.unit.branchrate>

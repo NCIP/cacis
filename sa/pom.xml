@@ -5,8 +5,8 @@
         <groupId>gov.nih.nci.cacis</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <name>Semantic Adapter Web Service</name>
-    <url>../../sa/target/site</url>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>semantic-adapter-ws</artifactId>
     <packaging>jar</packaging>

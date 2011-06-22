@@ -11,9 +11,7 @@
 
     <artifactId>transformer</artifactId>
     <packaging>jar</packaging>
-
     <name>transformer</name>
-    <url>../../transformer/target/site</url>
 
     <properties>
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
