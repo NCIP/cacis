@@ -71,8 +71,14 @@ import java.security.cert.CertSelector;
  */
 public interface X509CertConfig<T extends CertSelector> {
     /**
-     *
-     * @return - Returns factory for outbound fault creation
+     * Creates Cert Selection Factory.
+     * @return - Returns factory for cert creation
      */
     CertSelectorFactory<T> createCertSelectionFactory();
+
+    /**
+     * Creates Algorithm Checker.
+     * @return algorithm Checker
+     */
+    AlgorithmChecker createAlgorithmChecker();
 }

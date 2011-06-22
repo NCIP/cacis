@@ -76,7 +76,6 @@ import javax.xml.crypto.KeySelectorException;
 import javax.xml.crypto.KeySelectorResult;
 import javax.xml.crypto.XMLCryptoContext;
 import javax.xml.crypto.XMLStructure;
-import javax.xml.crypto.dsig.SignatureMethod;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
 
@@ -107,17 +106,28 @@ public class X509KeySelector extends KeySelector {
 
     private final CertSelectorFactory certSelectorFactory;
 
+    private final AlgorithmChecker algorithmChecker;
+
     /**
      * Creates a trusted <code>X509KeySelector</code>.
      *
      * @param keyStore the keystore
      * @param certSelectorFactory the CertSelectorFactory
+     * @param algorithmChecker the Algorithm Checker
      * @throws KeyStoreException if the keystore has not been initialized
      */
-    public X509KeySelector(KeyStore keyStore, CertSelectorFactory certSelectorFactory) throws KeyStoreException {
-        if (keyStore == null || certSelectorFactory == null) {
-            throw new NullPointerException("keyStore and CertSelectorFactory can not be null");
+    public X509KeySelector(KeyStore keyStore, CertSelectorFactory certSelectorFactory,
+            AlgorithmChecker algorithmChecker) throws KeyStoreException {
+        if (keyStore == null) {
+            throw new NullPointerException("keyStore can not be null");
         }
+        if (certSelectorFactory == null) {
+            throw new NullPointerException("certSelectorFactory can not be null");
+        }
+        if (algorithmChecker == null) {
+            throw new NullPointerException("algorithmChecker can not be null");
+        }
+        this.algorithmChecker = algorithmChecker;
         this.ks = keyStore;
         this.certSelectorFactory = certSelectorFactory;
         // Throw Exception if KeyStore has not been initialized
@@ -193,7 +203,7 @@ public class X509KeySelector extends KeySelector {
             final PublicKey key = xcert.getPublicKey();
             // Make sure the algorithm is compatible
             // with the method.
-            if (algEquals(method.getAlgorithm(), key.getAlgorithm())) {
+            if (algorithmChecker.algEquals(method.getAlgorithm(), key.getAlgorithm())) {
                 return keyStoreSelect(certSelectorFactory.createCertSelector(xcert));
             }
         }
@@ -231,17 +241,5 @@ public class X509KeySelector extends KeySelector {
         public Key getKey() {
             return key;
         }
-    }
-
-    /**
-     * Checks if a JCA/JCE public key algorithm name is compatible with the specified signature algorithm URI.
-     */
-    // @@@FIXME: this should also work for key types other than DSA/RSA
-    private boolean algEquals(String algURI, String algName) {
-        if ((algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1))
-                || (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1))) {
-            return true;
-        }
-        return false;
     }
 }

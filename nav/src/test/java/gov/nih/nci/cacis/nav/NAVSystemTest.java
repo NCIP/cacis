@@ -105,6 +105,9 @@ public class NAVSystemTest {
     @Autowired
     private CertSelectorFactory factory;
 
+    @Autowired
+    private AlgorithmChecker algorithmChecker;
+
     private static final String TRUE = "true";
     private static final String EMAIL1 = "another.one@somewhere.com";
     private static final String EMAIL2 = "some.one@somewhere.com";
@@ -273,7 +276,7 @@ public class NAVSystemTest {
 
             ks.load( is, "changeit".toCharArray());
 
-            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks, factory),
+            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks, factory, algorithmChecker),
                     new DefaultDocumentReferenceValidator());
             v.validate(messages[0]);
 

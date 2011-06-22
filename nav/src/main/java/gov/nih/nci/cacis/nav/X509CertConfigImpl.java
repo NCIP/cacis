@@ -67,19 +67,29 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Spring config that encapsulates factory for X509CertSelector
+ *
  * @author bpickeral
  * @since Jun 20, 2011
  */
 @Configuration
-public class X509CertConfigImpl implements X509CertConfig<X509CertSelector>  {
+public class X509CertConfigImpl implements X509CertConfig<X509CertSelector> {
 
-    /* (non-Javadoc)
-     * @see gov.nih.nci.cacis.nav.X509CertConfig#createCertSelectionFactory()
+    /**
+     * {@inheritDoc}
      */
     @Override
     @Bean
     public CertSelectorFactory<X509CertSelector> createCertSelectionFactory() {
         return new X509CertSelectorFactory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Bean
+    public AlgorithmChecker createAlgorithmChecker() {
+        return new DSARSAAlgorithmChecker();
     }
 
 }
