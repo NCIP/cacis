@@ -13,6 +13,11 @@
     <artifactId>nav</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <test.unit.branchrate>65</test.unit.branchrate>
+        <test.unit.linerate>65</test.unit.linerate>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.icegreen</groupId>

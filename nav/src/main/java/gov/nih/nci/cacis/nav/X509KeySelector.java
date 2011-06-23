@@ -203,11 +203,13 @@ public class X509KeySelector extends KeySelector {
             final PublicKey key = xcert.getPublicKey();
             // Make sure the algorithm is compatible
             // with the method.
-            if (algorithmChecker.algEquals(method.getAlgorithm(), key.getAlgorithm())) {
+            final String algorithm = method.getAlgorithm();
+            final String keyAlgorithm = key.getAlgorithm();
+            if (algorithmChecker.algEquals(algorithm, keyAlgorithm)) {
                 return keyStoreSelect(certSelectorFactory.createCertSelector(xcert));
             }
         }
-        throw new KeySelectorException("No matching X509SubjectName found!");
+        throw new KeySelectorException("No matching Key found!");
     }
 
     /**
