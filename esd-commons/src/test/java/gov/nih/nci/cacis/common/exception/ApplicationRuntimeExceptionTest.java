@@ -58,86 +58,37 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.common.dao;
+package gov.nih.nci.cacis.common.exception;
 
-import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-
 /**
- * @author kherm manav.kher@semanticbits.com
+ * @author bpickeral
+ * @since Jun 22, 2011
  */
-public class InMemoryDaoTest {
-    private final String STRING1 = "some string";
-    private final String STRING2 = "some other string";
+public class ApplicationRuntimeExceptionTest {
+    private final String MESSAGE = "test message";
 
-    private InMemoryDao<String> dao;
-
-    @Before
-    public void before() {
-        dao = new InMemoryDao<String>();
-    }
-
+    /**
+     * Test ApplicationRuntimeException passing message
+     */
     @Test
-    public void saveStrings() {
-        final Long id = dao.save(STRING1);
-        assertNotNull(id);
-
-        final Long id2 = dao.save(STRING2);
-        assertNotSame(id, id2);
-
-        assertEquals(2, dao.getAll().size());
-
-        dao.replace(id, dao.getById(id2));
-        assertEquals(dao.getById(id), dao.getById(id2));
+    public void createExceptionWithMessage() {
+        final ApplicationRuntimeException are = new ApplicationRuntimeException(MESSAGE);
+        assertEquals(MESSAGE, are.getMessage());
     }
 
+    /**
+     * Test ApplicationRuntimeException passing message + cause
+     */
     @Test
-    public void saveNullEntity() {
-        assertNull(dao.save(null));
-    }
+    public void createExceptionWithMessageCause() {
+        final Exception e = new NullPointerException(MESSAGE);
+        final ApplicationRuntimeException are = new ApplicationRuntimeException(MESSAGE, e);
 
-    @Test
-    public void replaceNullId() {
-        dao.save(STRING1);
-
-        dao.replace(null, null);
-
-        // Nothing should be replaced
-        assertEquals(1, dao.getAll().size());
-    }
-
-    @Test (expected = ApplicationRuntimeException.class)
-    public void replaceIncorrectId() {
-        Long id = dao.save(STRING1);
-
-        dao.replace(id + 1, STRING2);
-    }
-
-    @Test
-    public void delete() {
-        Long id = dao.save(STRING1);
-
-        dao.delete(id);
-
-        // Value should be removed
-        assertEquals(0, dao.getAll().size());
-    }
-
-    @Test
-    public void deleteAll() {
-        dao.save(STRING1);
-        dao.save(STRING2);
-
-        dao.deleteAll();
-
-        // Value should be removed
-        assertEquals(0, dao.getAll().size());
+        assertEquals(MESSAGE, are.getMessage());
+        assertEquals(e, are.getCause());
     }
 }

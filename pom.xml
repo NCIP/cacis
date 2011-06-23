@@ -194,6 +194,14 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>**/Abstract*.class</exclude>
+                            <exclude>**/Base*.class</exclude>
+                            <exclude>**/*IntegrationTest.class</exclude>
+                            <exclude>**/common/test/TestUtils.class</exclude>
+                        </excludes>
+                    </instrumentation>
                 </configuration>
             </plugin>
         </plugins>
@@ -379,11 +387,13 @@
                         <include>**/*Test.java</include>
                         <include>**/*TestDb.java</include>
                     </includes>
-                    <excludes>
-                        <exclude>**/Abstract*.java</exclude>
-                        <exclude>**/Base*.java</exclude>
-                        <exclude>**/*IntegrationTest.java</exclude>
-                    </excludes>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>**/Abstract*.class</exclude>
+                            <exclude>**/Base*.class</exclude>
+                            <exclude>**/*IntegrationTest.class</exclude>
+                        </excludes>
+                    </instrumentation>
                 </configuration>
             </plugin>
             <plugin>
@@ -403,6 +413,12 @@
                         <branchRate>0</branchRate>
                         <lineRate>0</lineRate>
                     </check>
+                    <excludes>
+                        <exclude>**/Abstract*.class</exclude>
+                        <exclude>**/Base*.class</exclude>
+                        <exclude>**/*IntegrationTest.class</exclude>
+                        <exclude>**/common/test/TestUtils.class</exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
