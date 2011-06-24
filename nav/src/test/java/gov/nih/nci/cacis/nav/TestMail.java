@@ -61,16 +61,17 @@
 package gov.nih.nci.cacis.nav;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -78,6 +79,7 @@ import javax.activation.DataHandler;
 import javax.activation.URLDataSource;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -88,21 +90,48 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetupTest;
 
 /**
  * Tests sending/receiving mail
  * 
  * @author joshua.phillips@semanticbits.com
+ * @author vinodh.rc@semanticbits.com
  * 
  */
 public class TestMail {
+    
+    private static final String INBOX = "INBOX";
 
+    private static final String POP3_TYPE = "pop3";
+
+    private static final String MAIL_POP3_PORT_KEY = "mail.pop3.port";
+
+    private static final String KEYALIAS = "securemailpkcs12";
+
+    private static final String STOREPASS = "changeit";
+
+    private static final String KEYSTORE = "securemail.p12";
+    
+    private static final String TRUSTSTORE = "securemail_ts.p12";
+
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected exception: ";
+    
+    private static final String EMAIL = "some.one@somewhere.com";
+    private static final String LOGIN = "another.one";
+    private static final String PASSWORD = "secret";
+
+    private static final Logger LOG = Logger.getLogger(TestMail.class);
+    
+    private static final String LOCALHOST = "localhost";
     private static final int SMTP_PORT = 3025;
     private static final int POP3_PORT = 3110;
 
@@ -113,8 +142,22 @@ public class TestMail {
      */
     @Before
     public void setUp() {
-        server = new GreenMail();
-        server.start();
+        server = new GreenMail(ServerSetupTest.ALL);
+        //for some reason, the greenmail server doesnt start in time
+        //will attempt max times to ensure all service gets startedup 
+        int i = 0;
+        final int max = 2;
+        while ( i < max ) {
+            try {
+                server.start();
+                //CHECKSTYLE:OFF
+            } catch (RuntimeException e) { //NOPMD
+              //CHECKSTYLE:ON
+                i++;
+                continue;
+            }
+            i = max;
+        }
     }
 
     /**
@@ -129,7 +172,7 @@ public class TestMail {
      * Tests sending mail
      */
     @Test
-    public void testSendMessage() {
+    public void sendMessage() {
         try {
 
             Transport.send(createMessage());
@@ -141,46 +184,284 @@ public class TestMail {
             // CHECKSTYLE:OFF
         } catch (Exception e) {
             // CHECKSTYLE:ON
-            fail("Unexpected exception: " + e);
+            fail(UNEXPECTED_EXCEPTION + e);
         }
 
     }
-
+    
     /**
      * tests receiving mail
+     * 
      * @throws IOException - io exception thrown
      */
     @Test
-    public void testRetrieveMessage() throws IOException {
-        Reader reader = null;
+    public void receiveMessage() throws IOException {               
         try {
-            final String email = "another.one@somewhere.com";
-            final String login = "another.one";
-            final String password = "secret";
-
             final MimeMessage msg = createMessage();
-            final GreenMailUser user = server.setUser(email, login, password);
-            user.deliver(msg);
+
+            final GreenMailUser user = server.setUser(EMAIL, LOGIN, PASSWORD);
+             user.deliver(msg);
             assertEquals(1, server.getReceivedMessages().length);
 
             final Properties props = new Properties();
-            props.setProperty("mail.pop3.port", String.valueOf(POP3_PORT));
+            props.setProperty(MAIL_POP3_PORT_KEY, String.valueOf(POP3_PORT));
             final Session session = Session.getInstance(props, null);
             session.setDebug(true);
 
-            final Store store = session.getStore("pop3");
-            store.connect("localhost", login, password);
-            final Folder folder = store.getFolder("INBOX");
+            final Store store = session.getStore(POP3_TYPE);
+            store.connect(LOCALHOST, LOGIN, PASSWORD);
+            final Folder folder = store.getFolder(INBOX);
             folder.open(Folder.READ_ONLY);
 
             final Message[] messages = folder.getMessages();
             assertTrue(messages != null);
             assertTrue(messages.length == 1);
 
-            final Multipart mp = (Multipart) msg.getContent();
+            final MimeMessage retMsg = (MimeMessage)messages[0];
+            
+            final Multipart mp = (Multipart) retMsg.getContent();
             assertTrue(mp.getCount() == 2);
+            
+            final String partMsg1 = getPartContent(mp.getBodyPart(0));
+            assertNotNull(partMsg1);
+            
+            final String partMsg2 = getPartContent(mp.getBodyPart(1));
+            assertNotNull(partMsg2);
+            
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON
+            fail(UNEXPECTED_EXCEPTION + e);
+        }
+    }
 
-            final Part part = mp.getBodyPart(1);
+    /**
+     * tests receiving encrypted mail
+     * 
+     * @throws IOException - io exception thrown
+     */
+    @Test
+    public void receiveEncryptedMessage() throws IOException {               
+        try {
+
+            final MimeMessage msg = createMessage();
+            final String trustStore = getClass().getClassLoader().getResource(TRUSTSTORE).getFile();
+            final SendEncryptedMail ssem = 
+                new SendEncryptedMail(LOCALHOST, String.valueOf(POP3_PORT),
+                    trustStore, STOREPASS, KEYALIAS);
+            
+            final MimeMessage encMsg = ssem.encryptMail(msg);
+
+            final GreenMailUser user = server.setUser(EMAIL, LOGIN, PASSWORD);
+            user.deliver(encMsg);
+            assertEquals(1, server.getReceivedMessages().length);
+
+            final Properties props = new Properties();
+            props.setProperty(MAIL_POP3_PORT_KEY, String.valueOf(POP3_PORT));
+            final Session session = Session.getInstance(props, null);
+            session.setDebug(true);
+
+            final Store store = session.getStore(POP3_TYPE);
+            store.connect(LOCALHOST, LOGIN, PASSWORD);
+            final Folder folder = store.getFolder(INBOX);
+            folder.open(Folder.READ_ONLY);
+
+            final Message[] messages = folder.getMessages();
+            assertTrue(messages != null);
+            assertTrue(messages.length == 1);
+
+            final MimeMessage retMsg = (MimeMessage)messages[0];
+            
+            final String keystore = getClass().getClassLoader().getResource(KEYSTORE).getFile();
+            
+            final DecryptMail dm = new DecryptMail();
+            final MimeBodyPart res = dm.decrypt(retMsg, keystore, STOREPASS, KEYALIAS);
+            assertNotNull(res);
+            
+            final Multipart mp = (Multipart) res.getContent();
+            assertTrue(mp.getCount() == 2);
+            
+            final Multipart origMsgMp = (Multipart) msg.getContent(); 
+            
+            validateMsgParts(origMsgMp, mp);
+            
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON 
+            fail(UNEXPECTED_EXCEPTION + e);
+        }
+    }
+    
+    /**
+     * tests receiving signed mail
+     * 
+     * @throws IOException - io exception thrown
+     */
+    @Test
+    public void receiveSignedMessage() throws IOException {               
+        try {
+            final String fromemail = "another.one@somewhere.com";
+
+            final MimeMessage msg = createMessage();
+            //TODO:fix sample certificate for email address
+            msg.setFrom(new InternetAddress(fromemail));
+            
+            final String keystore = getClass().getClassLoader().getResource(KEYSTORE).getFile();
+            final SendSignedMail ssem = 
+                new SendSignedMail(LOCALHOST, String.valueOf(POP3_PORT),
+                    keystore , STOREPASS, KEYALIAS);
+            
+            final MimeMessage signedMsg = ssem.signMail(msg);
+
+            final GreenMailUser user = server.setUser(EMAIL, LOGIN, PASSWORD);
+            user.deliver(signedMsg);
+            assertEquals(1, server.getReceivedMessages().length);
+
+            final Properties props = new Properties();
+            props.setProperty(MAIL_POP3_PORT_KEY, String.valueOf(POP3_PORT));
+            final Session session = Session.getInstance(props, null);
+            session.setDebug(true);
+
+            final Store store = session.getStore(POP3_TYPE);
+            store.connect("localhost", LOGIN, PASSWORD);
+            final Folder folder = store.getFolder(INBOX);
+            folder.open(Folder.READ_ONLY);
+
+            final Message[] messages = folder.getMessages();
+            assertTrue(messages != null);
+            assertTrue(messages.length == 1);
+
+            final MimeMessage retMsg = (MimeMessage)messages[0];
+            
+            final String trustStore = getClass().getClassLoader().getResource(TRUSTSTORE).getFile();
+            final ValidateSignedMail vsm = new ValidateSignedMail(false);
+            vsm.validate(retMsg, trustStore, STOREPASS, KEYALIAS);
+            
+            final Multipart mp = (Multipart) retMsg.getContent();
+            assertTrue(mp.getCount() == 2);           
+            
+            final Multipart origMsgMp = (Multipart) msg.getContent(); 
+            
+            final Part actualMsgPart = mp.getBodyPart(0);
+            final Multipart actualMsgMp = (Multipart) actualMsgPart.getContent();
+            
+            validateMsgParts(origMsgMp, actualMsgMp);
+            
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON
+            fail(UNEXPECTED_EXCEPTION + e);
+        }
+    }
+    
+    /**
+     * TODO : Test signed and encrypted message reading  
+     * tests receiving signed and encrypted mail
+     * 
+     * @throws IOException - io exception thrown
+     */
+    @Test
+    @Ignore
+    @SuppressWarnings("PMD.NcssMethodCount")
+    public void receiveSignedAndEncryptedMessage() throws IOException {               
+        try {
+            final String fromemail = "another.one@somewhere.com";
+
+            final MimeMessage msg = createMessage();
+            
+            //TODO:fix sample certificate for email address
+            msg.setFrom(new InternetAddress(fromemail));
+            
+            final String keystore = getClass().getClassLoader().getResource(KEYSTORE).getFile();
+            final String trustStore = getClass().getClassLoader().getResource(TRUSTSTORE).getFile();
+            
+            final SendSignedMail ssm = 
+                new SendSignedMail(LOCALHOST, String.valueOf(POP3_PORT),
+                    keystore , STOREPASS, KEYALIAS);            
+            
+            final SendEncryptedMail sem = 
+                new SendEncryptedMail(LOCALHOST, String.valueOf(POP3_PORT),
+                    trustStore, STOREPASS, KEYALIAS);
+            
+            final MimeMessage signedMsg = ssm.signMail(msg);
+            final MimeMessage msgToBeSent = sem.encryptMail(signedMsg);
+                        
+            final GreenMailUser user = server.setUser(EMAIL, LOGIN, PASSWORD);
+            user.deliver(msgToBeSent);
+            assertEquals(1, server.getReceivedMessages().length);
+
+            final Properties props = new Properties();
+            props.setProperty(MAIL_POP3_PORT_KEY, String.valueOf(POP3_PORT));
+            final Session session = Session.getInstance(props, null);
+            session.setDebug(true);
+
+            final Store store = session.getStore(POP3_TYPE);
+            store.connect("localhost", LOGIN, PASSWORD);
+            final Folder folder = store.getFolder(INBOX);
+            folder.open(Folder.READ_ONLY);
+
+            final Message[] messages = folder.getMessages();
+            assertTrue(messages != null);
+            assertTrue(messages.length == 1);
+            
+            final MimeMessage retMsg = (MimeMessage)messages[0];
+            
+            final DecryptMail dm = new DecryptMail();
+            final MimeBodyPart res = dm.decrypt(retMsg, keystore, STOREPASS, KEYALIAS);
+            assertNotNull(res);          
+                        
+            final ValidateSignedMail vsm = new ValidateSignedMail(false);
+            vsm.validate(retMsg, trustStore, STOREPASS, KEYALIAS);
+            
+            final MimeMessage retSignedMsg = new MimeMessage(session);
+            retSignedMsg.setContent((Multipart)res.getContent());
+            /* Set all original MIME headers in the encrypted message */
+            final Enumeration headers = retMsg.getAllHeaderLines();
+            while (headers.hasMoreElements()) {
+                final String headerLine = (String) headers.nextElement();
+                LOG.warn(headerLine);
+                retSignedMsg.addHeaderLine(headerLine);
+            }
+             
+            //TODO : Fix this code. not working as of now
+            final Multipart mp = (Multipart) res.getContent();
+            assertTrue(mp.getCount() == 2);            
+            
+            final Multipart origMsgMp = (Multipart) msg.getContent(); 
+            
+//            final Part actualMsgPart = mp.getBodyPart(0);
+//            final Multipart actualMsgMp = (Multipart) actualMsgPart.getContent();
+//            
+//            validateMsgParts(origMsgMp, actualMsgMp);
+            validateMsgParts(origMsgMp, mp);
+            
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON
+            fail("Unexpected exception: " + e);
+        }
+    }
+    
+    private void validateMsgParts(Multipart origMsgMp, Multipart actualMsgMp) {
+        try {
+            final String textpart = (String) actualMsgMp.getBodyPart(0).getContent();
+            assertNotNull(textpart);
+            assertEquals((String)origMsgMp.getBodyPart(0).getContent(), textpart);
+            
+            final String attachPart = getPartContent(actualMsgMp.getBodyPart(1));            
+            assertNotNull(attachPart);
+            assertEquals(getPartContent(origMsgMp.getBodyPart(1)), attachPart);
+        } catch (IOException e) {
+            fail(UNEXPECTED_EXCEPTION + e);
+        } catch (MessagingException e) {
+            fail(UNEXPECTED_EXCEPTION + e);
+        }
+    }
+
+    private String getPartContent(Part part) {
+        BufferedReader reader = null;
+        String partMsg = null;
+        try {
             final Writer writer = new StringWriter();
             final char[] buffer = new char[1024];
             reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
@@ -188,15 +469,20 @@ public class TestMail {
             while ((n = reader.read(buffer)) != -1) { // NOPMD
                 writer.write(buffer, 0, n);
             }
+            partMsg = writer.toString();
             // CHECKSTYLE:OFF
         } catch (Exception e) { // NOPMD
             // CHECKSTYLE:ON
-            fail("Unexpected exception: " + e);
         } finally {
-            if ( reader != null ) {
-                reader.close();
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    LOG.error("Error closing BufferedReader!");
+                }
             }
         }
+        return partMsg;
     }
 
     private MimeMessage createMessage() throws Exception { // NOPMD
@@ -207,7 +493,7 @@ public class TestMail {
 
         final Properties mailProps = new Properties();
         final Session session = Session.getInstance(mailProps, null);
-        mailProps.setProperty("mail.smtp.host", "localhost");
+        mailProps.setProperty("mail.smtp.host", LOCALHOST);
         mailProps.setProperty("mail.smtp.port", String.valueOf(SMTP_PORT));
         mailProps.setProperty("mail.smtp.sendpartial", "true");
         session.setDebug(true);
@@ -224,7 +510,8 @@ public class TestMail {
 
         final MimeBodyPart mbp2 = new MimeBodyPart();
         final ClassLoader cl = TestMail.class.getClassLoader();
-        final URLDataSource ds = new URLDataSource(cl.getResource("notification_gen.xml"));
+        final URLDataSource ds = new URLDataSource(cl.getResource("purchase_order.xml"));
+
         mbp2.setDataHandler(new DataHandler(ds));
         mbp2.setFileName("IHEXDSNAV-" + UUID.randomUUID() + ".xml");
         mbp2.setHeader("Content-Type", "application/xml; charset=UTF-8");

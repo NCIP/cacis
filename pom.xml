@@ -275,6 +275,13 @@
             <artifactId>saxon</artifactId>
             <version>9.1.0.1</version>
         </dependency>
+        
+        <!-- secured mail -->
+        <dependency>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcmail-jdk16</artifactId>
+            <version>140</version>
+        </dependency>
 
         <!--test dependencies -->
         <dependency>
@@ -312,7 +319,7 @@
             <artifactId>cxf-rt-testsupport</artifactId>
             <version>${cxf.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>        
     </dependencies>
 
     <build>
