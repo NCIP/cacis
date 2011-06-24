@@ -13,8 +13,8 @@
     <name>tolven-commons</name>
 
     <properties>
-        <test.unit.branchrate>5</test.unit.branchrate>
-        <test.unit.linerate>8</test.unit.linerate>
+         <test.unit.branchrate>85</test.unit.branchrate>
+        <test.unit.linerate>85</test.unit.linerate>
     </properties>
 
     <dependencies>

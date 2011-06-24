@@ -18,6 +18,8 @@
         <outputRootdir>${user.home}</outputRootdir>
         <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
         <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
+        <test.unit.branchrate>65</test.unit.branchrate>
+        <test.unit.linerate>65</test.unit.linerate>
     </properties>
 
     <dependencies>

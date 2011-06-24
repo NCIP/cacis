@@ -32,6 +32,7 @@
         <ipf.version>2.3-m1</ipf.version>
         <apache.camel.version>2.6.0</apache.camel.version>
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
+        <cobertura.plugin.version>2.5</cobertura.plugin.version>
         <gmaven.version>1.2</gmaven.version>
         <logger.level>WARN</logger.level>
         <skip.static.analysis>false</skip.static.analysis>
@@ -51,8 +52,6 @@
         <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
         <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
 
-        <!--URI to publish maven site-->
-        <maven.site.url>file:///${user.home}/cacis-site</maven.site.url>
     </properties>
 
     <organization>
@@ -163,9 +162,9 @@
             <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
         <site>
-              <id>cacis-ci-site</id>
-              <url>${maven.site.url}</url>
-         </site>
+            <id>cacis-ci-site</id>
+            <url>${maven.site.url}</url>
+        </site>
     </distributionManagement>
 
     <reporting>
@@ -186,23 +185,10 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.4</version>
             </plugin>
+            <!--this just links it to the site. Reports are configured in the plugins-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <configuration>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                    <instrumentation>
-                        <excludes>
-                            <exclude>**/Abstract*.class</exclude>
-                            <exclude>**/Base*.class</exclude>
-                            <exclude>**/*IntegrationTest.class</exclude>
-                            <exclude>**/common/test/TestUtils.class</exclude>
-                        </excludes>
-                    </instrumentation>
-                </configuration>
             </plugin>
         </plugins>
     </reporting>
@@ -275,7 +261,7 @@
             <artifactId>saxon</artifactId>
             <version>9.1.0.1</version>
         </dependency>
-        
+
         <!-- secured mail -->
         <dependency>
             <groupId>bouncycastle</groupId>
@@ -319,7 +305,7 @@
             <artifactId>cxf-rt-testsupport</artifactId>
             <version>${cxf.version}</version>
             <scope>test</scope>
-        </dependency>        
+        </dependency>
     </dependencies>
 
     <build>
@@ -404,7 +390,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.5</version>
+                <version>${cobertura.plugin.version}</version>
                 <configuration>
                     <formats>
                         <format>html</format>
@@ -420,18 +406,26 @@
                     </check>
                     <instrumentation>
                         <excludes>
-                            <exclude>**/Abstract*.class</exclude>
-                            <exclude>**/Base*.class</exclude>
-                            <exclude>**/*IntegrationTest.class</exclude>
-                            <exclude>**/common/test/TestUtils.class</exclude>
+                            <exclude>**/*Config.class</exclude>
+                            <exclude>**/*ConfigImpl.class</exclude>
+                            <exclude>**/*Server.class</exclude>
+                            <exclude>**/tolven/client/*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <goals>
                             <goal>clean</goal>
                             <goal>check</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>reports</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>cobertura</goal>
                         </goals>
                     </execution>
                 </executions>
