@@ -162,13 +162,7 @@ public class SendSignedMail extends AbstractSendMail {
      * @throws MessagingException - error thrown, if any
      */
     public SendSignedMail(String keystore, String storepass, String keyAlias) throws MessagingException {
-        smtpServer = "localhost";
-        smtpPort = String.valueOf(SMTP_PORT);
-        this.keystore = keystore;
-        this.storepass = storepass;
-        this.keyAlias = keyAlias;
-
-        init();
+        this("localhost", String.valueOf(SMTP_PORT), keystore, storepass, keyAlias);
     }
 
     private void init() throws MessagingException {

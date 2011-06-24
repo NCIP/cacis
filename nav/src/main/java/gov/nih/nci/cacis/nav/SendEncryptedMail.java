@@ -106,9 +106,9 @@ import org.bouncycastle.util.Strings;
  * @author vinodh.rc@semanticbits.com
  */
 public class SendEncryptedMail extends AbstractSendMail {
-    
-    private static final Logger LOG = Logger.getLogger(SendEncryptedMail.class);    
-    private static final String ERROR_INITALISING_ENCRYPTER = "Error initalising encrypter!";    
+
+    private static final Logger LOG = Logger.getLogger(SendEncryptedMail.class);
+    private static final String ERROR_INITALISING_ENCRYPTER = "Error initalising encrypter!";
 
     private final String smtpServer;
     private final String smtpPort;
@@ -129,8 +129,8 @@ public class SendEncryptedMail extends AbstractSendMail {
      * @param keyAlias - key alias
      * @throws MessagingException - error thrown, if any
      */
-    public SendEncryptedMail(String smtpServer, String smtpPort, String truststore, String storepass,
-            String keyAlias) throws MessagingException {
+    public SendEncryptedMail(String smtpServer, String smtpPort, String truststore, String storepass, String keyAlias)
+            throws MessagingException {
         this.smtpServer = smtpServer;
         this.smtpPort = smtpPort;
         this.truststore = truststore;
@@ -149,27 +149,20 @@ public class SendEncryptedMail extends AbstractSendMail {
      * @throws MessagingException - error thrown, if any
      */
     public SendEncryptedMail(String truststore, String storepass, String keyAlias) throws MessagingException {
-        smtpServer = "localhost";
-        smtpPort = String.valueOf(SMTP_PORT);
-        this.truststore = truststore;
-        this.storepass = storepass;
-        this.keyAlias = keyAlias;
-
-        initWithTrustStore();
+        this("localhost", String.valueOf(SMTP_PORT), truststore, storepass, keyAlias);
     }
-    
+
     /**
      * Initialize Mail Encrypter
      * 
      * @param smtpServer - smtp server host name
      * @param smtpPort - smtp port
      * @param trustedCert - trusted certificate to be used for encryption
-     * @throws MessagingException - error thrown, if any
      */
-    public SendEncryptedMail(String smtpServer, String smtpPort, Certificate trustedCert) throws MessagingException {
+    public SendEncryptedMail(String smtpServer, String smtpPort, Certificate trustedCert) {
         this.smtpServer = smtpServer;
         this.smtpPort = smtpPort;
-        
+
         initWithTrustedCert(trustedCert);
     }
 
@@ -177,13 +170,9 @@ public class SendEncryptedMail extends AbstractSendMail {
      * Initialize Mail Encrypter. Uses localhost smtp server and default port
      * 
      * @param trustedCert - trusted certificate to be used for encryption
-     * @throws MessagingException - error thrown, if any
      */
-    public SendEncryptedMail(Certificate trustedCert) throws MessagingException {
-        smtpServer = "localhost";
-        smtpPort = String.valueOf(SMTP_PORT);
-        
-        initWithTrustedCert(trustedCert);
+    public SendEncryptedMail(Certificate trustedCert) {
+        this("localhost", String.valueOf(SMTP_PORT), trustedCert);
     }
 
     private void initWithTrustStore() throws MessagingException {
@@ -198,7 +187,7 @@ public class SendEncryptedMail extends AbstractSendMail {
             final KeyStore truststoreRef = getTrustStoreRef();
             chain = new Certificate[1];
             chain[0] = truststoreRef.getCertificate(keyAlias);
-            
+
             // CHECKSTYLE:OFF
         } catch (Exception ex) { // NOPMD
             // CHECKSTYLE:ON
@@ -206,9 +195,8 @@ public class SendEncryptedMail extends AbstractSendMail {
             throw new MessagingException(ERROR_INITALISING_ENCRYPTER, ex);
         }
     }
-    
-    private void initWithTrustedCert(Certificate trustedCert) throws MessagingException {
-        try {
+
+    private void initWithTrustedCert(Certificate trustedCert) {        
             /* CommandCap setting */
             setCommandCap();
 
@@ -217,13 +205,6 @@ public class SendEncryptedMail extends AbstractSendMail {
 
             chain = new Certificate[1];
             chain[0] = trustedCert;
-            
-            // CHECKSTYLE:OFF
-        } catch (Exception ex) { // NOPMD
-            // CHECKSTYLE:ON
-            LOG.error(ERROR_INITALISING_ENCRYPTER, ex);
-            throw new MessagingException(ERROR_INITALISING_ENCRYPTER, ex);
-        }
     }
 
     /**
@@ -255,7 +236,7 @@ public class SendEncryptedMail extends AbstractSendMail {
         }
         return null;
     }
-    
+
     private MimeMessage encryptMessage(MimeMessage message, Session session) throws NoSuchAlgorithmException,
             NoSuchProviderException, SMIMEException, MessagingException, IOException {
         /* Create the encrypter */
@@ -287,7 +268,7 @@ public class SendEncryptedMail extends AbstractSendMail {
 
         return encryptedMessage;
     }
-    
+
     private KeyStore getTrustStoreRef() throws KeyStoreException {
         /* Open the truststore */
         KeyStore truststoreRef = null;
@@ -296,9 +277,9 @@ public class SendEncryptedMail extends AbstractSendMail {
             truststoreRef = KeyStore.getInstance(STORE_TYPE, PROVIDER_TYPE);
             is = new FileInputStream(truststore);
             truststoreRef.load(is, storepass.toCharArray());
-            //CHECKSTYLE:OFF
-        } catch (Exception e) { //NOPMD
-            //CHECKSTYLE:ON
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON
             throw new KeyStoreException("Error loading truststore!", e);
         } finally {
             if (is != null) {
