@@ -15,7 +15,6 @@
         <module>nav</module>
         <module>tolven-commons</module>
         <module>trim-loader-client</module>
-        <module>pcoplugin</module>
         <module>validation</module>
         <module>sa</module>
         <module>ip</module>
