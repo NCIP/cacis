@@ -1,0 +1,177 @@
+<com.mirth.connect.model.Channel>
+  <id>6901f2f6-ed86-4f72-a31b-2f8462db49b0</id>
+  <name>Trim-2-CCD-xslt</name>
+  <description>Base channel to take in Transcend Trim and convert it to Canonical data format(CCD) using Trim-to-ccd.xlt content&#xd;
+&#xd;
+This channel setup get the source as trim via the default AcceptMessage webservice and writes to a file as destination. &#xd;
+&#xd;
+TODO: Will need to configure the destination in the future, as required</description>
+  <enabled>true</enabled>
+  <version>2.0.1.5164</version>
+  <lastModified>
+    <time>1309895140114</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>40</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="port">9085</property>
+      <property name="DataType">Web Service Listener</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
+      <property name="host">0.0.0.0</property>
+      <property name="receiverServiceName">Mirth</property>
+      <property name="receiverClassName">com.mirth.connect.connectors.ws.DefaultAcceptMessage</property>
+      <property name="receiverResponseValue">Destination 1</property>
+      <property name="receiverPasswords">&lt;list/&gt;</property>
+    </properties>
+    <transformer>
+      <steps>
+        <step>
+          <sequenceNumber>0</sequenceNumber>
+          <name>stripSoapEnvelope</name>
+          <script>var stStr = &apos;&lt;trim&apos;;
+var endStr = &apos;&lt;/trim&gt;&apos;;
+
+var msgStr = msg.toString();
+
+var stIndex = msgStr.indexOf(stStr);
+var endIndex = msgStr.indexOf(endStr);
+
+if(stIndex &lt; 0 || endIndex &lt; 0){
+	logger.error(&apos;Not a valid trim&apos;);
+}
+
+var arg = msgStr.substring(stIndex, endIndex+endStr.length);
+
+var defns = new Namespace(&apos;urn:tolven-org:trim:4.0&apos;);
+default xml namespace = defns;
+
+msg = new XML(arg);</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>var stStr = &apos;&lt;trim&apos;;
+var endStr = &apos;&lt;/trim&gt;&apos;;
+
+var msgStr = msg.toString();
+
+var stIndex = msgStr.indexOf(stStr);
+var endIndex = msgStr.indexOf(endStr);
+
+if(stIndex &lt; 0 || endIndex &lt; 0){
+	logger.error(&apos;Not a valid trim&apos;);
+}
+
+var arg = msgStr.substring(stIndex, endIndex+endStr.length);
+
+var defns = new Namespace(&apos;urn:tolven-org:trim:4.0&apos;);
+default xml namespace = defns;
+
+msg = new XML(arg);</string>
+            </entry>
+          </data>
+        </step>
+        <step>
+          <sequenceNumber>1</sequenceNumber>
+          <name>process</name>
+          <script>tFactory = Packages.javax.xml.transform.TransformerFactory.newInstance();xsltTemplate = new Packages.java.io.StringReader(TRIM2CCD-XSLT);transformer = tFactory.newTransformer(new Packages.javax.xml.transform.stream.StreamSource(xsltTemplate));sourceVar = new Packages.java.io.StringReader(msg);resultVar = new Packages.java.io.StringWriter();transformer.transform(new Packages.javax.xml.transform.stream.StreamSource(sourceVar), new Packages.javax.xml.transform.stream.StreamResult(resultVar));channelMap.put(&apos;ccd&apos;, resultVar)</script>
+          <type>XSLT Step</type>
+          <data class="map">
+            <entry>
+              <string>Source</string>
+              <string>msg</string>
+            </entry>
+            <entry>
+              <string>Result</string>
+              <string>ccd</string>
+            </entry>
+            <entry>
+              <string>XsltTemplate</string>
+              <string>TRIM2CCD-XSLT</string>
+            </entry>
+          </data>
+        </step>
+      </steps>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Web Service Listener</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.0.1.5164</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <com.mirth.connect.model.Connector>
+      <name>Destination 1</name>
+      <properties>
+        <property name="secure">1</property>
+        <property name="scheme">file</property>
+        <property name="binary">0</property>
+        <property name="username">anonymous</property>
+        <property name="outputPattern">${SYSTIME}.ccd</property>
+        <property name="validateConnections">1</property>
+        <property name="DataType">File Writer</property>
+        <property name="FTPAnonymous">1</property>
+        <property name="timeout">10000</property>
+        <property name="charsetEncoding">DEFAULT_ENCODING</property>
+        <property name="password">anonymous</property>
+        <property name="passive">1</property>
+        <property name="template">${ccd}</property>
+        <property name="outputAppend">0</property>
+        <property name="host">CCD_OUTPUT_DIR</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>File Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.0.1.5164</version>
+    </com.mirth.connect.model.Connector>
+  </destinationConnectors>
+  <properties>
+    <property name="synchronous">true</property>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="transactional">false</property>
+    <property name="initialState">started</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="encryptData">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</com.mirth.connect.model.Channel>

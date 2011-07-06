@@ -34,8 +34,24 @@ to : XCCD - Exchange CCD&#xd;
         <step>
           <sequenceNumber>0</sequenceNumber>
           <name>process</name>
-          <script>//copy the inbound message as outbound message
-tmp=msg;
+          <script>var stStr = &apos;&lt;ClinicalDocument&apos; ;
+var endStr = &apos;&lt;/ClinicalDocument&gt;&apos;;
+
+var msgStr = msg.toString();
+
+var stIndex = msgStr.indexOf(stStr);
+var endIndex = msgStr.indexOf(endStr);
+
+if(stIndex &lt; 0 || endIndex &lt; 0){
+	logger.error(&quot;Not valid canonical data format message&quot;);
+}
+
+var arg = msgStr.substring(stIndex, endIndex+endStr.length);
+
+var defns2 = new Namespace(&quot;urn:hl7-org:v3&quot;);
+default xml namespace = defns2;
+
+tmp = new XML(arg);
 
 //NOTE: Before changing the namespace that you are going to work with
 //get all parent segments that belong to default namespace

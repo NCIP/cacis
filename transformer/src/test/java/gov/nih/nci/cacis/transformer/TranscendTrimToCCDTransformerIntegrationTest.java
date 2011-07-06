@@ -60,26 +60,22 @@
  */
 package gov.nih.nci.cacis.transformer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
- * WS tests Mirth Connect transformer XCCD to CDF
+ * WS tests Mirth Connect transformer Transcend Trim to CCD
  * 
- * @author bhumphrey
+ * @author vinodh.rc
  */
-public class XCCDToCDFTransformerIntegrationTest extends AbstractTransformerSystemTest {
-
-    static final Log LOG = LogFactory.getLog(XCCDToCDFTransformerIntegrationTest.class);
+public class TranscendTrimToCCDTransformerIntegrationTest extends AbstractTransformerSystemTest {
     
     /**
      * Constant for wsdl address
      */
-    private static final String ADDRESS = "http://localhost:9082/services/Mirth?wsdl";
+    private static final String ADDRESS = "http://localhost:9085/services/Mirth?wsdl";
 
     /**
      * @param invalidMessage
-     * @return
+     * @return invalid message string
      */
     protected String getInvalidMessage() {
         return "Invalid Message";
@@ -87,11 +83,11 @@ public class XCCDToCDFTransformerIntegrationTest extends AbstractTransformerSyst
 
     /**
      * 
-     * @return
+     * @return returns valid message file name
      */
     @Override
     protected String getValidSOAPMessageFilename() {
-        return "WS2-CDF-XCCD-valid-soap.xml";
+        return "Trim-2-CCD-valid-soap.xml";
     }
 
     @Override

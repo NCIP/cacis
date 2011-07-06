@@ -35,15 +35,42 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-
             </resource>
             <resource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
-
             </resource>
         </resources>
-
+        
+        <plugins>
+	       <plugin>
+	           <groupId>com.google.code.maven-replacer-plugin</groupId>
+	           <artifactId>maven-replacer-plugin</artifactId>
+	           <version>1.3.8</version>
+	           <executions>
+	               <execution>
+	                   <phase>compile</phase>
+	                   <goals>
+	                       <goal>replace</goal>
+	                   </goals>                   
+	               </execution>
+	           </executions>
+	           <configuration>
+	               <file>src/main/resources/channels/Trim-2-CCD-xslt.xml</file>
+	               <outputFile>target/classes/channels/Trim-2-CCD-xslt.xml</outputFile>
+	               <replacements>
+	                   <replacement>
+	                       <token>CCD_OUTPUT_DIR</token>
+	                       <value>${xccdOutputDir}</value>
+	                   </replacement>
+	                   <replacement>
+	                       <token>TRIM2CCD-XSLT</token>
+	                       <valueFile>sample_Trim2CCD.xslt</valueFile>
+	                   </replacement>         
+	               </replacements>
+	           </configuration>
+	       </plugin>
+    	</plugins>
     </build>
 
     <profiles>

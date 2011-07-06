@@ -92,15 +92,10 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      */
     protected static final String SUCCESS_MSG = "File successfully written";
 
-    /**
-     * Cosntant value for the endpoint address
-     */
-    protected static final String ADDRESS = "http://localhost:9082/services/Mirth?wsdl";
-
     private JaxWsDynamicClientFactory dcf;
     private Client client;
 
-    static final Log LOG = LogFactory.getLog(AbstractTransformerSystemTest.class);
+    private static final Log LOG = LogFactory.getLog(AbstractTransformerSystemTest.class);
 
     /**
      * reset CXF bus
@@ -113,6 +108,7 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
     }
 
     /** 
+     * Default constructor
      */
     public AbstractTransformerSystemTest() {
         super();
@@ -135,11 +131,10 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
     }
 
     /**
-     * @return
+     * @return string
      */
-    protected String getWSDLAddress() {
-        return ADDRESS;
-    }
+    protected abstract String getWSDLAddress();
+    
 
     /**
      * Pass an invalid message and check for invalid response.
