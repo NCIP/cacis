@@ -19,6 +19,7 @@
         <module>sa</module>
         <module>ip</module>
         <module>transformer</module>
+        <module>ip-mirth</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -30,6 +31,8 @@
         <jboss.server.version>4.2.2.GA</jboss.server.version>
         <ipf.version>2.3-m1</ipf.version>
         <apache.camel.version>2.6.0</apache.camel.version>
+        <mirthconnect.version>2.2.1</mirthconnect.version>
+
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
         <cobertura.plugin.version>2.5</cobertura.plugin.version>
         <gmaven.version>1.2</gmaven.version>
@@ -353,6 +356,7 @@
                     <excludeRoots>
                         <excludeRoot>target/generated-sources/stubs</excludeRoot>
                         <excludeRoot>target/generated-sources/groovy-stubs/main</excludeRoot>
+                        <excludeRoot>target/generated</excludeRoot>
                     </excludeRoots>
                 </configuration>
                 <executions>
@@ -410,6 +414,8 @@
                             <exclude>**/*ConfigImpl.class</exclude>
                             <exclude>**/*Server.class</exclude>
                             <exclude>**/tolven/client/*.class</exclude>
+                            <exclude>org/hl7/v3/*.class</exclude>
+                            <exclude>generated/*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
@@ -539,24 +545,11 @@
 
     <repositories>
         <repository>
-            <id>cbiit</id>
-            <url>https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
             <id>CBIIT Public Repositories</id>
             <url>https://ncimvn.nci.nih.gov/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
         </repository>
         <repository>
             <id>openehealth.releases</id>
@@ -565,9 +558,6 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
         </repository>
         <repository>
             <id>CBIIT 3rd Party</id>
@@ -575,15 +565,19 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
         </repository>
         <repository>
             <id>jboss</id>
             <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
         </repository>
-
+        <repository>
+            <id>CBIIT-Snapshot</id>
+            <name>CBIIT Snapshot Repository</name>
+            <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <pluginRepositories>
