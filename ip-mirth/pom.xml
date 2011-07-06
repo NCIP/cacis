@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>pco</artifactId>
+        <groupId>gov.nih.nci.cacis</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Integration Platform Service - MIRTH Connect</name>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ip-mirth</artifactId>
+    <packaging>jar</packaging>
+
+      <properties>
+          <!--WSDL generates a lot of classes. Need to set this low-->
+        <test.unit.branchrate>14</test.unit.branchrate>
+        <test.unit.linerate>20</test.unit.linerate>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.mirthconnect</groupId>
+            <artifactId>ws-server</artifactId>
+            <version>${mirthconnect.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/ws-server.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>mule</groupId>
+            <artifactId>mule-core</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>${cxf.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <sourceRoot>${project.build.directory}/generated</sourceRoot>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/wsdl/IntegrationPlatform.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-impl</extraarg>
+                                        <extraarg>-verbose</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+</project>

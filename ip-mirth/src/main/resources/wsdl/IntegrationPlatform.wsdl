@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:cacis="http://cacis.nci.nih.gov" targetNamespace="http://cacis.nci.nih.gov" name="AcceptCanonical">
+	<types>
+		<xsd:schema elementFormDefault="qualified">
+			<xsd:import namespace="http://cacis.nci.nih.gov" schemaLocation="../schema/caCISIPDataSharing.xsd"/>
+		</xsd:schema>
+	</types>
+	<message name="AcceptCanonicalRequest">
+		<documentation>Request for sending canonical data to the caCIS Integration Platform</documentation>
+		<part name="parameter" element="cacis:caCISRequest"/>
+	</message>
+	<message name="AcceptCanonicalResponse">
+		<documentation>Response from the caCIS Integration Platform</documentation>
+		<part name="parameter" element="cacis:caCISResponse"/>
+	</message>
+	<message name="AcceptCanonicalFault">
+		<documentation>Fault from the caCIS Integration Platform while processing accept canonical</documentation>
+		<part name="parameter" element="cacis:caCISFault"/>
+	</message>
+	<portType name="AcceptCanonical_PortType">
+		<operation name="acceptCanonical">
+			<input message="cacis:AcceptCanonicalRequest" wsa:Action="cacis:AcceptCanonicalRequest"/>
+			<output message="cacis:AcceptCanonicalResponse" wsa:Action="cacis:AccceptCanonicalResponse"/>
+			<fault name="acceptCanonicalFault" message="cacis:AcceptCanonicalFault"/>
+		</operation>
+	</portType>
+	<binding name="AcceptCanonical_Binding_Soap12" type="cacis:AcceptCanonical_PortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="acceptCanonical">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="acceptCanonicalFault">
+				<soap:fault name="" use="literal"/>
+			</fault>
+		</operation>
+	</binding>
+	<binding name="AcceptCanonical_Binding_Soap11" type="cacis:AcceptCanonical_PortType">
+		<soap11:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="acceptCanonical">
+			<soap11:operation soapAction="cacis:acceptCanonical"/>
+			<input>
+				<soap11:body use="literal"/>
+			</input>
+			<output>
+				<soap11:body use="literal"/>
+			</output>
+			<fault name="acceptCanonicalFault">
+				<soap11:fault name="acceptCanonicalFault" use="literal"/>
+			</fault>
+		</operation>
+	</binding>
+	<service name="AcceptCanonicalService">
+		<port name="AcceptCanonical_Port_Soap11" binding="cacis:AcceptCanonical_Binding_Soap11">
+			<soap11:address location="http://localhost/AcceptCanonicalService"/>
+		</port>
+		<port name="AcceptCanonical_Port_Soap12" binding="cacis:AcceptCanonical_Binding_Soap12">
+			<soap:address location="http://localhost/AcceptCanonicalService"/>
+		</port>
+	</service>
+</definitions>
