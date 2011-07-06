@@ -65,7 +65,7 @@
 	                   </replacement>
 	                   <replacement>
 	                       <token>TRIM2CCD-XSLT</token>
-	                       <valueFile>sample_Trim2CCD.xslt</valueFile>
+	                       <valueFile>${basedir}/sample_Trim2CCD.xslt</valueFile>
 	                   </replacement>         
 	               </replacements>
 	           </configuration>
