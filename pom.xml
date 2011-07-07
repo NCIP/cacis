@@ -16,8 +16,6 @@
         <module>tolven-commons</module>
         <module>trim-loader-client</module>
         <module>validation</module>
-        <module>sa</module>
-        <module>ip</module>
         <module>transformer</module>
         <module>ip-mirth</module>
     </modules>
