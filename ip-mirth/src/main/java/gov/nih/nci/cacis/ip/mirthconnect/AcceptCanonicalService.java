@@ -68,6 +68,8 @@ import gov.nih.nci.cacis.CaCISResponse;
 import gov.nih.nci.cacis.ResponseStatusType;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 
 /**
@@ -75,9 +77,9 @@ import javax.jws.WebService;
  */
 @WebService(
         serviceName = "AcceptCanonicalService",
-        wsdlLocation = "wsdl/IntegrationPlatform.wsdl",
         portName = "AcceptCanonical_Port_Soap11",
-        targetNamespace = "http://cacis.nci.nih.gov"
+        targetNamespace = "http://cacis.nci.nih.gov",
+        endpointInterface = "gov.nih.nci.cacis.AcceptCanonicalPortType"
 )
 public class AcceptCanonicalService extends AcceptMessage {
 
@@ -99,17 +101,24 @@ public class AcceptCanonicalService extends AcceptMessage {
      * @return response CaCISResponse
      * @throws AcceptCanonicalFault Fault
      */
+    @WebResult(name = "caCISResponse", targetNamespace = "http://cacis.nci.nih.gov", partName = "parameter")
     @WebMethod
-    public gov.nih.nci.cacis.CaCISResponse acceptCanonical(CaCISRequest request) throws AcceptCanonicalFault {
+    public gov.nih.nci.cacis.CaCISResponse acceptCanonical(
+            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = "http://cacis.nci.nih.gov")
+            CaCISRequest request)
+            throws AcceptCanonicalFault {
+
         final CaCISResponse response = new CaCISResponse();
         response.setStatus(ResponseStatusType.SUCCESS);
 
-        final String mcResponse = webServiceMessageReceiver.processData(request.getClinicalDocument());
-
-        // ToDo validate this assumption
-        if (mcResponse == null) {
-            throw new AcceptCanonicalFault("Error processing data ");
+        final String req = request.getClinicalDocument();
+        try {
+            webServiceMessageReceiver.processData(req);
+             // CHECKSTYLE:OFF
+        } catch (Exception e) {
+            throw new AcceptCanonicalFault("Error processing message", e);
         }
+         // CHECKSTYLE:ON
 
         return response;
     }

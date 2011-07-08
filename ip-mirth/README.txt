@@ -24,11 +24,11 @@ To run the unit tests run 'mvn test'
 Deployment to Mirth Connect
 ==========================================================
 
-1. Copy target/ip-mirth-1.0-SNAPSHOT.jar to Mirth Connect/lib folder
+1. Copy target/ip-mirth-1.0-SNAPSHOT.jar to Mirth Connect/custom-lib folder
 
 2. Startup Mirth
 
-3. Import src/main/channels/AcceptCanonical_Channel.xml
+3. Import src/main/resources/channels/AcceptCanonical_Channel.xml
    into Mirth Connect (using the Mirth Connect web start application)
 
 4. Once the channel is deployed, the AcceptCanonicalService

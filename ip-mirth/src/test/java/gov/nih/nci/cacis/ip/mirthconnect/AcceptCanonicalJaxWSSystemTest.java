@@ -61,89 +61,77 @@
 package gov.nih.nci.cacis.ip.mirthconnect;
 
 import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpServer;
-import gov.nih.nci.cacis.AcceptCanonicalFault;
-import gov.nih.nci.cacis.AcceptCanonicalPortTypeImpl;
+import gov.nih.nci.cacis.AcceptCanonicalPortType;
 import gov.nih.nci.cacis.CaCISRequest;
+import gov.nih.nci.cacis.common.systest.AbstractJaxWsTest;
+import org.apache.cxf.jaxws.EndpointImpl;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.xml.ws.Binding;
-import javax.xml.ws.Endpoint;
-import javax.xml.ws.handler.Handler;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
+ * Uses JaxWsProxyFactoryBean to invoke the service
+ *
  * @author kherm manav.kher@semanticbits.com
  */
-public class AcceptCanonicalServiceTest {
 
-    @Mock
-    WebServiceMessageReceiver webServiceMessageReceiver;
-    CaCISRequest request;
-    AcceptCanonicalService service;
+public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        request = new CaCISRequest();
-        request.setClinicalDocument("");
-        service = new AcceptCanonicalService(webServiceMessageReceiver);
-        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
-    }
+    /**
+     * Cosntant value for the endpoint address
+     */
+    protected static final String ADDRESS = "http://localhost:18081/services/Temp?wsdl";
+     @Mock
+        WebServiceMessageReceiver webServiceMessageReceiver;
 
+     private EndpointImpl ep;
 
-    @Test
-    public void acceptCanonical() throws AcceptCanonicalFault {
-        service.acceptCanonical(request);
-
-        verify(webServiceMessageReceiver).processData(anyString());
-
-    }
+    /**
+        * EndpointImpl
+        * @return Endpoint
+        */
+       @Override
+       protected EndpointImpl getEndpoint() {
+           return this.ep;
+       }
 
 
 
     /**
-     * Service throws exception when it is unable to process
-     * the incoming request
+     * Setups up namespace and Endpoint
      *
-     * @throws AcceptCanonicalFault fault
+     * @throws Exception - exception thrown
      */
-    @Test(expected = AcceptCanonicalFault.class)
-    public void exception() throws AcceptCanonicalFault {
-        when(webServiceMessageReceiver.processData(anyString())).thenThrow(new RuntimeException("Mirth Exception"));
-        service.acceptCanonical(request);
+    @Before
+    public void setup() throws Exception { // NOPMD - setUpBus throws
+        MockitoAnnotations.initMocks(this);
+        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
+
+       final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver);
+        ep =  new EndpointImpl(getBus(), service);
+        ep.publish(ADDRESS);
     }
+
 
     @Test
-    public void create() throws IOException, InterruptedException {
+    public void invoke() throws Exception {
 
-        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 18010), 5);
-        ExecutorService threads = Executors.newFixedThreadPool(5);
-        server.setExecutor(threads);
-        server.start();
+        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory.setServiceClass(AcceptCanonicalPortType.class);
+        // specify the URL. We are using the in memory test container
+        factory.setAddress(ADDRESS);
 
-        AcceptCanonicalPortTypeImpl service = new AcceptCanonicalPortTypeImpl();
+        final AcceptCanonicalPortType client = (AcceptCanonicalPortType) factory.create();
+        final CaCISRequest request = new CaCISRequest();
+        request.setClinicalDocument("");
 
-        Endpoint webServiceEndpoint = Endpoint.create(service);
-        Binding binding = webServiceEndpoint.getBinding();
-        List<Handler> handlerChain = new LinkedList<Handler>();
-        binding.setHandlerChain(handlerChain);
-        HttpContext context = server.createContext("/services/sa");
-
-        webServiceEndpoint.publish(context);
-
+        client.acceptCanonical(request);
     }
+
+
 }

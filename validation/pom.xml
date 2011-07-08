@@ -12,6 +12,11 @@
     <packaging>jar</packaging>
     <name>validation</name>
 
+    <properties>
+         <test.unit.branchrate>85</test.unit.branchrate>
+         <test.unit.linerate>85</test.unit.linerate>
+     </properties>
+
     <dependencies>
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>

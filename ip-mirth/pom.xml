@@ -11,9 +11,9 @@
     <artifactId>ip-mirth</artifactId>
     <packaging>jar</packaging>
 
-      <properties>
-          <!--WSDL generates a lot of classes. Need to set this low-->
-        <test.unit.branchrate>14</test.unit.branchrate>
+    <properties>
+        <!--WSDL generates a lot of classes. Need to set this low-->
+        <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>20</test.unit.linerate>
     </properties>
 
@@ -37,6 +37,12 @@
             <artifactId>mockito-all</artifactId>
             <version>1.8.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>esd-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -50,8 +56,7 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <sourceRoot>${project.build.directory}/generated</sourceRoot>
-                            <wsdlOptions>
+                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/IntegrationPlatform.wsdl</wsdl>
                                     <extraargs>
@@ -67,9 +72,60 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>cacis-ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <id>copy-mirth-resources</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${mirthConnect.server.dir}/custom-lib</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${build.directory}</directory>
+                                            <includes>
+                                                <include>${artifactId}-${project.version}.${packaging}</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--manual step. Start Mirth Connect. See http://caehrorg.jira.com/browse/ESD-3006-->
+                    <plugin>
+                        <groupId>gov.nih.nci.cacis</groupId>
+                        <artifactId>mirthconnect-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <configuration>
+                            <mirthConnect>${mirthConnect.cli}</mirthConnect>
+                            <script>${build.outputDirectory}/deploy.mc</script>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>cli</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

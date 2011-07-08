@@ -38,6 +38,14 @@
         <skip.static.analysis>false</skip.static.analysis>
         <cargo.timeout>300000</cargo.timeout>
 
+        <!--NOTE - customize this property to Mirth Connect location-->
+        <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
+        <mirthConnect.server.dir>${user.home}/Applications/Mirth Connect</mirthConnect.server.dir>
+
+        <outputRootdir>${user.home}</outputRootdir>
+        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
+
         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
         <skip.cargo.container>true</skip.cargo.container>
@@ -338,6 +346,7 @@
                     <excludeRoots>
                         <excludeRoot>target/generated-sources/stubs</excludeRoot>
                         <excludeRoot>target/generated-sources/groovy-stubs/main</excludeRoot>
+                        <excludeRoot>target/generated-sources/cxf</excludeRoot>
                     </excludeRoots>
                 </configuration>
             </plugin>
@@ -354,7 +363,7 @@
                     <excludeRoots>
                         <excludeRoot>target/generated-sources/stubs</excludeRoot>
                         <excludeRoot>target/generated-sources/groovy-stubs/main</excludeRoot>
-                        <excludeRoot>target/generated</excludeRoot>
+                        <excludeRoot>target/generated-sources/cxf</excludeRoot>
                     </excludeRoots>
                 </configuration>
                 <executions>
