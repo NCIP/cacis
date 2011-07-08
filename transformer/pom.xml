@@ -15,7 +15,12 @@
 
     <properties>
        <test.unit.branchrate>65</test.unit.branchrate>
-        <test.unit.linerate>65</test.unit.linerate>
+       <test.unit.linerate>65</test.unit.linerate>
+       <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
+       <outputRootdir>${user.home}</outputRootdir>
+       <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
+       <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
+       <xccdInputDir>${outputRootdir}/.cacis/mc/input/</xccdInputDir>
     </properties>
 
     <dependencies>
@@ -37,7 +42,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        
+
         <plugins>
 	       <plugin>
 	           <groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -48,7 +53,7 @@
 	                   <phase>compile</phase>
 	                   <goals>
 	                       <goal>replace</goal>
-	                   </goals>                   
+	                   </goals>
 	               </execution>
 	           </executions>
 	           <configuration>
@@ -62,7 +67,7 @@
 	                   <replacement>
 	                       <token>TRIM2CCD-XSLT</token>
 	                       <valueFile>${basedir}/sample_Trim2CCD.xslt</valueFile>
-	                   </replacement>         
+	                   </replacement>
 	               </replacements>
 	           </configuration>
 	       </plugin>
