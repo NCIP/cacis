@@ -107,13 +107,6 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
         }
     }
 
-    /** 
-     * Default constructor
-     */
-    public AbstractTransformerSystemTest() {
-        super();
-    }
-
     /**
      * Setups up namespace and Endpoint
      * 
@@ -121,7 +114,7 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      */
     @Before
     public void setUpBus() throws Exception { // NOPMD - setUpBus throws
-                                              // Exception
+        // Exception
         super.setUpBus();
 
         if (dcf == null || client == null) {
@@ -134,7 +127,6 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      * @return string
      */
     protected abstract String getWSDLAddress();
-    
 
     /**
      * Pass an invalid message and check for invalid response.
@@ -143,7 +135,7 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      */
     @Test
     public void invalidMessage() throws Exception { // NOPMD Exception type is
-                                                    // thrown
+        // thrown
 
         testTransformer(new Message() {
 
@@ -234,9 +226,9 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
     /**
      * Test transformer strategy. Send a message and validate the response.
      * 
-     * @param message
-     * @param validator
-     * @throws Exception
+     * @param message - Message instance for the transforer
+     * @param validator - Response validator instance
+     * @throws Exception - error thrown, if any
      */
     protected void testTransformer(Message message, ResponseValidator validator) throws Exception {
         final Object[] res = client.invoke("acceptMessage", message.getMessage());
@@ -257,7 +249,7 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      * 
      * @return an invalid message.
      */
-    abstract protected String getInvalidMessage();
+    protected abstract String getInvalidMessage();
 
     /**
      * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
@@ -288,7 +280,7 @@ public abstract class AbstractTransformerSystemTest extends AbstractCXFTest {
      * Override this method to identify the message under test. default null implementation provided to ease extension.
      * But this method must be overridden for the test to pass.
      * 
-     * @return
+     * @return String representing the valid soap message file name
      */
     protected String getValidSOAPMessageFilename() {
         return null;

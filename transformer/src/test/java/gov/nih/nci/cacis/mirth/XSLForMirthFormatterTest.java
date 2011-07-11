@@ -58,44 +58,52 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.transformer;
+package gov.nih.nci.cacis.mirth;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import org.apache.commons.io.FileUtils;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 /**
- * WS tests Mirth Connect transformer XCCD to CDF
+ * Test class for the XSLForMirthFormatter
  * 
- * @author bhumphrey
+ * @author vinodh.rc@semanticbits.com
+ * 
  */
-public class XCCDToCDFTransformerIntegrationTest extends AbstractTransformerSystemTest {
-
-    private static final Log LOG = LogFactory.getLog(XCCDToCDFTransformerIntegrationTest.class);
-    
-    /**
-     * Constant for wsdl address
-     */
-    private static final String ADDRESS = "http://localhost:9082/services/Mirth?wsdl";
+public class XSLForMirthFormatterTest {
 
     /**
-     * 
-     * @return invalid message string
+     * Tests the xsl formatter
+     * @throws IOException io error thrown, if any
+     * @throws URISyntaxException error thrown, if any
      */
-    protected String getInvalidMessage() {
-        return "Invalid Message";
-    }
-
-    /**
-     * 
-     * @return String representing the valid soap message file name
-     */
-    @Override
-    protected String getValidSOAPMessageFilename() {
-        return "WS2-CDF-XCCD-valid-soap.xml";
-    }
-
-    @Override
-    protected String getWSDLAddress() {
-        return ADDRESS;
+    @Test
+    public void checkFormatter() throws IOException, URISyntaxException {
+        final String origXslFile = getClass().getClassLoader().getResource("sample.xsl").getFile();
+        final File xslFile = new File(origXslFile);
+        final String xslFileNm = xslFile.getName();
+        final String outputDir = xslFile.getParent() + "/formatted/";
+        final String[] args = { outputDir, origXslFile };
+        XSLForMirthFormatter.main(args);
+        
+        final File actualFrmtdXsl = new File(outputDir + xslFileNm);
+        assertTrue(actualFrmtdXsl.exists());
+        
+        final String actualFrmtdXslContent = FileUtils.readFileToString(actualFrmtdXsl);
+        assertNotNull(actualFrmtdXslContent);
+        
+        final String expectedFrmtdXsl = getClass().getClassLoader().getResource("sample.formatted").getFile();
+        final String expectedFrmtdXslContent = FileUtils.readFileToString(new File(expectedFrmtdXsl));
+        assertNotNull(expectedFrmtdXslContent);
+        
+        assertEquals(expectedFrmtdXslContent, actualFrmtdXslContent);
+        
+        
     }
 }
