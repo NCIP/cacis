@@ -101,11 +101,11 @@ public class TranscendSemanticAdapterIntegrationTest {
         final int noOfFilesBef = ccdOpDir.list().length;
         
         final String origF = getClass().getClassLoader().getResource(MESSAGE_FILE_NAME).getFile();
-        final File opDir = new File(trimInputDir);
-        if (!opDir.exists() && opDir.mkdirs()) {
-            throw new IOException("Error creating output directory, " + opDir.getCanonicalPath());
+        final File ipDir = new File(trimInputDir);
+        if (!ipDir.exists() && ipDir.mkdirs()) {
+            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
         }
-        final File ipF = new File(trimInputDir + "/testFile.xml");
+        final File ipF = new File(ipDir, "testFile.xml");
 
         FileUtils.copyFile(new File(origF), ipF);
         
