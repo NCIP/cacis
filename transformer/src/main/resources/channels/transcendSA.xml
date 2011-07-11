@@ -34,7 +34,7 @@
       <property name="fileAge">1000</property>
       <property name="sortAttribute">date</property>
       <property name="FTPAnonymous">1</property>
-      <property name="moveToPattern">CDF-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
+      <property name="moveToPattern">transcendTrim-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
       <property name="autoDelete">0</property>
     </properties>
     <transformer>
@@ -75,9 +75,9 @@
         <property name="dispatcherUseAuthentication">0</property>
         <property name="dispatcherPort">{http://ws.connectors.connect.mirth.com/}DefaultAcceptMessagePort</property>
         <property name="dispatcherSoapAction"></property>
-        <property name="host">localhost:9081/services/Mirth?wsdl</property>
-        <property name="dispatcherWsdlCacheId">http://localhost:9081/services/Mirth?wsdl</property>
-        <property name="dispatcherWsdlUrl">http://localhost:9081/services/Mirth?wsdl</property>
+        <property name="host">localhost:9085/services/Mirth?wsdl</property>
+        <property name="dispatcherWsdlCacheId">http://localhost:9085/services/Mirth?wsdl</property>
+        <property name="dispatcherWsdlUrl">http://localhost:9085/services/Mirth?wsdl</property>
         <property name="DataType">Web Service Sender</property>
         <property name="dispatcherPassword"></property>
         <property name="usePersistentQueues">0</property>
@@ -142,7 +142,7 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
-globalChannelMap.put(&apos;inputDir&apos;,&apos;${xccdInputDir}&apos;);
+globalChannelMap.put(&apos;inputDir&apos;,&apos;${trimInputDir}&apos;);
 
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed

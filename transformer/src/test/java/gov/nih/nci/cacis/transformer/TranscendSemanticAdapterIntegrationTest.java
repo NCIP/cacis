@@ -60,38 +60,63 @@
  */
 package gov.nih.nci.cacis.transformer;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 
 /**
- * WS tests Mirth Connect transformer Transcend Trim to CCD
- * 
- * @author vinodh.rc
+ * @author bpickeral
+ * @since Jul 8, 2011
  */
-public class TranscendTrimToCCDTransformerIntegrationTest extends AbstractTransformerSystemTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath*:/applicationContext-transformers.xml")
+public class TranscendSemanticAdapterIntegrationTest {
+
+    private static final String MESSAGE_FILE_NAME = "sample_transcend_trim.xml";
     
-    /**
-     * Constant for wsdl address
-     */
-    private static final String ADDRESS = "http://localhost:9085/services/Mirth?wsdl";
+    @Value("${trimInputDir}")
+    private String trimInputDir;
+    
+    @Value("${xccdOutputDir}")
+    private String xccdOutputDir;
 
     /**
-     * invalidMessage
-     * @return invalid message string
-     */
-    protected String getInvalidMessage() {
-        return "Invalid Message";
-    }
-
-    /**
+     * Mirth Connect SA channel polls for new files and processes it
      * 
-     * @return returns valid message file name
+     * @throws IOException error thrown, if any
+     * @throws InterruptedException  error thrown, if interrupted
      */
-    @Override
-    protected String getValidSOAPMessageFilename() {
-        return "Trim-2-CCD-valid-soap.xml";
-    }
+    @Test
+    public void pollForMessage() throws IOException, InterruptedException {
+        final File ccdOpDir = new File(xccdOutputDir);
+        final int noOfFilesBef = ccdOpDir.list().length;
+        
+        final String origF = getClass().getClassLoader().getResource(MESSAGE_FILE_NAME).getFile();
+        final File opDir = new File(trimInputDir);
+        if (!opDir.exists() && opDir.mkdirs()) {
+            throw new IOException("Error creating output directory, " + opDir.getCanonicalPath());
+        }
+        final File ipF = new File(trimInputDir + "/testFile.xml");
 
-    @Override
-    protected String getWSDLAddress() {
-        return ADDRESS;
+        FileUtils.copyFile(new File(origF), ipF);
+        
+        Thread.sleep(5000);
+        
+        final int noOfFilesAft = ccdOpDir.list().length;
+        
+        //assert the file is taken and processed
+        assertFalse(ipF.exists());
+        //assert the increase in processed files size
+        assertEquals(noOfFilesBef + 1, noOfFilesAft);
     }
+    
 }

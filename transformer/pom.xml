@@ -20,7 +20,7 @@
        <outputRootdir>${user.home}</outputRootdir>
        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
        <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
-       <xccdInputDir>${outputRootdir}/.cacis/mc/input/</xccdInputDir>
+       <trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
     </properties>
 
     <dependencies>
@@ -47,6 +47,22 @@
         </resources>
 
         <plugins>
+        	<plugin>
+		        <groupId>org.codehaus.mojo</groupId>
+		        <artifactId>properties-maven-plugin</artifactId>
+		        <version>1.0-alpha-2</version>
+		        <executions>
+		          <execution>
+		            <phase>process-classes</phase>
+		            <goals>
+		              <goal>write-project-properties</goal>
+		            </goals>
+		            <configuration>
+		               <outputFile>${project.build.directory}/test-classes/transformers-test.properties</outputFile>
+		            </configuration>
+		          </execution>
+		        </executions>
+	       </plugin>
 	       <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
