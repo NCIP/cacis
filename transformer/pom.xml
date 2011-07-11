@@ -14,8 +14,8 @@
     <name>transformer</name>
 
     <properties>
-       <test.unit.branchrate>65</test.unit.branchrate>
-       <test.unit.linerate>65</test.unit.linerate>
+       <test.unit.branchrate>35</test.unit.branchrate>
+       <test.unit.linerate>35</test.unit.linerate>
        <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
        <outputRootdir>${user.home}</outputRootdir>
        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
