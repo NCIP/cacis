@@ -485,7 +485,6 @@
                                     <excludes>
                                         <exclude>**/Abstract*.java</exclude>
                                         <exclude>**/Base*.java</exclude>
-										<exclude>**/TranscendSemanticAdapterIntegrationTest.java</exclude>
                                     </excludes>
                                     <includes>
                                         <include>**/*IntegrationTest.java</include>

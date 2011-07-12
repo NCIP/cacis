@@ -102,7 +102,7 @@ public class TranscendSemanticAdapterIntegrationTest {
         
         final String origF = getClass().getClassLoader().getResource(MESSAGE_FILE_NAME).getFile();
         final File ipDir = new File(trimInputDir);
-        if (!ipDir.exists() && ipDir.mkdirs()) {
+        if (!ipDir.exists() && !ipDir.mkdirs()) {
             throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
         }
         final File ipF = new File(ipDir, "testFile.xml");
