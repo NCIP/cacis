@@ -552,6 +552,13 @@
 
     <repositories>
         <repository>
+            <id>cbiit</id>
+            <url>https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>CBIIT Public Repositories</id>
             <url>https://ncimvn.nci.nih.gov/nexus/content/groups/public/</url>
             <snapshots>
