@@ -109,7 +109,7 @@ public class TranscendSemanticAdapterIntegrationTest {
 
         FileUtils.copyFile(new File(origF), ipF);
         
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         
         final int noOfFilesAft = ccdOpDir.list().length;
         
