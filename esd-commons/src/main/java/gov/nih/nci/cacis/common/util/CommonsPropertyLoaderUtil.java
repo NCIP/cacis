@@ -77,12 +77,12 @@ import java.util.Properties;
 /**
  * This utility class resolve properties from any of following locations in the same order
  * <pre>
- * #a)${user.home}/.cacis/${ant.project.name}/${ant.project.name}.properties
- * #b)${catalina.home}/conf/cacis/${ant.project.name} (where ${catalina.home) is a system property
- * #c)classpath:${ant.project.name}.properties
+ * #a)${user.home}/.cacis/${project.name}/${propertyFile.name}
+ * #b)${catalina.home}/conf/cacis/${project.name}/${propertyFile.name} (where ${catalina.home) is a system property
+ * #c)classpath:${propertyFile.name}
  * </pre>
  * property files will be used in order. So if property is available at
- * ${user.home}/.cacis/${ant.project.name}/${ant.project.name}.properties
+ * ${user.home}/.cacis/${project.name}/${propertyFile.name}
  * is available, project will simply ignore that property from other property files.
  *
  * @author Saurabh.Agrawal@semanticbits.com

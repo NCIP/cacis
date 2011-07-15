@@ -22,8 +22,7 @@
             <groupId>com.mirthconnect</groupId>
             <artifactId>ws-server</artifactId>
             <version>${mirthconnect.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/ws-server.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

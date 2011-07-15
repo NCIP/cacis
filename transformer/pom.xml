@@ -14,13 +14,7 @@
     <name>transformer</name>
 
     <properties>
-       <test.unit.branchrate>35</test.unit.branchrate>
-       <test.unit.linerate>35</test.unit.linerate>
-       <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
-       <outputRootdir>${user.home}</outputRootdir>
-       <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
-       <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
-       <trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
+        <trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
     </properties>
 
     <dependencies>
@@ -32,92 +26,111 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-				<excludes>
-					<exclude>xsl/*</exclude>
-				</excludes>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
+
+        <testResources>
+            <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
-            </resource>
-        </resources>
+            </testResource>
+        </testResources>
 
         <plugins>
-        	<plugin>
-		        <groupId>org.codehaus.mojo</groupId>
-		        <artifactId>properties-maven-plugin</artifactId>
-		        <version>1.0-alpha-2</version>
-		        <executions>
-		          <execution>
-		            <phase>process-classes</phase>
-		            <goals>
-		              <goal>write-project-properties</goal>
-		            </goals>
-		            <configuration>
-		               <outputFile>${project.build.directory}/test-classes/transformers-test.properties</outputFile>
-		            </configuration>
-		          </execution>
-		        </executions>
-	       </plugin>
-	       <plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<includeProjectDependencies>true</includeProjectDependencies>
-					<includePluginDependencies>true</includePluginDependencies>
-					<mainClass>gov.nih.nci.cacis.mirth.XSLForMirthFormatter</mainClass>
-					<arguments>
-						<argument>${build.outputDirectory}/xsl/</argument>
-						<!-- List the xlst files one by one -->
-						<argument>${basedir}/src/main/resources/xsl/BaselineNote.xslt</argument>
-					</arguments>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>maven-replacer-plugin</artifactId>
-				<version>1.3.8</version>
-				<executions>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>						
-					</execution>
-				</executions>
-				<configuration>
-					<includes>
-	                    <include>src/main/resources/channels/Trim*</include>
-	                </includes>
-					<outputDir>target/classes/channels/</outputDir>
-					<preserveDir>false</preserveDir>
-					<replacements>
-					<!-- Specify multiple replacements as for every file in the includes -->
-						<replacement>
-							<token>CCD_OUTPUT_DIR</token>
-							<value>${xccdOutputDir}</value>
-						</replacement>
-						<replacement>
-							<token>TRIM2CCD-XSLT</token>
-							<valueFile>${build.outputDirectory}/xsl/BaselineNote.xslt</valueFile>
-						</replacement>
-					</replacements>
-				</configuration>
-			</plugin>
-    	</plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <id>read-properties</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${basedir}/default.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>write-properties</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.outputDirectory}/cacis-pco-transformers.properties</outputFile>
+                        </configuration>
+                    </execution>
+                    <!--test properties-->
+                    <execution>
+                        <id>write-test-properties</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.testOutputDirectory}/transformers-test.properties
+                            </outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeProjectDependencies>true</includeProjectDependencies>
+                    <includePluginDependencies>true</includePluginDependencies>
+                    <mainClass>gov.nih.nci.cacis.mirth.XSLForMirthFormatter</mainClass>
+                    <arguments>
+                        <argument>${build.outputDirectory}/xsl/</argument>
+                        <!-- List the xlst files one by one -->
+                        <argument>${basedir}/src/main/resources/xsl/BaselineNote.xslt</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.3.8</version>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>src/main/resources/channels/Trim*</include>
+                    </includes>
+                    <outputDir>target/classes/channels/</outputDir>
+                    <preserveDir>false</preserveDir>
+                    <replacements>
+                        <!-- Specify multiple replacements as for every file in the includes -->
+                        <replacement>
+                            <token>CCD_OUTPUT_DIR</token>
+                            <value>${xccdOutputDir}</value>
+                        </replacement>
+                        <replacement>
+                            <token>TRIM2CCD-XSLT</token>
+                            <valueFile>${build.outputDirectory}/xsl/BaselineNote.xslt</valueFile>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>

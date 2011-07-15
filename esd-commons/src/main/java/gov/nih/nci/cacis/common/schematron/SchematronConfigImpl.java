@@ -105,7 +105,7 @@ public class SchematronConfigImpl implements SchematronConfig {
     /** {@inheritDoc} */
     @Bean
     public URIResolver schematronUriResolver() {
-        return new ClassPathURIResolver(this.schematronBaseClassPath);
+        return new ClassPathURIResolver(SchematronConfigImpl.class);
     }
 
     /** {@inheritDoc} */
@@ -121,7 +121,7 @@ public class SchematronConfigImpl implements SchematronConfig {
     @Scope("prototype")
     public Transformer evaluateRulesTransformerTarget() throws TransformerConfigurationException, TransformerException {
         return schematronTransformerFactory().newTransformer(
-                schematronUriResolver().resolve(this.evaluateRulesXsl, null));
+                schematronUriResolver().resolve(this.evaluateRulesXsl, schematronBaseClassPath));
     }
 
     /** {@inheritDoc} */
@@ -130,7 +130,7 @@ public class SchematronConfigImpl implements SchematronConfig {
     public Transformer extractFailuresTransformerTarget() throws TransformerConfigurationException,
     TransformerException {
         return schematronTransformerFactory().newTransformer(
-                schematronUriResolver().resolve(this.extractFailuresXsl, null));
+                schematronUriResolver().resolve(this.extractFailuresXsl, schematronBaseClassPath));
     }
 
     /** {@inheritDoc} */
