@@ -30,6 +30,10 @@
         <ipf.version>2.3-m1</ipf.version>
         <apache.camel.version>2.6.0</apache.camel.version>
         <mirthconnect.version>2.2.1</mirthconnect.version>
+		
+		<virt.sesame.version>2</virt.sesame.version>
+		<virt.jdbc.version>3</virt.jdbc.version>
+		<sesame.version>2.1.2</sesame.version>
 
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
         <cobertura.plugin.version>2.5</cobertura.plugin.version>
