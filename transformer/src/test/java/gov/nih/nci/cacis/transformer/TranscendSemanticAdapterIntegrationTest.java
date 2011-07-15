@@ -105,6 +105,9 @@ public class TranscendSemanticAdapterIntegrationTest {
         if (!ipDir.exists() && !ipDir.mkdirs()) {
             throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
         }
+        if (!ccdOpDir.exists() && !ccdOpDir.mkdirs()) {
+            throw new IOException("Error creating output directory, " + ccdOpDir.getCanonicalPath());
+        }
         final File ipF = new File(ipDir, "testFile.xml");
 
         FileUtils.copyFile(new File(origF), ipF);
