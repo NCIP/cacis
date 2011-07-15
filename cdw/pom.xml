@@ -9,10 +9,17 @@
     <name>cdw</name>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cdw</artifactId>
+	<description>CaCIS component to work with Virtuoso as the ClinicalDataWarehouse</description>
     <packaging>jar</packaging>
 
 
     <dependencies>
+		<dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>esd-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		
         <dependency>
             <groupId>org.openlinksw</groupId>
             <artifactId>virt-sesame</artifactId>
