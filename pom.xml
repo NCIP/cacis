@@ -46,11 +46,7 @@
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
         <mirthConnect.server.dir>${user.home}/Applications/Mirth Connect</mirthConnect.server.dir>
 
-        <outputRootdir>${user.home}</outputRootdir>
-        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
-        <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
-
-        <!--integration tests-->
+         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
         <skip.cargo.container>true</skip.cargo.container>
         <!--NOTE - customize this property to your JBOSS location-->
