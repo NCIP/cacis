@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>pco</artifactId>
+        <groupId>gov.nih.nci.cacis</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <name>cdw</name>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cdw</artifactId>
+    <packaging>jar</packaging>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openlinksw</groupId>
+            <artifactId>virt-sesame</artifactId>
+            <version>${virt.sesame.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/virt_sesame2.jar</systemPath>
+        </dependency>
+		
+		<dependency>
+            <groupId>org.openlinksw</groupId>
+            <artifactId>virt-jdbc</artifactId>
+            <version>${virt.jdbc.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/virtjdbc3.jar</systemPath>
+        </dependency>
+		
+		<dependency>
+            <groupId>org.openrdf</groupId>
+            <artifactId>sesame</artifactId>
+            <version>${sesame.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/openrdf-sesame-2.1.2-onejar.jar</systemPath>
+        </dependency>
+		
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+			<resource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>
