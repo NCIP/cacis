@@ -104,7 +104,26 @@
                         </executions>
                     </plugin>
 
-                    <!--manual step. Start Mirth Connect. See http://caehrorg.jira.com/browse/ESD-3006-->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>stopMirth</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${mirthConnect.server.dir}/mcservice</executable>
+                                    <arguments>
+                                        <argument>restart</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>gov.nih.nci.cacis</groupId>
                         <artifactId>mirthconnect-maven-plugin</artifactId>
