@@ -41,7 +41,7 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes><include>deploy.mc</include></includes>
+                <excludes><exclude>xsl/*</exclude></excludes>
                 <filtering>true</filtering>
             </resource>
             <resource>
