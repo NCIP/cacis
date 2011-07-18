@@ -98,7 +98,7 @@ public class AcceptCanonicalMCIntegrationTest extends AbstractCXFTest {
      * @throws InterruptedException
      */
     @BeforeClass
-    public void startMC() throws InterruptedException {
+    public static void startMC() throws InterruptedException {
         Thread.sleep(10000);
     }
 
