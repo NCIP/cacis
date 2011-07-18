@@ -45,6 +45,13 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.cxf</groupId>
@@ -55,7 +62,7 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                             <wsdlOptions>
+                            <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/wsdl/IntegrationPlatform.wsdl</wsdl>
                                     <extraargs>
@@ -110,7 +117,7 @@
                         <version>1.1.1</version>
                         <executions>
                             <execution>
-                                <id>stopMirth</id>
+                                <id>restartMC</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -131,6 +138,7 @@
                         <configuration>
                             <mirthConnect>${mirthConnect.cli}</mirthConnect>
                             <script>${build.outputDirectory}/deploy.mc</script>
+                            <pause>10000</pause>
                         </configuration>
                         <executions>
                             <execution>

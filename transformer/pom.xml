@@ -14,13 +14,12 @@
     <name>transformer</name>
 
     <properties>
-       <test.unit.branchrate>35</test.unit.branchrate>
-       <test.unit.linerate>35</test.unit.linerate>
-       <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI</mirthConnect.cli>
-       <outputRootdir>${user.home}</outputRootdir>
-       <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
-       <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
-       <trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
+        <test.unit.branchrate>35</test.unit.branchrate>
+        <test.unit.linerate>35</test.unit.linerate>
+        <outputRootdir>${user.home}</outputRootdir>
+        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
+        <trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
 
         <cacis-pco.validation.xmltordf.xsl.baseClassPath>/xsl/</cacis-pco.validation.xmltordf.xsl.baseClassPath>
         <cacis-pco.validation.xmltordf.xsl>xml2rdf3.xsl</cacis-pco.validation.xmltordf.xsl>
@@ -35,13 +34,19 @@
     </dependencies>
 
     <build>
-
-        <testResources>
-            <testResource>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>xsl/*</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
-            </testResource>
-        </testResources>
+            </resource>
+        </resources>
 
         <plugins>
             <plugin>

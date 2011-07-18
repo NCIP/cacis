@@ -70,7 +70,6 @@ import org.apache.cxf.binding.soap.SoapTransportFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.test.AbstractCXFTest;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
@@ -91,17 +90,6 @@ public class AcceptCanonicalMCIntegrationTest extends AbstractCXFTest {
     public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
     private static final Log LOG = LogFactory.getLog(AcceptCanonicalMCIntegrationTest.class);
 
-
-    /**
-     * Wait for MC to start
-     *
-     * @throws InterruptedException
-     */
-    @BeforeClass
-    public static void startMC() throws InterruptedException {
-        Thread.sleep(10000);
-    }
-
     @Before
     public void init() {
         addNamespace("ns2", "http://cacis.nci.nih.gov");
@@ -113,7 +101,7 @@ public class AcceptCanonicalMCIntegrationTest extends AbstractCXFTest {
         final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
         factory.setServiceClass(AcceptCanonicalPortType.class);
         // specify the URL. We are using the in memory test container
-        factory.setAddress("http://localhost:18081/services/AcceptCanonicalService?wsdl");
+        factory.setAddress(ADDRESS);
 
         AcceptCanonicalPortType client = (AcceptCanonicalPortType) factory.create();
         CaCISRequest request = new CaCISRequest();
