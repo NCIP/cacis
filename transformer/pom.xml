@@ -37,9 +37,11 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>xsl/*</exclude>
-                </excludes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes><include>deploy.mc</include></includes>
                 <filtering>true</filtering>
             </resource>
             <resource>
