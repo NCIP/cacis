@@ -111,7 +111,8 @@ public class AcceptCanonicalService extends AcceptMessage {
         final CaCISResponse response = new CaCISResponse();
         response.setStatus(ResponseStatusType.SUCCESS);
 
-        final String req = request.getClinicalDocument();
+        // Will need to be updated in ESD-3040
+        final String req = request.getClinicalDocument().toString();
         try {
             webServiceMessageReceiver.processData(req);
              // CHECKSTYLE:OFF
