@@ -41,6 +41,7 @@
         <logger.level>WARN</logger.level>
         <skip.static.analysis>false</skip.static.analysis>
         <cargo.timeout>300000</cargo.timeout>
+        <mirthConnect.server.pause>20000</mirthConnect.server.pause>
 
         <!--NOTE - customize this property to Mirth Connect location-->
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
