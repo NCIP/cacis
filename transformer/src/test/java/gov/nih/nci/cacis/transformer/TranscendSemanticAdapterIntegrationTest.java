@@ -60,9 +60,6 @@
  */
 package gov.nih.nci.cacis.transformer;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,8 +67,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertFalse;
+import java.io.File;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author bpickeral
@@ -112,7 +112,7 @@ public class TranscendSemanticAdapterIntegrationTest {
 
         FileUtils.copyFile(new File(origF), ipF);
         
-        Thread.sleep(10000);
+        Thread.sleep(30000);
         
         final int noOfFilesAft = ccdOpDir.list().length;
         
