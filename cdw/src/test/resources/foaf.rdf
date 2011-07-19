@@ -1,0 +1,176 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:depiction xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/home/kidehen@openlinksw.com/wa/images/kingsley_minimized3.jpg"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com">
+		<foaf:primaryTopic xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:holdsAccount xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#based_near">
+		<geo:lat xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">42.485836</geo:lat>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:mbox_sha1sum xmlns:foaf="http://xmlns.com/foaf/0.1/">r6z2uGjmyzb3HSzsxtUxomzh8u8=</foaf:mbox_sha1sum>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/PersonalProfileDocument"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/dav#this">
+		<foaf:name xmlns:foaf="http://xmlns.com/foaf/0.1/">OpenLink Software</foaf:name>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com">
+		<foaf:maker xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#org">
+		<foaf:homepage xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:mbox xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="mailto:kidehen@openlinksw.com"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:knows xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/organization/uda#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/vdb#this">
+		<foaf:name xmlns:foaf="http://xmlns.com/foaf/0.1/">Virtuso Data Space Bot</foaf:name>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:knows xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/organization/vdb#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:workplaceHomepage xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:based_near xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#based_near"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#org">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:firstName xmlns:foaf="http://xmlns.com/foaf/0.1/">Kingsley </foaf:firstName>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/vdb#this">
+		<foaf:nick xmlns:foaf="http://xmlns.com/foaf/0.1/">vdb</foaf:nick>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#based_near">
+		<geo:long xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">-71.214287</geo:long>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#based_near">
+		<rdf:type rdf:resource="http://www.w3.org/2003/01/geo/wgs84_pos#Point"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/vdb#this">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com#this">
+		<rdf:type rdf:resource="http://rdfs.org/sioc/ns#User"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com">
+		<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Kingsley Uyi Idehen&#39;s FOAF file</dc:title>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:knows xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/organization/dav#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/dav#this">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:homepage xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/blog/~kidehen"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/uda#this">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#org">
+		<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">OpenLink Software</dc:title>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/uda#this">
+		<foaf:name xmlns:foaf="http://xmlns.com/foaf/0.1/">UDA Data Space Bot</foaf:name>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:gender xmlns:foaf="http://xmlns.com/foaf/0.1/">male</foaf:gender>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/uda#this">
+		<foaf:nick xmlns:foaf="http://xmlns.com/foaf/0.1/">uda</foaf:nick>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:name xmlns:foaf="http://xmlns.com/foaf/0.1/">Kingsley Uyi Idehen</foaf:name>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:nick xmlns:foaf="http://xmlns.com/foaf/0.1/">kidehen@openlinksw.com</foaf:nick>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/organization/dav#this">
+		<foaf:nick xmlns:foaf="http://xmlns.com/foaf/0.1/">dav</foaf:nick>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:family_name xmlns:foaf="http://xmlns.com/foaf/0.1/">Idehen</foaf:family_name>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<vcard:ADR xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#addr"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:holdsAccount xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:openid xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<n0pred:keywords xmlns:n0pred="http://vocab.org/bio/0.1/">semanticweb, sparql, hyperlink, rdf, semantic_web, semweb, odbc, jdbc, sql, sioc, foaf, webdav, rdfs, skos, owl, ordbms, linq, php, perl, python, ruby, programming, eii, esb, soa, xbrl, xml, xslt, xml_schema</n0pred:keywords>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<owl:sameAs xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="http://qdos.com/user/e922b748a2eb667bf37b188018002dec"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#addr">
+		<vcard:Country xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">United States</vcard:Country>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com#this">
+		<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/OnlineAccount"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<owl:sameAs xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="http://myopenlink.net/dataspace/person/kidehen#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<owl:sameAs xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="http://kidehen.idehen.net/dataspace/person/kidehen#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com/weblog/kidehen@openlinksw.com%27s%20BLOG%20%5B127%5D">
+		<foaf:maker xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com/weblog/kidehen@openlinksw.com%27s%20BLOG%20%5B127%5D">
+		<rdfs:label>kidehen@openlinksw.com&#39;s BLOG [127] description</rdfs:label>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:made xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/dataspace/kidehen@openlinksw.com/weblog/kidehen@openlinksw.com%27s%20BLOG%20%5B127%5D"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Enterprise_integration"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Enterprise_service_bus"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Database"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Data_integration"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Linked_Data"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Open_Data_Movement"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Application_and_Data_Integration"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Semantic_Web"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:interest xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://dbpedia.org/resource/Web_2.0"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://www.openlinksw.com/dataspace/person/kidehen@openlinksw.com#this">
+		<foaf:made xmlns:foaf="http://xmlns.com/foaf/0.1/" rdf:resource="http://www.openlinksw.com/ods/describe?uri=mailto%3Akidehen@openlinksw.com"/>
+	</rdf:Description>
+</rdf:RDF>

@@ -11,7 +11,19 @@
     <artifactId>cdw</artifactId>
 	<description>CaCIS component to work with Virtuoso as the ClinicalDataWarehouse</description>
     <packaging>jar</packaging>
-
+    
+    <properties>
+       <test.unit.branchrate>35</test.unit.branchrate>
+       <test.unit.linerate>35</test.unit.linerate>
+       
+       <virtuoso.server>localhost</virtuoso.server>
+       <virtuoso.port>1111</virtuoso.port>
+       <virtuoso.db.username>dba</virtuoso.db.username>
+       <virtuoso.db.password>dba</virtuoso.db.password>
+       <sesame.local.repo.managder.dir>${project.build.directory}/test-classes/repomngrdir/</sesame.local.repo.managder.dir>
+       <output.dir>${project.build.directory}/test-classes/</output.dir>
+       <memory.store.persist>false</memory.store.persist>
+    </properties>
 
     <dependencies>
 		<dependency>
@@ -43,8 +55,14 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/openrdf-sesame-2.1.2-onejar.jar</systemPath>
         </dependency>
+        
+        <dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.2.2</version>
+		</dependency>
 		
-    </dependencies>
+     </dependencies>
 
     <build>
         <resources>
@@ -61,6 +79,24 @@
                 </includes>
             </resource>
         </resources>
+        <plugins>
+        	<plugin>
+		        <groupId>org.codehaus.mojo</groupId>
+		        <artifactId>properties-maven-plugin</artifactId>
+		        <version>1.0-alpha-2</version>
+		        <executions>
+		          <execution>
+		            <phase>process-classes</phase>
+		            <goals>
+		              <goal>write-project-properties</goal>
+		            </goals>
+		            <configuration>
+		               <outputFile>${project.build.directory}/test-classes/cdw-test.properties</outputFile>
+		            </configuration>
+		          </execution>
+		        </executions>
+	       </plugin>
+	  </plugins>
     </build>
 
 </project>
