@@ -9,29 +9,26 @@
     <name>cdw</name>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cdw</artifactId>
-	<description>CaCIS component to work with Virtuoso as the ClinicalDataWarehouse</description>
+    <description>CaCIS component to work with Virtuoso as the ClinicalDataWarehouse</description>
     <packaging>jar</packaging>
-    
+
     <properties>
-       <test.unit.branchrate>35</test.unit.branchrate>
-       <test.unit.linerate>35</test.unit.linerate>
-       
-       <virtuoso.server>localhost</virtuoso.server>
-       <virtuoso.port>1111</virtuoso.port>
-       <virtuoso.db.username>dba</virtuoso.db.username>
-       <virtuoso.db.password>dba</virtuoso.db.password>
-       <sesame.local.repo.managder.dir>${project.build.directory}/test-classes/repomngrdir/</sesame.local.repo.managder.dir>
-       <output.dir>${project.build.directory}/test-classes/</output.dir>
-       <memory.store.persist>false</memory.store.persist>
+        <test.unit.branchrate>35</test.unit.branchrate>
+        <test.unit.linerate>35</test.unit.linerate>
+
+        <virtuoso.server>localhost</virtuoso.server>
+        <virtuoso.port>1111</virtuoso.port>
+        <virtuoso.db.username>dba</virtuoso.db.username>
+        <virtuoso.db.password>dba</virtuoso.db.password>
     </properties>
 
     <dependencies>
-		<dependency>
+        <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-		
+
         <dependency>
             <groupId>org.openlinksw</groupId>
             <artifactId>virt-sesame</artifactId>
@@ -39,64 +36,75 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/virt_sesame2.jar</systemPath>
         </dependency>
-		
-		<dependency>
+
+        <dependency>
             <groupId>org.openlinksw</groupId>
             <artifactId>virt-jdbc</artifactId>
             <version>${virt.jdbc.version}</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/virtjdbc3.jar</systemPath>
         </dependency>
-		
-		<dependency>
-            <groupId>org.openrdf</groupId>
-            <artifactId>sesame</artifactId>
-            <version>${sesame.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/openrdf-sesame-2.1.2-onejar.jar</systemPath>
-        </dependency>
-        
+
+
         <dependency>
-		    <groupId>commons-dbcp</groupId>
-		    <artifactId>commons-dbcp</artifactId>
-		    <version>1.2.2</version>
-		</dependency>
-		
-     </dependencies>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-rdfxml</artifactId>
+            <version>${sesame.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-repository-manager</artifactId>
+            <version>${sesame.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-queryparser-sparql</artifactId>
+            <version>${sesame.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-sail-memory</artifactId>
+            <version>${sesame.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-			<resource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
+                <filtering>true</filtering>
             </resource>
         </resources>
-        <plugins>
-        	<plugin>
-		        <groupId>org.codehaus.mojo</groupId>
-		        <artifactId>properties-maven-plugin</artifactId>
-		        <version>1.0-alpha-2</version>
-		        <executions>
-		          <execution>
-		            <phase>process-classes</phase>
-		            <goals>
-		              <goal>write-project-properties</goal>
-		            </goals>
-		            <configuration>
-		               <outputFile>${project.build.directory}/test-classes/cdw-test.properties</outputFile>
-		            </configuration>
-		          </execution>
-		        </executions>
-	       </plugin>
-	  </plugins>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
     </build>
 
+
+    <repositories>
+        <repository>
+            <id>openRDF</id>
+            <url>http://repo.aduna-software.org/maven2/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

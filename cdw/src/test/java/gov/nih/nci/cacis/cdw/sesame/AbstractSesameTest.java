@@ -60,10 +60,6 @@
  */
 package gov.nih.nci.cacis.cdw.sesame;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -82,7 +78,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import virtuoso.sesame2.driver.VirtuosoRepository;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Abstract class to have some setup methods and constants for sesame tests
@@ -91,32 +89,15 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationContext-cdw-test.xml")
+@ContextConfiguration(locations = "classpath:applicationContext-cdw-test.xml")
 public abstract class AbstractSesameTest {
 
     /**
      * ID for the in-memory repo
      */
     public static final String IN_MEMORY_DB_ID = "in-memory-db";
-    /**
-     * ID for the virtuoso repo
-     */
-    public static final String VIRTUOSO_ID = "virtuoso-db";
 
     private static final Log LOG = LogFactory.getLog(AbstractSesameTest.class);
-
-    // VIRTUOSO repository related constants
-    @Value("${virtuoso.server}")
-    private String virtuosoServer;
-
-    @Value("${virtuoso.port}")
-    private String virtuosoPort;
-
-    @Value("${virtuoso.db.username}")
-    private String virtuosoDBUserName;
-
-    @Value("${virtuoso.db.password}")
-    private String virtuosoDBPassword;
 
     @Value("${sesame.local.repo.managder.dir}")
     private String sesameLocalRepoMngrDir;
@@ -190,7 +171,7 @@ public abstract class AbstractSesameTest {
 
     /**
      * TODO : Config RDBMS store to work with virtuso
-     * 
+     *
      * @throws RepositoryException error thrown if any
      * @throws RepositoryConfigException error thrown if any
      */
@@ -201,12 +182,12 @@ public abstract class AbstractSesameTest {
      * rdbmsStoreConfig.setJdbcDriver("virtuoso.jdbc3.Driver"); rdbmsStoreConfig.setUrl("jdbc:virtuoso://" +
      * virtuosoServer + ":" + virtuosoPort); rdbmsStoreConfig.setUser(virtuosoDBUserName);
      * rdbmsStoreConfig.setPassword(virtuosoDBPassword);
-     * 
+     *
      * //Inferencer is not available for RDBMS repo // create a configuration for the repository implementation final
      * SailRepositoryConfig repositoryTypeSpec = new SailRepositoryConfig(rdbmsStoreConfig);
-     * 
+     *
      * final RepositoryConfig repConfig = new RepositoryConfig(VIRTUOSO_ID, repositoryTypeSpec);
-     * 
+     *
      * manager.addRepositoryConfig(repConfig); }
      */
 
@@ -222,24 +203,11 @@ public abstract class AbstractSesameTest {
         return getRepository(IN_MEMORY_DB_ID);
     }
 
-    /**
-     * Returns Virtuoso repository, if it is running
-     * 
-     * @return Repository instance
-     * @throws RepositoryConfigException - error thrown, if any
-     * @throws RepositoryException - error thrown, if any
-     */
-    public Repository getVirtuosoRepository() throws RepositoryConfigException, RepositoryException {
-        // TODO : use manager once it is properly configured
-        // initVirtuosoRepo();
 
-        return new VirtuosoRepository("jdbc:virtuoso://" + virtuosoServer + ":" + virtuosoPort, virtuosoDBUserName,
-                virtuosoDBPassword);
-    }
 
     /**
      * Returns the sesame repository based on id, if it is added to the manager
-     * 
+     *
      * @param repositoryId - String representing the id
      * @return Repository instance
      * @throws RepositoryConfigException - error thrown, if any
@@ -249,102 +217,55 @@ public abstract class AbstractSesameTest {
         return manager.getRepository(repositoryId);
     }
 
-    /**
-     * @return the virtuosoServer
-     */
-    public String getVirtuosoServer() {
-        return virtuosoServer;
-    }
-
-    /**
-     * @return the virtuosoPort
-     */
-    public String getVirtuosoPort() {
-        return virtuosoPort;
-    }
-
-    /**
-     * @return the virtuosoDBUserName
-     */
-    public String getVirtuosoDBUserName() {
-        return virtuosoDBUserName;
-    }
-
-    /**
-     * @return the virtuosoDBPassword
-     */
-    public String getVirtuosoDBPassword() {
-        return virtuosoDBPassword;
-    }
-
-    /**
-     * @return the sesameLocalRepoMngrDir
-     */
-    public String getSesameLocalRepoMngrDir() {
-        return sesameLocalRepoMngrDir;
-    }
-
-    /**
-     * @return the smplDataFile1
-     */
-    public File getSampleDataFile1() {
-        return sampleDataFile1;
-    }
-    
-    /**
-     * @return the smplRdfFile1
-     */
-    public File getSampleRdfFile1() {
-        return sampleRdfFile1;
-    }
-    
-    /**
-     * @return the smplRdfFile1Url
-     */
-    public URL getSampleRdfFile1Url() {
-        return sampleRdfFile1Url;
-    }
-
-    /**
-     * @return the inMemoryDbId
-     */
     public static String getInMemoryDbId() {
         return IN_MEMORY_DB_ID;
     }
 
-    /**
-     * @return the log
-     */
     public static Log getLog() {
         return LOG;
     }
 
-    /**
-     * @return the manager
-     */
+    public String getSesameLocalRepoMngrDir() {
+        return sesameLocalRepoMngrDir;
+    }
+
+    public String getOutputDirPath() {
+        return outputDirPath;
+    }
+
+    public boolean isMemoryStorePersist() {
+        return memoryStorePersist;
+    }
+
     public LocalRepositoryManager getManager() {
         return manager;
     }
 
-    /**
-     * @return the outputDir
-     */
     public File getOutputDir() {
         return outputDir;
     }
 
-    /**
-     * @return the smplDataFile1 name
-     */    
-    public static String getSmplDataFile1Name() {
-      return SMPL_DATA_FILE_1;
-  }
-    
-    /**
-     * @return the smplRdfFile1 name
-     */
-    public static String getSmplRdfFile1Name() {
+    public static String getSmplDataFile1() {
+        return SMPL_DATA_FILE_1;
+    }
+
+    public static String getSmplRdfFile1() {
         return SMPL_RDF_FILE_1;
     }
 
+    public File getSampleDataFile1() {
+        return sampleDataFile1;
+    }
+
+    public File getSampleRdfFile1() {
+        return sampleRdfFile1;
+    }
+
+    public URL getSampleRdfFile1Url() {
+        return sampleRdfFile1Url;
+    }
+
+    public boolean isOnceInitialized() {
+        return onceInitialized;
+    }
 }

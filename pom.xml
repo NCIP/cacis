@@ -18,6 +18,7 @@
         <module>validation</module>
         <module>transformer</module>
         <module>ip-mirth</module>
+        <module>cdw</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -30,10 +31,10 @@
         <ipf.version>2.3-m1</ipf.version>
         <apache.camel.version>2.6.0</apache.camel.version>
         <mirthconnect.version>2.2.1</mirthconnect.version>
-		
-		<virt.sesame.version>2</virt.sesame.version>
-		<virt.jdbc.version>3</virt.jdbc.version>
-		<sesame.version>2.1.2</sesame.version>
+
+        <virt.sesame.version>2</virt.sesame.version>
+        <virt.jdbc.version>3</virt.jdbc.version>
+        <sesame.version>2.4.2</sesame.version>
 
         <cobertura.check.haltOnFailure>true</cobertura.check.haltOnFailure>
         <cobertura.plugin.version>2.5</cobertura.plugin.version>
@@ -47,7 +48,7 @@
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
         <mirthConnect.server.dir>${user.home}/Applications/Mirth Connect</mirthConnect.server.dir>
 
-         <!--integration tests-->
+        <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
         <skip.cargo.container>true</skip.cargo.container>
         <!--NOTE - customize this property to your JBOSS location-->
@@ -235,7 +236,7 @@
             <version>1.5.8</version>
             <scope>compile</scope>
         </dependency>
-		
+
 		<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
@@ -323,6 +324,13 @@
             <version>${cxf.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.4</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -429,6 +437,7 @@
                             <exclude>**/*ConfigImpl.class</exclude>
                             <exclude>**/*Server.class</exclude>
                             <exclude>**/tolven/client/*.class</exclude>
+                            <exclude>**/*Exception.class</exclude>
                             <exclude>org/hl7/v3/*.class</exclude>
                             <exclude>generated/*.class</exclude>
                         </excludes>
@@ -603,7 +612,7 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-		<repository>
+        <repository>
             <id>Aduna</id>
             <name>Aduna software repository</name>
             <url>http://repo.aduna-software.org/maven2/releases/</url>
@@ -611,7 +620,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-		
+
     </repositories>
 
     <pluginRepositories>

@@ -1,0 +1,1504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <rdf:Description xmlns:xs="http://www.w3.org/TR/2008/REC-xml-20081126#"
+                    xmlns:cacis="http://cacis.nci.nih.gov"
+                    xmlns:cda="urn:hl7-org:v3"
+                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1">
+      <userName xmlns="http://cacis.nci.nih.gov#">user</userName>
+      <routingInstructions xmlns="http://cacis.nci.nih.gov#">
+         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions">
+            <exchangeDocument>
+               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions/exchangeDocument">
+                  <exchangeFormat>HL7_V2_CLINICAL_NOTE</exchangeFormat>
+                  <recipient>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions/exchangeDocument/recipient">
+                        <secureEmailAddress>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions/exchangeDocument/recipient/secureEmailAddress">
+                              <url>mailto:x@x.x</url>
+                           </rdf:Description>
+                        </secureEmailAddress>
+                     </rdf:Description>
+                  </recipient>
+               </rdf:Description>
+            </exchangeDocument>
+            <exchangeDocument>
+               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions/exchangeDocument_2">
+                  <exchangeFormat>RIM_ITS_CLINICAL_NOTE</exchangeFormat>
+                  <recipient>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions/exchangeDocument_2/recipient">
+                        <secureEmailAddress>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#routingInstructions/exchangeDocument_2/recipient/secureEmailAddress">
+                              <url>mailto:y@y.y</url>
+                           </rdf:Description>
+                        </secureEmailAddress>
+                     </rdf:Description>
+                  </recipient>
+               </rdf:Description>
+            </exchangeDocument>
+         </rdf:Description>
+      </routingInstructions>
+      <sourceData xmlns="http://cacis.nci.nih.gov#">
+         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData">
+            <trim xmlns="urn:tolven-org:trim:4.0#">
+               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim">
+                  <extends>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/extends">
+                        <rdf:value>patientAct</rdf:value>
+                     </rdf:Description>
+                  </extends>
+                  <name>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/name">
+                        <rdf:value>reg/evn/preStudyNote</rdf:value>
+                     </rdf:Description>
+                  </name>
+                  <description>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/description">
+                        <rdf:value>Baseline Evaluation Note</rdf:value>
+                     </rdf:Description>
+                  </description>
+                  <page>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/page">
+                        <rdf:value>baselineNote.xhtml</rdf:value>
+                     </rdf:Description>
+                  </page>
+                  <drilldown>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/drilldown">
+                        <rdf:value>baselineNoteDD.xhtml</rdf:value>
+                     </rdf:Description>
+                  </drilldown>
+                  <menu>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/menu">
+                        <rdf:value>global:clinicalStagingMenu</rdf:value>
+                     </rdf:Description>
+                  </menu>
+                  <tolvenEventId>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/tolvenEventId">
+                        <timestamp>20110621194905+0000</timestamp>
+                        <principal>tolven</principal>
+                        <application>echr</application>
+                        <path>echr:patient-514368:clinicalNote-1068096</path>
+                        <id>1068096</id>
+                        <accountId>2033</accountId>
+                     </rdf:Description>
+                  </tolvenEventId>
+                  <application>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/application">
+                        <signatureRequired>true</signatureRequired>
+                        <name>echr</name>
+                        <instance>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/application/instance">
+                              <rdf:value>echr:patient:clinicalNote</rdf:value>
+                           </rdf:Description>
+                        </instance>
+                        <wip>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/application/wip">
+                              <rdf:value>echr:activity:all</rdf:value>
+                           </rdf:Description>
+                        </wip>
+                     </rdf:Description>
+                  </application>
+                  <act>
+                     <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act">
+                        <moodCode>EVN</moodCode>
+                        <classCode>OBS</classCode>
+                        <bind>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/bind">
+                              <phase>create</phase>
+                              <application>echr</application>
+                              <placeholder>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/bind/placeholder">
+                                    <bindAction>create</bindAction>
+                                    <path>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/bind/placeholder/path">
+                                          <rdf:value>echr:patient:clinicalNote</rdf:value>
+                                       </rdf:Description>
+                                    </path>
+                                 </rdf:Description>
+                              </placeholder>
+                           </rdf:Description>
+                        </bind>
+                        <id>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/id">
+                              <II>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/id/II">
+                                    <root>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/id/II/root">
+                                          <rdf:value>1.2.1.2033</rdf:value>
+                                       </rdf:Description>
+                                    </root>
+                                    <extension>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/id/II/extension">
+                                          <rdf:value>echr:patient-514368:clinicalNote-1068092</rdf:value>
+                                       </rdf:Description>
+                                    </extension>
+                                 </rdf:Description>
+                              </II>
+                           </rdf:Description>
+                        </id>
+                        <code>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/code">
+                              <CD>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/code/CD">
+                                    <code>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/code/CD/code">
+                                          <rdf:value>OINT</rdf:value>
+                                       </rdf:Description>
+                                    </code>
+                                    <codeSystemName>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/code/CD/codeSystemName">
+                                          <rdf:value>HL7</rdf:value>
+                                       </rdf:Description>
+                                    </codeSystemName>
+                                    <codeSystemVersion>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/code/CD/codeSystemVersion">
+                                          <rdf:value>3.0</rdf:value>
+                                       </rdf:Description>
+                                    </codeSystemVersion>
+                                 </rdf:Description>
+                              </CD>
+                           </rdf:Description>
+                        </code>
+                        <statusCode>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/statusCode">
+                              <rdf:value>active</rdf:value>
+                           </rdf:Description>
+                        </statusCode>
+                        <title>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/title">
+                              <ST>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/title/ST">
+                                    <rdf:value>Baseline Evaluation Note</rdf:value>
+                                 </rdf:Description>
+                              </ST>
+                           </rdf:Description>
+                        </title>
+                        <effectiveTime>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/effectiveTime">
+                              <label>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/effectiveTime/label">
+                                    <rdf:value>Date of Exam</rdf:value>
+                                 </rdf:Description>
+                              </label>
+                              <new>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/effectiveTime/new">
+                                    <function>now</function>
+                                    <datatype>TS</datatype>
+                                 </rdf:Description>
+                              </new>
+                              <TS>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/effectiveTime/TS">
+                                    <value>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/effectiveTime/TS/value">
+                                          <rdf:value>20110621154905-0400</rdf:value>
+                                       </rdf:Description>
+                                    </value>
+                                 </rdf:Description>
+                              </TS>
+                           </rdf:Description>
+                        </effectiveTime>
+                        <participation>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation">
+                              <typeCode>SBJ</typeCode>
+                              <name>subject</name>
+                              <role>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role">
+                                    <classCode>PAT</classCode>
+                                    <bind>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/bind">
+                                          <application>echr</application>
+                                          <placeholder>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/bind/placeholder">
+                                                <path>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/bind/placeholder/path">
+                                                      <rdf:value>echr:patient</rdf:value>
+                                                   </rdf:Description>
+                                                </path>
+                                             </rdf:Description>
+                                          </placeholder>
+                                       </rdf:Description>
+                                    </bind>
+                                    <bind>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/bind_2">
+                                          <application>ephr</application>
+                                          <placeholder>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/bind_2/placeholder">
+                                                <path>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/bind_2/placeholder/path">
+                                                      <rdf:value>ephr:patient</rdf:value>
+                                                   </rdf:Description>
+                                                </path>
+                                             </rdf:Description>
+                                          </placeholder>
+                                       </rdf:Description>
+                                    </bind>
+                                    <id>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/id">
+                                          <II>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/id/II">
+                                                <root>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/id/II/root">
+                                                      <rdf:value>1.2.1.2033</rdf:value>
+                                                   </rdf:Description>
+                                                </root>
+                                                <extension>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/id/II/extension">
+                                                      <rdf:value>echr:patient-514368</rdf:value>
+                                                   </rdf:Description>
+                                                </extension>
+                                             </rdf:Description>
+                                          </II>
+                                       </rdf:Description>
+                                    </id>
+                                    <player>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player">
+                                          <determinerCode>INSTANCE</determinerCode>
+                                          <classCode>PSN</classCode>
+                                          <name>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/label">
+                                                      <rdf:value>Patient Name</rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <EN>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN">
+                                                      <label>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/label">
+                                                            <rdf:value>Legal Name</rdf:value>
+                                                         </rdf:Description>
+                                                      </label>
+                                                      <use>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/use">
+                                                            <rdf:value>L</rdf:value>
+                                                         </rdf:Description>
+                                                      </use>
+                                                      <part>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part">
+                                                            <label>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part/label">
+                                                                  <rdf:value>First Name</rdf:value>
+                                                               </rdf:Description>
+                                                            </label>
+                                                            <type>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part/type">
+                                                                  <rdf:value>GIV</rdf:value>
+                                                               </rdf:Description>
+                                                            </type>
+                                                            <ST>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part/ST">
+                                                                  <rdf:value>Gwendolyn</rdf:value>
+                                                               </rdf:Description>
+                                                            </ST>
+                                                         </rdf:Description>
+                                                      </part>
+                                                      <part>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_2">
+                                                            <label>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_2/label">
+                                                                  <rdf:value>Middle Name</rdf:value>
+                                                               </rdf:Description>
+                                                            </label>
+                                                            <type>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_2/type">
+                                                                  <rdf:value>GIV</rdf:value>
+                                                               </rdf:Description>
+                                                            </type>
+                                                            <ST>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_2/ST">
+                                                                  <rdf:value>Sabrina</rdf:value>
+                                                               </rdf:Description>
+                                                            </ST>
+                                                         </rdf:Description>
+                                                      </part>
+                                                      <part>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_3">
+                                                            <label>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_3/label">
+                                                                  <rdf:value>Last Name</rdf:value>
+                                                               </rdf:Description>
+                                                            </label>
+                                                            <type>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_3/type">
+                                                                  <rdf:value>FAM</rdf:value>
+                                                               </rdf:Description>
+                                                            </type>
+                                                            <ST>
+                                                               <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation/role/player/name/EN/part_3/ST">
+                                                                  <rdf:value>Cruise</rdf:value>
+                                                               </rdf:Description>
+                                                            </ST>
+                                                         </rdf:Description>
+                                                      </part>
+                                                   </rdf:Description>
+                                                </EN>
+                                             </rdf:Description>
+                                          </name>
+                                       </rdf:Description>
+                                    </player>
+                                 </rdf:Description>
+                              </role>
+                           </rdf:Description>
+                        </participation>
+                        <participation>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation_2">
+                              <typeCode>ENT</typeCode>
+                              <name>dataEnterer</name>
+                              <role>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation_2/role">
+                                    <classCode>ROL</classCode>
+                                    <id>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation_2/role/id">
+                                          <II>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation_2/role/id/II">
+                                                <root>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation_2/role/id/II/root">
+                                                      <rdf:value>1.2.1.2033</rdf:value>
+                                                   </rdf:Description>
+                                                </root>
+                                                <extension>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/participation_2/role/id/II/extension">
+                                                      <rdf:value>tolven</rdf:value>
+                                                   </rdf:Description>
+                                                </extension>
+                                             </rdf:Description>
+                                          </II>
+                                       </rdf:Description>
+                                    </id>
+                                 </rdf:Description>
+                              </role>
+                           </rdf:Description>
+                        </participation>
+                        <relationship>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship">
+                              <typeCode>PERT</typeCode>
+                              <direction>OUT</direction>
+                              <name>timePoint</name>
+                              <act>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act">
+                                    <classCode>OBS</classCode>
+                                    <moodCode>EVN</moodCode>
+                                    <observation>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation">
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/label">
+                                                      <rdf:value>Time point:</rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <valueSet>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/valueSet">
+                                                      <rdf:value>timePoint</rdf:value>
+                                                   </rdf:Description>
+                                                </valueSet>
+                                                <CE>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/CE">
+                                                      <displayName>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/CE/displayName">
+                                                            <rdf:value>Pre-Study</rdf:value>
+                                                         </rdf:Description>
+                                                      </displayName>
+                                                      <code>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/CE/code">
+                                                            <rdf:value>C0183100</rdf:value>
+                                                         </rdf:Description>
+                                                      </code>
+                                                      <codeSystem>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/CE/codeSystem">
+                                                            <rdf:value>2.16.840.1.113883.6.56</rdf:value>
+                                                         </rdf:Description>
+                                                      </codeSystem>
+                                                      <codeSystemVersion>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship/act/observation/value/CE/codeSystemVersion">
+                                                            <rdf:value>2007AA</rdf:value>
+                                                         </rdf:Description>
+                                                      </codeSystemVersion>
+                                                   </rdf:Description>
+                                                </CE>
+                                             </rdf:Description>
+                                          </value>
+                                       </rdf:Description>
+                                    </observation>
+                                 </rdf:Description>
+                              </act>
+                           </rdf:Description>
+                        </relationship>
+                        <relationship>
+                           <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2">
+                              <typeCode>PERT</typeCode>
+                              <direction>OUT</direction>
+                              <name>vitalSigns</name>
+                              <act>
+                                 <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act">
+                                    <moodCode>EVN</moodCode>
+                                    <classCode>OBS</classCode>
+                                    <bind>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/bind">
+                                          <phase>create</phase>
+                                          <application>echr</application>
+                                          <placeholder>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/bind/placeholder">
+                                                <bindAction>create</bindAction>
+                                                <path>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/bind/placeholder/path">
+                                                      <rdf:value>echr:patient:clinicalNote:vitalSign</rdf:value>
+                                                   </rdf:Description>
+                                                </path>
+                                             </rdf:Description>
+                                          </placeholder>
+                                       </rdf:Description>
+                                    </bind>
+                                    <id>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/id">
+                                          <II>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/id/II">
+                                                <root>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/id/II/root">
+                                                      <rdf:value>1.2.1.2033</rdf:value>
+                                                   </rdf:Description>
+                                                </root>
+                                                <extension>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/id/II/extension">
+                                                      <rdf:value>echr:patient-514368:clinicalNote-1068092:vitalSign-1068095</rdf:value>
+                                                   </rdf:Description>
+                                                </extension>
+                                             </rdf:Description>
+                                          </II>
+                                       </rdf:Description>
+                                    </id>
+                                    <title>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/title">
+                                          <ST>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/title/ST">
+                                                <rdf:value>Vital Signs</rdf:value>
+                                             </rdf:Description>
+                                          </ST>
+                                       </rdf:Description>
+                                    </title>
+                                    <observation>
+                                       <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation">
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value/label">
+                                                      <rdf:value>T: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value/ST">
+                                                      <rdf:value>36.5</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_2">
+                                                <valueSet>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_2/valueSet">
+                                                      <rdf:value>tUnit</rdf:value>
+                                                   </rdf:Description>
+                                                </valueSet>
+                                                <CE>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_2/CE">
+                                                      <displayName>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_2/CE/displayName">
+                                                            <rdf:value>C</rdf:value>
+                                                         </rdf:Description>
+                                                      </displayName>
+                                                      <code>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_2/CE/code">
+                                                            <rdf:value>278292003</rdf:value>
+                                                         </rdf:Description>
+                                                      </code>
+                                                      <codeSystem>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_2/CE/codeSystem">
+                                                            <rdf:value>2.16.840.1.113883.6.96</rdf:value>
+                                                         </rdf:Description>
+                                                      </codeSystem>
+                                                   </rdf:Description>
+                                                </CE>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_3">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_3/label">
+                                                      <rdf:value>P: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_3/ST">
+                                                      <rdf:value>78</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_4">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_4/label">
+                                                      <rdf:value>R: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_4/ST">
+                                                      <rdf:value>26</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_5">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_5/label">
+                                                      <rdf:value>BP: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_5/ST">
+                                                      <rdf:value>80</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_6">
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_6/ST">
+                                                      <rdf:value>120</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_7">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_7/label">
+                                                      <rdf:value>Wt: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_7/ST">
+                                                      <rdf:value>56</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_8">
+                                                <valueSet>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_8/valueSet">
+                                                      <rdf:value>wtUnit</rdf:value>
+                                                   </rdf:Description>
+                                                </valueSet>
+                                                <CE>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_8/CE">
+                                                      <displayName>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_8/CE/displayName">
+                                                            <rdf:value>kg</rdf:value>
+                                                         </rdf:Description>
+                                                      </displayName>
+                                                      <code>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_8/CE/code">
+                                                            <rdf:value>278292003</rdf:value>
+                                                         </rdf:Description>
+                                                      </code>
+                                                      <codeSystem>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_8/CE/codeSystem">
+                                                            <rdf:value>2.16.840.1.113883.6.96</rdf:value>
+                                                         </rdf:Description>
+                                                      </codeSystem>
+                                                   </rdf:Description>
+                                                </CE>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_9">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_9/label">
+                                                      <rdf:value>Ht: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_9/ST">
+                                                      <rdf:value>164</rdf:value>
+                                                   </rdf:Description>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_10">
+                                                <valueSet>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_10/valueSet">
+                                                      <rdf:value>htUnit</rdf:value>
+                                                   </rdf:Description>
+                                                </valueSet>
+                                                <CE>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_10/CE">
+                                                      <displayName>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_10/CE/displayName">
+                                                            <rdf:value>cm</rdf:value>
+                                                         </rdf:Description>
+                                                      </displayName>
+                                                      <code>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_10/CE/code">
+                                                            <rdf:value>278292003</rdf:value>
+                                                         </rdf:Description>
+                                                      </code>
+                                                      <codeSystem>
+                                                         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_10/CE/codeSystem">
+                                                            <rdf:value>2.16.840.1.113883.6.96</rdf:value>
+                                                         </rdf:Description>
+                                                      </codeSystem>
+                                                   </rdf:Description>
+                                                </CE>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_11">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_11/label">
+                                                      <rdf:value>Name: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_11/ST"/>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_12">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_12/label">
+                                                      <rdf:value>Prior BP: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_12/ST"/>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_13">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_13/label">
+                                                      <rdf:value>Prior Wt: </rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_13/ST"/>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_14">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_14/label">
+                                                      <rdf:value>Is vital sign entered today?</rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <valueSet>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_14/valueSet">
+                                                      <rdf:value>booleanStatus</rdf:value>
+                                                   </rdf:Description>
+                                                </valueSet>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_15">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_15/label">
+                                                      <rdf:value>Prior1 Date</rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <TS>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_15/TS"/>
+                                                </TS>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_16">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_16/label">
+                                                      <rdf:value>Prior2 Date</rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <TS>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_16/TS"/>
+                                                </TS>
+                                             </rdf:Description>
+                                          </value>
+                                          <value>
+                                             <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_17">
+                                                <label>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_17/label">
+                                                      <rdf:value>Difference between Prior2 Date and Prior1 Date in days</rdf:value>
+                                                   </rdf:Description>
+                                                </label>
+                                                <ST>
+                                                   <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#sourceData/trim/act/relationship_2/act/observation/value_17/ST"/>
+                                                </ST>
+                                             </rdf:Description>
+                                          </value>
+                                       </rdf:Description>
+                                    </observation>
+                                 </rdf:Description>
+                              </act>
+                           </rdf:Description>
+                        </relationship>
+                     </rdf:Description>
+                  </act>
+               </rdf:Description>
+            </trim>
+         </rdf:Description>
+      </sourceData>
+      <clinicalMetaData xmlns="http://cacis.nci.nih.gov#">
+         <rdf:Description rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#clinicalMetaData">
+            <documentType>CLINICAL_NOTE</documentType>
+            <siteIdRoot>2.3.4.0</siteIdRoot>
+            <patientIdRoot>2.3.4.1</patientIdRoot>
+            <siteIdExtension>site_id</siteIdExtension>
+            <patientIdExtension>patient_id</patientIdExtension>
+            <studyIdRoot>2.3.4.2</studyIdRoot>
+            <studyIdExtension>study_id</studyIdExtension>
+         </rdf:Description>
+      </clinicalMetaData>
+      <cda:ClinicalDocument xmlns:cda="urn:hl7-org:v3#">
+         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument">
+            <cda:realmCode xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:realmCode">
+                  <code xmlns="urn:hl7-org:v3#">US</code>
+               </rdf:Description>
+            </cda:realmCode>
+            <cda:typeId xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:typeId">
+                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.1.3</root>
+                  <extension xmlns="urn:hl7-org:v3#">POCD_HD000040</extension>
+               </rdf:Description>
+            </cda:typeId>
+            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:templateId">
+                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1</root>
+               </rdf:Description>
+            </cda:templateId>
+            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:templateId_2">
+                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.32.1</root>
+               </rdf:Description>
+            </cda:templateId>
+            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:templateId_3">
+                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.1.1</root>
+               </rdf:Description>
+            </cda:templateId>
+            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:templateId_4">
+                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.3</root>
+               </rdf:Description>
+            </cda:templateId>
+            <cda:id xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:id">
+                  <root xmlns="urn:hl7-org:v3#">1.2.1.2033</root>
+                  <extension xmlns="urn:hl7-org:v3#">echr:patient-514368:clinicalNote-1068092</extension>
+               </rdf:Description>
+            </cda:id>
+            <cda:code xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:code">
+                  <code xmlns="urn:hl7-org:v3#">OINT</code>
+                  <codeSystemName xmlns="urn:hl7-org:v3#">HL7</codeSystemName>
+                  <codeSystemVersion xmlns="urn:hl7-org:v3#">3.0</codeSystemVersion>
+               </rdf:Description>
+            </cda:code>
+            <cda:title xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:title">
+                  <rdf:value>Baseline Evaluation Note</rdf:value>
+               </rdf:Description>
+            </cda:title>
+            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:effectiveTime">
+                  <value xmlns="urn:hl7-org:v3#">20110621154905-0400</value>
+               </rdf:Description>
+            </cda:effectiveTime>
+            <cda:confidentialityCode xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:confidentialityCode">
+                  <code xmlns="urn:hl7-org:v3#">N</code>
+               </rdf:Description>
+            </cda:confidentialityCode>
+            <cda:recordTarget xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget">
+                  <cda:patientRole xmlns:cda="urn:hl7-org:v3#">
+                     <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                      rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole">
+                        <cda:id xmlns:cda="urn:hl7-org:v3#">
+                           <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                            rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:id">
+                              <root xmlns="urn:hl7-org:v3#">1.2.1.2033</root>
+                              <extension xmlns="urn:hl7-org:v3#">echr:patient-514368</extension>
+                           </rdf:Description>
+                        </cda:id>
+                        <cda:patient xmlns:cda="urn:hl7-org:v3#">
+                           <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                            rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient">
+                              <cda:name xmlns:cda="urn:hl7-org:v3#">
+                                 <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                  rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:name">
+                                    <use xmlns="urn:hl7-org:v3#">L</use>
+                                    <cda:family xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:name/cda:family">
+                                          <rdf:value>Cruise</rdf:value>
+                                       </rdf:Description>
+                                    </cda:family>
+                                    <cda:given xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:name/cda:given">
+                                          <rdf:value>Gwendolyn</rdf:value>
+                                       </rdf:Description>
+                                    </cda:given>
+                                    <cda:given xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:name/cda:given_2">
+                                          <rdf:value>Sabrina</rdf:value>
+                                       </rdf:Description>
+                                    </cda:given>
+                                 </rdf:Description>
+                              </cda:name>
+                           </rdf:Description>
+                        </cda:patient>
+                     </rdf:Description>
+                  </cda:patientRole>
+               </rdf:Description>
+            </cda:recordTarget>
+            <cda:author xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:author">
+                  <cda:time xmlns:cda="urn:hl7-org:v3#">
+                     <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                      rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:author/cda:time">
+                        <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                     </rdf:Description>
+                  </cda:time>
+                  <cda:assignedAuthor xmlns:cda="urn:hl7-org:v3#">
+                     <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                      rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:author/cda:assignedAuthor">
+                        <cda:id xmlns:cda="urn:hl7-org:v3#">
+                           <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                            rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:author/cda:assignedAuthor/cda:id">
+                              <root xmlns="urn:hl7-org:v3#">1.2.1.2033</root>
+                              <extension xmlns="urn:hl7-org:v3#">tolven</extension>
+                           </rdf:Description>
+                        </cda:id>
+                     </rdf:Description>
+                  </cda:assignedAuthor>
+               </rdf:Description>
+            </cda:author>
+            <cda:custodian xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:custodian">
+                  <cda:assignedCustodian xmlns:cda="urn:hl7-org:v3#">
+                     <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                      rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:custodian/cda:assignedCustodian">
+                        <cda:representedCustodianOrganization xmlns:cda="urn:hl7-org:v3#">
+                           <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                            rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization">
+                              <cda:id xmlns:cda="urn:hl7-org:v3#">
+                                 <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                  rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:id">
+                                    <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.26.1.6</root>
+                                 </rdf:Description>
+                              </cda:id>
+                           </rdf:Description>
+                        </cda:representedCustodianOrganization>
+                     </rdf:Description>
+                  </cda:assignedCustodian>
+               </rdf:Description>
+            </cda:custodian>
+            <cda:component xmlns:cda="urn:hl7-org:v3#">
+               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component">
+                  <cda:structuredBody xmlns:cda="urn:hl7-org:v3#">
+                     <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                      rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody">
+                        <cda:component xmlns:cda="urn:hl7-org:v3#">
+                           <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                            rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component">
+                              <cda:section xmlns:cda="urn:hl7-org:v3#">
+                                 <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                  rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section">
+                                    <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:templateId">
+                                          <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.16</root>
+                                       </rdf:Description>
+                                    </cda:templateId>
+                                    <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:templateId_2">
+                                          <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.119</root>
+                                       </rdf:Description>
+                                    </cda:templateId>
+                                    <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:templateId_3">
+                                          <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.3.25</root>
+                                       </rdf:Description>
+                                    </cda:templateId>
+                                    <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:templateId_4">
+                                          <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2</root>
+                                       </rdf:Description>
+                                    </cda:templateId>
+                                    <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:code">
+                                          <code xmlns="urn:hl7-org:v3#">8716-3</code>
+                                          <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                          <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                          <displayName xmlns="urn:hl7-org:v3#">vital signs</displayName>
+                                       </rdf:Description>
+                                    </cda:code>
+                                    <cda:title xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:title">
+                                          <rdf:value>Physical Findings - Vital signs</rdf:value>
+                                       </rdf:Description>
+                                    </cda:title>
+                                    <cda:entry xmlns:cda="urn:hl7-org:v3#">
+                                       <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                        rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry">
+                                          <cda:organizer xmlns:cda="urn:hl7-org:v3#">
+                                             <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                              rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer">
+                                                <classCode xmlns="urn:hl7-org:v3#">CLUSTER</classCode>
+                                                <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:templateId">
+                                                      <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.32</root>
+                                                   </rdf:Description>
+                                                </cda:templateId>
+                                                <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:templateId_2">
+                                                      <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.35</root>
+                                                   </rdf:Description>
+                                                </cda:templateId>
+                                                <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:templateId_3">
+                                                      <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.1</root>
+                                                   </rdf:Description>
+                                                </cda:templateId>
+                                                <cda:id xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:id">
+                                                      <root xmlns="urn:hl7-org:v3#">1.2.1.2033</root>
+                                                      <extension xmlns="urn:hl7-org:v3#">echr:patient-514368:clinicalNote-1068092:vitalSign-1068095</extension>
+                                                   </rdf:Description>
+                                                </cda:id>
+                                                <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:code">
+                                                      <code xmlns="urn:hl7-org:v3#">46680005</code>
+                                                      <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.96</codeSystem>
+                                                      <codeSystemName xmlns="urn:hl7-org:v3#">SNOMED CT</codeSystemName>
+                                                      <displayName xmlns="urn:hl7-org:v3#">Vital signs</displayName>
+                                                   </rdf:Description>
+                                                </cda:code>
+                                                <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:statusCode">
+                                                      <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                   </rdf:Description>
+                                                </cda:statusCode>
+                                                <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:effectiveTime">
+                                                      <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                   </rdf:Description>
+                                                </cda:effectiveTime>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:code">
+                                                                  <code xmlns="urn:hl7-org:v3#">8310-5</code>
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Body temperature</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">36.5</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">Cel</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:code">
+                                                                  <code xmlns="urn:hl7-org:v3#">8867-4</code>
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Heart rate</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_2/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">78</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">min</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:code">
+                                                                  <code xmlns="urn:hl7-org:v3#">9279-1</code>
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Respiration rate</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_3/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">26</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">min</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:code">
+                                                                  <code xmlns="urn:hl7-org:v3#">8462-4</code>
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Diastolic BP</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_4/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">80</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">mm[Hg]</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:code">
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <code xmlns="urn:hl7-org:v3#">8474</code>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Systolic BP</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_5/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">120</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">mm[Hg]</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:code">
+                                                                  <code xmlns="urn:hl7-org:v3#">3141-9</code>
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Body weight</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_6/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">56</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">kg</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                                <cda:component xmlns:cda="urn:hl7-org:v3#">
+                                                   <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                    rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7">
+                                                      <cda:observation xmlns:cda="urn:hl7-org:v3#">
+                                                         <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                          rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation">
+                                                            <classCode xmlns="urn:hl7-org:v3#">OBS</classCode>
+                                                            <moodCode xmlns="urn:hl7-org:v3#">EVN</moodCode>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:templateId">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.10.20.1.31</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:templateId_2">
+                                                                  <root xmlns="urn:hl7-org:v3#">2.16.840.1.113883.3.88.11.83.14</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:templateId_3">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:templateId xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:templateId_4">
+                                                                  <root xmlns="urn:hl7-org:v3#">1.3.6.1.4.1.19376.1.5.3.1.4.13.2</root>
+                                                               </rdf:Description>
+                                                            </cda:templateId>
+                                                            <cda:code xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:code">
+                                                                  <code xmlns="urn:hl7-org:v3#">8302-2</code>
+                                                                  <codeSystem xmlns="urn:hl7-org:v3#">2.16.840.1.113883.6.1</codeSystem>
+                                                                  <codeSystemName xmlns="urn:hl7-org:v3#">LOINC</codeSystemName>
+                                                                  <displayName xmlns="urn:hl7-org:v3#">Body height</displayName>
+                                                               </rdf:Description>
+                                                            </cda:code>
+                                                            <cda:statusCode xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:statusCode">
+                                                                  <code xmlns="urn:hl7-org:v3#">completed</code>
+                                                               </rdf:Description>
+                                                            </cda:statusCode>
+                                                            <cda:effectiveTime xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:effectiveTime">
+                                                                  <nullFlavor xmlns="urn:hl7-org:v3#">NI</nullFlavor>
+                                                               </rdf:Description>
+                                                            </cda:effectiveTime>
+                                                            <cda:value xmlns:cda="urn:hl7-org:v3#">
+                                                               <rdf:Description xmlns:cda="urn:hl7-org:v3"
+                                                                                rdf:about="http://cacis.nci.nih.gov/caCISRequest_1#cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section/cda:entry/cda:organizer/cda:component_7/cda:observation/cda:value">
+                                                                  <xsi:type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance#">cda:PQ</xsi:type>
+                                                                  <value xmlns="urn:hl7-org:v3#">164</value>
+                                                                  <unit xmlns="urn:hl7-org:v3#">cm</unit>
+                                                               </rdf:Description>
+                                                            </cda:value>
+                                                         </rdf:Description>
+                                                      </cda:observation>
+                                                   </rdf:Description>
+                                                </cda:component>
+                                             </rdf:Description>
+                                          </cda:organizer>
+                                       </rdf:Description>
+                                    </cda:entry>
+                                 </rdf:Description>
+                              </cda:section>
+                           </rdf:Description>
+                        </cda:component>
+                     </rdf:Description>
+                  </cda:structuredBody>
+               </rdf:Description>
+            </cda:component>
+         </rdf:Description>
+      </cda:ClinicalDocument>
+   </rdf:Description>
+</rdf:RDF>
