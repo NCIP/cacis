@@ -47,8 +47,10 @@ The below commands should be executed in the Interactive SQL (ISQL) window.
 
 	DB.DBA.RDF_GRAPH_USER_PERMS_SET ('http://university.edu/science_dept/operatingsystems_course', 'anna', 8);
 
-	--Grant permissions to anna to be able to read all the graphs under a graph group
-5:	caCIS_GRAPH_GROUP_USER_PERMS_SET('monish','http://university.edu/science_dept/operatingsystems_course',1);
+	
+5:	--Grant permissions to anna to be able to read all the graphs under a graph group
+	DB.DBA.RDF_GRAPH_USER_PERMS_SET ('http://university.edu/science_dept/operatingsystems_course/student3','anna',1);
+	DB.DBA.RDF_GRAPH_USER_PERMS_SET ('http://university.edu/science_dept/operatingsystems_course/student4','anna',1);
 
 
 6:	log on to the http://localhost:8890/sparql-auth as anna and try the following SPARQL:
