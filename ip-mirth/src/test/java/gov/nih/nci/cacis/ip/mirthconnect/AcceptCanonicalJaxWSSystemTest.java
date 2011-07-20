@@ -86,20 +86,20 @@ public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
      * Cosntant value for the endpoint address
      */
     protected static final String ADDRESS = "http://localhost:18081/services/Temp?wsdl";
-     @Mock
-        WebServiceMessageReceiver webServiceMessageReceiver;
+    @Mock
+    WebServiceMessageReceiver webServiceMessageReceiver;
 
-     private EndpointImpl ep;
+    private EndpointImpl ep;
 
     /**
-        * EndpointImpl
-        * @return Endpoint
-        */
-       @Override
-       protected EndpointImpl getEndpoint() {
-           return this.ep;
-       }
-
+     * EndpointImpl
+     *
+     * @return Endpoint
+     */
+    @Override
+    protected EndpointImpl getEndpoint() {
+        return this.ep;
+    }
 
 
     /**
@@ -112,8 +112,8 @@ public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
         MockitoAnnotations.initMocks(this);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
 
-       final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver);
-        ep =  new EndpointImpl(getBus(), service);
+        final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver);
+        ep = new EndpointImpl(getBus(), service);
         ep.publish(ADDRESS);
     }
 
@@ -128,7 +128,8 @@ public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
 
         final AcceptCanonicalPortType client = (AcceptCanonicalPortType) factory.create();
         final CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument("");
+        request.setClinicalDocument(AcceptCanonicalServiceTest.dummyClinicalDocument());
+
 
         client.acceptCanonical(request);
     }

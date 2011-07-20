@@ -66,6 +66,8 @@ import com.sun.net.httpserver.HttpServer;
 import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.AcceptCanonicalPortTypeImpl;
 import gov.nih.nci.cacis.CaCISRequest;
+import org.hl7.v3.II;
+import org.hl7.v3.POCDMT000040ClinicalDocument;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -99,7 +101,8 @@ public class AcceptCanonicalServiceTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         request = new CaCISRequest();
-        request.setClinicalDocument("");
+        request.setClinicalDocument(dummyClinicalDocument());
+
         service = new AcceptCanonicalService(webServiceMessageReceiver);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
     }
@@ -144,6 +147,16 @@ public class AcceptCanonicalServiceTest {
         HttpContext context = server.createContext("/services/sa");
 
         webServiceEndpoint.publish(context);
+
+    }
+
+     public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
+        II dummyIi = new II();
+        dummyIi.setExtension("123");
+        dummyIi.setRoot("123");
+        POCDMT000040ClinicalDocument doc = new POCDMT000040ClinicalDocument();
+        doc.setId(dummyIi);
+        return doc;
 
     }
 }

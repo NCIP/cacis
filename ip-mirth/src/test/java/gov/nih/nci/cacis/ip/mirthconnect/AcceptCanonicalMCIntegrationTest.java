@@ -105,7 +105,8 @@ public class AcceptCanonicalMCIntegrationTest extends AbstractCXFTest {
 
         AcceptCanonicalPortType client = (AcceptCanonicalPortType) factory.create();
         CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument("hello there");
+        request.setClinicalDocument(AcceptCanonicalServiceTest.dummyClinicalDocument());
+
         ClinicalMetadata meta = new ClinicalMetadata();
         meta.setPatientIdExtension("123");
         meta.setPatientIdRoot("123.456");
@@ -125,6 +126,8 @@ public class AcceptCanonicalMCIntegrationTest extends AbstractCXFTest {
         LOG.info("Echo response: " + res.getTextContent());
 
     }
+
+
 
     /**
      * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
