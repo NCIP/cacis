@@ -1,0 +1,26 @@
+Instructions to create procedure in Virtuoso.   
+---------------------------------------------
+caCIS_GRAPH_GROUP_USER_PERMS_SET.sql contains a stored procedure. There are a couple of ways to create this procedure in Virtuoso.
+
+1:Create Procedure using the Conductor Interface @ http://localhost:8890/conductor
+	a: 	login as dba/dba
+	b:	Click on the Database tab
+	c:	Double click on the DB folder
+	d:	Double click on the Procedures folder
+	e:	On the top of the panel	you will see a Create Procedure link. Click on this link.
+	f:	Create New Procedure/Module window will open.
+	g:	Delete the default procedure template provided in the window and then paste the contents of caCIS_GRAPH_GROUP_USER_PERMS_SET.sql
+	h:	Click save
+	
+2:Create procedure using the Interactive SQL (ISQL) interface provided with the Conductor Interface.
+	a:	login to http://localhost:8890/conductor as dba/dba
+	b:	Click on the Interactive SQL (ISQL). This will pop up a different window.
+	c:	Copy contents of caCIS_GRAPH_GROUP_USER_PERMS_SET.sql and paste it in Interactive SQL window. Click Execute.
+
+3:Execute the contents in caCIS_GRAPH_GROUP_USER_PERMS_SET.sql at a Virtuoso iSQL command line interface.
+
+	a:	Change directory to '/path/to/install/bin'
+	b:	execute ./isql on mac/linux or isql on windows. This should bring up the iSQL> prompt.
+	c:	Copy contents of caCIS_GRAPH_GROUP_USER_PERMS_SET.sql and paste it @ the iSQL> prompt and hit enter.
+
+	 
