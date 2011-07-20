@@ -119,10 +119,7 @@ public class MirthConnectCLIMojo extends AbstractMojo {
 
         try {
 
-            if (pause > 0) {
-                getLog().info("Will pause for " + pause + " milliseconds");
-                Thread.sleep(pause);
-            }
+            pause();
 
             Process process = Runtime.getRuntime().exec(
                     new String[]{mirthConnect.getCanonicalPath(), "-s" + script.getCanonicalPath()});
@@ -134,6 +131,8 @@ public class MirthConnectCLIMojo extends AbstractMojo {
             if (process.waitFor() != 0) {
                 throw new MojoExecutionException("Failed");
             }
+
+            pause();
 
         } catch (SecurityException e) {
             throw new MojoExecutionException("Does the user have permission to run the command line?" + mirthConnect, e);
@@ -150,6 +149,14 @@ public class MirthConnectCLIMojo extends AbstractMojo {
                     // eat this exception
                 }
             }
+        }
+
+    }
+
+    private void pause() throws InterruptedException {
+        if (pause > 0) {
+            getLog().info("Will pause for " + pause + " milliseconds");
+            Thread.sleep(pause);
         }
 
     }
