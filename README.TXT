@@ -12,6 +12,16 @@ Directory Structure:
 /docs                 - Project Documentation
 
 ==================================================================
+JDK Installation
+==================================================================
+If you dont have JDK installed, please download the correct JDK for your OS from here,
+http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u26-download-400750.html
+
+After you have installed the JDK, please download the Java Cryptography Extension
+http://www.oracle.com/technetwork/java/javase/downloads/jce-6-download-429243.html
+
+and follow the installation instructions in the jce/README.txt of the zip file
+==================================================================
 Build the Project
 ==================================================================
 
