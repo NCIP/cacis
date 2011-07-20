@@ -1,3 +1,4 @@
+
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
@@ -58,9 +59,9 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.transform;
 
-import org.apache.camel.spring.javaconfig.test.JavaConfigContextLoader;
+package gov.nih.nci.cacis.cdw;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,28 +70,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 
 import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * Tests CDWLoader.
+ * @author bpickeral
+ * @since Jul 19, 2011
  */
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        locations = "gov.nih.nci.cacis.config.TransformConfig",
-        loader = JavaConfigContextLoader.class)
-public class RDFToXMLTransformerTest {
-
-    @Autowired
-    private RdfToXmlTransformer transform;
+@ContextConfiguration(locations = "classpath:applicationContext-cdw-loader-test.xml")
+public class CDWLoaderTest {
 
     private InputStream sampleMessageIS;
+
+    @Autowired
+    private CDWLoader loader;
 
     @Before
     public void init() throws URISyntaxException, IOException {
@@ -100,24 +100,14 @@ public class RDFToXMLTransformerTest {
     }
 
     @Test
-    public void transform() throws TransformerException {
-        final OutputStream os = transform.transform(sampleMessageIS);
-        assertNotNull(os);
+    public void load() throws Exception {
+        OutputStream os = null;
+        try {
+            os = loader.load(sampleMessageIS);
+            assertNotNull(os);
+        } finally {
+            os.close();
+        }
     }
-
-    @Test
-    public void transformStream() throws XMLStreamException, TransformerException, URISyntaxException, IOException {
-       final ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-
-        transform.transform(sampleMessageIS, os);
-        assertNotNull(os);
-        assertTrue(os.size() > 0);
-
-
-    }
-
-
-
 
 }

@@ -28,6 +28,11 @@
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>transformer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.openlinksw</groupId>

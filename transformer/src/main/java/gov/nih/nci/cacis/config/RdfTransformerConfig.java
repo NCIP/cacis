@@ -61,7 +61,7 @@
 package gov.nih.nci.cacis.config;
 
 import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
-import gov.nih.nci.cacis.transform.RdfToXmlTransformer;
+import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -110,10 +110,10 @@ public class RdfTransformerConfig {
      */
     @Bean
     @Scope("prototype")
-    public RdfToXmlTransformer xmlToRdfTransformer() throws TransformerException {
+    public XmlToRdfTransformer xmlToRdfTransformer() throws TransformerException {
         final Transformer xslTransformer = xslTransformerFactory().
                 newTransformer(xslUriResolver().resolve(rdfToXmlXsl, xslBaseClassPath));
-        return new RdfToXmlTransformer(xslTransformer);
+        return new XmlToRdfTransformer(xslTransformer);
     }
 
 

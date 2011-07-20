@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Import;
 /**
  * @author kherm manav.kher@semanticbits.com
  *
- * Main configuration class for the pco transofmer
+ * Main configura  tion class for the pco transofmer
  * project
  */
 @Configuration

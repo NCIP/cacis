@@ -1,22 +1,22 @@
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
- * binary, object code form. The gov.nih.nci.cacis.cdw-authz-1.0 Software was developed in conjunction with the National
- * Cancer Institute (NCI) by NCI employees and subcontracted parties. To the extent government employees are authors,
- * any rights in such works shall be subject to Title 17 of the United States Code, section 105.
+ * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
+ * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
+ * To the extent government employees are authors, any rights in such works shall be subject to Title 17 of the United
+ * States Code, section 105.
  *
- * This gov.nih.nci.cacis.cdw-authz-1.0 Software License (the License) is between NCI and You. You (or Your) shall mean
- * a person or an entity, and all other entities that control, are controlled by, or are under common control with the
- * entity. Control for purposes of this definition means (i) the direct or indirect power to cause the direction or
- * management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the
- * outstanding shares, or (iii) beneficial ownership of such entity.
+ * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
+ * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
+ * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
+ * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
+ * (iii) beneficial ownership of such entity.
  *
  * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
  * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the gov.nih.nci.cacis.cdw-authz-1.0 Software to (i) use, install, access, operate, execute, copy, modify,
- * translate, market, publicly display, publicly perform, and prepare derivative works of the
- * gov.nih.nci.cacis.cdw-authz-1.0 Software; (ii) distribute and have distributed to and by third parties the
- * gov.nih.nci.cacis.cdw-authz-1.0 Software and any modifications and derivative works thereof; and (iii) sublicense the
- * foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
+ * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
+ * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
+ * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
+ * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
  * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
  * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
  * charge to You.
@@ -27,13 +27,13 @@
  * documentation and/or other materials provided with the distribution, if any.
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
- * product includes software developed by the National Cancer Institute and subcontracted parties. If You do not include
+ * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
  * such end-user documentation, You shall include this acknowledgment in the Software itself, wherever such third-party
  * acknowledgments normally appear.
  *
- * You may not use the names "The National Cancer Institute", "NCI", or any subcontracted party to endorse or promote
+ * You may not use the names "The National Cancer Institute", "NCI", or any SubContractor party to endorse or promote
  * products derived from this Software. This License does not authorize You to use any trademarks, service marks, trade
- * names, logos or product names of either NCI or theany of the subcontracted parties, except as required to comply with
+ * names, logos or product names of either NCI or any of the subcontracted parties, except as required to comply with
  * the terms of this License.
  *
  * For sake of clarity, and not by way of limitation, You may incorporate this Software into Your proprietary programs
@@ -58,48 +58,58 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package gov.nih.nci.cacis.transform;
 
-package gov.nih.nci.cacis.cdw;
-
-import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since Jul 15, 2011
- *
+ * @author kherm manav.kher@semanticbits.com
  */
-@Configuration
-public class CDWConfig {
+public class XmlToRdfTransformer {
 
-    @Autowired
-    private DataSource dataSource;
+    private final Transformer rdfTransformer;
 
     /**
+     * Constructor
      *
-     * @return GraphAuthzMgr
+     * @param rdfTransformer transformer xslt
      */
-    @Bean
-    public GraphAuthzMgr graphAuthzMgr() {
-        return new GraphAuthzMgrImpl(dataSource);
+    public XmlToRdfTransformer(Transformer rdfTransformer) {
+        this.rdfTransformer = rdfTransformer;
     }
 
 
-     /**
-        * Loads properties from classpath*:/"transformer-test.properties" location
-        *
-        * @return the property place holder configures
-        */
-       @Bean
-       public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-           return new CommonsPropertyPlaceholderConfigurer(
-                   "transformer", "cacis-cdw.properties");
-       }
+    /**
+     * Transform XML to RDF using XML Streams
+     *
+     * @param inStream XML input stream
+     * @param outStream OutputStream with the transformed data
+     * @throws TransformerException exception
+     * @throws javax.xml.stream.XMLStreamException exception
+     */
+    public void transform(InputStream inStream, OutputStream outStream) throws TransformerException, XMLStreamException {
+        rdfTransformer.transform(new StreamSource(inStream), new StreamResult(outStream));
+    }
 
+
+    /**
+     * Transform XML to RDF
+     *
+     * @param xmlStream XML input stream
+     * @return OutputStream RDF
+     * @throws TransformerException exception
+     */
+    public OutputStream transform(InputStream xmlStream) throws TransformerException {
+        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        rdfTransformer.transform(new StreamSource(xmlStream), new StreamResult(bos));
+        return bos;
+
+    }
 }
