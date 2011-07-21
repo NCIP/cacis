@@ -9,7 +9,10 @@ create procedure caCIS_GRAPH_GROUP_USER_PERMS_SET (in user_name varchar, in grap
   	return 0;
   if (graph_group_uri is null or graph_group_uri='')
     return 0;
-  
+  if(permission = 0){
+  	DB.DBA.RDF_GRAPH_USER_PERMS_SET (graph_group_uri, user_name, 0);
+  	retrun 0;
+  }
   select RGG_IID into graph_group_id from RDF_GRAPH_GROUP where RGG_IRI = graph_group_uri;
   if (graph_group_id = 0)
   	return 1;
