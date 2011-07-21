@@ -19,4 +19,7 @@
     <context:annotation-config/>
 
     <bean class="gov.nih.nci.cacis.cdw.TestCaCISConfig"/>
+
+    <!--can only be included if Virtuoso DB is available-->
+    <bean class="gov.nih.nci.cacis.cdw.JDBCConfig"/>
 </beans>

@@ -1,4 +1,3 @@
-
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
@@ -62,52 +61,93 @@
 
 package gov.nih.nci.cacis.cdw;
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+import org.openrdf.query.BindingSet;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import gov.nih.nci.cacis.cdw.sesame.AbstractSesameTest;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
-
-import static junit.framework.Assert.assertNotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests CDWLoader.
+ *
  * @author bpickeral
  * @since Jul 19, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-cdw-loader-test.xml")
+@ContextConfiguration(locations = "classpath:applicationContext-cdw-test.xml")
 public class CDWLoaderTest {
 
+    private static final String QUERY_END = "> WHERE {?s ?p ?o} LIMIT 1";
+
+    private static final String QUERY_PFX = "SELECT * FROM <";
+
     private InputStream sampleMessageIS;
+
+    @Autowired
+    private RepositoryConnection con;
 
     @Autowired
     private CDWLoader loader;
 
     @Before
-    public void init() throws URISyntaxException, IOException {
-        sampleMessageIS = FileUtils.openInputStream(new File(getClass().
-                getClassLoader().getResource("caCISRequestSample3.xml")
-                .toURI()));
+    public void before() throws URISyntaxException, IOException, RepositoryConfigException, RepositoryException {
+        sampleMessageIS = FileUtils.openInputStream(new File(getClass().getClassLoader()
+                .getResource("caCISRequestSample3.xml").toURI()));
     }
 
     @Test
     public void load() throws Exception {
-        OutputStream os = null;
-        try {
-            os = loader.load(sampleMessageIS);
-            assertNotNull(os);
-        } finally {
-            os.close();
+        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        loader.load(sampleMessageIS, context);
+        final String query = QUERY_PFX + context + QUERY_END;
+        final Value[][] results = doTupleQuery(con, query);
+        assertTrue(results.length > 0);
+    }
+
+    private static Value[][] doTupleQuery(RepositoryConnection con, String query) throws RepositoryException,
+            MalformedQueryException, QueryEvaluationException {
+        final TupleQuery resultsTable = con.prepareTupleQuery(QueryLanguage.SPARQL, query);
+        final TupleQueryResult bindings = resultsTable.evaluate();
+
+        final List<Value[]> results = new ArrayList<Value[]>();
+        BindingSet pairs = null;
+        List<String> names = null;
+        Value[] rv = null;
+
+        while (bindings.hasNext()) {
+            pairs = bindings.next();
+            names = bindings.getBindingNames();
+            rv = new Value[names.size()];
+            for (int i = 0; i < names.size(); i++) {
+                rv[i] = pairs.getValue(names.get(i));
+            }
+            results.add(rv);
         }
+        return results.toArray(new Value[0][0]); // NOPMD
     }
 
 }

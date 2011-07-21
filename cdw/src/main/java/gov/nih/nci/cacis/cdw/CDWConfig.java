@@ -62,11 +62,13 @@
 package gov.nih.nci.cacis.cdw;
 
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+import gov.nih.nci.cacis.config.TransformConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import javax.sql.DataSource;
 
@@ -76,6 +78,7 @@ import javax.sql.DataSource;
  *
  */
 @Configuration
+@Import(TransformConfig.class)
 public class CDWConfig {
 
     @Autowired
@@ -90,16 +93,24 @@ public class CDWConfig {
         return new GraphAuthzMgrImpl(dataSource);
     }
 
+    /**
+     * Creates loader.
+     *
+     * @return CDWLoader
+     */
+    @Bean
+    public CDWLoader loader() {
+        return new CDWLoader();
+    }
 
-     /**
-        * Loads properties from classpath*:/"transformer-test.properties" location
-        *
-        * @return the property place holder configures
-        */
-       @Bean
-       public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-           return new CommonsPropertyPlaceholderConfigurer(
-                   "transformer", "cacis-cdw.properties");
-       }
+    /**
+     * Loads properties from classpath*:/"transformer-test.properties" location
+     *
+     * @return the property place holder configures
+     */
+    @Bean
+    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        return new CommonsPropertyPlaceholderConfigurer("transformer", "cacis-cdw.properties");
+    }
 
 }
