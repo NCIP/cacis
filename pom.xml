@@ -31,6 +31,7 @@
         <ipf.version>2.3-m1</ipf.version>
         <apache.camel.version>2.6.0</apache.camel.version>
         <mirthconnect.version>2.2.1</mirthconnect.version>
+        <maven.reports.plugin.version>2.4</maven.reports.plugin.version>
 
         <virt.sesame.version>2</virt.sesame.version>
         <virt.jdbc.version>3</virt.jdbc.version>
@@ -190,10 +191,9 @@
                 <version>2.8</version>
             </plugin>
             <plugin>
-                <!-- Disabled features w/in the 2.1 plugin to speed up the report generation -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
+                <version>${maven.reports.plugin.version}</version>
             </plugin>
             <!--this just links it to the site. Reports are configured in the plugins-->
             <plugin>
