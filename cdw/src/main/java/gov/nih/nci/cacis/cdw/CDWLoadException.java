@@ -58,115 +58,49 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
-
-import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpServer;
-import gov.nih.nci.cacis.AcceptCanonicalFault;
-import gov.nih.nci.cacis.AcceptCanonicalPortTypeImpl;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.cdw.CDWLoader;
-import gov.nih.nci.cacis.ip.mirthconnect.config.TestIPMirthConfig;
-
-import org.hl7.v3.II;
-import org.hl7.v3.POCDMT000040ClinicalDocument;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.xml.ws.Binding;
-import javax.xml.ws.Endpoint;
-import javax.xml.ws.handler.Handler;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+package gov.nih.nci.cacis.cdw;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * Exception encountered while loading data to the CDW.
+ * @author bpickeral
+ * @since Jul 21, 2011
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-ip-mirth-test.xml")
-public class AcceptCanonicalServiceTest {
+public class CDWLoadException extends Exception {
 
-    @Mock
-    WebServiceMessageReceiver webServiceMessageReceiver;
-    CaCISRequest request;
-    AcceptCanonicalService service;
+    private static final long serialVersionUID = 4878153586628471573L;
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        request = new CaCISRequest();
-        request.setClinicalDocument(dummyClinicalDocument());
-
-        service = new AcceptCanonicalService(webServiceMessageReceiver);
-        service.setCtx(new AnnotationConfigApplicationContext(TestIPMirthConfig.class));
-        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
-    }
-
-    @Test
-    public void acceptCanonical() throws Exception {
-        service.acceptCanonical(request);
-
-        verify(webServiceMessageReceiver).processData(anyString());
-        verify(service.getApplicationContext().getBean(CDWLoader.class)).load(any(InputStream.class),
-                anyString());
-
+    /**
+     * Takes the cause
+     *
+     * @param cause the cause of the exception
+     */
+    public CDWLoadException(Throwable cause) {
+        super(cause);
     }
 
     /**
-     * Service throws exception when it is unable to process the incoming request
+     * Takes message and cause
      *
-     * @throws AcceptCanonicalFault fault
+     * @param msg a message
+     * @param cause the cause
      */
-    @Test(expected = AcceptCanonicalFault.class)
-    public void exception() throws AcceptCanonicalFault {
-        when(webServiceMessageReceiver.processData(anyString())).thenThrow(new RuntimeException("Mirth Exception"));
-        service.acceptCanonical(request);
+    public CDWLoadException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
-    @Test
-    public void create() throws IOException, InterruptedException {
-
-        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 18010), 5);
-        ExecutorService threads = Executors.newFixedThreadPool(5);
-        server.setExecutor(threads);
-        server.start();
-
-        AcceptCanonicalPortTypeImpl service = new AcceptCanonicalPortTypeImpl();
-
-        Endpoint webServiceEndpoint = Endpoint.create(service);
-        Binding binding = webServiceEndpoint.getBinding();
-        List<Handler> handlerChain = new LinkedList<Handler>();
-        binding.setHandlerChain(handlerChain);
-        HttpContext context = server.createContext("/services/sa");
-
-        webServiceEndpoint.publish(context);
-
+    /**
+     * Default constructor
+     */
+    public CDWLoadException() {
+        //empty constructor
     }
 
-    public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
-        II dummyIi = new II();
-        dummyIi.setExtension("123");
-        dummyIi.setRoot("123");
-        POCDMT000040ClinicalDocument doc = new POCDMT000040ClinicalDocument();
-        doc.setId(dummyIi);
-        return doc;
-
+    /**
+     * Takes a message
+     *
+     * @param msg a message
+     */
+    public CDWLoadException(String msg) {
+        super(msg);
     }
 }

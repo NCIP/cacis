@@ -24,7 +24,9 @@ To run the unit tests run 'mvn test'
 Deployment to Mirth Connect
 ==========================================================
 
-1. Copy target/ip-mirth-1.0-SNAPSHOT.jar to Mirth Connect/custom-lib folder
+1. Copy the following jar files to the Mirth Connect/custom-lib folder:
+	ip-mirth/target/ip-mirth-1.0-SNAPSHOT.jar
+	cdw/target/cdw-1.0-SNAPSHOT.jar
 
 2. Startup Mirth
 
