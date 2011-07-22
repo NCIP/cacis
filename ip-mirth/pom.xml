@@ -37,6 +37,39 @@
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>cdw</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>transformer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-rdfxml</artifactId>
+            <version>${sesame.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-repository-manager</artifactId>
+            <version>${sesame.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-queryparser-sparql</artifactId>
+            <version>${sesame.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-sail-memory</artifactId>
+            <version>${sesame.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

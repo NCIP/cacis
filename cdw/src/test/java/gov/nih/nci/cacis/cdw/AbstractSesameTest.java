@@ -99,7 +99,7 @@ public abstract class AbstractSesameTest {
 
     private static final Log LOG = LogFactory.getLog(AbstractSesameTest.class);
 
-    @Value("${sesame.local.repo.managder.dir}")
+    @Value("${sesame.local.repo.manager.dir}")
     private String sesameLocalRepoMngrDir;
 
     @Value("${output.dir}")

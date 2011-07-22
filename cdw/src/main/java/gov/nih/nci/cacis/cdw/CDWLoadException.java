@@ -58,60 +58,49 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package gov.nih.nci.cacis.cdw;
 
-import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import org.openrdf.model.URI;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.rio.RDFFormat;
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
- * Converts XML to RDF and stores the output file into the Clinical Data warehouse.
- *
+ * Exception encountered while loading data to the CDW.
  * @author bpickeral
- * @since Jul 18, 2011
+ * @since Jul 21, 2011
  */
-public class CDWLoader {
+public class CDWLoadException extends Exception {
 
-    @Autowired
-    private XmlToRdfTransformer transformer;
-    @Autowired
-    private RepositoryConnection con;
+    private static final long serialVersionUID = 4878153586628471573L;
 
     /**
-     * Transforms XML to RDF and then stores into Virtuoso.
+     * Takes the cause
      *
-     * @param xmlStream Inpt stream containing RDF
-     * @param context the context to add the data to, used for pulling out the data
-     * @throws CDWLoadException on RDF Parse Error
+     * @param cause the cause of the exception
      */
-    public void load(InputStream xmlStream, String context) throws CDWLoadException {
-        try {
-            final OutputStream os = transformer.transform(xmlStream);
-            ByteArrayOutputStream bos = null;
-            InputStream is = null;
-            final URI uriContext = con.getRepository().getValueFactory().createURI(context);
-            try {
-                bos = (ByteArrayOutputStream) os;
-                is = new ByteArrayInputStream(bos.toByteArray());
-                con.add(is, context, RDFFormat.RDFXML, uriContext);
-            } finally {
-                bos.close();
-            }
-
-            // CHECKSTYLE:OFF catching generic Exception
-        } catch (Exception e) {
-            // CHECKSTYLE:ON
-            throw new CDWLoadException(e);
-        }
+    public CDWLoadException(Throwable cause) {
+        super(cause);
     }
 
+    /**
+     * Takes message and cause
+     *
+     * @param msg a message
+     * @param cause the cause
+     */
+    public CDWLoadException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
+
+    /**
+     * Default constructor
+     */
+    public CDWLoadException() {
+        //empty constructor
+    }
+
+    /**
+     * Takes a message
+     *
+     * @param msg a message
+     */
+    public CDWLoadException(String msg) {
+        super(msg);
+    }
 }

@@ -60,17 +60,26 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import com.mirth.connect.connectors.ws.AcceptMessage;
 import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CaCISResponse;
 import gov.nih.nci.cacis.ResponseStatusType;
+import gov.nih.nci.cacis.cdw.CDWLoader;
+import gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthConfig;
+import gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthConfigImpl;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -81,16 +90,39 @@ import javax.jws.WebService;
         targetNamespace = "http://cacis.nci.nih.gov",
         endpointInterface = "gov.nih.nci.cacis.AcceptCanonicalPortType"
 )
-public class AcceptCanonicalService extends AcceptMessage {
-
+public class AcceptCanonicalService extends AcceptMessage { //
 
     /**
-     * Constructor
+     * caCIS context URI.
+     */
+    public static final String CACIS_NS = "http://cacis.nci.nih.gov";
+
+    private final ApplicationContext ctx;
+
+    private final CDWLoader loader;
+
+    /**
+     * Constructor where config can be specified, used for testing.
+     *
+     * @param webServiceMessageReceiver Mirth/Mule webServiceMessageReceiver
+     * @param config the configuration to use for the application context
+     */
+    public AcceptCanonicalService(WebServiceMessageReceiver webServiceMessageReceiver,
+            IPMirthConfig config) {
+        super(webServiceMessageReceiver);
+        this.ctx = new AnnotationConfigApplicationContext(config.getClass());
+        loader = getApplicationContext().getBean(CDWLoader.class);
+    }
+
+    /**
+     * Default Constructor that uses IPMirthConfigImpl as config.
      *
      * @param webServiceMessageReceiver Mirth/Mule webServiceMessageReceiver
      */
     public AcceptCanonicalService(WebServiceMessageReceiver webServiceMessageReceiver) {
         super(webServiceMessageReceiver);
+        this.ctx = new AnnotationConfigApplicationContext(IPMirthConfigImpl.class);
+        loader = getApplicationContext().getBean(CDWLoader.class);
     }
 
 
@@ -104,7 +136,7 @@ public class AcceptCanonicalService extends AcceptMessage {
     @WebResult(name = "caCISResponse", targetNamespace = "http://cacis.nci.nih.gov", partName = "parameter")
     @WebMethod
     public gov.nih.nci.cacis.CaCISResponse acceptCanonical(
-            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = "http://cacis.nci.nih.gov")
+            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = CACIS_NS)
             CaCISRequest request)
             throws AcceptCanonicalFault {
 
@@ -114,15 +146,25 @@ public class AcceptCanonicalService extends AcceptMessage {
         // Will need to be updated in ESD-3040
         final String req = request.getClinicalDocument().toString();
         try {
-            webServiceMessageReceiver.processData(req);
-             // CHECKSTYLE:OFF
+            final String message = webServiceMessageReceiver.processData(req);
+            final InputStream is = new ByteArrayInputStream(message.getBytes());
+            loader.load(is, CACIS_NS);
+        // CHECKSTYLE:OFF
         } catch (Exception e) {
+        // CHECKSTYLE:ON
             throw new AcceptCanonicalFault("Error processing message", e);
         }
-         // CHECKSTYLE:ON
 
         return response;
     }
 
+    /**
+     * Provides access to the server Spring application context
+     *
+     * @return Application Context
+     */
+    public ApplicationContext getApplicationContext() {
+        return ctx;
+    }
 
 }

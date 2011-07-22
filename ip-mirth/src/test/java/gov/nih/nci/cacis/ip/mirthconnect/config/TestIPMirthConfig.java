@@ -59,39 +59,118 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.cdw;
+package gov.nih.nci.cacis.ip.mirthconnect.config;
 
-import org.junit.Test;
-import org.openrdf.model.Value;
+import static org.mockito.Mockito.mock;
+import gov.nih.nci.cacis.cdw.CDWLoader;
+import gov.nih.nci.cacis.cdw.GraphAuthzMgr;
+import gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthConfig;
+import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
+import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-
-import static org.junit.Assert.assertTrue;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
+import org.springframework.context.ApplicationContextException;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * TODO: Use InMemorySesameJdbcConfig once ESD-3029 is checked in. Test IPMirthConfig.
+ *
+ * @author bpickeral
+ * @since Jul 21, 2011
  */
-@ContextConfiguration(locations = "classpath:applicationContext-mock-cdw-test.xml")
-public class CDWLoaderSystemTest extends BaseCDWLoaderTest {
+@Configuration
+public class TestIPMirthConfig implements IPMirthConfig {
 
-    private static final String CACIS_NS = "http://cacis.nci.nih.gov";
+    @Bean
+    public CDWLoader dummyLoader() {
+        return mock(CDWLoader.class);
+    }
 
-    @Autowired
-    RepositoryConnection con;
+    /**
+     * Authz Manager
+     *
+     * @return GraphAuthzMgr
+     */
+    @Bean
+    public GraphAuthzMgr graphAuthzMgr() {
+        return mock(GraphAuthzMgr.class);
+    }
 
-    @Autowired
-    CDWLoader loader;
+    /**
+     * Sesame Repository Connection
+     *
+     * @return RepositoryConnection
+     * @throws org.openrdf.repository.RepositoryException exception
+     */
 
-    @Test
-    public void xmlToRDFLoad() throws Exception {
-        final org.openrdf.model.URI context = con.getRepository().getValueFactory().createURI(CACIS_NS);
+    @Bean
+    public RepositoryConnection repositoryConnection() throws RepositoryException {
+        return repository().getConnection();
 
-        loader.load(sampleMessageIS, CACIS_NS);
+    }
 
-        final String query = QUERY_PFX + context + QUERY_END;
-        final Value[][] results = doTupleQuery(con, query);
-        assertTrue(results.length > 0);
+    /**
+     * Sesame Repository
+     *
+     * @return Repository
+     */
+    @Bean
+    public Repository repository() throws RepositoryException {
+        Repository myRepository = new SailRepository(new MemoryStore());
+        myRepository.initialize();
+        return myRepository;
+    }
+
+    /**
+     * Authz Manager
+     *
+     * @return GraphAuthzMgr
+     */
+    @Bean
+    public XmlToRdfTransformer xmlToRdfTransformer() {
+        return mock(XmlToRdfTransformer.class);
+    }
+
+    /**
+     * JDBC Connection
+     *
+     * @return Connection
+     * @throws java.sql.SQLException exception
+     */
+    @Bean
+    public Connection connection() throws SQLException {
+        return mock(Connection.class);
+    }
+
+    /**
+     * JDBC Transaction Manager
+     *
+     * @return DataSourceTransactionManager transaction manager
+     */
+    @Bean
+    public DataSourceTransactionManager cacisTxManager() {
+        return mock(DataSourceTransactionManager.class);
+    }
+
+    /**
+     * JDBC Data source
+     *
+     * @return DataSource
+     * @throws org.springframework.context.ApplicationContextException exception
+     */
+    @Bean
+    public DataSource dataSource() throws ApplicationContextException {
+        return mock(DataSource.class);
     }
 
 }
