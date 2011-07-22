@@ -1,4 +1,3 @@
-package gov.nih.nci.cacis.cdw;
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
@@ -60,6 +59,8 @@ package gov.nih.nci.cacis.cdw;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package gov.nih.nci.cacis.cdw;
+
 import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
 
 import java.io.ByteArrayInputStream;
@@ -95,15 +96,16 @@ public class CDWLoader {
 
     /**
      * Transforms XML to RDF and then stores into Virtuoso.
+     *
      * @param xmlStream Inpt stream containing RDF
-     * @param context the context to add the data to, used for pulling out the data
+     * @param context   the context to add the data to, used for pulling out the data
      * @throws TransformerException on error
-     * @throws RepositoryException if error occurs when storing data to the repository
-     * @throws IOException on IO error
-     * @throws RDFParseException on RDF Parse Error
+     * @throws RepositoryException  if error occurs when storing data to the repository
+     * @throws IOException          on IO error
+     * @throws RDFParseException    on RDF Parse Error
      */
     public void load(InputStream xmlStream, URI context) throws TransformerException, RepositoryException, RDFParseException,
-        IOException {
+            IOException {
         final OutputStream os = transformer.transform(xmlStream);
         ByteArrayOutputStream bos = null;
         InputStream is = null;
@@ -112,8 +114,7 @@ public class CDWLoader {
             is = new ByteArrayInputStream(bos.toByteArray());
             con.add(is, context.toString(), RDFFormat.RDFXML, context);
         } finally {
-            is.close();
-            bos.close();
+                bos.close();
         }
     }
 
