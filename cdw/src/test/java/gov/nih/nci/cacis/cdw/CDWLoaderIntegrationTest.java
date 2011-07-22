@@ -61,14 +61,26 @@
 
 package gov.nih.nci.cacis.cdw;
 
-import java.io.InputStream;
-
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.query.*;
 import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -81,12 +93,6 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = "classpath:applicationContext-cdw-test.xml")
 public class CDWLoaderIntegrationTest extends BaseCDWLoaderTest {
 
-    private static final String QUERY_END = "> WHERE {?s ?p ?o} LIMIT 1";
-    private static final String QUERY_PFX = "SELECT * FROM <";
-    private static final String CACIS_NS = "http://cacis.nci.nih.gov";
-
-    private InputStream sampleMessageIS;
-
     @Autowired
     private RepositoryConnection con;
 
@@ -96,16 +102,11 @@ public class CDWLoaderIntegrationTest extends BaseCDWLoaderTest {
 
     @Test
     public void load() throws Exception {
-        loader.load(sampleMessageIS, CACIS_NS);
-        final URI uriContext = con.getRepository().getValueFactory().createURI(CACIS_NS);
-        final String query = QUERY_PFX + uriContext + QUERY_END;
+        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        loader.load(sampleMessageIS, context);
+        final String query = QUERY_PFX + context + QUERY_END;
         final Value[][] results = doTupleQuery(con, query);
         assertTrue(results.length > 0);
-    }
-
-    @Test (expected = CDWLoadException.class)
-    public void loadException() throws Exception {
-        loader.load(null, null);
     }
 
 }

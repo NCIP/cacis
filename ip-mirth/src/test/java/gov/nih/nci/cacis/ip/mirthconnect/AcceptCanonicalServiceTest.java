@@ -66,32 +66,23 @@ import com.sun.net.httpserver.HttpServer;
 import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.AcceptCanonicalPortTypeImpl;
 import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.cdw.CDWLoader;
-import gov.nih.nci.cacis.ip.mirthconnect.config.TestIPMirthConfig;
-
 import org.hl7.v3.II;
 import org.hl7.v3.POCDMT000040ClinicalDocument;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.xml.ws.Binding;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.handler.Handler;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -99,8 +90,6 @@ import static org.mockito.Mockito.when;
 /**
  * @author kherm manav.kher@semanticbits.com
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-ip-mirth-test.xml")
 public class AcceptCanonicalServiceTest {
 
     @Mock
@@ -114,22 +103,24 @@ public class AcceptCanonicalServiceTest {
         request = new CaCISRequest();
         request.setClinicalDocument(dummyClinicalDocument());
 
-        service = new AcceptCanonicalService(webServiceMessageReceiver, new TestIPMirthConfig());
+        service = new AcceptCanonicalService(webServiceMessageReceiver);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
     }
 
+
     @Test
-    public void acceptCanonical() throws Exception {
+    public void acceptCanonical() throws AcceptCanonicalFault {
         service.acceptCanonical(request);
 
         verify(webServiceMessageReceiver).processData(anyString());
-        verify(service.getApplicationContext().getBean(CDWLoader.class)).load(any(InputStream.class),
-                anyString());
 
     }
 
+
+
     /**
-     * Service throws exception when it is unable to process the incoming request
+     * Service throws exception when it is unable to process
+     * the incoming request
      *
      * @throws AcceptCanonicalFault fault
      */
@@ -159,7 +150,7 @@ public class AcceptCanonicalServiceTest {
 
     }
 
-    public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
+     public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
         II dummyIi = new II();
         dummyIi.setExtension("123");
         dummyIi.setRoot("123");
