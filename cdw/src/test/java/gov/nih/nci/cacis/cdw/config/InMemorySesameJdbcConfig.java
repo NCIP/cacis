@@ -67,9 +67,11 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.memory.MemoryStore;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -79,10 +81,8 @@ import java.sql.SQLException;
 import static org.mockito.Mockito.mock;
 
 /**
- *
- *  Provides an in-memory persistence for the Sesame
+ * Provides an in-memory persistence for the Sesame
  * repository
- *
  *
  * @author kherm manav.kher@semanticbits.com
  */
@@ -107,9 +107,11 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      *          exception
      */
     @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public RepositoryConnection repositoryConnection() throws RepositoryException {
-        return repository().getConnection();
-
+        RepositoryConnection con = repository().getConnection();
+        con.setAutoCommit(true);
+        return con;
     }
 
     /**
@@ -117,11 +119,11 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      *
      * @return Repository
      */
-     @Bean
+    @Bean
     public Repository repository() throws RepositoryException {
         Repository myRepository = new SailRepository(new MemoryStore());
         myRepository.initialize();
-        return  myRepository;
+        return myRepository;
     }
 
     /**
@@ -132,7 +134,7 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      */
     @Bean
     public Connection connection() throws SQLException {
-        return  mock(Connection.class);
+        return mock(Connection.class);
     }
 
     /**
@@ -142,7 +144,7 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      */
     @Bean
     public DataSourceTransactionManager cacisTxManager() {
-      return  mock(DataSourceTransactionManager.class);
+        return mock(DataSourceTransactionManager.class);
     }
 
     /**
@@ -154,6 +156,6 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      */
     @Bean
     public DataSource dataSource() throws ApplicationContextException {
-        return  mock(DataSource.class);
+        return mock(DataSource.class);
     }
 }
