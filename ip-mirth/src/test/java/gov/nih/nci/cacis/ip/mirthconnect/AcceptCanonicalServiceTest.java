@@ -114,8 +114,7 @@ public class AcceptCanonicalServiceTest {
         request = new CaCISRequest();
         request.setClinicalDocument(dummyClinicalDocument());
 
-        service = new AcceptCanonicalService(webServiceMessageReceiver);
-        service.setCtx(new AnnotationConfigApplicationContext(TestIPMirthConfig.class));
+        service = new AcceptCanonicalService(webServiceMessageReceiver, new TestIPMirthConfig());
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
     }
 

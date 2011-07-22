@@ -73,7 +73,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -119,8 +118,8 @@ public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
         MockitoAnnotations.initMocks(this);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
 
-        final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver);
-        service.setCtx(new AnnotationConfigApplicationContext(TestIPMirthConfig.class));
+        final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver,
+                new TestIPMirthConfig());
         ep = new EndpointImpl(getBus(), service);
         ep.publish(ADDRESS);
     }
