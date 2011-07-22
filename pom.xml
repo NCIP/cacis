@@ -419,6 +419,7 @@
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>${cobertura.plugin.version}</version>
                 <configuration>
+                    <skip>${skip.static.analysis}</skip>
                     <formats>
                         <format>html</format>
                         <format>xml</format>

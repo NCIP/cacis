@@ -59,58 +59,19 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.cdw;
+package gov.nih.nci.cacis.cdw.config;
 
-import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-import gov.nih.nci.cacis.config.TransformConfig;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import javax.sql.DataSource;
+import gov.nih.nci.cacis.cdw.CDWLoader;
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since Jul 15, 2011
- *
+ * @author kherm manav.kher@semanticbits.com
  */
-@Configuration
-@Import(TransformConfig.class)
-public class CDWConfig {
+public interface CDWConfig {
 
-    @Autowired
-    private DataSource dataSource;
 
     /**
-     *
-     * @return GraphAuthzMgr
+     * CDW Loader
+     * @return loader
      */
-    @Bean
-    public GraphAuthzMgr graphAuthzMgr() {
-        return new GraphAuthzMgrImpl(dataSource);
-    }
-
-    /**
-     * Creates loader.
-     *
-     * @return CDWLoader
-     */
-    @Bean
-    public CDWLoader loader() {
-        return new CDWLoader();
-    }
-
-    /**
-     * Loads properties from classpath*:/"transformer-test.properties" location
-     *
-     * @return the property place holder configures
-     */
-    @Bean
-    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-        return new CommonsPropertyPlaceholderConfigurer("transformer", "cacis-cdw.properties");
-    }
-
+    CDWLoader loader();
 }

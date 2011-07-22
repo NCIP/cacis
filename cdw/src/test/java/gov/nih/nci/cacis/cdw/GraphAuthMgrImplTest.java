@@ -61,11 +61,8 @@
 
 package gov.nih.nci.cacis.cdw;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -75,16 +72,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-cdw-test.xml")
+@ContextConfiguration(locations = "classpath:applicationContext-mock-cdw-test.xml")
 public class GraphAuthMgrImplTest {
 
-    @Autowired
-    private GraphAuthzMgr graphAuthzMgr;
 
     @Test
     public void queryGraphGroups() {
 
-        assertNotNull(graphAuthzMgr);
 
 
 

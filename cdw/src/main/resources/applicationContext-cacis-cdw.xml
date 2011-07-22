@@ -10,13 +10,9 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"
-	default-autowire="byName">
-	
-	<aop:aspectj-autoproxy />
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<tx:annotation-driven transaction-manager="cacisTxManager" />
-	
-
+    <!-- enable processing of annotations such as @Autowired and @Configuration -->
+      <context:annotation-config/>
 
 </beans>

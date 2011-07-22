@@ -2,7 +2,9 @@
     <soap:Body>
         <ns3:caCISRequest xmlns:ns2="urn:hl7-org:v3" xmlns:ns3="http://cacis.nci.nih.gov">
             <ns3:clinicalMetaData patientIdRoot="123.456" patientIdExtension="123"/>
-            <ns2:ClinicalDocument>hello there</ns2:ClinicalDocument>
+            <ns2:ClinicalDocument>
+                <ns2:id root="123" extension="123"/>
+            </ns2:ClinicalDocument>
         </ns3:caCISRequest>
     </soap:Body>
 </soap:Envelope>

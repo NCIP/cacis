@@ -59,7 +59,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.cdw;
+package gov.nih.nci.cacis.cdw.config;
 
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -67,26 +67,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import javax.sql.DataSource;
-
-import static org.mockito.Mockito.mock;
-
+/**
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @since Jul 18, 2011
  *
  */
 @Configuration
-@Import( { CDWConfig.class })
-public class TestCaCISConfig {
-
+@Import( {  CDWConfigImpl.class })
+public class TestCDWConfig  {
 
     @Bean
-    public DataSource dummyDataSource() {
-        return mock(DataSource.class);
-    }
-    @Bean
-    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-        return new CommonsPropertyPlaceholderConfigurer("test-cacis", "test-cacis-cdw.properties");
+    public PropertyPlaceholderConfigurer testPropertyPlaceholderConfigurer() {
+        final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("test-cdw", "test-cacis-cdw.properties");
+        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
     }
 }

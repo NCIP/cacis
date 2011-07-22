@@ -63,52 +63,51 @@
 package gov.nih.nci.cacis.cdw;
 
 
+import junit.framework.Assert;
 import org.junit.Test;
-import org.openrdf.repository.Repository;
+import org.junit.runner.RunWith;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
-import org.openrdf.sail.memory.MemoryStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-
 /**
  * @author kherm manav.kher@semanticbits.com
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext-mock-cdw-test.xml")
 public class SesameInMemorySystemTest {
 
-    public static final String RFF_FILE_NAME = "sample-rdf.xml";
     public static final String CACIS_NS = "http://cacis.nci.nih.gov";
 
+    public static final String RFF_FILE_NAME = "sample-rdf.xml";
 
-    @Test
+    @Autowired
+    RepositoryConnection con;
+
+      @Test
     public void repository() throws RepositoryException, IOException, RDFParseException, URISyntaxException {
-        Repository myRepository = new SailRepository(new MemoryStore());
-        myRepository.initialize();
 
+          try {
+            Assert.assertNull(con.getNamespace(CACIS_NS));
 
-        RepositoryConnection con = myRepository.getConnection();
-
-        try {
-            assertNull(con.getNamespace(CACIS_NS));
-
-            File rdfFile = new File(getClass().getClassLoader().getResource(RFF_FILE_NAME).toURI());
+            File rdfFile = new File(getClass().getClassLoader().getResource(SesameInMemorySystemTest.RFF_FILE_NAME).toURI());
             con.add(rdfFile, CACIS_NS, RDFFormat.RDFXML);
 
-            assertNotNull("caCIS Namespace not found",
+            Assert.assertNotNull("caCIS Namespace not found",
                     con.getNamespace("cacis"));
-            assertEquals(CACIS_NS,con.getNamespace("cacis"));
+            Assert.assertEquals(CACIS_NS, con.getNamespace("cacis"));
         } finally {
             con.close();
         }
 
     }
+
 }

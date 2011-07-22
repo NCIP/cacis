@@ -1,22 +1,22 @@
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
- * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
- * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
- * To the extent government employees are authors, any rights in such works shall be subject to Title 17 of the United
- * States Code, section 105.
+ * binary, object code form. The gov.nih.nci.cacis.cdw-authz-1.0 Software was developed in conjunction with the National
+ * Cancer Institute (NCI) by NCI employees and subcontracted parties. To the extent government employees are authors,
+ * any rights in such works shall be subject to Title 17 of the United States Code, section 105.
  *
- * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
- * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
- * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
- * (iii) beneficial ownership of such entity.
+ * This gov.nih.nci.cacis.cdw-authz-1.0 Software License (the License) is between NCI and You. You (or Your) shall mean
+ * a person or an entity, and all other entities that control, are controlled by, or are under common control with the
+ * entity. Control for purposes of this definition means (i) the direct or indirect power to cause the direction or
+ * management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the
+ * outstanding shares, or (iii) beneficial ownership of such entity.
  *
  * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
  * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
- * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
- * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
- * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
+ * rights in the gov.nih.nci.cacis.cdw-authz-1.0 Software to (i) use, install, access, operate, execute, copy, modify,
+ * translate, market, publicly display, publicly perform, and prepare derivative works of the
+ * gov.nih.nci.cacis.cdw-authz-1.0 Software; (ii) distribute and have distributed to and by third parties the
+ * gov.nih.nci.cacis.cdw-authz-1.0 Software and any modifications and derivative works thereof; and (iii) sublicense the
+ * foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
  * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
  * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
  * charge to You.
@@ -27,13 +27,13 @@
  * documentation and/or other materials provided with the distribution, if any.
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
- * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
+ * product includes software developed by the National Cancer Institute and subcontracted parties. If You do not include
  * such end-user documentation, You shall include this acknowledgment in the Software itself, wherever such third-party
  * acknowledgments normally appear.
  *
- * You may not use the names "The National Cancer Institute", "NCI", or any SubContractor party to endorse or promote
+ * You may not use the names "The National Cancer Institute", "NCI", or any subcontracted party to endorse or promote
  * products derived from this Software. This License does not authorize You to use any trademarks, service marks, trade
- * names, logos or product names of either NCI or any of the subcontracted parties, except as required to comply with
+ * names, logos or product names of either NCI or theany of the subcontracted parties, except as required to comply with
  * the terms of this License.
  *
  * For sake of clarity, and not by way of limitation, You may incorporate this Software into Your proprietary programs
@@ -61,28 +61,15 @@
 
 package gov.nih.nci.cacis.cdw;
 
-import static org.junit.Assert.assertTrue;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
+import org.openrdf.query.*;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.config.RepositoryConfigException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import gov.nih.nci.cacis.cdw.sesame.AbstractSesameTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,26 +79,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tests CDWLoader.
- *
- * @author bpickeral
- * @since Jul 19, 2011
+ * @author kherm manav.kher@semanticbits.com
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-cdw-test.xml")
-public class CDWLoaderTest {
+public class BaseCDWLoaderTest {
+    protected static final String QUERY_END = "> WHERE {?s ?p ?o} LIMIT 1";
+    protected static final String QUERY_PFX = "SELECT * FROM <";
+    protected InputStream sampleMessageIS;
 
-    private static final String QUERY_END = "> WHERE {?s ?p ?o} LIMIT 1";
-
-    private static final String QUERY_PFX = "SELECT * FROM <";
-
-    private InputStream sampleMessageIS;
-
-    @Autowired
-    private RepositoryConnection con;
-
-    @Autowired
-    private CDWLoader loader;
 
     @Before
     public void before() throws URISyntaxException, IOException, RepositoryConfigException, RepositoryException {
@@ -119,16 +94,7 @@ public class CDWLoaderTest {
                 .getResource("caCISRequestSample3.xml").toURI()));
     }
 
-    @Test
-    public void load() throws Exception {
-        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
-        loader.load(sampleMessageIS, context);
-        final String query = QUERY_PFX + context + QUERY_END;
-        final Value[][] results = doTupleQuery(con, query);
-        assertTrue(results.length > 0);
-    }
-
-    private static Value[][] doTupleQuery(RepositoryConnection con, String query) throws RepositoryException,
+    protected static Value[][] doTupleQuery(RepositoryConnection con, String query) throws RepositoryException,
             MalformedQueryException, QueryEvaluationException {
         final TupleQuery resultsTable = con.prepareTupleQuery(QueryLanguage.SPARQL, query);
         final TupleQueryResult bindings = resultsTable.evaluate();
@@ -149,5 +115,4 @@ public class CDWLoaderTest {
         }
         return results.toArray(new Value[0][0]); // NOPMD
     }
-
 }

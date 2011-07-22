@@ -1,5 +1,3 @@
-// CHECKSTYLE:OFF
-
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The gov.nih.nci.cacis.cdw-authz-1.0 Software was developed in conjunction with the National
@@ -61,56 +59,110 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.cdw;
+package gov.nih.nci.cacis.cdw.config;
 
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import gov.nih.nci.cacis.cdw.GraphAuthzMgr;
+import gov.nih.nci.cacis.cdw.GraphAuthzMgrImpl;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationContextException;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import virtuoso.sesame2.driver.VirtuosoRepository;
 
 import javax.sql.DataSource;
-import java.net.URI;
-import java.util.Set;
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @since Jul 15, 2011
- *
  */
+@Configuration
+public class VirtuosoJdbcConfigImpl implements SesameJdbcConfig {
 
-public class GraphAuthzMgrImpl implements GraphAuthzMgr {
+    // datasource properties
 
-    private SimpleJdbcTemplate jdbcTemplate;
-
-    public GraphAuthzMgrImpl(DataSource dataSource){
-        this.jdbcTemplate = new SimpleJdbcTemplate(dataSource);
-    }
-
-    /*
-     * (non-Javadoc) {@inheritDoc}
+    /**
+     * The datasource url.
      */
+    @Value("${cacis.virtuoso.db.url}")
+    private String url;
+
+    /**
+     * The datasource username.
+     */
+    @Value("${cacis.virtuoso.db.username}")
+    private String username;
+
+    /**
+     * The datasource password.
+     */
+    @Value("${cacis.virtuoso.db.password}")
+    private String password;
+
+    /**
+     * The datasource driver class name.
+     */
+    @Value("${cacis.virtuoso.db.driver}")
+    private String driverClassName;
+
 
     @Override
-    public void add(URI graph, Set<URI> graphGroups) throws AuthzProvisioningException {
-
-        // TODO Auto-generated method stub
-
+    @Bean
+    public GraphAuthzMgr graphAuthzMgr() {
+        return new GraphAuthzMgrImpl(dataSource());
     }
-
-    /*
-     * (non-Javadoc) {@inheritDoc}
-     */
 
     @Override
-    public void remove(URI graph, Set<URI> graphGroups) throws AuthzProvisioningException {
-
-        // TODO Auto-generated method stub
-
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public RepositoryConnection repositoryConnection() throws RepositoryException {
+        final RepositoryConnection con = repository().getConnection();
+        con.setAutoCommit(true);
+        return con;
     }
 
-
-    public SimpleJdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
+    @Override
+    @Bean
+    public Repository repository() {
+        return new VirtuosoRepository(url, username, password);
     }
 
-    public void setJdbcTemplate(SimpleJdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    @Override
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public Connection connection() throws SQLException {
+        return dataSource().getConnection();
     }
+
+    @Override
+    @Bean
+    public DataSourceTransactionManager cacisTxManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
+
+    @Override
+    @Bean(destroyMethod = "close")
+    public DataSource dataSource() throws ApplicationContextException {
+        final ComboPooledDataSource dataSource = new ComboPooledDataSource();
+        dataSource.setJdbcUrl(url);
+        dataSource.setPassword(username);
+        dataSource.setUser(password);
+
+        try {
+            dataSource.setDriverClass(driverClassName);
+        } catch (PropertyVetoException e) {
+            throw new ApplicationContextException("Error configuring c3p0 data source: " + e.getMessage(), e);
+        }
+        return dataSource;
+    }
+
 }

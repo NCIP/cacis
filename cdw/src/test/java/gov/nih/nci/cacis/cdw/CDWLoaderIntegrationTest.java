@@ -59,36 +59,54 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.config;
+package gov.nih.nci.cacis.cdw;
 
-import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+import org.openrdf.query.*;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 /**
- * @author kherm manav.kher@semanticbits.com
- *         <p/>
- *         Main configura  tion class for the pco transofmer
- *         project
+ * Tests CDWLoader.
+ *
+ * @author bpickeral
+ * @since Jul 19, 2011
  */
-@Configuration
-@Import(RdfTransformerConfig.class)
-public class TransformConfig {
+@ContextConfiguration(locations = "classpath:applicationContext-cdw-test.xml")
+public class CDWLoaderIntegrationTest extends BaseCDWLoaderTest {
 
-    /**
-     * Loads properties from classpath*:/"transformer-test.properties" location
-     *
-     * @return the property place holder configures
-     */
-    @Bean
-    public PropertyPlaceholderConfigurer transformPropertyPlaceholderConfigurer() {
-        final PropertyPlaceholderConfigurer configurer =
-                new CommonsPropertyPlaceholderConfigurer("transformer", "cacis-pco-transformers.properties");
-        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
-        configurer.setIgnoreUnresolvablePlaceholders(true);
-        return configurer;
+    @Autowired
+    private RepositoryConnection con;
+
+    @Autowired
+    private CDWLoader loader;
+
+
+    @Test
+    public void load() throws Exception {
+        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        loader.load(sampleMessageIS, context);
+        final String query = QUERY_PFX + context + QUERY_END;
+        final Value[][] results = doTupleQuery(con, query);
+        assertTrue(results.length > 0);
     }
 
 }

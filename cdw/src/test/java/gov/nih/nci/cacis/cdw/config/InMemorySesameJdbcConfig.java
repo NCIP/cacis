@@ -59,115 +59,101 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.cdw;
+package gov.nih.nci.cacis.cdw.config;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import gov.nih.nci.cacis.cdw.GraphAuthzMgr;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
-import org.springframework.beans.factory.annotation.Value;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import virtuoso.sesame2.driver.VirtuosoRepository;
 
 import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static org.mockito.Mockito.mock;
+
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since Jul 15, 2011
+ *
+ *  Provides an in-memory persistence for the Sesame
+ * repository
+ *
+ *
+ * @author kherm manav.kher@semanticbits.com
  */
 @Configuration
-public class JDBCConfig {
-
-    // datasource properties
+public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
 
     /**
-     * The datasource url.
+     * Authz Manager
+     *
+     * @return GraphAuthzMgr
      */
-    @Value("${cacis.virtuoso.db.url}")
-    private String url;
+    @Bean
+    public GraphAuthzMgr graphAuthzMgr() {
+        return mock(GraphAuthzMgr.class);
+    }
 
     /**
-     * The datasource username.
-     */
-    @Value("${cacis.virtuoso.db.username}")
-    private String username;
-
-    /**
-     * The datasource password.
-     */
-    @Value("${cacis.virtuoso.db.password}")
-    private String password;
-
-    /**
-     * The datasource driver class name.
-     */
-    @Value("${cacis.virtuoso.db.driver}")
-    private String driverClassName;
-
-    /**
-     * @return Virtuoso Repository Connection
-     * @throws RepositoryException exception
+     * Sesame Repository Connection
+     *
+     * @return RepositoryConnection
+     * @throws org.openrdf.repository.RepositoryException
+     *          exception
      */
     @Bean
     public RepositoryConnection repositoryConnection() throws RepositoryException {
-        final RepositoryConnection con = repository().getConnection();
-        con.setAutoCommit(true);
-        return con;
+        return repository().getConnection();
+
     }
 
     /**
-     * Will return the Virtuoso Repository
+     * Sesame Repository
      *
-     * @return Virtuoso Repository
+     * @return Repository
      */
-    @Bean
-    public Repository repository() {
-        return new VirtuosoRepository(url, username, password);
+     @Bean
+    public Repository repository() throws RepositoryException {
+        Repository myRepository = new SailRepository(new MemoryStore());
+        myRepository.initialize();
+        return  myRepository;
     }
 
     /**
-     * @return JDBC Connection
-     * @throws SQLException exception
+     * JDBC Connection
+     *
+     * @return Connection
+     * @throws java.sql.SQLException exception
      */
     @Bean
     public Connection connection() throws SQLException {
-        return dataSource().getConnection();
+        return  mock(Connection.class);
     }
-
 
     /**
      * JDBC Transaction Manager
+     *
      * @return DataSourceTransactionManager transaction manager
      */
     @Bean
     public DataSourceTransactionManager cacisTxManager() {
-        return new DataSourceTransactionManager(dataSource());
+      return  mock(DataSourceTransactionManager.class);
     }
+
     /**
-     * Will return the Data source.
+     * JDBC Data source
      *
-     * @return the data source
-     * @throws ApplicationContextException on configuration error
+     * @return DataSource
+     * @throws org.springframework.context.ApplicationContextException
+     *          exception
      */
-    @Bean(destroyMethod = "close")
+    @Bean
     public DataSource dataSource() throws ApplicationContextException {
-        final ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setJdbcUrl(url);
-        dataSource.setPassword(password);
-        dataSource.setUser(username);
-
-        try {
-            dataSource.setDriverClass(driverClassName);
-        } catch (PropertyVetoException e) {
-            throw new ApplicationContextException("Error configuring c3p0 data source: " + e.getMessage(), e);
-        }
-        return dataSource;
+        return  mock(DataSource.class);
     }
-
 }
