@@ -65,21 +65,29 @@ import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.xml.transform.TransformerException;
+
 import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Converts XML to RDF and stores the output file into the Clinical Data warehouse.
- *
  * @author bpickeral
  * @since Jul 18, 2011
  */
 public class CDWLoader {
+    /**
+     * caCIS context URI.
+     */
+    public static final String CACIS_NS = "http://cacis.nci.nih.gov";
 
     @Autowired
     private XmlToRdfTransformer transformer;
@@ -90,26 +98,23 @@ public class CDWLoader {
      * Transforms XML to RDF and then stores into Virtuoso.
      *
      * @param xmlStream Inpt stream containing RDF
-     * @param context the context to add the data to, used for pulling out the data
-     * @throws CDWLoadException on RDF Parse Error
+     * @param context   the context to add the data to, used for pulling out the data
+     * @throws TransformerException on error
+     * @throws RepositoryException  if error occurs when storing data to the repository
+     * @throws IOException          on IO error
+     * @throws RDFParseException    on RDF Parse Error
      */
-    public void load(InputStream xmlStream, String context) throws CDWLoadException {
+    public void load(InputStream xmlStream, URI context) throws TransformerException, RepositoryException, RDFParseException,
+            IOException {
+        final OutputStream os = transformer.transform(xmlStream);
+        ByteArrayOutputStream bos = null;
+        InputStream is = null;
         try {
-            final OutputStream os = transformer.transform(xmlStream);
-            ByteArrayOutputStream bos = null;
-            InputStream is = null;
-            final URI uriContext = con.getRepository().getValueFactory().createURI(context);
-            try {
-                bos = (ByteArrayOutputStream) os;
-                is = new ByteArrayInputStream(bos.toByteArray());
-                con.add(is, context, RDFFormat.RDFXML, uriContext);
-            } finally {
+            bos = (ByteArrayOutputStream) os;
+            is = new ByteArrayInputStream(bos.toByteArray());
+            con.add(is, context.toString(), RDFFormat.RDFXML, context);
+        } finally {
                 bos.close();
-            }
-            // CHECKSTYLE:OFF catching generic Exception
-        } catch (Exception e) {
-            // CHECKSTYLE:ON
-            throw new CDWLoadException(e);
         }
     }
 

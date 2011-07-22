@@ -64,17 +64,12 @@ import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 import gov.nih.nci.cacis.AcceptCanonicalPortType;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.common.systest.AbstractJaxWsTest;
-import gov.nih.nci.cacis.ip.mirthconnect.config.TestIPMirthConfig;
-
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -84,8 +79,7 @@ import static org.mockito.Mockito.when;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-ip-mirth-test.xml")
+
 public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
 
     /**
@@ -118,8 +112,7 @@ public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
         MockitoAnnotations.initMocks(this);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
 
-        final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver,
-                new TestIPMirthConfig());
+        final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver);
         ep = new EndpointImpl(getBus(), service);
         ep.publish(ADDRESS);
     }

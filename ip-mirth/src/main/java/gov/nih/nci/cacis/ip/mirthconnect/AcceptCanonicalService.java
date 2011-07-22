@@ -60,42 +60,29 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import com.mirth.connect.connectors.ws.AcceptMessage;
 import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CaCISResponse;
 import gov.nih.nci.cacis.ResponseStatusType;
-import gov.nih.nci.cacis.cdw.CDWLoader;
-import gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthConfig;
-import gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthConfigImpl;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 /**
  * @author kherm manav.kher@semanticbits.com
  */
-@WebService(serviceName = "AcceptCanonicalService", portName = "AcceptCanonical_Port_Soap11",
-        targetNamespace = "http://cacis.nci.nih.gov", endpointInterface = "gov.nih.nci.cacis.AcceptCanonicalPortType")
-public class AcceptCanonicalService extends AcceptMessage { //
+@WebService(
+        serviceName = "AcceptCanonicalService",
+        portName = "AcceptCanonical_Port_Soap11",
+        targetNamespace = "http://cacis.nci.nih.gov",
+        endpointInterface = "gov.nih.nci.cacis.AcceptCanonicalPortType"
+)
+public class AcceptCanonicalService extends AcceptMessage {
 
-    /**
-     * caCIS context URI.
-     */
-    public static final String CACIS_NS = "http://cacis.nci.nih.gov";
-
-    private final ApplicationContext ctx;
-
-    private final CDWLoader loader;
 
     /**
      * Constructor
@@ -104,21 +91,8 @@ public class AcceptCanonicalService extends AcceptMessage { //
      */
     public AcceptCanonicalService(WebServiceMessageReceiver webServiceMessageReceiver) {
         super(webServiceMessageReceiver);
-        ctx = new AnnotationConfigApplicationContext(IPMirthConfigImpl.class);
-        loader = ctx.getBean(CDWLoader.class);
     }
 
-    /**
-     * Constructor Constructor where config can be specified, used for testing.
-     *
-     * @param webServiceMessageReceiver Mirth/Mule webServiceMessageReceiver
-     * @param config the configuration to use for the application context
-     */
-    public AcceptCanonicalService(WebServiceMessageReceiver webServiceMessageReceiver, IPMirthConfig config) {
-        super(webServiceMessageReceiver);
-        this.ctx = new AnnotationConfigApplicationContext(config.getClass());
-        loader = ctx.getBean(CDWLoader.class);
-    }
 
     /**
      * Method accepts canonical data for processing
@@ -130,7 +104,8 @@ public class AcceptCanonicalService extends AcceptMessage { //
     @WebResult(name = "caCISResponse", targetNamespace = "http://cacis.nci.nih.gov", partName = "parameter")
     @WebMethod
     public gov.nih.nci.cacis.CaCISResponse acceptCanonical(
-            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = CACIS_NS) CaCISRequest request)
+            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = "http://cacis.nci.nih.gov")
+            CaCISRequest request)
             throws AcceptCanonicalFault {
 
         final CaCISResponse response = new CaCISResponse();
@@ -139,25 +114,15 @@ public class AcceptCanonicalService extends AcceptMessage { //
         // Will need to be updated in ESD-3040
         final String req = request.getClinicalDocument().toString();
         try {
-            final String message = webServiceMessageReceiver.processData(req);
-            final InputStream is = new ByteArrayInputStream(message.getBytes());
-            loader.load(is, CACIS_NS);
-            // CHECKSTYLE:OFF
+            webServiceMessageReceiver.processData(req);
+             // CHECKSTYLE:OFF
         } catch (Exception e) {
             throw new AcceptCanonicalFault("Error processing message", e);
         }
-        // CHECKSTYLE:ON
+         // CHECKSTYLE:ON
 
         return response;
     }
 
-    /**
-     * Provides access to the server Spring application context
-     *
-     * @return Application Context
-     */
-    public ApplicationContext getApplicationContext() {
-        return ctx;
-    }
 
 }
