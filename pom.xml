@@ -17,8 +17,8 @@
         <module>trim-loader-client</module>
         <module>validation</module>
         <module>transformer</module>
-        <module>ip-mirth</module>
         <module>cdw</module>
+        <module>ip-mirth</module>
     </modules>
     <packaging>pom</packaging>
 
