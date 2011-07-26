@@ -60,97 +60,104 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
-import gov.nih.nci.cacis.AcceptCanonicalPortType;
+import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
+import com.sun.net.httpserver.HttpContext;
+import com.sun.net.httpserver.HttpServer;
+import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.ClinicalMetadata;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.binding.soap.SoapTransportFactory;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.test.AbstractCXFTest;
+import gov.nih.nci.cacis.CanonicalModelProcessorPortTypeImpl;
+
+import org.hl7.v3.II;
+import org.hl7.v3.POCDMT000040ClinicalDocument;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Node;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.io.File;
+import javax.xml.ws.Binding;
+import javax.xml.ws.Endpoint;
+import javax.xml.ws.handler.Handler;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
- * Integration test. Invokes the deployed
- * Mirth Connect web service for AcceptCanonical
- *
  * @author kherm manav.kher@semanticbits.com
  */
-public class AcceptCanonicalMCIntegrationTest extends AbstractCXFTest {
+public class CanonicalModelProcessorTest {
 
-    public static final String ADDRESS = "http://localhost:18081/services/AcceptCanonicalService?wsdl";
-    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
-    private static final Log LOG = LogFactory.getLog(AcceptCanonicalMCIntegrationTest.class);
+    @Mock
+    WebServiceMessageReceiver webServiceMessageReceiver;
+    CaCISRequest request;
+    CanonicalModelProcessor service;
 
     @Before
     public void init() {
-        addNamespace("ns2", "http://cacis.nci.nih.gov");
+        MockitoAnnotations.initMocks(this);
+        request = new CaCISRequest();
+        request.setClinicalDocument(dummyClinicalDocument());
+
+        service = new CanonicalModelProcessor(webServiceMessageReceiver);
+        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
     }
 
-    @Test
-    public void invokeJaxWS() throws Exception {
-
-        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(AcceptCanonicalPortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(ADDRESS);
-
-        AcceptCanonicalPortType client = (AcceptCanonicalPortType) factory.create();
-        CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(AcceptCanonicalServiceTest.dummyClinicalDocument());
-
-        ClinicalMetadata meta = new ClinicalMetadata();
-        meta.setPatientIdExtension("123");
-        meta.setPatientIdRoot("123.456");
-        request.setClinicalMetaData(meta);
-
-
-        client.acceptCanonical(request);
-    }
 
     @Test
-    public void invokeSOAP() throws Exception {
+    public void acceptCanonical() throws AcceptCanonicalFault {
+        service.acceptCanonical(request);
 
-        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
-                getValidMessage().getBytes());
-        assertNotNull(res);
-        assertValid("//ns2:caCISResponse[@status='SUCCESS']", res);
-        LOG.info("Echo response: " + res.getTextContent());
+        verify(webServiceMessageReceiver).processData(anyString());
 
     }
 
 
 
     /**
-     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
+     * Service throws exception when it is unable to process
+     * the incoming request
      *
-     * @return string representation of a valid message
+     * @throws AcceptCanonicalFault fault
      */
-    protected String getValidMessage() {
-        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
-        File msgFile = null;
-        try {
-            msgFile = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String validMessage = null;
-        try {
-            validMessage = FileUtils.readFileToString(msgFile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return validMessage;
+    @Test(expected = AcceptCanonicalFault.class)
+    public void exception() throws AcceptCanonicalFault {
+        when(webServiceMessageReceiver.processData(anyString())).thenThrow(new RuntimeException("Mirth Exception"));
+        service.acceptCanonical(request);
     }
 
+    @Test
+    public void create() throws IOException, InterruptedException {
+
+        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 18010), 5);
+        ExecutorService threads = Executors.newFixedThreadPool(5);
+        server.setExecutor(threads);
+        server.start();
+
+        CanonicalModelProcessorPortTypeImpl service = new CanonicalModelProcessorPortTypeImpl();
+
+        Endpoint webServiceEndpoint = Endpoint.create(service);
+        Binding binding = webServiceEndpoint.getBinding();
+        List<Handler> handlerChain = new LinkedList<Handler>();
+        binding.setHandlerChain(handlerChain);
+        HttpContext context = server.createContext("/services/sa");
+
+        webServiceEndpoint.publish(context);
+
+    }
+
+     public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
+        II dummyIi = new II();
+        dummyIi.setExtension("123");
+        dummyIi.setRoot("123");
+        POCDMT000040ClinicalDocument doc = new POCDMT000040ClinicalDocument();
+        doc.setId(dummyIi);
+        return doc;
+
+    }
 }

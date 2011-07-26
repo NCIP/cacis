@@ -21,8 +21,13 @@
                 <tolven.jboss.id>jboss42x</tolven.jboss.id>
                 <tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
 
-                <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
-                <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
+                <mirthConnect.cli>/Applications/Mirth Connect/mccommand</mirthConnect.cli>
+                <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
+
+		<outputRootdir>/Users/bpickeral/Documents</outputRootdir>
+        	<cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
+        	<xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
+        	<trimInputDir>${outputRootdir}/cacis/mc/input/</trimInputDir>
 
             </properties>
         </profile>

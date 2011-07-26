@@ -76,12 +76,12 @@ import javax.jws.WebService;
  * @author kherm manav.kher@semanticbits.com
  */
 @WebService(
-        serviceName = "AcceptCanonicalService",
-        portName = "AcceptCanonical_Port_Soap11",
+        serviceName = "CanonicalModelProcessor",
+        portName = "CanonicalModelProcessor_Port_Soap11",
         targetNamespace = "http://cacis.nci.nih.gov",
-        endpointInterface = "gov.nih.nci.cacis.AcceptCanonicalPortType"
+        endpointInterface = "gov.nih.nci.cacis.CanonicalModelProcessorPortType"
 )
-public class AcceptCanonicalService extends AcceptMessage {
+public class CanonicalModelProcessor extends AcceptMessage {
 
 
     /**
@@ -89,7 +89,7 @@ public class AcceptCanonicalService extends AcceptMessage {
      *
      * @param webServiceMessageReceiver Mirth/Mule webServiceMessageReceiver
      */
-    public AcceptCanonicalService(WebServiceMessageReceiver webServiceMessageReceiver) {
+    public CanonicalModelProcessor(WebServiceMessageReceiver webServiceMessageReceiver) {
         super(webServiceMessageReceiver);
     }
 

@@ -60,79 +60,97 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
-import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
-import gov.nih.nci.cacis.AcceptCanonicalPortType;
 import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.common.systest.AbstractJaxWsTest;
-import org.apache.cxf.jaxws.EndpointImpl;
+import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
+import gov.nih.nci.cacis.ClinicalMetadata;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.binding.soap.SoapTransportFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.test.AbstractCXFTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.w3c.dom.Node;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
- * Uses JaxWsProxyFactoryBean to invoke the service
+ * Integration test. Invokes the deployed
+ * Mirth Connect web service for AcceptCanonical
  *
  * @author kherm manav.kher@semanticbits.com
  */
+public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
 
-public class AcceptCanonicalJaxWSSystemTest extends AbstractJaxWsTest {
+    public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
+    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
+    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorMCIntegrationTest.class);
 
-    /**
-     * Cosntant value for the endpoint address
-     */
-    protected static final String ADDRESS = "http://localhost:18081/services/Temp?wsdl";
-    @Mock
-    WebServiceMessageReceiver webServiceMessageReceiver;
-
-    private EndpointImpl ep;
-
-    /**
-     * EndpointImpl
-     *
-     * @return Endpoint
-     */
-    @Override
-    protected EndpointImpl getEndpoint() {
-        return this.ep;
-    }
-
-
-    /**
-     * Setups up namespace and Endpoint
-     *
-     * @throws Exception - exception thrown
-     */
     @Before
-    public void setup() throws Exception { // NOPMD - setUpBus throws
-        MockitoAnnotations.initMocks(this);
-        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
-
-        final AcceptCanonicalService service = new AcceptCanonicalService(webServiceMessageReceiver);
-        ep = new EndpointImpl(getBus(), service);
-        ep.publish(ADDRESS);
+    public void init() {
+        addNamespace("ns2", "http://cacis.nci.nih.gov");
     }
-
 
     @Test
-    public void invoke() throws Exception {
+    public void invokeJaxWS() throws Exception {
 
         final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(AcceptCanonicalPortType.class);
+        factory.setServiceClass(CanonicalModelProcessorPortType.class);
         // specify the URL. We are using the in memory test container
         factory.setAddress(ADDRESS);
 
-        final AcceptCanonicalPortType client = (AcceptCanonicalPortType) factory.create();
-        final CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(AcceptCanonicalServiceTest.dummyClinicalDocument());
+        CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
+        CaCISRequest request = new CaCISRequest();
+        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
+
+        ClinicalMetadata meta = new ClinicalMetadata();
+        meta.setPatientIdExtension("123");
+        meta.setPatientIdRoot("123.456");
+        request.setClinicalMetaData(meta);
 
 
         client.acceptCanonical(request);
     }
 
+    @Test
+    public void invokeSOAP() throws Exception {
+
+        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
+                getValidMessage().getBytes());
+        assertNotNull(res);
+        assertValid("//ns2:caCISResponse[@status='SUCCESS']", res);
+        LOG.info("Echo response: " + res.getTextContent());
+
+    }
+
+
+
+    /**
+     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
+     *
+     * @return string representation of a valid message
+     */
+    protected String getValidMessage() {
+        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
+        File msgFile = null;
+        try {
+            msgFile = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String validMessage = null;
+        try {
+            validMessage = FileUtils.readFileToString(msgFile);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return validMessage;
+    }
 
 }

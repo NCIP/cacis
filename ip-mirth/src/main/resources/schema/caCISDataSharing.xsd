@@ -36,6 +36,11 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="userName" type="NonEmptyString" use="optional">
+			<xs:annotation>
+				<xs:documentation>The user name that initiated the data exchange request. This value would be used to log which user originated the request.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="RoutingInstructions">
 		<xs:sequence>
@@ -94,11 +99,6 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="documentType" type="DocumentType" use="required">
-			<xs:annotation>
-				<xs:documentation>Identifies the type of document to be generated (should be aligned with the set of data provided)</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ClinicalMetadata">
 		<xs:attribute name="patientIdRoot" type="UUID" use="required">
@@ -129,6 +129,11 @@
 		<xs:attribute name="studyIdExtension" type="NonEmptyString" use="optional">
 			<xs:annotation>
 				<xs:documentation>The local identifier assigned to a study within the siteIdRoot namespace.  This element may only be omitted if the patient data is not study-specific or when the full, globally unique, study identifier is sent in the studyIdRoot attribute.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="documentType" type="DocumentType" use="optional">
+			<xs:annotation>
+				<xs:documentation>Identifies the type of document to be generated (should be aligned with the set of data provided)</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -267,11 +272,6 @@
 			<xs:enumeration value="SUCCESS">
 				<xs:annotation>
 					<xs:documentation>Represents a successfull processing of the request.</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="FAILURE">
-				<xs:annotation>
-					<xs:documentation>Represents a failure in processing of the clinical data request. The clinical data is not persisted in the Clinical Data Warehouse and the document is not sent to the target recipients</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 		</xs:restriction>
