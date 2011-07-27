@@ -1,3 +1,6 @@
+drop procedure caCIS_GRAPH_GROUP_USER_PERMS_SET
+/
+
 --This procedure grants a user permissions to read or read/write or noacess to members of a graph group 
 --permission 0 is for no access
 --permission 1 is for read only
@@ -11,7 +14,7 @@ create procedure caCIS_GRAPH_GROUP_USER_PERMS_SET (in user_name varchar, in grap
     return 0;
   if(permission = 0){
   	DB.DBA.RDF_GRAPH_USER_PERMS_SET (graph_group_uri, user_name, 0);
-  	retrun 0;
+  	return 0;
   }
   select RGG_IID into graph_group_id from RDF_GRAPH_GROUP where RGG_IRI = graph_group_uri;
   if (graph_group_id = 0)
@@ -32,3 +35,4 @@ create procedure caCIS_GRAPH_GROUP_USER_PERMS_SET (in user_name varchar, in grap
 nf:
   return 0;
 }
+/
