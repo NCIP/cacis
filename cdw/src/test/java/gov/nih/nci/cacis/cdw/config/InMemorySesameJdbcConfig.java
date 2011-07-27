@@ -62,6 +62,8 @@
 package gov.nih.nci.cacis.cdw.config;
 
 import gov.nih.nci.cacis.cdw.GraphAuthzMgr;
+import gov.nih.nci.cacis.cdw.GraphAuthzMgrImpl;
+
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -72,6 +74,7 @@ import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -96,7 +99,7 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      */
     @Bean
     public GraphAuthzMgr graphAuthzMgr() {
-        return mock(GraphAuthzMgr.class);
+        return new GraphAuthzMgrImpl(simpleJdbcTemplate());
     }
 
     /**
@@ -109,7 +112,7 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public RepositoryConnection repositoryConnection() throws RepositoryException {
-        RepositoryConnection con = repository().getConnection();
+        final RepositoryConnection con = repository().getConnection();
         con.setAutoCommit(true);
         return con;
     }
@@ -118,10 +121,11 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
      * Sesame Repository
      *
      * @return Repository
+     * @throws RepositoryException exception
      */
     @Bean
     public Repository repository() throws RepositoryException {
-        Repository myRepository = new SailRepository(new MemoryStore());
+        final Repository myRepository = new SailRepository(new MemoryStore());
         myRepository.initialize();
         return myRepository;
     }
@@ -157,5 +161,14 @@ public class InMemorySesameJdbcConfig implements SesameJdbcConfig {
     @Bean
     public DataSource dataSource() throws ApplicationContextException {
         return mock(DataSource.class);
+    }
+
+    /**
+     * Simple JDBC Template
+     * @return returns a mock simple jdbc template
+     */
+    @Bean
+    public SimpleJdbcTemplate simpleJdbcTemplate() {
+        return mock(SimpleJdbcTemplate.class);
     }
 }

@@ -61,11 +61,12 @@
 
 package gov.nih.nci.cacis.cdw;
 
-import java.net.URI;
 import java.util.Set;
 
+import org.openrdf.model.URI;
+
 /**
- * Handles provisioning of access control at the graphgroup and graph levels.
+ * Handles provisioning of access control at the graph group and graph levels.
  * 
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @since Jul 15, 2011

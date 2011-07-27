@@ -66,6 +66,7 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.context.ApplicationContextException;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -78,11 +79,11 @@ import java.sql.SQLException;
 public interface SesameJdbcConfig {
 
     /**
-       * Authz Manager
-       *
-       * @return GraphAuthzMgr
-       */
-      GraphAuthzMgr graphAuthzMgr();
+     * Authz Manager
+     * 
+     * @return GraphAuthzMgr
+     */
+    GraphAuthzMgr graphAuthzMgr();
 
     /**
      * Sesame Repository Connection
@@ -117,4 +118,10 @@ public interface SesameJdbcConfig {
      * @throws ApplicationContextException exception
      */
     DataSource dataSource() throws ApplicationContextException;
+    
+    /**
+     * SimpleJdbcTemplate
+     * @return SimpleJdbcTemplate instance
+     */
+    SimpleJdbcTemplate simpleJdbcTemplate();
 }

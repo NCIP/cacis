@@ -73,6 +73,7 @@ import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
@@ -118,7 +119,7 @@ public class VirtuosoJdbcConfigImpl implements SesameJdbcConfig {
     @Override
     @Bean
     public GraphAuthzMgr graphAuthzMgr() {
-        return new GraphAuthzMgrImpl(dataSource());
+        return new GraphAuthzMgrImpl(simpleJdbcTemplate());
     }
 
     @Override
@@ -163,6 +164,12 @@ public class VirtuosoJdbcConfigImpl implements SesameJdbcConfig {
             throw new ApplicationContextException("Error configuring c3p0 data source: " + e.getMessage(), e);
         }
         return dataSource;
+    }
+
+    @Override
+    @Bean
+    public SimpleJdbcTemplate simpleJdbcTemplate() {
+        return new SimpleJdbcTemplate(dataSource());
     }
 
 }
