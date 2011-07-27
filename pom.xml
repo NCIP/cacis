@@ -19,6 +19,7 @@
         <module>transformer</module>
         <module>ip-mirth</module>
         <module>cdw</module>
+        <module>xds-authz</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -237,6 +238,17 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
 		<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
@@ -440,6 +452,7 @@
                             <exclude>**/*Exception.class</exclude>
                             <exclude>org/hl7/v3/*.class</exclude>
                             <exclude>generated/*.class</exclude>
+                             <exclude>**/domain/*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
@@ -603,6 +616,14 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>CBIIT-Snapshot</id>
+            <name>CBIIT Snapshot Repository</name>
+            <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
         <repository>
             <id>Aduna</id>
