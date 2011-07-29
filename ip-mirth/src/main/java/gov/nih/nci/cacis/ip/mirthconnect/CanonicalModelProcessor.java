@@ -60,29 +60,36 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
-import com.mirth.connect.connectors.ws.AcceptMessage;
-import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CaCISResponse;
 import gov.nih.nci.cacis.ResponseStatusType;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+
+import com.mirth.connect.connectors.ws.AcceptMessage;
+import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 
 /**
  * @author kherm manav.kher@semanticbits.com
  */
-@WebService(
-        serviceName = "CanonicalModelProcessor",
-        portName = "CanonicalModelProcessor_Port_Soap11",
+@WebService(serviceName = "CanonicalModelProcessor", portName = "CanonicalModelProcessor_Port_Soap11",
         targetNamespace = "http://cacis.nci.nih.gov",
-        endpointInterface = "gov.nih.nci.cacis.CanonicalModelProcessorPortType"
-)
+        endpointInterface = "gov.nih.nci.cacis.CanonicalModelProcessorPortType")
 public class CanonicalModelProcessor extends AcceptMessage {
 
+    private static final String CACIS_NS = "http://cacis.nci.nih.gov";
 
     /**
      * Constructor
@@ -93,36 +100,46 @@ public class CanonicalModelProcessor extends AcceptMessage {
         super(webServiceMessageReceiver);
     }
 
-
     /**
      * Method accepts canonical data for processing
      *
      * @param request CaCISRequest
      * @return response CaCISResponse
      * @throws AcceptCanonicalFault Fault
+     * @throws
      */
-    @WebResult(name = "caCISResponse", targetNamespace = "http://cacis.nci.nih.gov", partName = "parameter")
+    @WebResult(name = "caCISResponse", targetNamespace = CACIS_NS, partName = "parameter")
     @WebMethod
     public gov.nih.nci.cacis.CaCISResponse acceptCanonical(
-            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = "http://cacis.nci.nih.gov")
-            CaCISRequest request)
+            @WebParam(partName = "parameter", name = "caCISRequest", targetNamespace = CACIS_NS) CaCISRequest request)
             throws AcceptCanonicalFault {
 
         final CaCISResponse response = new CaCISResponse();
         response.setStatus(ResponseStatusType.SUCCESS);
 
         // Will need to be updated in ESD-3040
-        final String req = request.getClinicalDocument().toString();
+        final StringWriter sw = new StringWriter();
         try {
-            webServiceMessageReceiver.processData(req);
-             // CHECKSTYLE:OFF
+            final JAXBContext jc = JAXBContext.newInstance("gov.nih.nci.cacis");
+            final Marshaller m = jc.createMarshaller();
+            final QName qn = new QName(CACIS_NS, "caCISRequest");
+            final JAXBElement<CaCISRequest> jaxbElement = new JAXBElement(qn, CaCISRequest.class, request);
+
+            final PrintWriter pw = new PrintWriter(sw);
+            m.marshal(jaxbElement, pw);
+        } catch (JAXBException jaxE) {
+            throw new AcceptCanonicalFault("Error Marshalling object", jaxE);
+        }
+
+        try {
+            webServiceMessageReceiver.processData(sw.toString());
+            // CHECKSTYLE:OFF
         } catch (Exception e) {
+            // CHECKSTYLE:ON
             throw new AcceptCanonicalFault("Error processing message", e);
         }
-         // CHECKSTYLE:ON
 
         return response;
     }
 
-
-}
+};

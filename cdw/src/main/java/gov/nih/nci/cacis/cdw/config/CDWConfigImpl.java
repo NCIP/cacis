@@ -64,10 +64,13 @@ package gov.nih.nci.cacis.cdw.config;
 import gov.nih.nci.cacis.cdw.CDWLoader;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 import gov.nih.nci.cacis.config.TransformConfig;
+
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -80,6 +83,7 @@ public class CDWConfigImpl implements CDWConfig {
 
     @Override
     @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public CDWLoader loader() {
         return new CDWLoader();
     }

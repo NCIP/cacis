@@ -118,4 +118,20 @@ public class CDWLoader {
         }
     }
 
+    /**
+     * Transforms XML to RDF and then stores into Virtuoso.
+     *
+     * @param xmlString String containing RDF
+     * @param context   the context to add the data to, used for pulling out the data
+     * @throws TransformerException on error
+     * @throws RepositoryException  if error occurs when storing data to the repository
+     * @throws IOException          on IO error
+     * @throws RDFParseException    on RDF Parse Error
+     */
+    public void load(String xmlString, String context) throws TransformerException, RepositoryException, RDFParseException,
+            IOException {
+        final org.openrdf.model.URI uriContext = con.getRepository().getValueFactory().createURI(context);
+        load(new ByteArrayInputStream(xmlString.getBytes()), uriContext);
+    }
+
 }

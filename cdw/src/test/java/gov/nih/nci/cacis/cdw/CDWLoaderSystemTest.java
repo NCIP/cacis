@@ -61,9 +61,16 @@
 
 package gov.nih.nci.cacis.cdw;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import javax.xml.transform.TransformerException;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openrdf.model.Value;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
@@ -72,15 +79,6 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.xml.transform.TransformerException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -88,15 +86,15 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = "classpath:applicationContext-mock-cdw-test.xml")
 public class CDWLoaderSystemTest extends BaseCDWLoaderTest {
 
-     @Autowired
-     RepositoryConnection con;
+    @Autowired
+    RepositoryConnection con;
 
     @Autowired
     CDWLoader loader;
 
     @Test
-    public void xmlToRDFLoad() throws
-            TransformerException, RepositoryException, IOException, RDFParseException, URISyntaxException, MalformedQueryException, QueryEvaluationException {
+    public void xmlToRDFLoad() throws TransformerException, RepositoryException, IOException, RDFParseException,
+            URISyntaxException, MalformedQueryException, QueryEvaluationException {
         final org.openrdf.model.URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
 
         loader.load(sampleMessageIS, context);
@@ -106,5 +104,19 @@ public class CDWLoaderSystemTest extends BaseCDWLoaderTest {
         assertTrue(results.length > 0);
     }
 
+    @Test
+    public void xmlToRDFLoadString() throws TransformerException, RepositoryException, IOException, RDFParseException,
+            URISyntaxException, MalformedQueryException, QueryEvaluationException {
+        final org.openrdf.model.URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        File xslF = new File(getClass().getClassLoader().getResource("caCISRequestSample3.xml").toURI());
+
+        String xmlString = FileUtils.readFileToString(xslF);
+
+        loader.load(xmlString, CDWLoader.CACIS_NS);
+
+        final String query = QUERY_PFX + context + QUERY_END;
+        final Value[][] results = doTupleQuery(con, query);
+        assertTrue(results.length > 0);
+    }
 
 }

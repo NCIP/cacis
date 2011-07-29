@@ -61,26 +61,16 @@
 
 package gov.nih.nci.cacis.cdw;
 
+import java.io.File;
+
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.query.*;
 import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.config.RepositoryConfigException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -104,6 +94,19 @@ public class CDWLoaderIntegrationTest extends BaseCDWLoaderTest {
     public void load() throws Exception {
         final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
         loader.load(sampleMessageIS, context);
+        final String query = QUERY_PFX + context + QUERY_END;
+        final Value[][] results = doTupleQuery(con, query);
+        assertTrue(results.length > 0);
+    }
+
+    @Test
+    public void loadString() throws Exception {
+        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        File xslF = new File(getClass().getClassLoader().getResource("caCISRequestSample3.xml").toURI());
+
+        String xmlString = FileUtils.readFileToString(xslF);
+
+        loader.load(xmlString, CDWLoader.CACIS_NS);
         final String query = QUERY_PFX + context + QUERY_END;
         final Value[][] results = doTupleQuery(con, query);
         assertTrue(results.length > 0);

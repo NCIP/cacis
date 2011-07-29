@@ -3,12 +3,12 @@
   <name>AcceptCanonical_Channel</name>
   <description></description>
   <enabled>true</enabled>
-  <version>2.1.1</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1310139080569</time>
+    <time>1311950438219</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>43</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -23,23 +23,15 @@
     </properties>
     <transformer>
       <steps/>
-      <inboundProtocol>HL7V2</inboundProtocol>
-      <outboundProtocol>HL7V2</outboundProtocol>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
-        <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
+        <property name="stripNamespaces">false</property>
       </inboundProperties>
       <outboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
-        <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
+        <property name="stripNamespaces">false</property>
       </outboundProperties>
     </transformer>
     <filter>
@@ -48,56 +40,35 @@
     <transportName>Web Service Listener</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">/tmp</property>
-        <property name="outputAppend">1</property>
-        <property name="outputPattern">temp</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
-        <property name="template">temp</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var loader = globalChannelMap.get(&apos;cdwloader&apos;);
+loader.load(messageObject.getEncodedData(), Packages.gov.nih.nci.cacis.cdw.CDWLoader.CACIS_NS);</property>
       </properties>
       <transformer>
         <steps/>
-        <inboundProtocol>HL7V2</inboundProtocol>
-        <outboundProtocol>HL7V2</outboundProtocol>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
-          <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
+          <property name="stripNamespaces">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
-          <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
+          <property name="stripNamespaces">false</property>
         </outboundProperties>
       </transformer>
       <filter>
         <rules/>
       </filter>
-      <transportName>File Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
@@ -117,6 +88,11 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+
+var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-cacis-cdw.xml&quot;);
+var loader = cdwContext.getBean(&quot;loader&quot;);
+
+globalChannelMap.put(&apos;cdwloader&apos;, loader);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
