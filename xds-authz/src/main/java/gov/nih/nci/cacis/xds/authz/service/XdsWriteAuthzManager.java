@@ -61,6 +61,8 @@
 
 package gov.nih.nci.cacis.xds.authz.service;
 
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
+
 /**
  * @author kherm manav.kher@semanticbits.com
  */
@@ -72,8 +74,9 @@ public interface XdsWriteAuthzManager {
      *
      * @param subjectDN Subject Distinguished Name
      * to grant access to
+     * @throws AuthzProvisioningException Exception
      */
-    void grantStoreWrite(String subjectDN);
+    void grantStoreWrite(String subjectDN) throws AuthzProvisioningException;
 
     /**
      * Revoke access for Sunject on the
@@ -81,6 +84,7 @@ public interface XdsWriteAuthzManager {
      *
      * @param subjectDN Subject Distinguished Name
      * to revoke access from
+     * @throws AuthzProvisioningException Exception
      */
-    void revokeStoreWrite(String subjectDN);
+    void revokeStoreWrite(String subjectDN) throws AuthzProvisioningException;
 }

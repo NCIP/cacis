@@ -63,6 +63,7 @@ package gov.nih.nci.cacis.cdw;
 
 import java.util.Set;
 
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import org.openrdf.model.URI;
 
 /**

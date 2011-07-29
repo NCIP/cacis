@@ -41,93 +41,20 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
 
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
-import gov.nih.nci.cacis.ClinicalMetadata;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.binding.soap.SoapTransportFactory;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.test.AbstractCXFTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Node;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
-
-    public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
-    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
-    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorMCIntegrationTest.class);
-
-    @Before
-    public void init() {
-        addNamespace("ns2", "http://cacis.nci.nih.gov");
-    }
-
-    @Test
-    public void invokeJaxWS() throws Exception {
-
-        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(CanonicalModelProcessorPortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(ADDRESS);
-
-        CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
-        CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
-
-        ClinicalMetadata meta = new ClinicalMetadata();
-        meta.setPatientIdExtension("123");
-        meta.setPatientIdRoot("123.456");
-        request.setClinicalMetaData(meta);
+package gov.nih.nci.cacis.xds.authz;
 
 
-        client.acceptCanonical(request);
-    }
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-    @Test
-    public void invokeSOAP() throws Exception {
-
-        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
-                getValidMessage().getBytes());
-        assertNotNull(res);
-        assertValid("//ns2:caCISResponse[@status='SUCCESS']", res);
-        LOG.info("Echo response: " + res.getTextContent());
-
-    }
-
-
-
-    /**
-     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
-     *
-     * @return string representation of a valid message
-     */
-    protected String getValidMessage() {
-        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
-        File msgFile = null;
-        try {
-            msgFile = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String validMessage = null;
-        try {
-            validMessage = FileUtils.readFileToString(msgFile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return validMessage;
-    }
-
+/**
+ * Runs tests from parent class
+ * in Postgres DB
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(inheritLocations = false,
+        locations = "classpath:applicationContext-xds-authz-test.xml")
+public class DocumentAccessManagerIntegrationTest extends DocumentAccessManagerTest{
 }

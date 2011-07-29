@@ -67,7 +67,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.camel.ExpectedBodyTypeException;
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -192,7 +192,7 @@ public class GraphAuthzMgrSystemTest {
      * @throws AuthzProvisioningException - exception thrown, if any
      */
     @Test(expected=AuthzProvisioningException.class)
-    public void validateEmptyGraphGroups() throws AuthzProvisioningException {       
+    public void validateEmptyGraphGroups() throws AuthzProvisioningException {
         final URI graph = mock(URI.class);
         final Set<URI> grphGrps = new HashSet<URI>();
         graphAuthzMgr.add(graph, grphGrps);

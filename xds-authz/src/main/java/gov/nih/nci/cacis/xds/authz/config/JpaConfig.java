@@ -120,12 +120,6 @@ public class JpaConfig {
     private String databasePlatform;
 
     /**
-     * The hibernate generate ddl properties.
-     */
-    @Value("${cacis.xds.authz.hibernate.generate.ddl}")
-    private Boolean generateDdl;
-
-    /**
      * The persistence unit name.
      */
     protected static final String PERSISTENCE_UNIT_NAME = "cacis-xds-authz";
@@ -158,7 +152,6 @@ public class JpaConfig {
         final HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
 
         jpaVendorAdapter.setDatabasePlatform(databasePlatform);
-        jpaVendorAdapter.setGenerateDdl(generateDdl);
         jpaVendorAdapter.setShowSql(showSql);
         return jpaVendorAdapter;
     }

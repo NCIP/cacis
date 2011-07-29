@@ -66,6 +66,7 @@ import java.io.IOException;
 
 import javax.sql.DataSource;
 
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;

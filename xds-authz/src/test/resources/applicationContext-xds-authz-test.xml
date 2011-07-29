@@ -14,8 +14,6 @@
                    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-    <bean class="gov.nih.nci.cacis.xds.authz.TestXdsAuthzConfig"/>
-
     <bean class="gov.nih.nci.cacis.xds.authz.config.XdsAuthzConfig"/>
 
 </beans>

@@ -1,4 +1,4 @@
-/*
+/**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
  * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
@@ -7,7 +7,24 @@
  *
  * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- *  of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
+ * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
+ * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
+ * (iii) beneficial ownership of such entity.
+ *
+ * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
+ * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
+ * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
+ * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
+ * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
+ * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
+ * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
+ * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
+ * charge to You.
+ *
+ * Your redistributions of the source code for the Software must retain the above copyright notice, this list of
+ * conditions and the disclaimer and limitation of liability of Article 6, below. Your redistributions in object code
+ * form must reproduce the above copyright notice, this list of conditions and the disclaimer of Article 6 in the
+ * documentation and/or other materials provided with the distribution, if any.
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
  * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
@@ -41,93 +58,36 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
 
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
-import gov.nih.nci.cacis.ClinicalMetadata;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.binding.soap.SoapTransportFactory;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.test.AbstractCXFTest;
-import org.junit.Before;
+package gov.nih.nci.cacis.xds.authz;
+
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
+import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
+import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
+import org.apache.camel.spring.javaconfig.test.JavaConfigContextLoader;
 import org.junit.Test;
-import org.w3c.dom.Node;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
+import static junit.framework.Assert.assertEquals;
 
-    public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
-    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
-    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorMCIntegrationTest.class);
-
-    @Before
-    public void init() {
-        addNamespace("ns2", "http://cacis.nci.nih.gov");
-    }
-
-    @Test
-    public void invokeJaxWS() throws Exception {
-
-        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(CanonicalModelProcessorPortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(ADDRESS);
-
-        CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
-        CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
-
-        ClinicalMetadata meta = new ClinicalMetadata();
-        meta.setPatientIdExtension("123");
-        meta.setPatientIdRoot("123.456");
-        request.setClinicalMetaData(meta);
+/**
+ * Runs tests from parent class
+ * in Postgres DB
+ * @author kherm manav.kher@semanticbits.com
+ */
 
 
-        client.acceptCanonical(request);
-    }
+@ContextConfiguration(inheritLocations = false,
+        locations = "classpath:applicationContext-xds-authz-test.xml")
+public class XdsWriteAuthzManagerIntegrationTest extends XdsWriteAuthzManagerTest {
 
-    @Test
-    public void invokeSOAP() throws Exception {
-
-        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
-                getValidMessage().getBytes());
-        assertNotNull(res);
-        assertValid("//ns2:caCISResponse[@status='SUCCESS']", res);
-        LOG.info("Echo response: " + res.getTextContent());
-
-    }
-
-
-
-    /**
-     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
-     *
-     * @return string representation of a valid message
-     */
-    protected String getValidMessage() {
-        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
-        File msgFile = null;
-        try {
-            msgFile = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String validMessage = null;
-        try {
-            validMessage = FileUtils.readFileToString(msgFile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return validMessage;
-    }
 
 }

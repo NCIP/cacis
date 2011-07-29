@@ -61,6 +61,7 @@
 
 package gov.nih.nci.cacis.xds.authz;
 
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.authz.config.JpaConfig;
 import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
@@ -93,7 +94,7 @@ public class XdsWriteAuthzManagerTest {
 
     @Test
     @Transactional
-    public void grantAndRevoke() {
+    public void grantAndRevoke() throws AuthzProvisioningException {
         final String dn = "juser@example.com,cn=Joe User,dc=example,dc=com,o=Example Inc.,c=US";
 
         manager.grantStoreWrite(dn);

@@ -19,6 +19,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <test.unit.branchrate>75</test.unit.branchrate>
         <test.unit.linerate>75</test.unit.linerate>
+
+        <!--runtime properties-->
+        <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
+        <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
+        <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
+        <cacis.xds.authz.db.driver>org.postgresql.Driver</cacis.xds.authz.db.driver>
+        <cacis.xds.authz.db.hibernate.show.sql>true</cacis.xds.authz.db.hibernate.show.sql>
+        <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</cacis.xds.authz.db.hibernate.dialect>
+        <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
     </properties>
 
 
@@ -76,5 +85,13 @@
 
     </dependencies>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 
 </project>

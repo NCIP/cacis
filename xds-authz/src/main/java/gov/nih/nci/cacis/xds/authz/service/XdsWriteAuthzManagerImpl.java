@@ -1,5 +1,6 @@
 package gov.nih.nci.cacis.xds.authz.service;
 
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,25 +83,37 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
 
 
     @Override
-    public void grantStoreWrite(String subjectDN) {
-        createXdsWriteResource();
+    public void grantStoreWrite(String subjectDN) throws AuthzProvisioningException {
+        try {
+            createXdsWriteResource();
 
-        final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
-                ("from " + XdsWriteResource.class.getSimpleName())
-                .getSingleResult();
-        writeResource.addSubject(subjectDN);
+            final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
+                    ("from " + XdsWriteResource.class.getSimpleName())
+                    .getSingleResult();
+            writeResource.addSubject(subjectDN);
+               // CHECKSTYLE:OFF Want to throw checked exception
+        } catch (Exception e) {
+             // CHECKSTYLE:ON
+            throw new  AuthzProvisioningException(e);
+        }
 
     }
 
 
     @Override
-    public void revokeStoreWrite(String subjectDN) {
-        createXdsWriteResource();
+    public void revokeStoreWrite(String subjectDN) throws AuthzProvisioningException {
+        try {
+            createXdsWriteResource();
 
-        final XdsWriteResource writeResource =
-                (XdsWriteResource) this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
-                        .getSingleResult();
-        writeResource.removeSubject(subjectDN);
+            final XdsWriteResource writeResource =
+                    (XdsWriteResource) this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
+                            .getSingleResult();
+            writeResource.removeSubject(subjectDN);
+               // CHECKSTYLE:OFF Want to throw checked exception
+        } catch (Exception e) {
+             // CHECKSTYLE:ON
+            throw new AuthzProvisioningException(e);
+        }
     }
 
     /**

@@ -70,6 +70,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

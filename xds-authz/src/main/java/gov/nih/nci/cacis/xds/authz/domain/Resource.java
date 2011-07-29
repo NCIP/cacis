@@ -84,6 +84,7 @@ public class Resource extends AbstractPersistentEntity {
     /**
      * Getter for
      * Subjects that have access to this resource
+     *
      * @return Subjects that have access to the resource
      */
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
@@ -93,6 +94,7 @@ public class Resource extends AbstractPersistentEntity {
 
     /**
      * Setter for subjects
+     *
      * @param subjects subjects
      */
     public void setSubjects(Set<Subject> subjects) {
@@ -103,10 +105,17 @@ public class Resource extends AbstractPersistentEntity {
     /**
      * Add a subject to the list of Subjects
      * that have access to this Resource
+     *
      * @param subjectDn Subject Distinguished Name
      * @return boolean Set.add()
      */
     public boolean addSubject(String subjectDn) {
+        for (Subject subject : subjects) {
+            if (subject.getDn().equals(subjectDn)) {
+//                already exists
+                return false;
+            }
+        }
         final Subject subject = new Subject();
         subject.setDn(subjectDn);
         return getSubjects().add(subject);
@@ -119,8 +128,11 @@ public class Resource extends AbstractPersistentEntity {
      * @return boolean Set.remove()
      */
     public boolean removeSubject(String subjectDn) {
-        final Subject subject = new Subject();
-        subject.setDn(subjectDn);
-        return getSubjects().remove(subject);
+        for (Subject subject : subjects) {
+            if (subject.getDn().equals(subjectDn)) {
+                return this.getSubjects().remove(subject);
+            }
+        }
+        return false;
     }
 }

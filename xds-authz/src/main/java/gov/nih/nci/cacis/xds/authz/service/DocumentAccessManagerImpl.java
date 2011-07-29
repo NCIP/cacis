@@ -41,93 +41,101 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
 
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
-import gov.nih.nci.cacis.ClinicalMetadata;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.binding.soap.SoapTransportFactory;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.test.AbstractCXFTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Node;
+package gov.nih.nci.cacis.xds.authz.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
+import gov.nih.nci.cacis.xds.authz.domain.DocumentResource;
+import gov.nih.nci.cacis.xds.authz.domain.Subject;
+import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
-public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
-    public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
-    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
-    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorMCIntegrationTest.class);
+/**
+ * Document Access Manager
+ * for managing access to XDS Documents
+ */
+@Transactional
+public class DocumentAccessManagerImpl implements DocumentAccessManager {
 
-    @Before
-    public void init() {
-        addNamespace("ns2", "http://cacis.nci.nih.gov");
-    }
-
-    @Test
-    public void invokeJaxWS() throws Exception {
-
-        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(CanonicalModelProcessorPortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(ADDRESS);
-
-        CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
-        CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
-
-        ClinicalMetadata meta = new ClinicalMetadata();
-        meta.setPatientIdExtension("123");
-        meta.setPatientIdRoot("123.456");
-        request.setClinicalMetaData(meta);
-
-
-        client.acceptCanonical(request);
-    }
-
-    @Test
-    public void invokeSOAP() throws Exception {
-
-        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
-                getValidMessage().getBytes());
-        assertNotNull(res);
-        assertValid("//ns2:caCISResponse[@status='SUCCESS']", res);
-        LOG.info("Echo response: " + res.getTextContent());
-
-    }
-
+    private final EntityManager em;
+    private static final Logger LOG = Logger.getLogger(DocumentAccessManagerImpl.class);
 
 
     /**
-     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
+     * Constructor
      *
-     * @return string representation of a valid message
+     * @param em JPA Entity Manager
      */
-    protected String getValidMessage() {
-        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
-        File msgFile = null;
-        try {
-            msgFile = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String validMessage = null;
-        try {
-            validMessage = FileUtils.readFileToString(msgFile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return validMessage;
+    public DocumentAccessManagerImpl(EntityManager em) {
+        this.em = em;
     }
 
+    @Override
+    public void grantDocumentAccess(String documentSetId, String userId)
+            throws AuthzProvisioningException {
+
+        DocumentResource docResource = findByDocumentSetId(documentSetId);
+        if (docResource == null) {
+            LOG.info("Document ID does not exist. Will create " + documentSetId);
+            docResource = new DocumentResource(documentSetId);
+        }
+
+        docResource.addSubject(userId);
+        em.persist(docResource);
+
+    }
+
+    @Override
+    public void revokeDocumentAccess(String documentSetId, String userId)
+            throws AuthzProvisioningException {
+
+        final DocumentResource docResource = findByDocumentSetId(documentSetId);
+
+        if (docResource == null) {
+            throw new AuthzProvisioningException("Document with id " + documentSetId + " does not exist");
+
+        } else {
+            docResource.removeSubject(userId);
+            em.persist(docResource);
+        }
+    }
+
+    @Override
+    public boolean checkDocumentAccess(String documentSetId, String userId) throws AuthzProvisioningException {
+
+        final DocumentResource docResource = findByDocumentSetId(documentSetId);
+
+        if (docResource == null) {
+            throw new AuthzProvisioningException("Document with id " + documentSetId + " does not exist");
+
+        } else {
+            for (Subject subject : docResource.getSubjects()) {
+                if (subject.getDn().equals(userId)) {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+
+    private DocumentResource findByDocumentSetId(String documentSetId) throws AuthzProvisioningException {
+        try {
+            final Query docQuery = this.em.createQuery("from " + DocumentResource.class.getSimpleName()
+                    + " doc where doc.docId = :docId ");
+            docQuery.setParameter("docId", documentSetId);
+
+            return (DocumentResource) docQuery.getSingleResult();
+
+        } catch (NoResultException e) {
+            return null;
+        }
+
+
+    }
 }

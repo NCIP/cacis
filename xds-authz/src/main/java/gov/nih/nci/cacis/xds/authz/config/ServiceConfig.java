@@ -60,6 +60,8 @@
  */
 package gov.nih.nci.cacis.xds.authz.config;
 
+import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
+import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManagerImpl;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManagerImpl;
 import org.springframework.context.annotation.Bean;
@@ -87,4 +89,13 @@ public class ServiceConfig {
         return new XdsWriteAuthzManagerImpl(em);
     }
 
+    /**
+     * Docuemnt Access Manager
+     * @return DocumentAccessManager
+     */
+    @Bean
+    public DocumentAccessManager documentAccessManager() {
+        return new DocumentAccessManagerImpl(em);
+    }
 }
+
