@@ -82,7 +82,7 @@ import static junit.framework.Assert.assertEquals;
  * @author kherm manav.kher@semanticbits.com
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-xds-authz-test.xml")
+@ContextConfiguration(locations = "classpath:applicationContext-xds-authz-test-hsqldb.xml")
 public class XdsWriteAuthzManagerTest {
 
 
