@@ -68,6 +68,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.UUID;
 
 import javax.xml.transform.TransformerException;
 
@@ -87,7 +88,7 @@ public class CDWLoader {
     /**
      * caCIS context URI.
      */
-    public static final String CACIS_NS = "http://cacis.nci.nih.gov";
+    private static final String CACIS_NS = "http://cacis.nci.nih.gov";
 
     @Autowired
     private XmlToRdfTransformer transformer;
@@ -132,6 +133,15 @@ public class CDWLoader {
             IOException {
         final org.openrdf.model.URI uriContext = con.getRepository().getValueFactory().createURI(context);
         load(new ByteArrayInputStream(xmlString.getBytes()), uriContext);
+    }
+
+    /**
+     * Generates a caCIS context with a random UUID - http://cacis.nci.nih.gov/<UUID>
+     * @return context
+     */
+    public URI generateContext() {
+        final UUID uuid = UUID.randomUUID();
+        return con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS + '/' + uuid);
     }
 
 }

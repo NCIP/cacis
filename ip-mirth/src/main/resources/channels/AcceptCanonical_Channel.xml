@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1311950438219</time>
+    <time>1312208686865</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>43</revision>
+  <revision>47</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -49,7 +49,7 @@
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
         <property name="script">var loader = globalChannelMap.get(&apos;cdwloader&apos;);
-loader.load(messageObject.getEncodedData(), Packages.gov.nih.nci.cacis.cdw.CDWLoader.CACIS_NS);</property>
+loader.load(messageObject.getEncodedData(), loader.generateContext());</property>
       </properties>
       <transformer>
         <steps/>

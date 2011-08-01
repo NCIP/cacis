@@ -92,7 +92,7 @@ public class CDWLoaderIntegrationTest extends BaseCDWLoaderTest {
 
     @Test
     public void load() throws Exception {
-        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        final URI context = loader.generateContext();
         loader.load(sampleMessageIS, context);
         final String query = QUERY_PFX + context + QUERY_END;
         final Value[][] results = doTupleQuery(con, query);
@@ -101,12 +101,12 @@ public class CDWLoaderIntegrationTest extends BaseCDWLoaderTest {
 
     @Test
     public void loadString() throws Exception {
-        final URI context = con.getRepository().getValueFactory().createURI(CDWLoader.CACIS_NS);
+        final URI context = loader.generateContext();
         File xslF = new File(getClass().getClassLoader().getResource("caCISRequestSample3.xml").toURI());
 
         String xmlString = FileUtils.readFileToString(xslF);
 
-        loader.load(xmlString, CDWLoader.CACIS_NS);
+        loader.load(xmlString, context.toString());
         final String query = QUERY_PFX + context + QUERY_END;
         final Value[][] results = doTupleQuery(con, query);
         assertTrue(results.length > 0);
