@@ -9,7 +9,6 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +52,19 @@ public class XdsClientTest extends TestCase {
     private B_Consumer consumer;
     private Map<String,URI> repositoryUriMap = new HashMap<String,URI>();
     
-    private String repositoryURL = "http://localhost:8080/openxds-web/services/DocumentRepository";
-    private String registryURL = "http://localhost:8080/openxds-web/services/DocumentRegistry";
+//    private String repositoryURL = "http://localhost:8080/openxds-web/services/DocumentRepository";
+//    private String registryURL = "http://localhost:8080/openxds-web/services/DocumentRegistry";
     
+//    private String repositoryURL = "https://localhost:8011/openxds/services/DocumentRepository";
+//    private String registryURL = "https://localhost:8011/openxds/services/DocumentRegistry";
+    
+    private String repositoryURL = "https://localhost:8011/openxds-web/services/DocumentRepository";
+    private String registryURL = "https://localhost:8011/openxds-web/services/DocumentRegistry";
+    
+
+//    private String repositoryURL = "https://localhost:8443/openxds-web/services/DocumentRepository";
+//    private String registryURL = "https://localhost:8443/openxds-web/services/DocumentRegistry";
+
 
     @Override
     protected void setUp() throws Exception {
@@ -74,6 +83,11 @@ public class XdsClientTest extends TestCase {
         consumer = new B_Consumer(URI.create(registryURL),null,repositoryUriMap);
         //turn off auditing for now ...
         XDSConsumerAuditor.getAuditor().getConfig().setAuditorEnabled(false);
+        
+        System.setProperty("javax.net.ssl.keyStore", "/Users/Moni/Misc/certs/OpenXDS_2011_Keystore.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "password");
+        System.setProperty("javax.net.ssl.trustStore", "/Users/Moni/Misc/certs/OpenXDS_2011_Truststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword", "password");
         
     }
     
@@ -134,7 +148,7 @@ public class XdsClientTest extends TestCase {
         txnData.addDocumentToFolder(docEntryUUID, folderEntryUUID);
         
         //Submitting Document;
-        XDSResponseType response = source.submit(true,txnData);
+        XDSResponseType response = source.submit(false,txnData);
         
         while (!response.isComplete()) {
             Thread.sleep(1000);
@@ -153,15 +167,15 @@ public class XdsClientTest extends TestCase {
         assertNotNull(documents);
         assertEquals(1,documents.size());
         
-        if (null != documents) {
-            logger.debug("Received " + documents.size() + " documents");
-            Iterator<XDSDocument> docIterator = documents.iterator();
-            while (docIterator.hasNext()) {
-                XDSDocument doc = docIterator.next();
-                System.out.println("Received Document: " + doc);
-                //System.out.println(readStream(doc.getStream()));
-            }
-        } 
+//        if (null != documents) {
+//            logger.debug("Received " + documents.size() + " documents");
+//            Iterator<XDSDocument> docIterator = documents.iterator();
+//            while (docIterator.hasNext()) {
+//                XDSDocument doc = docIterator.next();
+//                System.out.println("Received Document: " + doc);
+//                System.out.println(readStream(doc.getStream()));
+//            }
+//        } 
     }
     
     /**
