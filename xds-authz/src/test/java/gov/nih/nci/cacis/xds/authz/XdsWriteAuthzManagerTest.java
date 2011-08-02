@@ -75,6 +75,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -92,17 +94,22 @@ public class XdsWriteAuthzManagerTest {
 
     @Test
     @Transactional
-    public void grantAndRevoke() throws AuthzProvisioningException {
+    public void grantCheckAndRevoke() throws AuthzProvisioningException {
         final String dn = "juser@example.com,cn=Joe User,dc=example,dc=com,o=Example Inc.,c=US";
 
         manager.grantStoreWrite(dn);
          final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
                 ("from " + XdsWriteResource.class.getSimpleName())
                 .getSingleResult();
+
         assertEquals(1, writeResource.getSubjects().size());
+
+        assertTrue(manager.checkStoreWrite(dn));
 
         manager.revokeStoreWrite(dn);
         assertEquals(0, writeResource.getSubjects().size());
+
+        assertFalse(manager.checkStoreWrite(dn));
 
     }
 

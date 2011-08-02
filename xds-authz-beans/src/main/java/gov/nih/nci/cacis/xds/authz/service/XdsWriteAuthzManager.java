@@ -87,4 +87,15 @@ public interface XdsWriteAuthzManager {
      * @throws AuthzProvisioningException Exception
      */
     void revokeStoreWrite(String subjectDN) throws AuthzProvisioningException;
+
+    /**
+     * Checks if user has access to invoke
+     * xds store operation
+     *
+     * @param subjectDN Subject Distinguished Name
+     * @throws AuthzProvisioningException Exception
+     * @return boolean value indicating if Subject has access
+     */
+    boolean checkStoreWrite(String subjectDN) throws AuthzProvisioningException;
+
 }

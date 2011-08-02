@@ -28,6 +28,9 @@
         <spring.version>2.5.6</spring.version>
         <xds.axis2.version>1.5</xds.axis2.version>
         <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
+
+        <test.unit.branchrate>75</test.unit.branchrate>
+        <test.unit.linerate>75</test.unit.linerate>
     </properties>
 
 

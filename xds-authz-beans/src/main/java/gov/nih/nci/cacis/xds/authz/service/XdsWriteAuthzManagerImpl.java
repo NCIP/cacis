@@ -1,6 +1,7 @@
 package gov.nih.nci.cacis.xds.authz.service;
 
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
+import gov.nih.nci.cacis.xds.authz.domain.Subject;
 import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,11 +95,7 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
     @Override
     public void grantStoreWrite(String subjectDN) throws AuthzProvisioningException {
         try {
-            createXdsWriteResource();
-
-            final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
-                    ("from " + XdsWriteResource.class.getSimpleName())
-                    .getSingleResult();
+            final XdsWriteResource writeResource = createXdsWriteResource();
             writeResource.addSubject(subjectDN);
             // CHECKSTYLE:OFF Want to throw checked exception
         } catch (Exception e) {
@@ -112,11 +109,8 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
     @Override
     public void revokeStoreWrite(String subjectDN) throws AuthzProvisioningException {
         try {
-            createXdsWriteResource();
+            final XdsWriteResource writeResource = createXdsWriteResource();
 
-            final XdsWriteResource writeResource =
-                    (XdsWriteResource) this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
-                            .getSingleResult();
             writeResource.removeSubject(subjectDN);
             // CHECKSTYLE:OFF Want to throw checked exception
         } catch (Exception e) {
@@ -125,11 +119,32 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
         }
     }
 
+
+    @Override
+    public boolean checkStoreWrite(String subjectDN) throws AuthzProvisioningException {
+
+        final XdsWriteResource writeResource =
+                               (XdsWriteResource) this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
+                                       .getSingleResult();
+
+        if (writeResource == null) {
+            throw new AuthzProvisioningException( "No appropriate resource for XDS store operation found");
+        }
+       for (Subject subject : writeResource.getSubjects()) {
+           if (subject.getDn().equals(subjectDN)) {
+               return true;
+           }
+       }
+
+        return false;
+    }
+
     /**
      * Method creates XdsWriteResource
      * if one does not exist already
+     * @return XdsWriteResource
      */
-    private void createXdsWriteResource() {
+    private XdsWriteResource createXdsWriteResource() {
 
         final List results = this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
                 .getResultList();
@@ -140,7 +155,14 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
             em.persist(xdsWriteResource);
             em.flush();
         }
+
+        final XdsWriteResource writeResource =
+                               (XdsWriteResource) this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
+                                       .getSingleResult();
+        return writeResource;
     }
+
+
 
     /**
      * Getter for Entity Manager
