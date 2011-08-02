@@ -10,79 +10,33 @@
     <artifactId>xds-authz</artifactId>
     <packaging>jar</packaging>
 
-    <name>XDS Authz</name>
+    <name>xds-authz</name>
     <description>XDS Authorization Manager</description>
 
 
     <properties>
-        <hibernate.version>3.5.6-Final</hibernate.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <test.unit.branchrate>75</test.unit.branchrate>
-        <test.unit.linerate>75</test.unit.linerate>
-
         <!--runtime properties-->
         <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
         <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
         <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
         <cacis.xds.authz.db.driver>org.postgresql.Driver</cacis.xds.authz.db.driver>
         <cacis.xds.authz.db.hibernate.show.sql>true</cacis.xds.authz.db.hibernate.show.sql>
-        <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</cacis.xds.authz.db.hibernate.dialect>
-        <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
+        <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect
+        </cacis.xds.authz.db.hibernate.dialect>
+
+        <test.unit.branchrate>75</test.unit.branchrate>
+        <test.unit.linerate>75</test.unit.linerate>
+
+       <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
     </properties>
 
 
     <dependencies>
-
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
-            <artifactId>esd-commons</artifactId>
+            <artifactId>xds-authz-beans</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>8.3-603.jdbc3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.5.4</version>
-        </dependency>
-        <dependency>
-            <groupId>aspectj</groupId>
-            <artifactId>aspectjtools</artifactId>
-            <version>1.5.4</version>
-        </dependency>
-        <dependency>
-            <groupId>aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.5.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>

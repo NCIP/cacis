@@ -4,6 +4,10 @@
 
     <persistence-unit name="cacis-xds-authz" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource</class>
+        <class>gov.nih.nci.cacis.xds.authz.domain.DocumentResource</class>
+        <class>gov.nih.nci.cacis.xds.authz.domain.Subject</class>
+        <class>gov.nih.nci.cacis.xds.authz.domain.Resource</class>
 
         <validation-mode>NONE</validation-mode>
 

@@ -7,19 +7,31 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>xds-axis-handlers</artifactId>
+    <artifactId>xds-authz-handlers</artifactId>
     <packaging>jar</packaging>
 
-    <name>xds-axis-handlers</name>
-    <description>XDS Axis Handlers</description>
+    <name>xds-authz-handlers</name>
+    <description>XDS Authz Axis Handlers</description>
 
     <properties>
+        <!--runtime properties-->
+        <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
+        <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
+        <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
+        <cacis.xds.authz.db.driver>org.postgresql.Driver</cacis.xds.authz.db.driver>
+        <cacis.xds.authz.db.hibernate.show.sql>true</cacis.xds.authz.db.hibernate.show.sql>
+        <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect
+        </cacis.xds.authz.db.hibernate.dialect>
+
+        <!--open-xds versions-->
         <junit.version>4.4</junit.version>
         <spring.version>2.5.6</spring.version>
         <xds.axis2.version>1.5</xds.axis2.version>
-     </properties>
+        <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
+    </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -28,9 +40,9 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
-             <version>3.2.1.ga</version>
+            <version>3.2.1.ga</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>3.0.0.GA</version>
@@ -60,34 +72,9 @@
 
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
-            <artifactId>xds-authz</artifactId>
+            <artifactId>xds-authz-beans</artifactId>
             <version>${project.version}</version>
-            <!--ignore as this project uses
-            spring and hibernate versions of open-xds-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-jdbc</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-orm</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context-support</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-entitymanager</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-annotations</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.axis2</groupId>
