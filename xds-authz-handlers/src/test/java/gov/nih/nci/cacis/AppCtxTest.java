@@ -1,4 +1,4 @@
-/**
+/*
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
  * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
@@ -7,24 +7,7 @@
  *
  * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
- * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
- * (iii) beneficial ownership of such entity.
- *
- * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
- * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
- * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
- * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
- * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
- * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
- * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
- * charge to You.
- *
- * Your redistributions of the source code for the Software must retain the above copyright notice, this list of
- * conditions and the disclaimer and limitation of liability of Article 6, below. Your redistributions in object code
- * form must reproduce the above copyright notice, this list of conditions and the disclaimer of Article 6 in the
- * documentation and/or other materials provided with the distribution, if any.
+ *  of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
  * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
@@ -59,51 +42,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.xds.authz;
+package gov.nih.nci.cacis;
 
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
-import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import static junit.framework.Assert.assertEquals;
-
-/**
- * @author kherm manav.kher@semanticbits.com
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-xds-authz-test-hsqldb.xml")
-public class XdsWriteAuthzManagerTest {
-
-
-    @Autowired
-    private XdsWriteAuthzManager manager;
-
-    @PersistenceContext
-    private EntityManager em;
+public class AppCtxTest {
 
     @Test
-    @Transactional
-    public void grantAndRevoke() throws AuthzProvisioningException {
-        final String dn = "juser@example.com,cn=Joe User,dc=example,dc=com,o=Example Inc.,c=US";
+    public void init() throws AuthzProvisioningException {
+        ApplicationContext context = new ClassPathXmlApplicationContext(
+                new String[] {"applicationContext-xds-authz-handlers-hsqldb.xml"});
 
-        manager.grantStoreWrite(dn);
-         final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
-                ("from " + XdsWriteResource.class.getSimpleName())
-                .getSingleResult();
-        assertEquals(1, writeResource.getSubjects().size());
+        assertTrue(context.getBeanDefinitionCount() > 0);
+        final XdsWriteAuthzManager docAccessMgr = (XdsWriteAuthzManager) context.getBean("xdsWriteAuthzManager");
+        assertNotNull(docAccessMgr);
 
-        manager.revokeStoreWrite(dn);
-        assertEquals(0, writeResource.getSubjects().size());
 
     }
-
 }

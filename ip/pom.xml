@@ -19,7 +19,27 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <skip.cargo.container>false</skip.cargo.container>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openehealth.ipf</groupId>
+                <artifactId>ipf</artifactId>
+                <version>${ipf.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
     <dependencies>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty</artifactId>
+            <version>${apache.camel.version}</version>
+        </dependency>
+
 
         <!--gets all ipf dependencies -->
         <dependency>
@@ -65,6 +85,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <version>${apache.camel.version}</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -107,7 +133,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 </executions>
                 <configuration>
                     <jbossHome>${tolven.jboss.location}</jbossHome>
-                     <serverName>${tolven.jboss.configuration}</serverName>
+                    <serverName>${tolven.jboss.configuration}</serverName>
                     <fileName>${build.directory}/${artifactId}.war</fileName>
                 </configuration>
             </plugin>

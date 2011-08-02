@@ -52,6 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -61,9 +62,17 @@ import javax.persistence.Query;
 @Transactional
 public class DocumentAccessManagerImpl implements DocumentAccessManager {
 
-    private final EntityManager em;
+
+    @PersistenceContext(unitName = "cacis-xds-authz")
+    private EntityManager em;
     private static final Logger LOG = Logger.getLogger(DocumentAccessManagerImpl.class);
 
+    /**
+     * No args constructor
+     */
+    public DocumentAccessManagerImpl() {
+        //    no args constructor
+    }
 
     /**
      * Constructor
@@ -135,7 +144,23 @@ public class DocumentAccessManagerImpl implements DocumentAccessManager {
         } catch (NoResultException e) {
             return null;
         }
+    }
 
+    /**
+     * Getter for Entity Manager
+     *
+     * @return EntityManager
+     */
+    public EntityManager getEm() {
+        return em;
+    }
 
+    /**
+     * Setter for Entity Manager
+     *
+     * @param em EntityManager
+     */
+    public void setEm(EntityManager em) {
+        this.em = em;
     }
 }

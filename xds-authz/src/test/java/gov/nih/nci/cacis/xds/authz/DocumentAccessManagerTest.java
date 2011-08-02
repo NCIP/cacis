@@ -46,7 +46,6 @@ package gov.nih.nci.cacis.xds.authz;
 
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
-import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,75 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                   http://www.springframework.org/schema/beans/spring-beans.xsd
+                   http://www.springframework.org/schema/tx
+                   http://www.springframework.org/schema/tx/spring-tx.xsd
+                   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                   ">
+    <aop:aspectj-autoproxy/>
+
+    <tx:annotation-driven/>
+
+    <bean id="documentAccessManager"
+            class="gov.nih.nci.cacis.xds.authz.service.DocumentAccessManagerImpl">
+      </bean>
+
+    <bean id="xdsWriteAuthzManager"
+          class="gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManagerImpl">
+    </bean>
+
+    <bean id="xdsAuthpropertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+            p:ignoreUnresolvablePlaceholders="true"
+            p:systemPropertiesModeName="SYSTEM_PROPERTIES_MODE_OVERRIDE"
+            p:location="classpath:cacis-xds-authz.properties">
+    </bean>
+
+
+    <bean id="dataSource"
+          name="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+          p:driverClassName="${cacis.xds.authz.db.driver}"
+          p:maxActive="40" p:maxIdle="5" p:maxWait="180000"
+          p:removeAbandoned="true"
+          p:removeAbandonedTimeout="300"
+          p:logAbandoned="true"
+          p:timeBetweenEvictionRunsMillis="300000"
+          p:minEvictableIdleTimeMillis="600000"
+          p:url="${cacis.xds.authz.db.url}"
+          p:username="${cacis.xds.authz.db.username}"
+          p:password="${cacis.xds.authz.db.password}"/>
+
+    <bean id="jpaVendorAdapter"
+          name="jpaVendorAdapter"
+          class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+          autowire="byName"
+          p:databasePlatform="${cacis.xds.authz.db.hibernate.dialect}"
+          p:showSql="${cacis.xds.authz.db.hibernate.show.sql}"
+            p:generateDdl="true"/>
+
+
+    <bean id="entityManagerFactory"
+          name="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          p:persistenceUnitName="cacis-xds-authz"
+          p:jpaVendorAdapter-ref="jpaVendorAdapter"
+          p:dataSource-ref="dataSource"
+          p:persistenceXmlLocation="META-INF/jpa1_0_persistence.xml">
+
+    </bean>
+
+    <bean id="transactionManager"
+          name="transactionManager"
+          class="org.springframework.orm.jpa.JpaTransactionManager"
+          p:entityManagerFactory-ref="entityManagerFactory"
+          p:dataSource-ref="dataSource"/>
+
+    <bean
+            class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
+
+</beans>

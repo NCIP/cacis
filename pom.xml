@@ -20,6 +20,7 @@
         <module>ip-mirth</module>
         <module>cdw</module>
         <module>xds-authz</module>
+        <module>xds-authz-handlers</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -33,6 +34,7 @@
         <apache.camel.version>2.6.0</apache.camel.version>
         <mirthconnect.version>2.2.1</mirthconnect.version>
         <maven.reports.plugin.version>2.4</maven.reports.plugin.version>
+        <junit.version>4.8.1</junit.version>
 
         <virt.sesame.version>2</virt.sesame.version>
         <virt.jdbc.version>3</virt.jdbc.version>
@@ -206,17 +208,6 @@
     </reporting>
 
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.openehealth.ipf</groupId>
-                <artifactId>ipf</artifactId>
-                <version>${ipf.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -256,21 +247,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${ipf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-javaconfig</artifactId>
-            <version>${apache.camel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty</artifactId>
-            <version>${apache.camel.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
@@ -303,15 +280,11 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test</artifactId>
-            <version>${apache.camel.version}</version>
-            <scope>test</scope>
-        </dependency>
+
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -340,6 +313,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.8.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-javaconfig</artifactId>
+            <version>${apache.camel.version}</version>
             <scope>test</scope>
         </dependency>
 

@@ -13,9 +13,9 @@
     <name>validation</name>
 
     <properties>
-         <test.unit.branchrate>85</test.unit.branchrate>
-         <test.unit.linerate>85</test.unit.linerate>
-     </properties>
+        <test.unit.branchrate>85</test.unit.branchrate>
+        <test.unit.linerate>85</test.unit.linerate>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -23,6 +23,21 @@
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${ipf.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <version>${apache.camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -104,5 +119,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>

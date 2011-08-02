@@ -1,0 +1,19 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+
+    <persistence-unit name="cacis-xds-authz" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource</class>
+        <class>gov.nih.nci.cacis.xds.authz.domain.DocumentResource</class>
+        <class>gov.nih.nci.cacis.xds.authz.domain.Subject</class>
+        <class>gov.nih.nci.cacis.xds.authz.domain.Resource</class>
+
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="${cacis.xds.authz.hibernate.hbm2ddl.auto}"/>
+            <property name="hibernate.jdbc.batch_size" value="0"/>
+        </properties>
+    </persistence-unit>
+
+</persistence>

@@ -62,11 +62,9 @@
 package gov.nih.nci.cacis.xds.authz;
 
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-import gov.nih.nci.cacis.xds.authz.config.XdsAuthzConfig;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  *

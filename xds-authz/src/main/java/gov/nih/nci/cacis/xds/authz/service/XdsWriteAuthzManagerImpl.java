@@ -5,6 +5,7 @@ import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -70,7 +71,15 @@ import java.util.List;
 @Transactional
 public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
 
-    private final EntityManager em;
+    @PersistenceContext(unitName = "cacis-xds-authz")
+    private EntityManager em;
+
+    /**
+     * No args constructor
+     */
+    public XdsWriteAuthzManagerImpl() {
+    //    no args constructor
+    }
 
     /**
      * Constructor
@@ -91,10 +100,10 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
                     ("from " + XdsWriteResource.class.getSimpleName())
                     .getSingleResult();
             writeResource.addSubject(subjectDN);
-               // CHECKSTYLE:OFF Want to throw checked exception
+            // CHECKSTYLE:OFF Want to throw checked exception
         } catch (Exception e) {
-             // CHECKSTYLE:ON
-            throw new  AuthzProvisioningException(e);
+            // CHECKSTYLE:ON
+            throw new AuthzProvisioningException(e);
         }
 
     }
@@ -109,9 +118,9 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
                     (XdsWriteResource) this.em.createQuery("from " + XdsWriteResource.class.getSimpleName())
                             .getSingleResult();
             writeResource.removeSubject(subjectDN);
-               // CHECKSTYLE:OFF Want to throw checked exception
+            // CHECKSTYLE:OFF Want to throw checked exception
         } catch (Exception e) {
-             // CHECKSTYLE:ON
+            // CHECKSTYLE:ON
             throw new AuthzProvisioningException(e);
         }
     }
@@ -131,5 +140,23 @@ public class XdsWriteAuthzManagerImpl implements XdsWriteAuthzManager {
             em.persist(xdsWriteResource);
             em.flush();
         }
+    }
+
+    /**
+     * Getter for Entity Manager
+     *
+     * @return EntityManager
+     */
+    public EntityManager getEm() {
+        return em;
+    }
+
+    /**
+     * Setter for Entity Manager
+     *
+     * @param em EntityManager
+     */
+    public void setEm(EntityManager em) {
+        this.em = em;
     }
 }
