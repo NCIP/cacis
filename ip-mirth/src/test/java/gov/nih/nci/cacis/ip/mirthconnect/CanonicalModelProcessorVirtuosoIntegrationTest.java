@@ -58,123 +58,103 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package gov.nih.nci.cacis.ip.mirthconnect;
 
-package gov.nih.nci.cacis.cdw;
-
+import gov.nih.nci.cacis.cdw.BaseVirtuosoIntegrationTest;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
-import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.openrdf.model.URI;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.xml.sax.SAXException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.binding.soap.SoapTransportFactory;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.w3c.dom.Node;
 
 /**
- * Converts the XML message to RDF and stores the output Document into the Clinical Data warehouse and
- *  adds the document to the study, site and patient graph groups.
- *
+ * Tests full round trip from CanonicalModelProcessor to Virtuoso.
  * @author bpickeral
- * @since Jul 18, 2011
+ * @since Aug 2, 2011
  */
-public class CDWLoader {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
+public class CanonicalModelProcessorVirtuosoIntegrationTest extends BaseVirtuosoIntegrationTest {
+
+    public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
+    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
+    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorVirtuosoIntegrationTest.class);
+
+    private static final String GRPH_GROUP_STUDY_ID = "study_id";
+    private static final String GRPH_GROUP_SITE_ID = "site_id";
+    private static final String GRPH_GROUP_P1_ID = "patient_id";
+
+    private static final String GRPH_GROUP_STUDY = CACIS_NS + GRPH_GROUP_STUDY_ID;
+    private static final String GRPH_GROUP_SITE = GRPH_GROUP_STUDY + "/" + GRPH_GROUP_SITE_ID;
+    private static final String GRPH_GROUP_P1 = GRPH_GROUP_SITE + "/" + GRPH_GROUP_P1_ID;
+
+    @Override
+    @Before
+    public void init() throws AuthzProvisioningException, URISyntaxException {
+        super.init();
+        addNamespace("ns2", "http://cacis.nci.nih.gov");
+
+        site1URI = virtuosoUtils.createGraphGroup(repository, GRPH_GROUP_SITE);
+        study1URI = virtuosoUtils.createGraphGroup(repository, GRPH_GROUP_STUDY);
+        p1URI = virtuosoUtils.createGraphGroup(repository, GRPH_GROUP_P1);
+    }
+
+    @Test
+    public void invokeSOAP() throws Exception {
+
+        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
+                getValidMessage().getBytes());
+        assertNotNull(res);
+        LOG.info("Echo response: " + res.getTextContent());
+
+        // Wait for MC to call CDWLoader
+        Thread.sleep(30000);
+
+        int grphTriplesCnt = getNoOfTriples(dbaSimpleJdbcTemplate, site1URI);
+        assertTrue(grphTriplesCnt > 0);
+
+        grphTriplesCnt = getNoOfTriples(dbaSimpleJdbcTemplate, study1URI);
+        assertTrue(grphTriplesCnt > 0);
+
+        grphTriplesCnt = getNoOfTriples(dbaSimpleJdbcTemplate, p1URI);
+        assertTrue(grphTriplesCnt > 0);
+
+    }
 
     /**
-     * caCIS context URI.
-     */
-    public static final String CACIS_NS = "http://cacis.nci.nih.gov";
-
-    @Autowired
-    private XmlToRdfTransformer transformer;
-    @Autowired
-    private RepositoryConnection con;
-    @Autowired
-    private GraphAuthzMgr graphAuthzMgr;
-
-    /**
-     * Transforms XML to RDF and then stores into Virtuoso.
+     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
      *
-     * @param xmlString String containing RDF
-     * @param context the context to add the data to, used for pulling out the data
-     * @param studyId id of the study to be used in the IRI
-     * @param siteId id of the site to be used in the IRI
-     * @param patientId id of the patient to be used in the IRI
-     * @throws CDWLoaderException on error transforming or loading the data into Virtuoso
+     * @return string representation of a valid message
      */
-    public void load(String xmlString, String context, String studyId, String siteId,
-            String patientId) throws CDWLoaderException {
+    protected String getValidMessage() {
+        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
+        File msgFile = null;
         try {
-            final org.openrdf.model.URI uriContext = con.getRepository().getValueFactory().createURI(context);
-            load(new ByteArrayInputStream(xmlString.getBytes()), uriContext, studyId, siteId, patientId);
-            //CHECKSTYLE:OFF
-        } catch(Exception e) {
-            //CHECKSTYLE:ON
-            throw new CDWLoaderException(e);
+            msgFile = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-    }
-
-    private void load(InputStream xmlStream, URI context, String studyId, String siteId,
-            String patientId) throws TransformerException, RepositoryException, RDFParseException, IOException,
-            AuthzProvisioningException, SAXException, ParserConfigurationException {
-        final OutputStream os = transformer.transform(xmlStream);
-        ByteArrayOutputStream bos = null;
-        InputStream repoStream = null;
+        String validMessage = null;
         try {
-            bos = (ByteArrayOutputStream) os;
-            repoStream = new ByteArrayInputStream(bos.toByteArray());
-
-            con.add(repoStream, context.toString(), RDFFormat.RDFXML, context);
-
-            addToGraphGroups(context, studyId, siteId, patientId);
-        } finally {
-            bos.close();
+            validMessage = FileUtils.readFileToString(msgFile);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-    }
-
-    private void addToGraphGroups(URI context, String studyId, String siteId,
-            String patientId) throws AuthzProvisioningException {
-        final Set<URI> grphGrps = new HashSet<URI>();
-        final URI studyURI = con.getRepository().getValueFactory().createURI(appendToIRI(CACIS_NS,
-                studyId));
-        final URI siteURI = con.getRepository().getValueFactory().createURI(appendToIRI(studyURI.toString(),
-                siteId));
-        final URI patientURI = con.getRepository().getValueFactory().createURI(appendToIRI(siteURI.toString(),
-                patientId));
-
-        grphGrps.add(studyURI);
-        grphGrps.add(siteURI);
-        grphGrps.add(patientURI);
-        graphAuthzMgr.add(context, grphGrps);
-    }
-
-
-    private String appendToIRI(String s1, String s2) {
-        return s1 + '/' + s2;
-    }
-
-
-    /**
-     * Generates a caCIS context with a random UUID - http://cacis.nci.nih.gov/<UUID>
-     *
-     * @return context
-     */
-    public String generateContext() {
-        final UUID uuid = UUID.randomUUID();
-        return CDWLoader.CACIS_NS + '/' + uuid;
+        return validMessage;
     }
 
 }

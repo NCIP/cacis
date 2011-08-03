@@ -59,58 +59,21 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.cdw;
+package gov.nih.nci.cacis.ip.mirthconnect.config;
 
-import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
+import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
 
-import javax.xml.transform.TransformerException;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.junit.Test;
-import org.openrdf.model.Value;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFParseException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * Config for CDW tests.
+ * @author bpickeral
+ * @since Aug 2, 2011
  */
-@ContextConfiguration(locations = "classpath:applicationContext-mock-cdw-test.xml")
-public class CDWLoaderSystemTest extends BaseCDWLoaderTest {
-
-    @Autowired
-    RepositoryConnection con;
-
-    @Autowired
-    CDWLoader loader;
-
-    private static final String GRPH_GROUP_STUDY_ID = "2.3.4.2";
-    private static final String GRPH_GROUP_SITE_ID = "2.3.4.0";
-    private static final String GRPH_GROUP_P1_ID = "2.3.4.1";
-
-    @Test
-    public void xmlToRDFLoad() throws Exception {
-        final org.openrdf.model.URI context = con.getRepository().getValueFactory().createURI(loader.generateContext());
-        File xslF = new File(getClass().getClassLoader().getResource("caCISRequestSample3.xml").toURI());
-
-        String xmlString = FileUtils.readFileToString(xslF);
-
-        loader.load(xmlString, context.toString(), GRPH_GROUP_STUDY_ID, GRPH_GROUP_SITE_ID, GRPH_GROUP_P1_ID);
-
-        final String query = QUERY_PFX + context + QUERY_END;
-        final Value[][] results = doTupleQuery(con, query);
-        assertTrue(results.length > 0);
-    }
-
-    @Test
-    public void generateContext() throws TransformerException, RepositoryException, IOException, RDFParseException {
-        assertTrue(StringUtils.startsWith(loader.generateContext(), "http://cacis.nci.nih.gov/"));
-    }
+@Configuration
+@Import(TestCDWConfig.class)
+public class TestIPMirthConfig {
 
 }
