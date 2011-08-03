@@ -41,14 +41,17 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <excludes><exclude>xsl/*</exclude></excludes>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>**/xsl/*</exclude></excludes>
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
 
         <plugins>
             <plugin>
