@@ -126,10 +126,4 @@ public class CDWLoaderIntegrationTest extends BaseVirtuosoIntegrationTest {
         assertEquals(557, getNoOfTriples(dbaSimpleJdbcTemplate, p1URI));
     }
 
-    @Test(expected = CDWLoaderException.class)
-    public void xmlToRDFLoadException() throws CDWLoaderException {
-        loader.load(null, null, null, null, null);
-    }
-
-
 }
