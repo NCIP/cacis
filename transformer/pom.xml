@@ -16,10 +16,10 @@
     <properties>
         <test.unit.branchrate>35</test.unit.branchrate>
         <test.unit.linerate>35</test.unit.linerate>
-        <outputRootdir>${mirthConnect.server.dir}/temp</outputRootdir>
-        <cdfOutputDir>${outputRootdir}/output/cdf/</cdfOutputDir>
-        <xccdOutputDir>${outputRootdir}/output/xccd/</xccdOutputDir>
-        <trimInputDir>${outputRootdir}/input/</trimInputDir>
+        <outputRootdir>${user.home}</outputRootdir>
+        <cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
+        <trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
 
         <cacis-pco.validation.xmltordf.xsl.baseClassPath>/xsl/</cacis-pco.validation.xmltordf.xsl.baseClassPath>
         <cacis-pco.validation.xmltordf.xsl>xml2rdf3.xsl</cacis-pco.validation.xmltordf.xsl>
