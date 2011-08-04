@@ -42,51 +42,55 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis;
+/**
+ * Outbound XDS handler
+ * @author monish.dombla@semanticbits.com
+ * @since Jul 28, 2011 
+ */
 
-import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
-import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
-import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
+package gov.nih.nci.cacis.xds.auth.axis;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.security.Principal;
+import java.security.cert.X509Certificate;
 
-import static junit.framework.Assert.assertEquals;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.axis2.context.MessageContext;
+import org.apache.axis2.handlers.AbstractHandler;
+import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * Outbound XDS handler
+ * @author monish.dombla@semanticbits.com
+ * @since Jul 28, 2011 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-xds-authz-handlers-hsqldb.xml")
-public class XdsWriteAuthzManagerDbTest {
 
+public abstract class AbstractCacisXdsHandler extends AbstractHandler {
+    
+    private static final Log LOG = LogFactory.getLog(AbstractCacisXdsHandler.class);
 
-    @Autowired
-    private XdsWriteAuthzManager manager;
-
-    @PersistenceContext
-    private EntityManager em;
-
-    @Test
-    @Transactional
-    public void grantAndRevoke() throws AuthzProvisioningException {
-        final String dn = "juser@example.com,cn=Joe User,dc=example,dc=com,o=Example Inc.,c=US";
-
-        manager.grantStoreWrite(dn);
-         final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
-                ("from " + XdsWriteResource.class.getSimpleName())
-                .getSingleResult();
-        assertEquals(1, writeResource.getSubjects().size());
-
-        manager.revokeStoreWrite(dn);
-        //assertEquals(0, writeResource.getSubjects().size());
-
+    /**
+     * 
+     * @param msgContext Accepts the axis2 message context
+     * @return returns the SubjectDN present in the x509 certificate presented by client.
+     */
+    protected String getSubjectDN(MessageContext msgContext) {
+        
+        final HttpServletRequest req = (HttpServletRequest) msgContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+        
+        final X509Certificate[] certificate = (X509Certificate[])req.getAttribute("javax.servlet.request.X509Certificate");
+        if (certificate == null) {
+            LOG.debug("javax.servlet.request.X509Certificate NOT AVAILABLE");
+        } else {
+            final Principal clientDN = certificate[0].getSubjectDN();        // certificate[0] is the end of the chain.
+            if (clientDN != null) {
+                return clientDN.getName();
+            }
+        }
+        return null;
     }
-
+    
 }
+

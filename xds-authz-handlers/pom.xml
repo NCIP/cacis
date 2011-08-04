@@ -29,8 +29,8 @@
         <xds.axis2.version>1.5</xds.axis2.version>
         <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
 
-        <test.unit.branchrate>75</test.unit.branchrate>
-        <test.unit.linerate>75</test.unit.linerate>
+        <test.unit.branchrate>65</test.unit.branchrate>
+        <test.unit.linerate>65</test.unit.linerate>
     </properties>
 
 
@@ -51,6 +51,60 @@
                 </excludes>
             </resource>
         </resources>
+        <plugins>
+			  <plugin>
+			    <artifactId>maven-clean-plugin</artifactId>
+			    <version>2.4.1</version>
+			    <configuration>
+			    	<failOnError>false</failOnError>
+			      <filesets>
+			        <fileset>
+			          <directory>${openxds.web.dir}/WEB-INF/lib</directory>
+			          <includes>
+			            <include>hibernate-annotations-3.3.0.ga.jar</include>
+			          </includes>
+			          <followSymlinks>false</followSymlinks>
+			        </fileset>
+			      </filesets>
+			    </configuration>
+			  </plugin>        
+        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>esd-commons</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>xds-authz-beans</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+								<artifactItem>
+									<groupId>org.hibernate</groupId>
+									<artifactId>hibernate-annotations</artifactId>
+									<version>3.2.1.ga</version>
+								</artifactItem>                                
+                            </artifactItems>
+                            <outputDirectory>${openxds.web.dir}/WEB-INF/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>  
+        </plugins>
     </build>
 
     <dependencies>
@@ -92,7 +146,6 @@
             <version>${spring.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>xds-authz-beans</artifactId>
@@ -105,7 +158,47 @@
             <version>${xds.axis2.version}</version>
         </dependency>
 
+        <dependency>
+	    	<groupId>org.apache.axis2</groupId>
+	    	<artifactId>axis2-jaxws</artifactId>
+	    	<version>1.5</version>
+	    	<type>jar</type>
+    	</dependency>         
+
     </dependencies>
 
-
+    <profiles>
+        <profile>
+            <id>cacis-ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <id>copy-xds-authz-resources</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${openxds.web.dir}/WEB-INF/lib</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${build.directory}</directory>
+                                            <includes>
+                                                <include>${artifactId}-${project.version}.${packaging}</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -42,51 +42,81 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis;
+package gov.nih.nci.cacis.xds.auth.axis;
+
 
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
-import gov.nih.nci.cacis.xds.authz.domain.XdsWriteResource;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.context.MessageContext;
+import org.apache.axis2.description.HandlerDescription;
+import org.apache.axis2.engine.Handler;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static junit.framework.Assert.assertEquals;
+
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * Outbound XDS handler
+ * @author monish.dombla@semanticbits.com
+ * @since Jul 28, 2011 
+
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext-xds-authz-handlers-hsqldb.xml")
-public class XdsWriteAuthzManagerDbTest {
+public class CacisXdsWriteAuthzInHandler extends AbstractCacisXdsHandler implements Handler {
+    
+    private static final Log LOG = LogFactory.getLog(CacisXdsWriteAuthzInHandler.class);
+    private static final String PROVIDE_AND_REGISETR_DOCUMENT_SET_B = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b";
+    private ApplicationContext applicationContext;
 
-
-    @Autowired
-    private XdsWriteAuthzManager manager;
-
-    @PersistenceContext
-    private EntityManager em;
-
-    @Test
-    @Transactional
-    public void grantAndRevoke() throws AuthzProvisioningException {
-        final String dn = "juser@example.com,cn=Joe User,dc=example,dc=com,o=Example Inc.,c=US";
-
-        manager.grantStoreWrite(dn);
-         final XdsWriteResource writeResource = (XdsWriteResource) this.em.createQuery
-                ("from " + XdsWriteResource.class.getSimpleName())
-                .getSingleResult();
-        assertEquals(1, writeResource.getSubjects().size());
-
-        manager.revokeStoreWrite(dn);
-        //assertEquals(0, writeResource.getSubjects().size());
-
+    
+    /**
+     * 
+     * {@inheritDoc} load context
+     */
+    @Override
+    public void init(HandlerDescription handlerdesc) {
+        super.init(handlerdesc);
+        applicationContext = 
+            new ClassPathXmlApplicationContext("classpath*:applicationContext-xds-authz-handlers.xml");
     }
 
+    /**
+     * 
+     * {@inheritDoc} 
+     */
+    public InvocationResponse invoke(MessageContext msgContext) throws AxisFault {
+        
+        final XdsWriteAuthzManager xdsWriteAuthzManager = 
+            (XdsWriteAuthzManager) applicationContext.getBean("xdsWriteAuthzManager");
+        boolean hasAccess = false;
+        
+        if (PROVIDE_AND_REGISETR_DOCUMENT_SET_B.equals(msgContext.getWSAAction())) {
+            LOG.debug("ACTION INVOKED-------- ::: " + msgContext.getWSAAction());
+            final String subjectDN = getSubjectDN(msgContext);
+            LOG.debug("SubjectDN -------- ::: " + subjectDN);
+            try {
+                hasAccess = xdsWriteAuthzManager.checkStoreWrite(subjectDN);
+            } catch (AuthzProvisioningException e) {
+                throw new AxisFault("Error while checking access",e);
+                //CHECKSTYLE:OFF
+            } catch (Exception e) {
+                //CHECKSTYLE:ON
+                throw new AxisFault("Error while checking access",e);
+            }
+            if (!hasAccess) {
+                throw new AxisFault("Permission denied");
+            }
+        }
+        return InvocationResponse.CONTINUE;        
+    }
+    
+    /** 
+     * @param applicationContext the applicationContext to set
+     */
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }    
 }
