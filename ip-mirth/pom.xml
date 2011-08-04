@@ -17,7 +17,8 @@
         <test.unit.linerate>20</test.unit.linerate>
 
         <!--  Temporary directory for System test output file -->
-        <cacis.mc.temp.dir>/tmp</cacis.mc.temp.dir>
+        <outputRootdir>${user.home}</outputRootdir>
+        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/tmp</cacis.mc.temp.dir>
     </properties>
 
     <dependencies>
@@ -111,6 +112,11 @@
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>cdw</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>nav</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
                                 <artifactItem>

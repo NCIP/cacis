@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1312401915454</time>
+    <time>1312484728730</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>7</revision>
+  <revision>10</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -42,7 +42,7 @@
         <property name="FTPAnonymous">1</property>
         <property name="binary">0</property>
         <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">/tmp</property>
+        <property name="host">${outputDir}</property>
         <property name="outputAppend">1</property>
         <property name="outputPattern">temp-mc.xml</property>
         <property name="passive">1</property>
@@ -91,6 +91,8 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+globalChannelMap.put(&apos;outputDir&apos;,&apos;${cacis.mc.temp.dir}&apos;);
+
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
