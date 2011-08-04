@@ -24,10 +24,14 @@
                 <mirthConnect.cli>/Applications/Mirth Connect/mccommand</mirthConnect.cli>
                 <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
 
-		<outputRootdir>/Users/bpickeral/Documents</outputRootdir>
-        	<cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
-        	<xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
-        	<trimInputDir>${outputRootdir}/cacis/mc/input/</trimInputDir>
+				<outputRootdir>/Users/bpickeral/Documents</outputRootdir>
+        		<cdfOutputDir>${outputRootdir}/cacis/mc/output/cdf/</cdfOutputDir>
+        		<xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
+        		<trimInputDir>${outputRootdir}/cacis/mc/input/</trimInputDir>
+        		
+        		<!--NOTE - customize this property to OpenXDS location on the desired environment-->
+        		<openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
+        		
 
 		<!--  Temporary directory for System test output file -->
 		<cacis.mc.temp.dir>/tmp</cacis.mc.temp.dir>

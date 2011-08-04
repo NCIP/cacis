@@ -66,6 +66,8 @@
         <tolven.jboss.port>8080</tolven.jboss.port>
         <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
         <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
+        <!--NOTE - customize this property to OpenXDS location-->
+        <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
 
     </properties>
 
