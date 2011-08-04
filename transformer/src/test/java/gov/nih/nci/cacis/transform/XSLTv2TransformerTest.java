@@ -1,4 +1,4 @@
-/**
+/*
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
  * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
@@ -7,24 +7,7 @@
  *
  * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
- * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
- * (iii) beneficial ownership of such entity.
- *
- * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
- * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
- * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
- * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
- * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
- * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
- * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
- * charge to You.
- *
- * Your redistributions of the source code for the Software must retain the above copyright notice, this list of
- * conditions and the disclaimer and limitation of liability of Article 6, below. Your redistributions in object code
- * form must reproduce the above copyright notice, this list of conditions and the disclaimer of Article 6 in the
- * documentation and/or other materials provided with the distribution, if any.
+ *  of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
  * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
@@ -58,82 +41,116 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package gov.nih.nci.cacis.transform;
 
+import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
+import gov.nih.nci.cacis.config.RdfTransformerConfig;
+import junit.framework.Assert;
 import org.apache.camel.spring.javaconfig.test.JavaConfigContextLoader;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.*;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-/**
- * @author kherm manav.kher@semanticbits.com
- */
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
         locations = "gov.nih.nci.cacis.config.TransformConfig",
         loader = JavaConfigContextLoader.class)
-@DirtiesContext
-public class XMLToRdfTransformerTest {
+public class XSLTv2TransformerTest {
 
-      @Autowired
+    @Autowired
     private XmlToRdfTransformer transform;
 
-    private InputStream sampleMessageIS, sampleTrimIS;
+    private InputStream sampleMessageIS;
+
+    @BeforeClass
+    public static void setupEnv() {
+        System.setProperty("cacis-pco.validation.xmltordf.xsl", "sampleXSLv2.xsl");
+        System.setProperty("cacis-pco.validation.xmltordf.xsl.baseClassPath", "/xsl2/");
+    }
 
     @Before
     public void init() throws URISyntaxException, IOException {
-        sampleMessageIS = FileUtils.openInputStream(new File(getClass().
-                getClassLoader().getResource("caCISRequestSample3.xml")
-                .toURI()));
 
-        sampleTrimIS =  FileUtils.openInputStream(new File(getClass().
-                getClassLoader().getResource("sample_transcend_trim.xml")
+        sampleMessageIS = FileUtils.openInputStream(new File(getClass().
+                getClassLoader().getResource("xsl2/sampleForXSLv2.xml")
                 .toURI()));
     }
+
+
 
     @Test
     public void transform() throws TransformerException {
         final OutputStream os = transform.transform(sampleMessageIS);
         assertNotNull(os);
-
-       assertNotNull(transform.transform(sampleTrimIS));
     }
 
-    @Test
-    public void transformStream() throws XMLStreamException, TransformerException, URISyntaxException, IOException {
-       final ByteArrayOutputStream os = new ByteArrayOutputStream();
 
+
+    @Test
+    public void transformStream() throws XMLStreamException, TransformerException, URISyntaxException, IOException, SAXException, ParserConfigurationException, XPathExpressionException {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
 
         transform.transform(sampleMessageIS, os);
         assertNotNull(os);
         assertTrue(os.size() > 0);
-
-
-        os.reset();
-        transform.transform(sampleTrimIS, os);
-        assertNotNull(os);
         System.out.println(os);
-        assertTrue(os.size() > 0);
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true); // never forget this!
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        Document doc = builder.parse(new ByteArrayInputStream(os.toByteArray()));
+        assertNotNull(doc);
+
+
+        XPathFactory xPathFactory = XPathFactory.newInstance();
+        XPath xpath = xPathFactory.newXPath();
+        XPathExpression expr = xpath.compile("/world/country[1]/city[1]");
+        System.out.println("city is" + expr.evaluate(doc));
+
+        assertEquals("Tokyo", expr.evaluate(doc));
+
+
     }
-
-
 
 
 }

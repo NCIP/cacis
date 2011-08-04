@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<world>
+    <country name="Canada" continent="North America">
+        <city>Toronto</city>
+        <city>Vancouver</city>
+    </country>
+    <country name="Jamaica" continent="North America">
+        <city>Kingston</city>
+        <city>Ocho Rios</city>
+    </country>
+    <country name="United States" continent="North America">
+        <city>Allentown</city>
+        <city>Mobile</city>
+    </country>
+    <country name="United Kingdom" continent="Europe">
+        <city>London</city>
+        <city>Dundee</city>
+    </country>
+    <country name="France" continent="Europe">
+        <city>Paris</city>
+        <city>Nice</city>
+    </country>
+    <country name="Japan" continent="Asia">
+        <city>Tokyo</city>
+        <city>Osaka</city>
+    </country>
+</world>
