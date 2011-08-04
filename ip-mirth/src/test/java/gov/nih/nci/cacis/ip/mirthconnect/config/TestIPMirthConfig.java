@@ -63,7 +63,10 @@ package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
 import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -75,5 +78,12 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import(TestCDWConfig.class)
 public class TestIPMirthConfig {
-
+    @Bean
+    public PropertyPlaceholderConfigurer testPropertyPlaceholderConfigurer() {
+        final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("ip-mirth",
+                "cacis-ip-mirth.properties");
+        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
+    }
 }

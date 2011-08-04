@@ -63,29 +63,37 @@ package gov.nih.nci.cacis.ip.mirthconnect;
 import gov.nih.nci.cacis.cdw.BaseVirtuosoIntegrationTest;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 
+import java.io.File;
 import java.net.URISyntaxException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapTransportFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Node;
 
 /**
- * Tests full round trip from CanonicalModelProcessor to Virtuoso.
+ * Tests full round trip from CanonicalModelProcessor to Document router. Currently, the Document Router channel routes
+ *  to a file (Mock implementation) so that we can test that it was called properly.
+ *
  * @author bpickeral
  * @since Aug 2, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class CanonicalModelProcessorVirtuosoIntegrationTest extends BaseVirtuosoIntegrationTest {
+public class CanonicalModelProcessorDocRouterIntegrationTest extends BaseVirtuosoIntegrationTest {
+
+    @Value("${cacis.mc.temp.dir}")
+    private String tempDirectory;
 
     public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
-    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorVirtuosoIntegrationTest.class);
+    private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorDocRouterIntegrationTest.class);
 
     private static final String GRPH_GROUP_STUDY_ID = "study_id";
     private static final String GRPH_GROUP_SITE_ID = "site_id";
@@ -94,6 +102,8 @@ public class CanonicalModelProcessorVirtuosoIntegrationTest extends BaseVirtuoso
     private static final String GRPH_GROUP_STUDY = CACIS_NS + GRPH_GROUP_STUDY_ID;
     private static final String GRPH_GROUP_SITE = GRPH_GROUP_STUDY + "/" + GRPH_GROUP_SITE_ID;
     private static final String GRPH_GROUP_P1 = GRPH_GROUP_SITE + "/" + GRPH_GROUP_P1_ID;
+
+    private File tempFile = null;
 
     @Override
     @Before
@@ -114,18 +124,22 @@ public class CanonicalModelProcessorVirtuosoIntegrationTest extends BaseVirtuoso
         assertNotNull(res);
         LOG.info("Echo response: " + res.getTextContent());
 
-        // Wait for MC to call CDWLoader
+        // Wait for MC to call Doc Router
         Thread.sleep(30000);
 
-        int grphTriplesCnt = getNoOfTriples(dbaSimpleJdbcTemplate, site1URI);
-        assertTrue(grphTriplesCnt > 0);
+        //TODO: Replace with code that checks that the new and improved Doc Router works. Currently the Doc
+        // router channel is mocked to save to a temporary file
+        tempFile = new File(tempDirectory + "/temp-mc.xml");
+        assertTrue(tempFile.exists());
+    }
 
-        grphTriplesCnt = getNoOfTriples(dbaSimpleJdbcTemplate, study1URI);
-        assertTrue(grphTriplesCnt > 0);
-
-        grphTriplesCnt = getNoOfTriples(dbaSimpleJdbcTemplate, p1URI);
-        assertTrue(grphTriplesCnt > 0);
-
+    @Override
+    @After
+    public void cleanUp() throws AuthzProvisioningException {
+        super.cleanUp();
+        if (tempFile != null && tempFile.exists()) {
+            tempFile.delete();
+        }
     }
 
 }

@@ -60,33 +60,50 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
+import java.net.URISyntaxException;
+
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
 import gov.nih.nci.cacis.ClinicalMetadata;
-import org.apache.commons.io.FileUtils;
+import gov.nih.nci.cacis.cdw.BaseVirtuosoIntegrationTest;
+import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapTransportFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.test.AbstractCXFTest;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Node;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
+public class CanonicalModelProcessorMCIntegrationTest extends BaseVirtuosoIntegrationTest {
 
     public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
-    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
+    public static final String SOAP_MSG_FILENAME = "CanonicalModelProcessorMC_sample.xml";
     private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorMCIntegrationTest.class);
 
+    private static final String GRPH_GROUP_STUDY_ID = "mc_study_id";
+    private static final String GRPH_GROUP_SITE_ID = "mc_site_id";
+    private static final String GRPH_GROUP_P1_ID = "mc_patient_id";
+
+    private static final String GRPH_GROUP_URI_STR_STUDY1 = CACIS_NS + "/" + GRPH_GROUP_STUDY_ID;
+    private static final String GRPH_GROUP_URI_STR_SITE1 = GRPH_GROUP_URI_STR_STUDY1 + "/" + GRPH_GROUP_SITE_ID;
+    private static final String GRPH_GROUP_URI_STR_P1 = GRPH_GROUP_URI_STR_SITE1 + "/" + GRPH_GROUP_P1_ID;
+
+    @Override
     @Before
-    public void init() {
+    public void init() throws AuthzProvisioningException, URISyntaxException {
+        super.init();
+
         addNamespace("ns2", "http://cacis.nci.nih.gov");
+        virtuosoUtils.createGraphGroup(repository, GRPH_GROUP_URI_STR_SITE1);
+        virtuosoUtils.createGraphGroup(repository, GRPH_GROUP_URI_STR_STUDY1);
+        virtuosoUtils.createGraphGroup(repository, GRPH_GROUP_URI_STR_P1);
     }
 
     @Test
@@ -104,6 +121,9 @@ public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
         ClinicalMetadata meta = new ClinicalMetadata();
         meta.setPatientIdExtension("123");
         meta.setPatientIdRoot("123.456");
+        meta.setSiteIdExtension(GRPH_GROUP_SITE_ID);
+        meta.setPatientIdExtension(GRPH_GROUP_P1_ID);
+        meta.setStudyIdExtension(GRPH_GROUP_STUDY_ID);
         request.setClinicalMetaData(meta);
 
 
@@ -119,32 +139,6 @@ public class CanonicalModelProcessorMCIntegrationTest extends AbstractCXFTest {
         assertValid("//ns2:caCISResponse[@status='SUCCESS']", res);
         LOG.info("Echo response: " + res.getTextContent());
 
-    }
-
-
-
-    /**
-     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
-     *
-     * @return string representation of a valid message
-     */
-    protected String getValidMessage() {
-        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
-        File msgFile = null;
-        try {
-            msgFile = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        String validMessage = null;
-        try {
-            validMessage = FileUtils.readFileToString(msgFile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return validMessage;
     }
 
 }

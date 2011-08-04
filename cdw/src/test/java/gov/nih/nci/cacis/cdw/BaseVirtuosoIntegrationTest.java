@@ -62,8 +62,12 @@ package gov.nih.nci.cacis.cdw;
 
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.cxf.test.AbstractCXFTest;
 import org.junit.After;
 import org.junit.Before;
@@ -102,6 +106,7 @@ public class BaseVirtuosoIntegrationTest extends AbstractCXFTest {
     protected String driver;
 
     protected static final String CACIS_NS = "http://cacis.nci.nih.gov/";
+    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
 
     private static final String NOBODY = "nobody";
 
@@ -139,6 +144,18 @@ public class BaseVirtuosoIntegrationTest extends AbstractCXFTest {
 
         final Object[] args = {};
         return jdbcTemplate.queryForInt(query, args);
+    }
+
+    /**
+     * Gets a valid Message. Default implementation reads a valid SOAPMessage that has been serialized to a file.
+     *
+     * @return string representation of a valid message
+     * @throws IOException on I/O error
+     * @throws URISyntaxException on URI Syntax error
+     */
+    protected String getValidMessage() throws IOException, URISyntaxException {
+        final URL url = getClass().getClassLoader().getResource(SOAP_MSG_FILENAME);
+        return FileUtils.readFileToString(new File(url.toURI()));
     }
 
 }

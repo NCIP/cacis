@@ -29,6 +29,9 @@
         	<xccdOutputDir>${outputRootdir}/cacis/mc/output/xccd/</xccdOutputDir>
         	<trimInputDir>${outputRootdir}/cacis/mc/input/</trimInputDir>
 
+		<!--  Temporary directory for System test output file -->
+		<cacis.mc.temp.dir>/tmp</cacis.mc.temp.dir>
+
             </properties>
         </profile>
 

@@ -15,6 +15,9 @@
         <!--WSDL generates a lot of classes. Need to set this low -->
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>20</test.unit.linerate>
+
+        <!--  Temporary directory for System test output file -->
+        <cacis.mc.temp.dir>/tmp</cacis.mc.temp.dir>
     </properties>
 
     <dependencies>
