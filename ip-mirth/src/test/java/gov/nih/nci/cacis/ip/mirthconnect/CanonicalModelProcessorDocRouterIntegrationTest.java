@@ -125,7 +125,7 @@ public class CanonicalModelProcessorDocRouterIntegrationTest extends BaseVirtuos
         LOG.info("Echo response: " + res.getTextContent());
 
         // Wait for MC to call Doc Router
-        Thread.sleep(30000);
+        Thread.sleep(40000);
 
         //TODO: Replace with code that checks that the new and improved Doc Router works. Currently the Doc
         // router channel is mocked to save to a temporary file

@@ -18,7 +18,7 @@
 
         <!--  Temporary directory for System test output file -->
         <outputRootdir>${user.home}</outputRootdir>
-        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/tmp</cacis.mc.temp.dir>
+        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
     </properties>
 
     <dependencies>
