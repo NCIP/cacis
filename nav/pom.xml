@@ -18,7 +18,7 @@
 
         <nav.keystore.type>JKS</nav.keystore.type>
         <nav.keystore.folder>${user.home}</nav.keystore.folder>
-        <nav.keystore.location>${user.home}/keystore.jks</nav.keystore.location>
+        <nav.keystore.location>${nav.keystore.folder}/keystore.jks</nav.keystore.location>
         <nav.keystore.password>changeit</nav.keystore.password>
         <nav.keystore.key>nav_test</nav.keystore.key>
     </properties>
@@ -78,7 +78,7 @@
                             <outputDirectory>${nav.keystore.folder}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}</directory>
+                                    <directory>src/main/resources</directory>
                                     <includes>
                                         <include>keystore.jks</include>
                                     </includes>
