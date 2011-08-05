@@ -17,6 +17,7 @@
         <test.unit.linerate>65</test.unit.linerate>
 
         <nav.keystore.type>JKS</nav.keystore.type>
+        <nav.keystore.folder>${user.home}</nav.keystore.folder>
         <nav.keystore.location>${user.home}/keystore.jks</nav.keystore.location>
         <nav.keystore.password>changeit</nav.keystore.password>
         <nav.keystore.key>nav_test</nav.keystore.key>
@@ -62,6 +63,32 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-keystore</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${nav.keystore.folder}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}</directory>
+                                    <includes>
+                                        <include>keystore.jks</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 
