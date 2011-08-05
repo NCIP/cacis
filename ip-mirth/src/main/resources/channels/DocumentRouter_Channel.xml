@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1312484728730</time>
+    <time>1312569291133</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>10</revision>
+  <revision>11</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -38,21 +38,11 @@
     <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">${outputDir}</property>
-        <property name="outputAppend">1</property>
-        <property name="outputPattern">temp-mc.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var sender = globalChannelMap.get(&apos;docSender&apos;);
+
+sender.sendNotification(&apos;urn:oid:1.3.345245354.435345&apos;, &apos;urn:oid:1.3.345245354.435346&apos;, messageObject.getEncodedData());</property>
       </properties>
       <transformer>
         <steps/>
@@ -68,7 +58,7 @@
       <filter>
         <rules/>
       </filter>
-      <transportName>File Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
@@ -91,7 +81,10 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
-globalChannelMap.put(&apos;outputDir&apos;,&apos;${cacis.mc.temp.dir}&apos;);
+var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-nav.xml&quot;);
+var sender = navContext.getBean(&quot;sender&quot;);
+
+globalChannelMap.put(&apos;docSender&apos;, sender);
 
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed

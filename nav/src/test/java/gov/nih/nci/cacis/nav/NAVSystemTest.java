@@ -83,6 +83,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Document;
@@ -107,6 +108,9 @@ public class NAVSystemTest {
 
     @Autowired
     private AlgorithmChecker algorithmChecker;
+
+    @Value("${nav.keystore.location}")
+    private String keyStoreLocation;
 
     private static final String TRUE = "true";
     private static final String EMAIL1 = "another.one@somewhere.com";
@@ -149,7 +153,7 @@ public class NAVSystemTest {
     public void testNotificationSenderNonSecure() throws Exception {
 
         final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
-                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit",
+                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", keyStoreLocation, "changeit",
                 "nav_test");
 
         final Properties props = new Properties();
@@ -190,7 +194,7 @@ public class NAVSystemTest {
         // props.setProperty("mail.debug", TRUE);
 
         final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
-                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit",
+                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", keyStoreLocation, "changeit",
                 "nav_test");
 
         final String mailbox = EMAIL1;
@@ -230,7 +234,7 @@ public class NAVSystemTest {
         // props.setProperty("mail.debug", TRUE);
 
         final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
-                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", "keystore.jks", "changeit",
+                getDocumentResolver(), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, "JKS", keyStoreLocation, "changeit",
                 "nav_test");
 
         final String mailbox = EMAIL1;

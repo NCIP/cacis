@@ -1,20 +1,21 @@
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
- * binary, object code form. The nav Software was developed in conjunction with the National Cancer Institute (NCI) by
- * NCI employees and subcontracted parties. To the extent government employees are authors, any rights in such works
- * shall be subject to Title 17 of the United States Code, section 105.
+ * binary, object code form. The gov.nih.nci.cacis.cdw-authz-1.0 Software was developed in conjunction with the National
+ * Cancer Institute (NCI) by NCI employees and subcontracted parties. To the extent government employees are authors,
+ * any rights in such works shall be subject to Title 17 of the United States Code, section 105.
  *
- * This nav Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
- * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
- * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
- * (iii) beneficial ownership of such entity.
+ * This gov.nih.nci.cacis.cdw-authz-1.0 Software License (the License) is between NCI and You. You (or Your) shall mean
+ * a person or an entity, and all other entities that control, are controlled by, or are under common control with the
+ * entity. Control for purposes of this definition means (i) the direct or indirect power to cause the direction or
+ * management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the
+ * outstanding shares, or (iii) beneficial ownership of such entity.
  *
  * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
  * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the nav Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
- * display, publicly perform, and prepare derivative works of the nav Software; (ii) distribute and have distributed to
- * and by third parties the nav Software and any modifications and derivative works thereof; and (iii) sublicense the
+ * rights in the gov.nih.nci.cacis.cdw-authz-1.0 Software to (i) use, install, access, operate, execute, copy, modify,
+ * translate, market, publicly display, publicly perform, and prepare derivative works of the
+ * gov.nih.nci.cacis.cdw-authz-1.0 Software; (ii) distribute and have distributed to and by third parties the
+ * gov.nih.nci.cacis.cdw-authz-1.0 Software and any modifications and derivative works thereof; and (iii) sublicense the
  * foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
  * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
  * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
@@ -58,69 +59,71 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.cacis.nav;
+package gov.nih.nci.cacis.nav.config;
 
-import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+import gov.nih.nci.cacis.nav.DocRouterNotificationSender;
+import gov.nih.nci.cacis.nav.NotificationSender;
+import gov.nih.nci.cacis.nav.NotificationSenderImpl;
 
-import javax.xml.crypto.dsig.DigestMethod;
-import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.w3c.dom.Node;
+import com.icegreen.greenmail.util.GreenMail;
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since May 10, 2011
- *
+ * Spreing config for NAV.
+ * @author bpickeral
+ * @since Aug 2, 2011
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
-public class DefaultXDSNotificationSignatureBuilderTest {
-
-    @Value("${nav.keystore.location}")
-    private String keyStoreLocation;
+@Configuration
+public class NAVConfig {
 
     /**
-     *
-     * @throws Exception on error
+     * GreenMail Bean.
+     * @return server
      */
-    @Test
-    public void testBuildNotificationSignature() throws Exception {
-        final String regId = "urn:oid:1.3.983249923.1234.3";
-        final String docId1 = "urn:oid:1.3.345245354.435345";
-        final String docId2 = "urn:oid:1.3.345245354.435346";
+    @Bean
+    public GreenMail server() {
+        return new GreenMail();
+    }
 
-        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
-        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
-        docCache.putDocument(docId2, new File("purchase_order.xml"));
+    /**
+     * Notification Sender.
+     * @return notification sender
+     */
+    @Bean
+    public NotificationSender notificationSender() {
+        return new NotificationSenderImpl(null, null, null, null, null,
+                null, null, "", null, 0, null);
+    }
 
-        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
-        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA256, "JKS", keyStoreLocation, "changeit", "nav_test");
+    /**
+     * DocRouterNotificationSender bean.
+     * @return sender
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public DocRouterNotificationSender sender() {
+        return new DocRouterNotificationSender();
+    }
 
-        final String[] keys = { docId1, docId2 };
-        final Node sig = sigBuilder.buildSignature(new ArrayList<String>(Arrays.asList(keys)));
-
-        assertNotNull(sig);
-
-        // Test to see if it can be transformed without error
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        final Transformer trans = tf.newTransformer();
-        trans.transform(new DOMSource(sig), new StreamResult(System.out));
-        // trans.transform(new DOMSource(sig), new StreamResult(new FileOutputStream(
-        // "src/test/resources/notification_gen.xml")));
+    /**
+     * Loads properties from classpath*:/"cacis-nav.properties" location
+     *
+     * @return the property place holder configures
+     */
+    @Bean
+    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("nav",
+                "cacis-nav.properties");
+        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
     }
 
 }

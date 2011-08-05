@@ -1,10 +1,11 @@
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
- * binary, object code form. The nav Software was developed in conjunction with the National Cancer Institute (NCI) by
- * NCI employees and subcontracted parties. To the extent government employees are authors, any rights in such works
- * shall be subject to Title 17 of the United States Code, section 105.
+ * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
+ * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
+ * To the extent government employees are authors, any rights in such works shall be subject to Title 17 of the United
+ * States Code, section 105.
  *
- * This nav Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
+ * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
  * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
  * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
@@ -12,10 +13,10 @@
  *
  * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
  * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the nav Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
- * display, publicly perform, and prepare derivative works of the nav Software; (ii) distribute and have distributed to
- * and by third parties the nav Software and any modifications and derivative works thereof; and (iii) sublicense the
- * foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
+ * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
+ * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
+ * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
+ * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
  * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
  * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
  * charge to You.
@@ -26,13 +27,13 @@
  * documentation and/or other materials provided with the distribution, if any.
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
- * product includes software developed by the National Cancer Institute and subcontracted parties. If You do not include
+ * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
  * such end-user documentation, You shall include this acknowledgment in the Software itself, wherever such third-party
  * acknowledgments normally appear.
  *
- * You may not use the names "The National Cancer Institute", "NCI", or any subcontracted party to endorse or promote
+ * You may not use the names "The National Cancer Institute", "NCI", or any SubContractor party to endorse or promote
  * products derived from this Software. This License does not authorize You to use any trademarks, service marks, trade
- * names, logos or product names of either NCI or theany of the subcontracted parties, except as required to comply with
+ * names, logos or product names of either NCI or any of the subcontracted parties, except as required to comply with
  * the terms of this License.
  *
  * For sake of clarity, and not by way of limitation, You may incorporate this Software into Your proprietary programs
@@ -57,70 +58,109 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package gov.nih.nci.cacis.nav;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 
 import javax.xml.crypto.dsig.DigestMethod;
 import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.w3c.dom.Node;
+
+import com.icegreen.greenmail.util.GreenMail;
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * @since May 10, 2011
- *
+ * Class used by MC to send notification via NotificationSender.
+ * @author bpickeral
+ * @since Aug 4, 2011
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
-public class DefaultXDSNotificationSignatureBuilderTest {
+public class DocRouterNotificationSender {
+
+    @Autowired
+    private GreenMail server;
+
+    @Autowired
+    private NotificationSenderImpl notificationSender;
+
+    @Value("${nav.keystore.type}")
+    private String keyStoreType;
 
     @Value("${nav.keystore.location}")
     private String keyStoreLocation;
 
+    @Value("${nav.keystore.password}")
+    private String keyStorePassword;
+
+    @Value("${nav.keystore.key}")
+    private String keyStoreKey;
+
+    @Value("${nav.message.instructions}")
+    private String instructions;
+
+    @Value("${nav.message.subject}")
+    private String subject;
+
+    @Value("${nav.message.to}")
+    private String mailTo;
+
+    @Value("${nav.message.from}")
+    private String mailFrom;
+
+
     /**
-     *
-     * @throws Exception on error
+     * Used by MC to send an email Notification using the Document Router.
+     * @param docId Document ID
+     * @param regId Reg Id
+     * @param document Clinical Document exchange CCD
+     * @throws IOException on error
+     * @throws NotificationSendException on send error
      */
-    @Test
-    public void testBuildNotificationSignature() throws Exception {
-        final String regId = "urn:oid:1.3.983249923.1234.3";
-        final String docId1 = "urn:oid:1.3.345245354.435345";
-        final String docId2 = "urn:oid:1.3.345245354.435346";
+    public void sendNotification(String docId, String regId, String document) throws IOException,
+            NotificationSendException {
+        try {
+            server.start();
 
-        final InMemoryCacheDocumentHolder docCache = new InMemoryCacheDocumentHolder(2048);
-        docCache.putDocument(docId1, new File("sample_exchangeCCD.xml"));
-        docCache.putDocument(docId2, new File("purchase_order.xml"));
+            final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(
+                    getDocumentResolver(docId, regId, document), SignatureMethod.RSA_SHA1, DigestMethod.SHA1, keyStoreType,
+                    keyStoreLocation, keyStorePassword, keyStoreKey);
 
-        final InMemoryCacheXDSDocumentResolver xdsDocResolver = new InMemoryCacheXDSDocumentResolver(regId, docCache);
-        final XDSNotificationSignatureBuilder sigBuilder = new DefaultXDSNotificationSignatureBuilder(xdsDocResolver,
-                SignatureMethod.RSA_SHA1, DigestMethod.SHA256, "JKS", keyStoreLocation, "changeit", "nav_test");
+            // props.setProperty("mail.debug", TRUE);
 
-        final String[] keys = { docId1, docId2 };
-        final Node sig = sigBuilder.buildSignature(new ArrayList<String>(Arrays.asList(keys)));
+            notificationSender.setSignatureBuilder(sigBuilder);
+            notificationSender.setHost(server.getSmtp().getBindTo());
+            notificationSender.setPort(server.getSmtp().getPort());
+            notificationSender.setProtocol(server.getSmtp().getProtocol());
+            notificationSender.setInstructions(instructions);
+            notificationSender.setSubject(subject);
+            notificationSender.setTo(mailTo);
+            notificationSender.setFrom(mailFrom);
+            notificationSender.setMailProperties(new Properties());
+            notificationSender.setUserName("");
 
-        assertNotNull(sig);
 
-        // Test to see if it can be transformed without error
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        final Transformer trans = tf.newTransformer();
-        trans.transform(new DOMSource(sig), new StreamResult(System.out));
-        // trans.transform(new DOMSource(sig), new StreamResult(new FileOutputStream(
-        // "src/test/resources/notification_gen.xml")));
+            final String[] keys = { docId };
+            notificationSender.send(new ArrayList<String>(Arrays.asList(keys)));
+        } finally {
+            server.stop();
+        }
+
     }
 
+    private XDSDocumentResolver getDocumentResolver(String docId, String regId, String document) throws IOException {
+        final InMemoryCacheDocumentHolder h = new InMemoryCacheDocumentHolder();
+        h.putDocument(docId, document.getBytes());
+        return new InMemoryCacheXDSDocumentResolver(regId, h);
+    }
+
+    /**
+     * Get the server.
+     * @return server
+     */
+    public GreenMail getServer() {
+        return server;
+    }
 }

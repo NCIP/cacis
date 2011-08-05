@@ -3,13 +3,13 @@
  * binary, object code form. The nav Software was developed in conjunction with the National Cancer Institute (NCI) by
  * NCI employees and subcontracted parties. To the extent government employees are authors, any rights in such works
  * shall be subject to Title 17 of the United States Code, section 105.
- * 
+ *
  * This nav Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
  * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
  * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
  * (iii) beneficial ownership of such entity.
- * 
+ *
  * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
  * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
  * rights in the nav Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
@@ -19,22 +19,22 @@
  * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
  * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
  * charge to You.
- * 
+ *
  * Your redistributions of the source code for the Software must retain the above copyright notice, this list of
  * conditions and the disclaimer and limitation of liability of Article 6, below. Your redistributions in object code
  * form must reproduce the above copyright notice, this list of conditions and the disclaimer of Article 6 in the
  * documentation and/or other materials provided with the distribution, if any.
- * 
+ *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
  * product includes software developed by the National Cancer Institute and subcontracted parties. If You do not include
  * such end-user documentation, You shall include this acknowledgment in the Software itself, wherever such third-party
  * acknowledgments normally appear.
- * 
+ *
  * You may not use the names "The National Cancer Institute", "NCI", or any subcontracted party to endorse or promote
  * products derived from this Software. This License does not authorize You to use any trademarks, service marks, trade
  * names, logos or product names of either NCI or theany of the subcontracted parties, except as required to comply with
  * the terms of this License.
- * 
+ *
  * For sake of clarity, and not by way of limitation, You may incorporate this Software into Your proprietary programs
  * and into any third party proprietary programs. However, if You incorporate the Software into third party proprietary
  * programs, You agree that You are solely responsible for obtaining any permission from such third parties required to
@@ -43,12 +43,12 @@
  * before incorporating the Software into such third party proprietary software programs. In the event that You fail to
  * obtain such permissions, You agree to indemnify NCI for any claims against NCI by such third parties, except to the
  * extent prohibited by law, resulting from Your failure to obtain such permissions.
- * 
+ *
  * For sake of clarity, and not by way of limitation, You may add Your own copyright statement to Your modifications and
  * to the derivative works, and You may provide additional or different license terms and conditions in Your sublicenses
  * of modifications of the Software, or any derivative works of the Software as a whole, provided Your use,
  * reproduction, and distribution of the Work otherwise complies with the conditions stated in this License.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE) ARE DISCLAIMED. IN NO
  * EVENT SHALL THE NATIONAL CANCER INSTITUTE, ANY OF ITS SUBCONTRACTED PARTIES OR THEIR AFFILIATES BE LIABLE FOR ANY
@@ -60,6 +60,8 @@
 
 package gov.nih.nci.cacis.nav;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidAlgorithmParameterException;
@@ -110,10 +112,10 @@ import org.w3c.dom.Text;
 
 /**
  * Default implementation of XDSNotificationSignatureBuilder.
- * 
+ *
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @since May 10, 2011
- * 
+ *
  */
 public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSignatureBuilder {
 
@@ -150,7 +152,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
 
     private String keyStoreType = "JKS";
 
-    private String keyStoreName = "keystore";
+    private String keyStoreLocation = "keystore";
 
     private String keyStorePassword = "changeit";
 
@@ -165,22 +167,22 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
 
     /**
      * Parameterized constructor
-     * 
+     *
      * @param documentResolver the XDSDocumentResolver
      * @param signatureMethod defaults to SignatureMethod.SHA1
      * @param digestMethod defaults to DigestMethod.RSA_SHA1
      * @param keyStoreType defaults to 'JKS'
-     * @param keyStoreName defaults to 'keystore'
+     * @param keyStoreLocation defaults to 'keystore'
      * @param keyStorePassword defaults to 'changeit'
      * @param keyEntry defaults to 'nav_sign'
      */
     public DefaultXDSNotificationSignatureBuilder(XDSDocumentResolver documentResolver, String signatureMethod, // NOPMD
-            String digestMethod, String keyStoreType, String keyStoreName, String keyStorePassword, String keyEntry) {
+            String digestMethod, String keyStoreType, String keyStoreLocation, String keyStorePassword, String keyEntry) {
         this.documentResolver = documentResolver;
         this.signatureMethod = signatureMethod;
         this.digestMethod = digestMethod;
         this.keyStoreType = keyStoreType;
-        this.keyStoreName = keyStoreName;
+        this.keyStoreLocation = keyStoreLocation;
         this.keyStorePassword = keyStorePassword;
         this.keyEntry = keyEntry;
     }
@@ -291,7 +293,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @return the URIDereferencer
      */
     protected URIDereferencer getURIDereferener() {
@@ -319,7 +321,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @return the Key to sign with
      * @throws NoSuchAlgorithmException on error
      * @throws UnrecoverableEntryException on error
@@ -333,7 +335,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @param fac the XMLSginatureFactory
      * @return the KeyInfo
      * @throws NoSuchAlgorithmException on error
@@ -354,7 +356,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @return the X509Certificate
      * @throws NoSuchAlgorithmException on error
      * @throws UnrecoverableEntryException on error
@@ -368,7 +370,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @return the KeyStore
      * @throws KeyStoreException on error
      * @throws NoSuchAlgorithmException on error
@@ -377,15 +379,24 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
      */
     protected KeyStore getKeyStore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
             IOException {
+        FileInputStream fos = null;
         final KeyStore ks = KeyStore.getInstance(getKeyStoreType());
-        final ClassLoader cl = DefaultXDSNotificationSignatureBuilder.class.getClassLoader();
-        ks.load(cl.getResourceAsStream(getKeyStoreName()), getKeyStorePassword().toCharArray());
+        try {
+            final File keyStore = new File(getKeyStoreLocation());
+            fos = new FileInputStream(keyStore);
+            ks.load(fos, getKeyStorePassword().toCharArray());
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
+
         return ks;
 
     }
 
     /**
-     * 
+     *
      * @return the KeyStore.PrivateKeyEntry
      * @throws NoSuchAlgorithmException on error
      * @throws UnrecoverableEntryException on error
@@ -400,7 +411,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @param fac the XMLSignatureFactory
      * @param documentIds list of document IDs
      * @param sigProps the SignatureProperties
@@ -422,7 +433,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @param fac the XMLSignatureFactory
      * @param documentIds the list of document IDs
      * @return the Manifest on error
@@ -440,7 +451,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @param doc the parent Document
      * @param fac the XMLSignatureFactory on error
      * @param signatureId the Signature ID to which the properties will refer
@@ -456,7 +467,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @param fac the XMLSignatureFactory
      * @return the SignedInfo
      * @throws NoSuchAlgorithmException on error
@@ -471,7 +482,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * 
+     *
      * @return the XMLSignatureFactory
      */
     protected XMLSignatureFactory getXMLSignatureFactory() {
@@ -587,12 +598,12 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     }
 
     /**
-     * @return the keyStoreName
+     * @return the keyStoreLocation
      */
 
-    public String getKeyStoreName() {
+    public String getKeyStoreLocation() {
 
-        return keyStoreName;
+        return keyStoreLocation;
     }
 
     /**
@@ -601,7 +612,7 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
 
     public void setKeyStoreName(String keyStoreName) {
 
-        this.keyStoreName = keyStoreName;
+        this.keyStoreLocation = keyStoreName;
     }
 
 }
