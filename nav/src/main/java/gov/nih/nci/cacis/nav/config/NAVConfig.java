@@ -61,7 +61,6 @@
 
 package gov.nih.nci.cacis.nav.config;
 
-
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
 import gov.nih.nci.cacis.nav.DefaultXDSNotificationSignatureBuilder;
 import gov.nih.nci.cacis.nav.NotificationSender;
@@ -69,8 +68,6 @@ import gov.nih.nci.cacis.nav.NotificationSenderImpl;
 import gov.nih.nci.cacis.nav.OpenXDSDocumentResolver;
 import gov.nih.nci.cacis.nav.XDSDocumentResolver;
 import gov.nih.nci.cacis.nav.XDSNotificationSignatureBuilder;
-import gov.nih.nci.cacis.xds.client.XDSConfigImpl;
-import gov.nih.nci.cacis.xds.client.XDSPropsConfig;
 
 import java.util.Properties;
 
@@ -82,7 +79,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
 import com.icegreen.greenmail.util.GreenMail;
@@ -94,7 +90,6 @@ import com.icegreen.greenmail.util.ServerSetup;
  * @since Aug 2, 2011
  */
 @Configuration
-@Import( { XDSPropsConfig.class, XDSConfigImpl.class } )
 public class NAVConfig {
     
     @Value("${xds.repo.oid}")

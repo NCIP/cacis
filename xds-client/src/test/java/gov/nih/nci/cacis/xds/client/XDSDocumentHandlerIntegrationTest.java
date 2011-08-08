@@ -91,7 +91,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationContext-xds-test.xml")
-public class XDSDocumentHandlerTest {
+public class XDSDocumentHandlerIntegrationTest {
 
     private static final String SUBJECT_DN = "EMAILADDRESS=kondayya.mullapudi@misys.com,"
             + " CN=XDSb_REP_MOSS.ihe.net, OU=MOSS, O=\"Misys Open Source Solutions, LLC.\","
