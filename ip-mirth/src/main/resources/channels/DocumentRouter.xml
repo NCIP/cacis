@@ -1,0 +1,166 @@
+<com.mirth.connect.model.Channel>
+  <id>ec2b76be-923f-4d56-bb6f-0166a76dd50b</id>
+  <name>DocumentRouter</name>
+  <description></description>
+  <enabled>true</enabled>
+  <version>2.0.1.5164</version>
+  <lastModified>
+    <time>1312783038017</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>36</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">Destination 1</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.0.1.5164</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <com.mirth.connect.model.Connector>
+      <name>Destination 1</name>
+      <properties>
+        <property name="script">return;</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+      </properties>
+      <transformer>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>processRoutingInstructions</name>
+            <script>var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+
+var responseMsg = &apos;&apos;;
+
+for each (seg in exchDocs) {
+	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+	//TODO : to handle transformations
+	var rec = seg[&apos;recipient&apos;].child(0);
+	var recTyp = rec.localName();
+	var url = rec[&apos;@url&apos;].toString();
+	var chNm = recTyp + &apos;Channel&apos;;
+	var msgToRoute = msg.copy();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
+	processRoute(chNm, msgToRoute, recTyp, url);
+}
+
+responseMap.put(&apos;Destination 1&apos;, responseMsg);
+
+function processRoute(channelName, msgToRoute, recTyp, url) {	
+	var response = router.routeMessage(channelName, msgToRoute, false);
+	handleResponse(response, recTyp, url );
+}
+
+function handleResponse(response, recTyp, url ) {
+	responseMsg = responseMsg 
+			+ &apos;Processed routing for &apos;
+			+ recTyp + &apos;, &apos; + url 
+			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;		
+}</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+
+var responseMsg = &apos;&apos;;
+
+for each (seg in exchDocs) {
+	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+	//TODO : to handle transformations
+	var rec = seg[&apos;recipient&apos;].child(0);
+	var recTyp = rec.localName();
+	var url = rec[&apos;@url&apos;].toString();
+	var chNm = recTyp + &apos;Channel&apos;;
+	var msgToRoute = msg.copy();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
+	processRoute(chNm, msgToRoute, recTyp, url);
+}
+
+responseMap.put(&apos;Destination 1&apos;, responseMsg);
+
+function processRoute(channelName, msgToRoute, recTyp, url) {	
+	var response = router.routeMessage(channelName, msgToRoute, false);
+	handleResponse(response, recTyp, url );
+}
+
+function handleResponse(response, recTyp, url ) {
+	responseMsg = responseMsg 
+			+ &apos;Processed routing for &apos;
+			+ recTyp + &apos;, &apos; + url 
+			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;		
+}</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64">PGNhQ0lTUmVxdWVzdCB4bWxucz0iaHR0cDovL2NhY2lzLm5jaS5uaWguZ292IiB4bWxuczp4c2k9
+Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4bWxuczpjZGE9InVy
+bjpobDctb3JnOnYzIiB1c2VyTmFtZT0idXNlciI+Cgk8cm91dGluZ0luc3RydWN0aW9ucz4KCQk8
+ZXhjaGFuZ2VEb2N1bWVudCBleGNoYW5nZUZvcm1hdD0iSEw3X1YyX0NMSU5JQ0FMX05PVEUiPgoJ
+CQk8cmVjaXBpZW50PgoJCQkJPHNlY3VyZUVtYWlsQWRkcmVzcyB1cmw9Im1haWx0bzp4QHgueCIv
+PgoJCQk8L3JlY2lwaWVudD4KCQk8L2V4Y2hhbmdlRG9jdW1lbnQ+CgkJPGV4Y2hhbmdlRG9jdW1l
+bnQgZXhjaGFuZ2VGb3JtYXQ9IlJJTV9JVFNfQ0xJTklDQUxfTk9URSI+CgkJCTxyZWNpcGllbnQ+
+CgkJCQk8c2VjdXJlRW1haWxBZGRyZXNzIHVybD0ibWFpbHRvOnlAeS55Ii8+CgkJCTwvcmVjaXBp
+ZW50PgoJCTwvZXhjaGFuZ2VEb2N1bWVudD4KCTwvcm91dGluZ0luc3RydWN0aW9ucz4KPC9jYUNJ
+U1JlcXVlc3Q+</inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.0.1.5164</version>
+    </com.mirth.connect.model.Connector>
+  </destinationConnectors>
+  <properties>
+    <property name="synchronous">true</property>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="transactional">false</property>
+    <property name="initialState">started</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="encryptData">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</com.mirth.connect.model.Channel>

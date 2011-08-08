@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tns:DocumentEntry 
+ xmlns:hl7v2="urn:org:openhealthtools:ihe:common:hl7v2" 
+ xmlns:p0="htt//www.w3.org/XML/1998/namespace" 
+ xmlns:tns="urn:org:openhealthtools:ihe:xds:metadata" 
+ xmlns:xsi="htt//www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="urn:org:openhealthtools:ihe:xds:metadata metadata.xsd urn:org:openhealthtools:ihe:common:hl7v2 ../../../org.openhealthtools.ihe.common.hl7v2/resources/schema/hl7v2_wrapper.xsd htt//www.w3.org/XML/1998/namespace htt//www.w3.org/2001/xml.xsd ">
+   <author>
+   	<authorInstitution>
+ 		<organizationName>St Mary's Hospital and Clinics</organizationName>
+  	</authorInstitution>
+  	<authorPerson>
+    	<idNumber>ae21667b95a7792a</idNumber>
+    	<familyName>Jordan</familyName>
+  		<givenName>Pearl</givenName>
+  		<assigningAuthorityUniversalId>2.16.840.1.113883.3.933</assigningAuthorityUniversalId>
+		<assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+  	</authorPerson>
+  </author>
+  <classCode>
+    <code>Consult</code>
+    <displayName>
+      <LocalizedString value="Consult"/>
+    </displayName>
+    <schemeName>Connect-a-thon classCodes</schemeName>
+  </classCode>
+  <confidentialityCode>
+    <code>N</code>
+    <displayName>
+      <LocalizedString value="Normal"/>
+    </displayName>
+    <schemeName>Connect-a-thon confidentialityCodes</schemeName>
+  </confidentialityCode>
+  <creationTime>20060614</creationTime>
+  <formatCode>
+    <code>CDAR2/IHE 1.0</code>
+    <displayName>
+      <LocalizedString value="CDAR2/IHE 1.0"/>
+    </displayName>
+    <schemeName>Connect-a-thon formatCodes</schemeName>
+  </formatCode>
+  <healthCareFacilityTypeCode>
+    <code>Outpatient</code>
+    <displayName>
+      <LocalizedString value="Outpatient"/>
+    </displayName>
+    <schemeName>Connect-a-thon healthcareFacilityTypeCodes</schemeName>
+  </healthCareFacilityTypeCode>
+
+  <languageCode>en-US</languageCode>
+  <!-- NA2010 -->
+ <patientId>
+   <idNumber>NA5156</idNumber>  
+   <assigningAuthorityUniversalId>1.3.6.1.4.1.21367.13.20.3000</assigningAuthorityUniversalId>
+   <assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+  </patientId>
+  <practiceSettingCode>
+    <code>General Medicine</code>
+    <displayName>
+      <LocalizedString value="General Medicine"/>
+    </displayName>
+    <schemeName>Connect-a-thon practiceSettingCodes</schemeName>
+  </practiceSettingCode>
+  <sourcePatientId>
+   <idNumber>2005-11-14-09-4576626b7c-3040-4877-9dca-4c00792dc3f0</idNumber>
+   <assigningAuthorityUniversalId>2.16.840.1.113883.19</assigningAuthorityUniversalId>
+   <assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+  </sourcePatientId>
+  <sourcePatientInfo>
+	<patientIdentifier>
+   		<idNumber>2005-11-14-09-4576626b7c-3040-4877-9dca-4c00792dc3f0</idNumber>
+   		<assigningAuthorityUniversalId>2.16.840.1.113883.19</assigningAuthorityUniversalId>
+   		<assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+	</patientIdentifier>
+	<patientName>
+		<familyName>Murphy</familyName>
+ 		<givenName>Joyce</givenName>
+ 	</patientName>
+	<patientDateOfBirth>19691128</patientDateOfBirth>
+	<patientSex>F</patientSex>
+	<patientAddress>
+		<streetAddress>1234 Some St. USA</streetAddress>
+	</patientAddress>
+  </sourcePatientInfo>
+  <typeCode>
+    <code>11488-4</code>
+    <displayName>
+      <LocalizedString value="Consultation Note"/>
+    </displayName>
+    <schemeName>LOINC</schemeName>
+  </typeCode>
+</tns:DocumentEntry>

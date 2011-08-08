@@ -62,18 +62,31 @@
 package gov.nih.nci.cacis.nav.config;
 
 
-import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-import gov.nih.nci.cacis.nav.DocRouterNotificationSender;
+import gov.nih.nci.cacis.common.doc.DocumentHandler;
+import gov.nih.nci.cacis.nav.DefaultXDSNotificationSignatureBuilder;
 import gov.nih.nci.cacis.nav.NotificationSender;
 import gov.nih.nci.cacis.nav.NotificationSenderImpl;
+import gov.nih.nci.cacis.nav.OpenXDSDocumentResolver;
+import gov.nih.nci.cacis.nav.XDSDocumentResolver;
+import gov.nih.nci.cacis.nav.XDSNotificationSignatureBuilder;
+import gov.nih.nci.cacis.xds.client.XDSConfigImpl;
+import gov.nih.nci.cacis.xds.client.XDSPropsConfig;
 
+import java.util.Properties;
+
+import javax.xml.crypto.dsig.DigestMethod;
+import javax.xml.crypto.dsig.SignatureMethod;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
 import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
 
 /**
  * Spreing config for NAV.
@@ -81,15 +94,43 @@ import com.icegreen.greenmail.util.GreenMail;
  * @since Aug 2, 2011
  */
 @Configuration
+@Import( { XDSPropsConfig.class, XDSConfigImpl.class } )
 public class NAVConfig {
+    
+    @Value("${xds.repo.oid}")
+    private String repoOID;
+    
+    @Autowired
+    private DocumentHandler docHndlr;
 
+    @Value("${nav.keystore.type}")
+    private String keyStoreType;
+
+    @Value("${nav.keystore.location}")
+    private String keyStoreLocation;
+
+    @Value("${nav.keystore.password}")
+    private String keyStorePassword;
+
+    @Value("${nav.keystore.key}")
+    private String keyStoreKey;
+
+    @Value("${nav.message.instructions}")
+    private String instructions;
+
+    @Value("${nav.message.subject}")
+    private String subject;
+
+    @Value("${nav.message.from}")
+    private String mailFrom;
+    
     /**
      * GreenMail Bean.
      * @return server
      */
     @Bean
     public GreenMail server() {
-        return new GreenMail();
+        return new GreenMail(new ServerSetup(3125, null, ServerSetup.PROTOCOL_SMTP));
     }
 
     /**
@@ -97,33 +138,44 @@ public class NAVConfig {
      * @return notification sender
      */
     @Bean
-    public NotificationSender notificationSender() {
-        return new NotificationSenderImpl(null, null, null, null, null,
-                null, null, "", null, 0, null);
-    }
-
-    /**
-     * DocRouterNotificationSender bean.
-     * @return sender
-     */
-    @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocRouterNotificationSender sender() {
-        return new DocRouterNotificationSender();
+    public NotificationSender notificationSender() {
+        final NotificationSenderImpl notificationSender =
+            new NotificationSenderImpl(null, null, null, null, "", null, 0, null);
+        
+        notificationSender.setSignatureBuilder(signatureBuilder());
+        notificationSender.setHost(server().getSmtp().getBindTo());
+        notificationSender.setPort(server().getSmtp().getPort());
+        notificationSender.setProtocol(server().getSmtp().getProtocol());
+        notificationSender.setInstructions(instructions);
+        notificationSender.setSubject(subject);
+        notificationSender.setFrom(mailFrom);
+        notificationSender.setMailProperties(new Properties());
+        
+        //username will be set sending time
+        
+        return notificationSender;
     }
-
+    
     /**
-     * Loads properties from classpath*:/"cacis-nav.properties" location
-     *
-     * @return the property place holder configures
+     * Notification Signature builder.
+     * @return notification signature builder
      */
     @Bean
-    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-        final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("nav",
-                "cacis-nav.properties");
-        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
-        configurer.setIgnoreUnresolvablePlaceholders(true);
-        return configurer;
+    public XDSNotificationSignatureBuilder signatureBuilder() {
+        return new DefaultXDSNotificationSignatureBuilder(
+                documentResolver(),
+                SignatureMethod.RSA_SHA1, DigestMethod.SHA1, keyStoreType,
+                keyStoreLocation, keyStorePassword, keyStoreKey);
+    }
+    
+    /**
+     * XDS Document Resolver
+     * @return notification sender
+     */
+    @Bean
+    public XDSDocumentResolver documentResolver() {
+        return new OpenXDSDocumentResolver(repoOID, docHndlr);
     }
 
 }

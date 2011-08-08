@@ -71,13 +71,21 @@ import java.util.List;
  */
 
 public interface NotificationSender {
-
+    
+    /**
+     * Sets the credentials
+     * @param userName - user name
+     * @param password - password
+     */
+    void setCredentials(String userName, String password);
+    
     /**
      * Defines behavior for sending notifications
      * 
+     * @param toEmailAddress recipient
      * @param documentIds list of document IDs
      * @throws NotificationSendException on error
      */
-    void send(List<String> documentIds) throws NotificationSendException;
+    void send(String toEmailAddress, List<String> documentIds) throws NotificationSendException;
 
 }

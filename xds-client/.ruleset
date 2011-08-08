@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="caEHR Ruleset"
+    xmlns="http://pmd.sf.net/ruleset/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+    xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>caEHR ESD PMD Rules</description>
+	
+	<exclude-pattern>.*/target/generated/.*</exclude-pattern>
+	
+    <!-- Basic Rules -->
+    <rule ref="rulesets/basic.xml">
+        <exclude name="UselessOverridingMethod" />
+        <exclude name="CheckResultSet" />
+    </rule>
+    <rule ref="rulesets/basic.xml/EmptyCatchBlock">
+        <properties>
+            <property name="allowCommentedBlocks" value="true" />
+        </properties>
+    </rule>
+
+    <!-- Brace Rules -->
+    <rule ref="rulesets/braces.xml" />
+
+    <!-- Clone Implementation Rules -->
+    <rule ref="rulesets/clone.xml" />
+
+    <!-- Codesize Rules -->
+    <rule ref="rulesets/codesize.xml">
+        <exclude name="ExcessiveMethodLength" />
+        <exclude name="ExcessiveClassLength" />
+        <exclude name="ExcessivePublicCount" />
+        <exclude name="TooManyFields" />
+        <exclude name="TooManyMethods" />
+    </rule>
+    <rule ref="rulesets/codesize.xml/ExcessiveParameterList">
+        <properties>
+            <property name="minimum" value="7" />
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/NcssMethodCount">
+        <properties>
+            <property name="minimum" value="40" />
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
+        <properties>
+            <property name="reportLevel" value="10" />
+        </properties>
+    </rule>
+
+    <!-- Controversial Rules -->
+    <rule ref="rulesets/controversial.xml">
+        <exclude name="OnlyOneReturn" />
+        <exclude name="AtLeastOneConstructor" />
+        <exclude name="CallSuperInConstructor" />
+        <exclude name="AvoidFinalLocalVariable" />
+        <exclude name="AvoidUsingShortType" />
+        <exclude name="DataflowAnomalyAnalysis" />
+    </rule>
+
+
+    <!-- Coupling Rules -->
+    <rule ref="rulesets/coupling.xml">
+        <exclude name="ExcessiveImports" />
+    </rule>
+
+    <!-- Design Rules -->
+    <rule ref="rulesets/design.xml">
+        <exclude name="AvoidSynchronizedAtMethodLevel" />
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" />
+	<exclude name="AbstractClassWithoutAbstractMethod"/> <!-- ESD-197 -->
+    </rule>
+
+    <!-- Finalizer Rules -->
+    <rule ref="rulesets/finalizers.xml" />
+
+    <!-- Import Statements Rules -->
+    <rule ref="rulesets/imports.xml" />
+
+    <!-- Java Bean Rules -->
+    <rule ref="rulesets/javabeans.xml">
+        <exclude name="BeanMembersShouldSerialize" />
+    </rule>
+
+    <!-- Jakarta Commons Logging  Rules -->
+    <rule ref="rulesets/logging-jakarta-commons.xml" />
+
+    <!-- Java Logging Rules -->
+    <rule ref="rulesets/logging-java.xml" />
+
+    <!-- Migrating Rules -->
+    <rule ref="rulesets/migrating.xml" />
+
+    <!-- Naming Rules -->
+    <rule ref="rulesets/naming.xml">
+        <exclude name="ShortVariable" />
+        <exclude name="LongVariable" />
+        <exclude name="BooleanGetMethodName" />
+    </rule>
+
+    <!-- commented out since the minimum does not fire
+    <rule ref="rulesets/naming.xml/LongVariable">
+        <properties>
+            <property name="minimum" value="50" />
+        </properties>
+    </rule>
+    -->
+
+    <!-- Optimization  Rules -->
+    <rule ref="rulesets/optimizations.xml">
+        <exclude name="MethodArgumentCouldBeFinal" />
+        <exclude name="AvoidInstantiatingObjectsInLoops" />
+        <exclude name="UseStringBufferForStringAppends" />
+    </rule>
+
+    <!-- Strict Exception  Rules -->
+    <rule ref="rulesets/strictexception.xml">
+        <exclude name="AvoidThrowingNullPointerException" />
+        <exclude name=" AvoidThrowingNewInstanceOfSameException" />
+    </rule>
+
+    <!-- Security Code Guidelines -->
+    <rule ref="rulesets/sunsecure.xml" />
+
+    <!-- String and StringBuffer  Rules -->
+    <rule ref="rulesets/strings.xml" />
+
+    <!-- Unused Code Rules -->
+    <rule ref="rulesets/unusedcode.xml" />
+
+</ruleset>

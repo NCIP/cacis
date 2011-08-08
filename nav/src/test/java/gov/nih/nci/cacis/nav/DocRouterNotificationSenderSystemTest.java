@@ -60,19 +60,31 @@
  */
 package gov.nih.nci.cacis.nav;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import gov.nih.nci.cacis.common.doc.DocumentHandler;
+import gov.nih.nci.cacis.xds.client.XDSDocumentMetadata;
+import gov.nih.nci.cacis.xds.client.XDSHandlerInfo;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openhealthtools.ihe.xds.document.DocumentDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.icegreen.greenmail.util.GreenMail;
 
 /**
  * Tests DocRouterNotificationSender.
@@ -82,15 +94,52 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
 public class DocRouterNotificationSenderSystemTest {
-
+    
+    @Value("${ext.file.location}")
+    private String extSupportedFilesLoc;
     @Autowired
-    private DocRouterNotificationSender sender;
+    private GreenMail server;
+    
+    @Autowired
+    private NotificationSender sender;
+    
+    @Autowired
+    private DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docHndlr;
 
+    /**
+     * Sample file name
+     */
     public static final String MSG_FILENAME = "sample_exchangeCCD.xml";
-
-    private static final String DOC_ID = "urn:oid:1.3.345245354.435345";
-    private static final String REG_ID = "urn:oid:1.3.983249923.1234.3";
-
+    
+    /**
+     * setup method
+     */
+    @Before
+    public void setup() {
+      //for some reason, the greenmail server doesnt start in time
+        //will attempt max times to ensure all service gets startedup 
+        int i = 0;
+        final int max = 2;
+        while ( i < max ) {
+            try {
+                server.start();
+                //CHECKSTYLE:OFF
+            } catch (RuntimeException e) { //NOPMD
+              //CHECKSTYLE:ON
+                i++;
+                continue;
+            }
+            i = max;
+        }
+    }
+    
+    /**
+     * teardown method
+     */
+    @After
+    public void tearDown() {
+        server.stop();
+    }
 
     /**
      *
@@ -98,15 +147,35 @@ public class DocRouterNotificationSenderSystemTest {
      */
     @Test
     public void testNotificationSenderNonSecure() throws Exception {
-        sender.sendNotification(DOC_ID, REG_ID, getValidMessage());
+        final String docCont = getValidMessage();
+        final String docId = docHndlr.handleDocument(getDocumentMetadata(docCont));
+        assertNotNull(docId);
+        sender.setCredentials("", "");
+        List<String> docIds = Arrays.asList( new String[]{docId} );
+        sender.send("some.one@somewhere.com", docIds);
 
-        assertTrue(sender.getServer().getReceivedMessages().length == 1);
+        assertTrue(server.getReceivedMessages().length == 1);
+    }
+    
+    private XDSDocumentMetadata getDocumentMetadata(String docContent) throws URISyntaxException, IOException {
+        final XDSDocumentMetadata docMd = new XDSDocumentMetadata();
+        docMd.setDocEntryContent(getFileContent(extSupportedFilesLoc + "/docEntry.xml"));
+        docMd.setSubmissionSetContent(getFileContent(extSupportedFilesLoc + "/submissionSet.xml"));
+        docMd.setDocumentType(DocumentDescriptor.XML);
+        docMd.setDocOID("1.2.3.4"); // NOPMD
+        docMd.setDocSourceOID("1.3.6.1.4.1.21367.2010.1.2");
+        docMd.setDocumentContent(getValidMessage());
+        
+        return docMd;
+    }
+    
+    private String getFileContent(String fileName) throws URISyntaxException, IOException {
+        final File docEntryFile = new File(fileName);
+        return FileUtils.readFileToString(docEntryFile);
     }
 
     private String getValidMessage() throws IOException, URISyntaxException {
         final URL url = getClass().getClassLoader().getResource(MSG_FILENAME);
         return FileUtils.readFileToString(new File(url.toURI()));
     }
-
-
 }

@@ -1,0 +1,330 @@
+<com.mirth.connect.model.Channel>
+  <id>a6414d87-9689-4e56-ab96-f4dad78a8a33</id>
+  <name>navEmailAddressChannel</name>
+  <description></description>
+  <enabled>true</enabled>
+  <version>2.0.1.5164</version>
+  <lastModified>
+    <time>1312790596264</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>106</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">navDestination</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.0.1.5164</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <com.mirth.connect.model.Connector>
+      <name>navDestination</name>
+      <properties>
+        <property name="script">return;</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+      </properties>
+      <transformer>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>submitDocToXDS</name>
+            <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+var user=msg[&apos;@userName&apos;].toString();
+
+var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
+
+logger.error(&apos;user = &apos; + user);
+logger.error(&apos;navEmail = &apos; + navEmail);
+
+var docH = globalChannelMap.get(&apos;documentHandler&apos;);
+var navS = globalChannelMap.get(&apos;navSender&apos;);
+var docAccMngr = globalChannelMap.get(&apos;docAccMngr&apos;);
+
+var docSourceOID = globalChannelMap.get(&apos;docSourceOID&apos;);
+var docOID = globalChannelMap.get(&apos;docOID&apos;);
+
+
+//submit to XDS
+var docId = &apos;&apos;;
+try{
+	docId = docH.handleDocument(getXDSDocumentMetadata());
+	logger.error(&apos;docId = &apos; + docId);
+
+	if(docId==&apos;undefined&apos; || docId == &apos;&apos;){
+		responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error handling XDS document. No document id returned&apos;));
+		return;
+	}
+}catch(herr) {
+	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error handling XDS document.&apos; + herr.message));
+	return;
+}
+
+//Grant access to the document
+//TODO: in ESD-3073 find out the correct subjectDN and use it for the user
+try{
+	var subjectDN = &apos;subjectdn&apos;;
+	docAccMngr.grantDocumentAccess(docId, subjectDN);
+}catch(accerr) {
+	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error giving access to the XDS document.&apos; + accerr.message));
+	return;
+}
+
+
+var docIds = new Packages.java.util.ArrayList();
+docIds.add(docId);
+try{
+	navS.setCredentials(user, &quot;&quot;);
+	navS.send(navEmail, docIds);
+}catch(naverr) {
+	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + naverr.message));
+	return;
+}
+
+responseMap.put(&apos;navDestination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully sent NAV&apos;));
+
+function getXDSDocumentMetadata() {
+	var docMd = new Packages.gov.nih.nci.cacis.xds.client.XDSDocumentMetadata();
+
+	docMd.setDocEntryContent(getDocEntryContent());
+	docMd.setSubmissionSetContent(getSubmissionSetContent());
+	docMd.setDocumentType(Packages.org.openhealthtools.ihe.xds.document.DocumentDescriptor.XML);
+	docMd.setDocOID(docOID); 
+	docMd.setDocSourceOID(docSourceOID);
+	docMd.setDocumentContent(msg.toString());
+	
+	return docMd;
+}
+
+function getDocEntryContent() {
+	//TODO : populate doc entry from the contents of msg
+	//using hardcode default values for now
+	var docEntryF = globalChannelMap.get(&apos;docEntryFile&apos;);
+	var contents = FileUtil.read(docEntryF);
+	
+	return contents;
+}
+
+function getSubmissionSetContent() {
+	//TODO : populate submission set from the contents of msg
+	//using hardcode default values for now
+	var ssF = globalChannelMap.get(&apos;submissionSetFile&apos;);
+	var contents = FileUtil.read(ssF);
+	
+	return contents;
+}</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+var user=msg[&apos;@userName&apos;].toString();
+
+var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
+
+logger.error(&apos;user = &apos; + user);
+logger.error(&apos;navEmail = &apos; + navEmail);
+
+var docH = globalChannelMap.get(&apos;documentHandler&apos;);
+var navS = globalChannelMap.get(&apos;navSender&apos;);
+var docAccMngr = globalChannelMap.get(&apos;docAccMngr&apos;);
+
+var docSourceOID = globalChannelMap.get(&apos;docSourceOID&apos;);
+var docOID = globalChannelMap.get(&apos;docOID&apos;);
+
+
+//submit to XDS
+var docId = &apos;&apos;;
+try{
+	docId = docH.handleDocument(getXDSDocumentMetadata());
+	logger.error(&apos;docId = &apos; + docId);
+
+	if(docId==&apos;undefined&apos; || docId == &apos;&apos;){
+		responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error handling XDS document. No document id returned&apos;));
+		return;
+	}
+}catch(herr) {
+	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error handling XDS document.&apos; + herr.message));
+	return;
+}
+
+//Grant access to the document
+//TODO: in ESD-3073 find out the correct subjectDN and use it for the user
+try{
+	var subjectDN = &apos;subjectdn&apos;;
+	docAccMngr.grantDocumentAccess(docId, subjectDN);
+}catch(accerr) {
+	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error giving access to the XDS document.&apos; + accerr.message));
+	return;
+}
+
+
+var docIds = new Packages.java.util.ArrayList();
+docIds.add(docId);
+try{
+	navS.setCredentials(user, &quot;&quot;);
+	navS.send(navEmail, docIds);
+}catch(naverr) {
+	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + naverr.message));
+	return;
+}
+
+responseMap.put(&apos;navDestination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully sent NAV&apos;));
+
+function getXDSDocumentMetadata() {
+	var docMd = new Packages.gov.nih.nci.cacis.xds.client.XDSDocumentMetadata();
+
+	docMd.setDocEntryContent(getDocEntryContent());
+	docMd.setSubmissionSetContent(getSubmissionSetContent());
+	docMd.setDocumentType(Packages.org.openhealthtools.ihe.xds.document.DocumentDescriptor.XML);
+	docMd.setDocOID(docOID); 
+	docMd.setDocSourceOID(docSourceOID);
+	docMd.setDocumentContent(msg.toString());
+	
+	return docMd;
+}
+
+function getDocEntryContent() {
+	//TODO : populate doc entry from the contents of msg
+	//using hardcode default values for now
+	var docEntryF = globalChannelMap.get(&apos;docEntryFile&apos;);
+	var contents = FileUtil.read(docEntryF);
+	
+	return contents;
+}
+
+function getSubmissionSetContent() {
+	//TODO : populate submission set from the contents of msg
+	//using hardcode default values for now
+	var ssF = globalChannelMap.get(&apos;submissionSetFile&apos;);
+	var contents = FileUtil.read(ssF);
+	
+	return contents;
+}</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64">PGNhQ0lTUmVxdWVzdCB4bWxucz0iaHR0cDovL2NhY2lzLm5jaS5uaWguZ292IiB4bWxuczpjZGE9
+InVybjpobDctb3JnOnYzIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2No
+ZW1hLWluc3RhbmNlIiB1c2VyTmFtZT0idXNlcjEyMyI+Cgk8cm91dGluZ0luc3RydWN0aW9ucz4K
+CQk8ZXhjaGFuZ2VEb2N1bWVudCBleGNoYW5nZUZvcm1hdD0iZXhjaGFuZ2UgZm9ybWF0Ij4KCQkJ
+PHJlY2lwaWVudD4KCQkJCTxuYXZFbWFpbEFkZHJlc3MgdXJsPSJhQGIuYyIvPgoJCQk8L3JlY2lw
+aWVudD4KCQk8L2V4Y2hhbmdlRG9jdW1lbnQ+Cgk8L3JvdXRpbmdJbnN0cnVjdGlvbnM+CjwvY2FD
+SVNSZXF1ZXN0Pg==</inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.0.1.5164</version>
+    </com.mirth.connect.model.Connector>
+  </destinationConnectors>
+  <properties>
+    <property name="synchronous">true</property>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="transactional">false</property>
+    <property name="initialState">started</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="encryptData">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+
+var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-nav.xml&apos;);
+var documentHandler = navContext.getBean(&quot;documentHandler&quot;);
+var navSender = navContext.getBean(&quot;notificationSender&quot;);
+
+//TODO:ESD-3073 will change this from dummy to acutal access manager
+var docAccMngr = navContext.getBean(&quot;dummyDocumentAccessManager&quot;);
+
+globalChannelMap.put(&apos;navContext&apos;,navContext);
+globalChannelMap.put(&apos;documentHandler&apos;,documentHandler);
+globalChannelMap.put(&apos;navSender&apos;,navSender);
+globalChannelMap.put(&apos;docAccMngr&apos;,docAccMngr);
+
+//var docSourceOID=&apos;${xds.doc.source.oid}&apos;;
+var docSourceOID=&apos;1.3.6.1.4.1.21367.2010.1.2&apos;;
+globalChannelMap.put(&apos;docSourceOID&apos;,docSourceOID);
+
+//var docOID=&apos;${xds.doc.oid}&apos;;
+var docOID=&apos;1.2.3.4&apos;;
+globalChannelMap.put(&apos;docOID&apos;,docOID);
+
+//var docEntryFile =&apos;${xds.doc.entry.file}&apos;;
+//var submissionSetFile=&apos;${xds.doc.submissionset.file}&apos;;
+
+var docEntryFile =&apos;C:/Users/sb-admin-cp/.cacis/mc/docEntry.xml&apos;;
+var submissionSetFile=&apos;C:/Users/sb-admin-cp/.cacis/mc/submissionSet.xml&apos;;
+
+globalChannelMap.put(&apos;docEntryFile&apos;,docEntryFile);
+globalChannelMap.put(&apos;submissionSetFile&apos;,submissionSetFile);
+
+//TODO:Remove this test server startup, once correct mail properties have been configured
+var ss = Packages.com.icegreen.greenmail.util.ServerSetup(4125, null, Packages.com.icegreen.greenmail.util.ServerSetup.PROTOCOL_SMTP);
+
+var gm = Packages.com.icegreen.greenmail.util.GreenMail(ss);
+
+var i = 0;
+var max = 2;
+while ( i &lt; max ) {
+	try {
+		gm.start();
+	} catch (err) { 
+		i++;
+		continue;
+	}
+	i = max;
+}
+
+globalChannelMap.put(&apos;greenmail&apos;,gm);
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+
+//TODO: this is test email server, will have to be removed, once actual server is configured
+var gm = globalChannelMap.get(&apos;greenmail&apos;);
+gm.stop();
+
+return;</shutdownScript>
+</com.mirth.connect.model.Channel>

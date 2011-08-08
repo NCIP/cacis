@@ -157,7 +157,8 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
     private String keyStorePassword = "changeit";
 
     private String keyEntry = "nav_sign";
-
+    
+    private KeyStore ks;
     /**
      * This is the default constructor.
      */
@@ -302,7 +303,10 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
 
             @Override
             public Data dereference(URIReference uriRef, XMLCryptoContext ctx) throws URIReferenceException {
-
+                //The manifest reference will not be resolved through document resolver
+                if (uriRef.getURI().contains(MANIFEST_ID)) {
+                    return null;
+                }
                 InputStream in = null;
                 try {
                     in = getDocumentResolver().resolve(uriRef.getURI().toString());
@@ -379,8 +383,11 @@ public class DefaultXDSNotificationSignatureBuilder implements XDSNotificationSi
      */
     protected KeyStore getKeyStore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
             IOException {
+        if (ks != null) {
+            return ks;
+        }
         FileInputStream fos = null;
-        final KeyStore ks = KeyStore.getInstance(getKeyStoreType());
+        ks = KeyStore.getInstance(getKeyStoreType());
         try {
             final File keyStore = new File(getKeyStoreLocation());
             fos = new FileInputStream(keyStore);

@@ -102,7 +102,6 @@ public class NotificationSenderImpl implements NotificationSender {
     private XDSNotificationSignatureBuilder signatureBuilder;
     private Properties mailProperties;
     private String subject;
-    private String to;
     private String from;
     private String instructions;
     private String userName;
@@ -127,39 +126,28 @@ public class NotificationSenderImpl implements NotificationSender {
      * @param from
      * @param instructions
      */
-    @SuppressWarnings({ "PMD.ExcessiveParameterList" })
- // CHECKSTYLE:OFF
-    public NotificationSenderImpl(XDSNotificationSignatureBuilder signatureBuilder, 
-                                        Properties mailProperties,
-                                        String subject,
-                                        String to,
-                                        String from,
-                                        String instructions,
-                                        String userName,
-                                        String password,
-                                        String host,
-                                        int port,
-                                        String protocol) { // NOPMD
-        
+    @SuppressWarnings( { "PMD.ExcessiveParameterList" })
+    // CHECKSTYLE:OFF
+    public NotificationSenderImpl(XDSNotificationSignatureBuilder signatureBuilder, Properties mailProperties,
+            String subject, String from, String instructions, String host, int port, String protocol) { // NOPMD
+
         this.signatureBuilder = signatureBuilder;
         this.subject = subject;
-        this.to = to;
         this.from = from;
         this.instructions = instructions;
         mailSender = new JavaMailSenderImpl();
         mailSender.setJavaMailProperties(mailProperties);
-        mailSender.setUsername(userName);
-        mailSender.setPassword(password);
         mailSender.setHost(host);
         mailSender.setPort(port);
-        if(StringUtils.isNotEmpty(protocol)){
+        if (StringUtils.isNotEmpty(protocol)) {
             mailSender.setProtocol(protocol);
         }
     }
- // CHECKSTYLE:ON
-    
+
+    // CHECKSTYLE:ON
+
     @Override
-    public void send(List<String> documentIds) throws NotificationSendException {
+    public void send(String toEmailAddress, List<String> documentIds) throws NotificationSendException {
         Node sig = null;
         try {
             sig = getSignatureBuilder().buildSignature(documentIds);
@@ -168,7 +156,7 @@ public class NotificationSenderImpl implements NotificationSender {
         }
 
         try {
-            sendEmail(sig);
+            sendEmail(toEmailAddress, sig);
         } catch (AddressException e) {
             throw new NotificationSendException(e);
         } catch (TransformerConfigurationException e) {
@@ -184,15 +172,27 @@ public class NotificationSenderImpl implements NotificationSender {
         }
     }
 
-    private void sendEmail(Node sig) throws AddressException, MessagingException, TransformerConfigurationException,
-            TransformerException, TransformerFactoryConfigurationError, UnsupportedEncodingException { // NOPMD
-        
+    /*
+     * (non-Javadoc)
+     * 
+     * @see gov.nih.nci.cacis.nav.NotificationSender#setCredentials(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void setCredentials(String userName, String password) {
+        mailSender.setUsername(userName);
+        mailSender.setPassword(password);
+    }
+
+    private void sendEmail(String to, Node sig) throws AddressException, MessagingException,
+            TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError,
+            UnsupportedEncodingException { 
+
         final MimeMessage msg = mailSender.createMimeMessage();
-        
+
         msg.setFrom(new InternetAddress(getFrom()));
         msg.setSubject(getSubject());
         msg.setSentDate(new Date());
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(getTo()));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
         // The readable part
         final MimeBodyPart mbp1 = new MimeBodyPart();
@@ -247,48 +247,42 @@ public class NotificationSenderImpl implements NotificationSender {
 
     }
 
-    
-    /** 
-     * @return the mailSender 
+    /**
+     * @return the mailSender
      */
     public JavaMailSenderImpl getMailSender() {
         return mailSender;
     }
 
-    
-    /** 
+    /**
      * @param mailSender the mailSender to set
      */
     public void setMailSender(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
     }
 
-    
-    /** 
-     * @return the signatureBuilder 
+    /**
+     * @return the signatureBuilder
      */
     public XDSNotificationSignatureBuilder getSignatureBuilder() {
         return signatureBuilder;
     }
 
-    
-    /** 
+    /**
      * @param signatureBuilder the signatureBuilder to set
      */
     public void setSignatureBuilder(XDSNotificationSignatureBuilder signatureBuilder) {
         this.signatureBuilder = signatureBuilder;
     }
 
-    
-    /** 
-     * @return the mailProperties 
+    /**
+     * @return the mailProperties
      */
     public Properties getMailProperties() {
         return mailProperties;
     }
 
-    
-    /** 
+    /**
      * @param mailProperties the mailProperties to set
      */
     public void setMailProperties(Properties mailProperties) {
@@ -296,80 +290,56 @@ public class NotificationSenderImpl implements NotificationSender {
         mailSender.setJavaMailProperties(mailProperties);
     }
 
-    
-    /** 
-     * @return the subject 
+    /**
+     * @return the subject
      */
     public String getSubject() {
         return subject;
     }
 
-    
-    /** 
+    /**
      * @param subject the subject to set
      */
     public void setSubject(String subject) {
         this.subject = subject;
     }
 
-    
-    /** 
-     * @return the to 
-     */
-    public String getTo() {
-        return to;
-    }
-
-    
-    /** 
-     * @param to the to to set
-     */
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    
-    /** 
-     * @return the from 
+    /**
+     * @return the from
      */
     public String getFrom() {
         return from;
     }
 
-    
-    /** 
+    /**
      * @param from the from to set
      */
     public void setFrom(String from) {
         this.from = from;
     }
 
-    
-    /** 
-     * @return the instructions 
+    /**
+     * @return the instructions
      */
     public String getInstructions() {
         return instructions;
     }
 
-    
-    /** 
+    /**
      * @param instructions the instructions to set
      */
     public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
 
-    
-    /** 
-     * @return the userName 
+    /**
+     * @return the userName
      */
     public String getUserName() {
         return userName;
     }
 
-    
-    /** 
+    /**
      * @param userName the userName to set
      */
     public void setUserName(String userName) {
@@ -377,16 +347,14 @@ public class NotificationSenderImpl implements NotificationSender {
         mailSender.setUsername(userName);
     }
 
-    
-    /** 
-     * @return the host 
+    /**
+     * @return the host
      */
     public String getHost() {
         return host;
     }
 
-    
-    /** 
+    /**
      * @param host the host to set
      */
     public void setHost(String host) {
@@ -394,16 +362,14 @@ public class NotificationSenderImpl implements NotificationSender {
         mailSender.setHost(host);
     }
 
-    
-    /** 
-     * @return the port 
+    /**
+     * @return the port
      */
     public int getPort() {
         return port;
     }
 
-    
-    /** 
+    /**
      * @param port the port to set
      */
     public void setPort(int port) {
@@ -411,16 +377,14 @@ public class NotificationSenderImpl implements NotificationSender {
         mailSender.setPort(port);
     }
 
-    
-    /** 
-     * @return the protocol 
+    /**
+     * @return the protocol
      */
     public String getProtocol() {
         return protocol;
     }
 
-    
-    /** 
+    /**
      * @param protocol the protocol to set
      */
     public void setProtocol(String protocol) {

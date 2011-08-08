@@ -124,7 +124,7 @@ public class NAVSystemTest {
     private String docPath2;
 
     /**
-     *
+     * setup for system test
      */
     @Before
     public void setUp() {
@@ -134,7 +134,21 @@ public class NAVSystemTest {
         docPath1 = "sample_exchangeCCD.xml";
         docPath2 = "purchase_order.xml";
         server = new GreenMail();
-        server.start();
+        //for some reason, the greenmail server doesnt start in time
+        //will attempt max times to ensure all service gets startedup 
+        int i = 0;
+        final int max = 2;
+        while ( i < max ) {
+            try {
+                server.start();
+                //CHECKSTYLE:OFF
+            } catch (RuntimeException e) { //NOPMD
+              //CHECKSTYLE:ON
+                i++;
+                continue;
+            }
+            i = max;
+        }
     }
 
     /**
@@ -164,12 +178,12 @@ public class NAVSystemTest {
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
 
-        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, to,
-                instructions, "", "", server.getSmtp().getBindTo(), server.getSmtp().getPort(), server.getSmtp()
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, 
+                instructions, server.getSmtp().getBindTo(), server.getSmtp().getPort(), server.getSmtp()
                         .getProtocol());
-
+        sender.setCredentials("", "");
         final String[] keys = { docId1, docId2 };
-        sender.send(new ArrayList<String>(Arrays.asList(keys)));
+        sender.send(to, new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
 
@@ -201,13 +215,14 @@ public class NAVSystemTest {
         final String to = EMAIL2;
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
-
-        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, to,
-                instructions, user.getLogin(), user.getPassword(), server.getSmtp().getBindTo(), server.getSmtp()
-                        .getPort(), server.getSmtp().getProtocol());
+ 
+       
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, 
+                subject, mailbox , instructions, server.getSmtp().getBindTo(),
+                server.getSmtp().getPort(), null);
         final String[] keys = { docId1, docId2 };
-
-        sender.send(new ArrayList<String>(Arrays.asList(keys)));
+        sender.setCredentials(user.getLogin(), user.getPassword());
+        sender.send(to, new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
 
@@ -242,12 +257,13 @@ public class NAVSystemTest {
         final String subject = "Notification of Document Availability";
         final String instructions = "Instructions to the user.";
 
-        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, to,
-                instructions, user.getLogin(), user.getPassword(), server.getSmtps().getBindTo(), server.getSmtps()
+        final NotificationSender sender = new NotificationSenderImpl(sigBuilder, props, subject, mailbox, 
+                instructions, server.getSmtps().getBindTo(), server.getSmtps()
                         .getPort(), server.getSmtps().getProtocol());
+        sender.setCredentials(user.getLogin(), user.getPassword());
         final String[] keys = { docId1, docId2 };
 
-        sender.send(new ArrayList<String>(Arrays.asList(keys)));
+        sender.send(to, new ArrayList<String>(Arrays.asList(keys)));
 
         assertTrue(server.getReceivedMessages().length == 1);
 
@@ -280,7 +296,8 @@ public class NAVSystemTest {
 
             ks.load( is, "changeit".toCharArray());
 
-            final NotificationValidator v = new DefaultNotificationValidator(new X509KeySelector(ks, factory, algorithmChecker),
+            final NotificationValidator v = 
+                new DefaultNotificationValidator(new X509KeySelector(ks, factory, algorithmChecker),
                     new DefaultDocumentReferenceValidator());
             v.validate(messages[0]);
 

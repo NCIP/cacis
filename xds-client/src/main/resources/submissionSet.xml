@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:SubmissionSet xmlns:hl7v2="urn:org:openhealthtools:ihe:common:hl7v2" xmlns:p0="htt//www.w3.org/XML/1998/namespace" xmlns:tns="urn:org:openhealthtools:ihe:xds:metadata" xmlns:xsi="htt//www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:org:openhealthtools:ihe:xds:metadata metadata.xsd urn:org:openhealthtools:ihe:common:hl7v2 ../../../org.openhealthtools.ihe.common.hl7v2/resources/schema/hl7v2_wrapper.xsd htt//www.w3.org/XML/1998/namespace htt//www.w3.org/2001/xml.xsd ">
+  <author>
+   	<authorInstitution>
+ 		<organizationName>St Mary's Hospital and Clinics</organizationName>
+  	</authorInstitution>
+  	<authorPerson>
+    	<idNumber>ae21667b95a7792a</idNumber>
+    	<familyName>Jordan</familyName>
+  		<givenName>Pearl</givenName>
+  		<assigningAuthorityUniversalId>2.16.840.1.113883.3.933</assigningAuthorityUniversalId>
+		<assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+  	</authorPerson>
+  </author>
+  <contentTypeCode>
+    <code>Consult</code>
+    <displayName>
+      <LocalizedString value="Consult"/>
+    </displayName>
+    <schemeName>Connect-a-thon contentTypeCodes</schemeName>
+  </contentTypeCode>
+
+ <patientId>
+   <idNumber>NA5156</idNumber>  
+   <assigningAuthorityUniversalId>1.3.6.1.4.1.21367.13.20.3000</assigningAuthorityUniversalId>
+   <assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+  </patientId>
+
+</tns:SubmissionSet>

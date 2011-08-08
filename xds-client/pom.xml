@@ -1,149 +1,218 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>pco</artifactId>
-    <groupId>gov.nih.nci.cacis</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-<!--   <groupId>gov.nih.nci.cacis</groupId> -->
-  <artifactId>xds-client</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>XDS Client</name>
-  
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-    	<groupId>log4j</groupId>
-    	<artifactId>log4j</artifactId>
-    	<version>1.2.14</version>
-    	<type>jar</type>
-    </dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+        <artifactId>pco</artifactId>
+        <groupId>gov.nih.nci.cacis</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency> 
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-kernel</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-adb</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency> 
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-adb-codegen</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency> 
-        <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-jaxws</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency> 
-        <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-metadata</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency> 
-        <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-saaj</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency> 
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-transport-http</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-transport-local</artifactId>
-    	<version>1.5</version>
-    	<type>jar</type>
-    </dependency>    
-    <dependency>
-    	<groupId>org.apache.axis2</groupId>
-    	<artifactId>axis2-transport-tcp</artifactId>
-    	<version>1.0.0</version>
-    	<type>jar</type>
-    </dependency>    
-     
-    <dependency>
-    	<groupId>org.eclipse.emf</groupId>
-    	<artifactId>org.eclipse.emf.ecore</artifactId>
-    	<version>2.6.0.v20100614-1136</version>
-    	<type>jar</type>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.emf.ecore</groupId>
-    	<artifactId>xmi</artifactId>
-    	<version>2.3.0-v200706262000</version>
-    	<type>jar</type>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.httpcomponents</groupId>
-    	<artifactId>httpcore</artifactId>
-    	<version>4.1.1</version>
-    	<type>jar</type>
-    </dependency>
-   
-   <!-- 
-	All jars under lib/org.openhealthtools.ihe_1.2.0.rc1 have been packaged into ihelibrary.jar
-	These jars are from ihe profiles org.openhealthtools.ihe_1.2.0.rc1.zip
-	https://www.projects.openhealthtools.org/sf/frs/do/viewRelease/projects.iheprofiles/frs.incremental_builds.rc1
-	 
-	 Using Eclipse i created a Runnable Jar by following the steps below.
-		1.create simple (non-maven) java project
- 		2.add a Main class
- 		3.add all the jars to the classpath
- 		4.export Runnable JAR (it's important, because no other way here to do it)
- 		5.select Extract required libraries into generated JAR
- 		6.decide the licence issues
- 		7.tadammm...install the generated jar to your m2repo
- 		8.add this single dependency to your other projects.
-    --> 
-   <dependency>
-        <groupId>ihe.profiles.libs</groupId>
-        <artifactId>ihelibrary</artifactId>
-        <version>1.0</version>
-        <scope>system</scope>
-        <systemPath>${project.basedir}/lib/ihelibrary.jar</systemPath>
-    </dependency>
+    <artifactId>xds-client</artifactId>
+    <packaging>jar</packaging>
+    <name>xds-client</name>
     
-       <dependency>
-        <groupId>nhhtp-lib</groupId>
-        <artifactId>sypase-nhhtp-lib</artifactId>
-        <version>1.0</version>
-        <scope>system</scope>
-        <systemPath>${project.basedir}/lib/synapse-nhttp-1.0.jar</systemPath>
-    </dependency>
+    <properties>
+        <test.unit.branchrate>35</test.unit.branchrate>
+        <test.unit.linerate>35</test.unit.linerate>
+        <!-- TODO: After ESD-3073, fix these properties -->
+        <!-- 
+        <xds.repository.url>https://localhost:8011/openxds-web/services/DocumentRepository</xds.repository.url>
+        <xds.registry.url>https://localhost:8011/openxds-web/services/DocumentRegistry</xds.registry.url>
+         -->
+        <xds.repository.url>http://localhost:8010/openxds/services/DocumentRepository</xds.repository.url>
+        <xds.registry.url>http://localhost:8010/openxds/services/DocumentRegistry</xds.registry.url>
         
-       <dependency>
-       	<groupId>org.apache.httpcomponents</groupId>
-       	<artifactId>httpcore-nio</artifactId>
-       	<version>4.1.2</version>
-       	<type>jar</type>
-       	<scope>compile</scope>
-       </dependency>
-  </dependencies>  
-  
-  
-  
+        <xds.repo.oid>1.3.6.1.4.1.21367.13.1150</xds.repo.oid>
+        <xds.doc.location>${user.home}/.cacis/mc</xds.doc.location>
+        <axis2.xml.location>${xds.doc.location}/axis2.xml</axis2.xml.location>    
+        <xds.keystore.path>${xds.doc.location}/OpenXDS_2011_Keystore.jks</xds.keystore.path>
+		<xds.keystore.password>password</xds.keystore.password>
+		<xds.truststore.path>${xds.doc.location}/OpenXDS_2011_Truststore.jks</xds.truststore.path>
+		<xds.truststore.password>password</xds.truststore.password>
+    </properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>gov.nih.nci.cacis</groupId>
+			<artifactId>esd-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nih.nci.cacis</groupId>
+			<artifactId>xds-authz-handlers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--<dependency>
+			<groupId>gov.nih.nci.cacis</groupId>
+			<artifactId>xds-authz-beans</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		--><dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-kernel</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-adb</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-adb-codegen</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-jaxws</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-metadata</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-saaj</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-http</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-local</artifactId>
+			<version>1.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-tcp</artifactId>
+			<version>1.0.0</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.ecore</artifactId>
+			<version>2.6.0.v20100614-1136</version>
+			<type>jar</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.1.1</version>
+			<type>jar</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore-nio</artifactId>
+			<version>4.1.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<!--
+			All jars under lib/org.openhealthtools.ihe_1.2.0.rc1 have been
+			packaged into ihelibrary.jar These jars are from ihe profiles
+			org.openhealthtools.ihe_1.2.0.rc1.zip
+			https://www.projects.openhealthtools.org/sf/frs/do/viewRelease/projects.iheprofiles/frs.incremental_builds.rc1
+
+			Using Eclipse i created a Runnable Jar by following the steps below.
+			1.create simple (non-maven) java project 2.add a Main class 3.add all
+			the jars to the classpath 4.export Runnable JAR (it's important,
+			because no other way here to do it) 5.select Extract required
+			libraries into generated JAR 6.decide the licence issues
+			7.tadammm...install the generated jar to your m2repo 8.add this
+			single dependency to your other projects.
+		-->
+		<dependency>
+			<groupId>ihe.profiles.libs</groupId>
+			<artifactId>ihelibrary</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/ihelibrary.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf.ecore</groupId>
+			<artifactId>xmi</artifactId>
+			<version>2.3.0-v200706262000</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/../lib/xmi-2.3.0-v200706262000.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.equinox</groupId>
+			<artifactId>app</artifactId>
+			<version>1.0.0-v20070606</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/../lib/app_1.0.0-v20070606.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>nhhtp-lib</groupId>
+			<artifactId>sypase-nhhtp-lib</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/../lib/synapse-nhttp-1.0.jar</systemPath>
+		</dependency>		
+	</dependencies>
+	
+	<build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        
+        <plugins>
+        	<plugin>
+               <artifactId>maven-resources-plugin</artifactId>
+               <version>2.5</version>
+               <executions>
+                   <execution>
+                       <id>copy-xds-support-files</id>
+                       <phase>compile</phase>
+                       <goals>
+                           <goal>copy-resources</goal>
+                       </goals>
+                       <configuration>
+                           <outputDirectory>${xds.doc.location}</outputDirectory>
+                           <resources>
+                               <resource>
+                                   <directory>${basedir}/src/main/resources</directory>
+                                   <includes>
+                                   		<include>axis2.xml</include>
+                                   		<include>docEntry.xml</include>
+                                   		<include>submissionSet.xml</include>
+                                   		<include>OpenXDS_2011_Keystore.jks</include>
+                                   		<include>OpenXDS_2011_Truststore.jks</include>
+                                   </includes>
+                               </resource>
+                           </resources>
+                       </configuration>
+                   </execution>
+               </executions>
+           </plugin>
+        </plugins>
+   </build>
 </project>

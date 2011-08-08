@@ -47,12 +47,19 @@
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>20041127.091804</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>xds-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+        	<groupId>commons-codec</groupId>
+        	<artifactId>commons-codec</artifactId>
+        	<version>20041127.091804</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
         </dependency>
     </dependencies>
 

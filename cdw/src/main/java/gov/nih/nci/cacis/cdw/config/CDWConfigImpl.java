@@ -81,13 +81,14 @@ import org.springframework.context.annotation.Scope;
 public class CDWConfigImpl implements CDWConfig {
 
 
-    @Override
+    @Override    
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public CDWLoader loader() {
         return new CDWLoader();
     }
-
+    
+    
     /**
      * Loads properties from classpath*:/"transformer-test.properties" location
      *
