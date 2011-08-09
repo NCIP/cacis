@@ -19,8 +19,8 @@
         <xds.repository.url>https://localhost:8011/openxds-web/services/DocumentRepository</xds.repository.url>
         <xds.registry.url>https://localhost:8011/openxds-web/services/DocumentRegistry</xds.registry.url>
          -->
-        <xds.repository.url>http://localhost:21080/openxds12-web/services/DocumentRepository</xds.repository.url>
-        <xds.registry.url>http://localhost:21080/openxds12-web/services/DocumentRegistry</xds.registry.url>
+        <xds.repository.url>https://localhost:21443/openxds12-web/services/DocumentRepository</xds.repository.url>
+        <xds.registry.url>https://localhost:21443/openxds12-web/services/DocumentRegistry</xds.registry.url>
         
         <xds.repo.oid>1.3.6.1.4.1.21367.13.1150</xds.repo.oid>
         <xds.doc.location>${user.home}/.cacis/mc</xds.doc.location>
