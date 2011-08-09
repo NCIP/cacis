@@ -513,6 +513,8 @@
                                     <excludes>
                                         <exclude>**/Abstract*.java</exclude>
                                         <exclude>**/Base*.java</exclude>
+                                        <!-- Excluding XDSDocumentHandlerIntegrationTest as CI openxds is not available. Fix comes in ESD-3106 -->
+                                        <exclude>**/XDSDocumentHandlerIntegrationTest.java</exclude>
                                     </excludes>
                                     <includes>
                                         <include>**/*IntegrationTest.java</include>
