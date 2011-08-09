@@ -86,7 +86,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @since Jun 16, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
+@ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
 public class X509CertSelectorTest {
 
     @Autowired

@@ -100,7 +100,7 @@ import com.icegreen.greenmail.util.GreenMail;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
+@ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
 public class NAVSystemTest {
 
     @Autowired

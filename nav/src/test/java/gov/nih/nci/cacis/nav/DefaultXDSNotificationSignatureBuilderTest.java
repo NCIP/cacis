@@ -86,7 +86,7 @@ import org.w3c.dom.Node;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
+@ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
 public class DefaultXDSNotificationSignatureBuilderTest {
 
     @Value("${nav.keystore.location}")

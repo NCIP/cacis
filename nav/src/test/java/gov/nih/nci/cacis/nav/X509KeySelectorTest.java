@@ -91,7 +91,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @since Jun 23, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:/applicationContext-nav.xml" } )
+@ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
 public class X509KeySelectorTest {
     @Autowired
     private CertSelectorFactory certSelectorFactory;
