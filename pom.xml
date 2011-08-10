@@ -72,7 +72,8 @@
 		<cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
 		<xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
 		<trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
-
+		<cacis.mc.support.files.dir>${user.home}/.cacis/mc</cacis.mc.support.files.dir>	
+		
     </properties>
 
     <organization>
