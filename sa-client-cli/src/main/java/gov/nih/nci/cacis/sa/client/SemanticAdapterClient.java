@@ -58,55 +58,95 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.sa.mirthconnect;
+package gov.nih.nci.cacis.sa.client;
 
+import gov.nih.nci.cacis.AcceptSourceFault;
 import gov.nih.nci.cacis.AcceptSourcePortType;
 import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.ClinicalData;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import gov.nih.nci.cacis.CaCISResponse;
+import gov.nih.nci.cacis.sa.config.SemanticAdapterClientConfig;
+import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.StringWriter;
+import java.net.URL;
 
 /**
  * @author kherm manav.kher@semanticbits.com
  */
-public class SemanticAdapterServerSystemTest extends AbstractBusClientServerTestBase {
+public class SemanticAdapterClient {
 
-    private AcceptSourcePortType semanticAdapter;
+    private static final Logger LOG = Logger.getLogger(SemanticAdapterClient.class);
 
-    @BeforeClass
-    public static void startServers() {
-        assertTrue("server did not launch correctly", launchServer(SemanticAdapterServer.class,
-                true));
+
+    /**
+     * @param requestFileUrl file that has the request to be submitted
+     * @throws JAXBException     Exception
+     * @throws AcceptSourceFault Service Fault
+     * @return String response
+     */
+    public String invoke(URL requestFileUrl) throws JAXBException, AcceptSourceFault {
+        return this.invoke(requestFileUrl.getFile());
+    }
+
+
+    /**
+     * @param requestFileUrl file that has the request to be submitted
+     * @throws JAXBException     Exception
+     * @throws AcceptSourceFault Service Fault
+     * @return String response
+     */
+    public String invoke(String requestFileUrl) throws JAXBException, AcceptSourceFault {
+        return this.invoke(new File(requestFileUrl));
     }
 
     /**
-     * Setup test instance objects
+     * @param requestFile file that has the request to be submitted
+     * @throws JAXBException     Exception
+     * @throws AcceptSourceFault Service Fault
+     * @return String response
      */
-    @Before
-    public void setup() {
-        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(AcceptSourcePortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(SemanticAdapterServer.ADDRESS);
+    public String invoke(File requestFile) throws JAXBException, AcceptSourceFault {
 
+        final ApplicationContext ctx =
+                new AnnotationConfigApplicationContext(SemanticAdapterClientConfig.class);
+        final AcceptSourcePortType
+                saClient = (AcceptSourcePortType) ctx.getBean("client");
 
-        this.semanticAdapter = (AcceptSourcePortType) factory.create();
+        final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
+
+        final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(requestFile);
+
+        LOG.info("Sending request to SA Service ");
+        //        todo serialize response
+        final CaCISResponse response = saClient.acceptSource(request);
+
+        final StringWriter result = new StringWriter();
+        jc.createMarshaller().marshal(response,result);
+
+        return result.toString();
+
     }
 
-
-    @Test
-    public void invoke() throws Exception {
-
-        final CaCISRequest request = new CaCISRequest();
-        ClinicalData cData = new ClinicalData();
-
-        request.setSourceData(cData);
-
-        semanticAdapter.acceptSource(request);
-
+    /**
+     * Main method
+     *
+     * @param args argument. Only 1 is expected which is the path to the request data file
+     * @throws JAXBException     Exception
+     * @throws AcceptSourceFault Service fault
+     */
+    public static void main(String[] args) throws JAXBException, AcceptSourceFault {
+        if (args.length != 1) {
+            System.out.println("usage is " +                //NOPMD
+                    "\"java SemanticAdapterClient <request_file_url>");
+            System.exit(0);
+        }
+        final SemanticAdapterClient client = new SemanticAdapterClient();
+        client.invoke(args[0]);
 
     }
 }

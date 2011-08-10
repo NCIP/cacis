@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:cacis="http://cacis.nci.nih.gov"
+             targetNamespace="http://cacis.nci.nih.gov" name="AcceptSource">
+    <types>
+        <xsd:schema elementFormDefault="qualified">
+            <xsd:import namespace="http://cacis.nci.nih.gov" schemaLocation="../schema/caCISSADataSharing.xsd"/>
+        </xsd:schema>
+    </types>
+    <message name="AcceptSourceRequest">
+        <documentation>Request for sending source data to the Semantic Adapter</documentation>
+        <part name="parameter" element="cacis:caCISRequest"/>
+    </message>
+    <message name="AcceptSourceResponse">
+        <documentation>Response from the Semantic Adaptor</documentation>
+        <part name="parameter" element="cacis:caCISResponse"/>
+    </message>
+    <message name="AcceptSourceFault">
+        <documentation>Fault from the Semantic Adapter while processing accept source operation</documentation>
+        <part name="parameter" element="cacis:caCISFault"/>
+    </message>
+    <portType name="AcceptSource_PortType">
+        <operation name="AcceptSource">
+            <input message="cacis:AcceptSourceRequest" wsa:Action="cacis:AcceptSourceRequest"/>
+            <output message="cacis:AcceptSourceResponse" wsa:Action="cacis:AcceptSourceResponse"/>
+            <fault name="AcceptSourceFault" message="cacis:AcceptSourceFault"/>
+        </operation>
+    </portType>
+    <binding name="AcceptSource_Binding_Soap11" type="cacis:AcceptSource_PortType">
+        <soap11:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="AcceptSource">
+            <soap11:operation soapAction="cacis:AcceptSource"/>
+            <input>
+                <soap11:body use="literal"/>
+            </input>
+            <output>
+                <soap11:body use="literal"/>
+            </output>
+            <fault name="AcceptSourceFault">
+                <soap11:fault name="AcceptSourceFault" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="SemanticAdapter">
+        <port name="AcceptSource_Port_Soap11" binding="cacis:AcceptSource_Binding_Soap11">
+            <soap11:address location="http://localhost/SemanticAdapter"/>
+        </port>
+    </service>
+</definitions>

@@ -96,7 +96,7 @@ import com.icegreen.greenmail.util.ServerSetup;
 @ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
 public class DocRouterNotificationSenderSystemTest {
     
-    private static final int TEST_SMTP_PORT = 4125;
+    private static final int TEST_SMTP_PORT = 14125;
 
     @Value("${ext.file.location}")
     private String extSupportedFilesLoc;

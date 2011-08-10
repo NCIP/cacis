@@ -1,4 +1,4 @@
-/*
+/**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
  * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
  * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
@@ -7,7 +7,24 @@
  *
  * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- *  of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
+ * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
+ * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
+ * (iii) beneficial ownership of such entity.
+ *
+ * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
+ * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
+ * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
+ * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
+ * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
+ * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
+ * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
+ * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
+ * charge to You.
+ *
+ * Your redistributions of the source code for the Software must retain the above copyright notice, this list of
+ * conditions and the disclaimer and limitation of liability of Article 6, below. Your redistributions in object code
+ * form must reproduce the above copyright notice, this list of conditions and the disclaimer of Article 6 in the
+ * documentation and/or other materials provided with the distribution, if any.
  *
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
  * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
@@ -41,92 +58,33 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
+package gov.nih.nci.cacis.sa.config;
 
-import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
-import gov.nih.nci.cacis.AcceptCanonicalFault;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
-import gov.nih.nci.cacis.common.systest.AbstractJaxWsTest;
-import org.apache.cxf.jaxws.EndpointImpl;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import javax.xml.ws.soap.SOAPFaultException;
+/**
+ * @author kherm manav.kher@semanticbits.com
+ */
+@Configuration
+@Import(SemanticAdapterServiceConfig.class)
+public class SemanticAdapterClientConfig {
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
 
-public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
-
-    /**
-     * Constant value for the endpoint address
-     */
-    protected static final String ADDRESS = "http://localhost:18081/services/Temp?wsdl";
-    @Mock
-    WebServiceMessageReceiver webServiceMessageReceiver;
-
-    private JaxWsProxyFactoryBean factory;
-    private EndpointImpl ep;
-
-    /**
-     * EndpointImpl
+     /**
+     * Loads properties from classpath*:/"transformer-test.properties" location
      *
-     * @return Endpoint
+     * @return the property place holder configures
      */
-    @Override
-    protected EndpointImpl getEndpoint() {
-        return this.ep;
+    @Bean
+    public PropertyPlaceholderConfigurer saClientPropertyPlaceholderConfigurer() {
+        final PropertyPlaceholderConfigurer configurer =
+                new CommonsPropertyPlaceholderConfigurer("sa-client", "sa-client.properties");
+        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
     }
-
-
-    /**
-     * Setups up namespace and Endpoint
-     *
-     * @throws Exception - exception thrown
-     */
-    @Before
-    public void setup() throws Exception { // NOPMD - setUpBus throws
-        MockitoAnnotations.initMocks(this);
-
-        final CanonicalModelProcessor service = new CanonicalModelProcessor(webServiceMessageReceiver);
-        ep = new EndpointImpl(getBus(), service);
-        ep.publish(ADDRESS);
-
-        factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(CanonicalModelProcessorPortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(ADDRESS);
-
-    }
-
-
-    @Test
-    public void invoke() throws Exception {
-        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
-
-        final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
-        final CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
-
-
-        client.acceptCanonical(request);
-    }
-
-
-    @Test(expected = SOAPFaultException.class)
-    public void exception() throws Exception {
-        when(webServiceMessageReceiver.processData(anyString())).thenThrow(new RuntimeException());
-
-        final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
-        final CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
-
-
-        client.acceptCanonical(request);
-    }
-
 }

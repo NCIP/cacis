@@ -22,6 +22,8 @@
         <module>xds-authz</module>
         <module>xds-authz-handlers</module>
         <module>xds-client</module>
+        <module>sa-mirth</module>
+        <module>sa-client-cli</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -30,6 +32,7 @@
         <compileSource>1.6</compileSource>
         <spring.version>3.0.2.RELEASE</spring.version>
         <cxf.version>2.3.2</cxf.version>
+        <xerces.version>2.9.1</xerces.version>
         <jboss.server.version>4.2.2.GA</jboss.server.version>
         <mirthconnect.version>2.2.1</mirthconnect.version>
         <maven.reports.plugin.version>2.4</maven.reports.plugin.version>
@@ -276,14 +279,9 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon-dom</artifactId>
-            <version>9.1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon</artifactId>
-            <version>9.1.0.1</version>
+            <groupId>net.sourceforge.saxon</groupId>
+            <artifactId>saxonhe</artifactId>
+            <version>9.2.1.5</version>
         </dependency>
 
         <!-- secured mail -->

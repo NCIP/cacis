@@ -9,29 +9,28 @@
             will be used as the interface from TRANSCEND Tolven to the Semantic Adaptor.
         </xs:documentation>
     </xs:annotation>
-    <xs:element name="caCISRequest">
+    <xs:element name="caCISRequest" type="CaCISRequest">
         <xs:annotation>
             <xs:documentation>The root element for the XML structure to be passed from a native clinical application to
                 the Semantic Adaptor for processing by the NCI caCIS solution.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="routingInstructions" type="RoutingInstructions" minOccurs="0"/>
-                <xs:element name="sourceData" type="ClinicalData"/>
-                <xs:element name="clinicalMetaData" type="ClinicalMetadata"/>
-                <xs:element ref="cda:ClinicalDocument"/>
-            </xs:sequence>
-            <xs:attribute name="userName" type="NonEmptyString" use="optional">
-                <xs:annotation>
-                    <xs:documentation>The user name that initiated the data exchange request. This value would be used
-                        to
-                        log which user originated the request.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
-        </xs:complexType>
     </xs:element>
+    <xs:complexType name="CaCISRequest">
+        <xs:sequence>
+            <xs:element name="routingInstructions" type="RoutingInstructions" minOccurs="0"/>
+            <xs:element name="sourceData" type="ClinicalData"/>
+            <xs:element name="clinicalMetaData" type="ClinicalMetadata"/>
+            <xs:element ref="cda:ClinicalDocument"/>
+        </xs:sequence>
+        <xs:attribute name="userName" type="NonEmptyString" use="optional">
+            <xs:annotation>
+                <xs:documentation>The user name that initiated the data exchange request. This value would be used to
+                    log which user originated the request.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
     <xs:complexType name="RoutingInstructions">
         <xs:sequence>
             <xs:element name="exchangeDocument" maxOccurs="unbounded">
@@ -193,42 +192,38 @@
             <xs:extension base="xs:anyType"/>
         </xs:complexContent>
     </xs:complexType>
-
-    <xs:element name="caCISResponse">
+    <xs:element name="caCISResponse" type="CaCISResponse">
         <xs:annotation>
             <xs:documentation>The root element for the XML structure that is passed as a response from the caCIS
                 Semantic Adaptor to the source Clinical System or from the Integration Platform to the Semantic Adaptor.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:annotation>
-                <xs:documentation>The root element for the XML structure to be passed as a response to the Semantic
-                    Adaptor
-                    from the caCIS Integration Platform or to the Source Clinical System from the Semantic Adaptorr
-                </xs:documentation>
-            </xs:annotation>
-            <xs:attribute name="status" type="ResponseStatusType" use="required"/>
-        </xs:complexType>
     </xs:element>
-
-    <xs:element name="caCISFault">
+    <xs:element name="caCISFault" type="CaCISFault">
         <xs:annotation>
             <xs:documentation>The root element for the XML structure that is passed as a response from the caCIS
                 Semantic Adaptor to the source Clinical System or from the Integration Platform to the Semantic Adaptor.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:annotation>
-                <xs:documentation>The root element for the XML structure to be passed as a fault to the Semantic Adaptor
-                    from the caCIS Integration Platform or to the Source Clinical System from the Semantic Adaptor
-                </xs:documentation>
-            </xs:annotation>
-            <xs:sequence>
-                <xs:element name="caCISError" type="CaCISError" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
     </xs:element>
-
+    <xs:complexType name="CaCISResponse">
+        <xs:annotation>
+            <xs:documentation>The root element for the XML structure to be passed as a response to the Semantic Adaptor
+                from the caCIS Integration Platform or to the Source Clinical System from the Semantic Adaptorr
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="status" type="ResponseStatusType" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="CaCISFault">
+        <xs:annotation>
+            <xs:documentation>The root element for the XML structure to be passed as a fault to the Semantic Adaptor
+                from the caCIS Integration Platform or to the Source Clinical System from the Semantic Adaptor
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="caCISError" type="CaCISError" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="CaCISError">
         <xs:annotation>
             <xs:documentation>The root element for the XML structure to be used to convey errors from caCIS Semantic

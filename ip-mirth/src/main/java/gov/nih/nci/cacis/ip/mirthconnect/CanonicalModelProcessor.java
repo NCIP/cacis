@@ -73,10 +73,8 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import com.mirth.connect.connectors.ws.AcceptMessage;
 import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
@@ -117,16 +115,13 @@ public class CanonicalModelProcessor extends AcceptMessage {
         final CaCISResponse response = new CaCISResponse();
         response.setStatus(ResponseStatusType.SUCCESS);
 
-        // Will need to be updated in ESD-3040
         final StringWriter sw = new StringWriter();
         try {
-            final JAXBContext jc = JAXBContext.newInstance("gov.nih.nci.cacis");
+            final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
             final Marshaller m = jc.createMarshaller();
-            final QName qn = new QName(CACIS_NS, "caCISRequest");
-            final JAXBElement<CaCISRequest> jaxbElement = new JAXBElement(qn, CaCISRequest.class, request);
 
             final PrintWriter pw = new PrintWriter(sw);
-            m.marshal(jaxbElement, pw);
+            m.marshal(request, pw);
         } catch (JAXBException jaxE) {
             throw new AcceptCanonicalFault("Error Marshalling object", jaxE);
         }
