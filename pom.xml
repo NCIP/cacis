@@ -22,6 +22,7 @@
         <module>xds-authz</module>
         <module>xds-authz-handlers</module>
         <module>xds-client</module>
+        <module>sa-mirth</module>
     </modules>
     <packaging>pom</packaging>
 

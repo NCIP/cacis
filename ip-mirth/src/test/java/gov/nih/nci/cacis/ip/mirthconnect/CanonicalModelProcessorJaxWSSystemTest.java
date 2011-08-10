@@ -44,6 +44,7 @@
 package gov.nih.nci.cacis.ip.mirthconnect;
 
 import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
+import gov.nih.nci.cacis.AcceptCanonicalFault;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
 import gov.nih.nci.cacis.common.systest.AbstractJaxWsTest;
@@ -54,18 +55,21 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.xml.ws.soap.SOAPFaultException;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
 
     /**
-     * Cosntant value for the endpoint address
+     * Constant value for the endpoint address
      */
     protected static final String ADDRESS = "http://localhost:18081/services/Temp?wsdl";
     @Mock
     WebServiceMessageReceiver webServiceMessageReceiver;
 
+    private JaxWsProxyFactoryBean factory;
     private EndpointImpl ep;
 
     /**
@@ -87,21 +91,22 @@ public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
     @Before
     public void setup() throws Exception { // NOPMD - setUpBus throws
         MockitoAnnotations.initMocks(this);
-        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
 
         final CanonicalModelProcessor service = new CanonicalModelProcessor(webServiceMessageReceiver);
         ep = new EndpointImpl(getBus(), service);
         ep.publish(ADDRESS);
+
+       factory = new JaxWsProxyFactoryBean();
+              factory.setServiceClass(CanonicalModelProcessorPortType.class);
+              // specify the URL. We are using the in memory test container
+              factory.setAddress(ADDRESS);
+
     }
 
 
     @Test
     public void invoke() throws Exception {
-
-        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(CanonicalModelProcessorPortType.class);
-        // specify the URL. We are using the in memory test container
-        factory.setAddress(ADDRESS);
+        when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
 
         final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
         final CaCISRequest request = new CaCISRequest();
@@ -111,5 +116,17 @@ public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
         client.acceptCanonical(request);
     }
 
+
+    @Test(expected = SOAPFaultException.class)
+    public void exception() throws Exception {
+        when(webServiceMessageReceiver.processData(anyString())).thenThrow(new RuntimeException());
+
+        final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
+        final CaCISRequest request = new CaCISRequest();
+        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
+
+
+        client.acceptCanonical(request);
+    }
 
 }
