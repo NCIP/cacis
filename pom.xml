@@ -15,7 +15,6 @@
         <module>nav</module>
         <module>tolven-commons</module>
         <module>trim-loader-client</module>
-        <module>validation</module>
         <module>transformer</module>
         <module>ip-mirth</module>
         <module>cdw</module>
@@ -32,8 +31,6 @@
         <spring.version>3.0.2.RELEASE</spring.version>
         <cxf.version>2.3.2</cxf.version>
         <jboss.server.version>4.2.2.GA</jboss.server.version>
-        <ipf.version>2.3-m1</ipf.version>
-        <apache.camel.version>2.6.0</apache.camel.version>
         <mirthconnect.version>2.2.1</mirthconnect.version>
         <maven.reports.plugin.version>2.4</maven.reports.plugin.version>
         <junit.version>4.8.1</junit.version>
@@ -326,12 +323,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.8.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-javaconfig</artifactId>
-            <version>${apache.camel.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

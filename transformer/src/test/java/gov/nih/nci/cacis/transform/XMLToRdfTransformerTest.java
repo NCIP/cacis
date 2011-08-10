@@ -60,35 +60,34 @@
  */
 package gov.nih.nci.cacis.transform;
 
-import org.apache.camel.spring.javaconfig.test.JavaConfigContextLoader;
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
-import java.io.*;
-import java.net.URISyntaxException;
-
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author kherm manav.kher@semanticbits.com
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        locations = "gov.nih.nci.cacis.config.TransformConfig",
-        loader = JavaConfigContextLoader.class)
+@ContextConfiguration(locations = "classpath*:/applicationContext-transformer.xml")
 @DirtiesContext
 public class XMLToRdfTransformerTest {
 
@@ -129,7 +128,6 @@ public class XMLToRdfTransformerTest {
         os.reset();
         transform.transform(sampleTrimIS, os);
         assertNotNull(os);
-        System.out.println(os);
         assertTrue(os.size() > 0);
     }
 

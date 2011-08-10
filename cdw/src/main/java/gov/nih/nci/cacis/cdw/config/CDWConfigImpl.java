@@ -63,7 +63,7 @@ package gov.nih.nci.cacis.cdw.config;
 
 import gov.nih.nci.cacis.cdw.CDWLoader;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-import gov.nih.nci.cacis.config.TransformConfig;
+import gov.nih.nci.cacis.config.TransformerConfig;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -77,7 +77,7 @@ import org.springframework.context.annotation.Scope;
  * @since Jul 15, 2011
  */
 @Configuration
-@Import({ VirtuosoJdbcConfigImpl.class,  TransformConfig.class })
+@Import({ VirtuosoJdbcConfigImpl.class,  TransformerConfig.class })
 public class CDWConfigImpl implements CDWConfig {
 
 

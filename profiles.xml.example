@@ -32,6 +32,8 @@
         		<!--NOTE - customize this property to OpenXDS location on the desired environment-->
         		<openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
         		
+		<trimProcessedDir>${trimInputDir}/processed</trimProcessedDir>
+        	<trimErrorDir>${trimInputDir}/error</trimErrorDir>
 
 		<!--  Temporary directory for System test output file -->
 		<cacis.mc.temp.dir>/tmp</cacis.mc.temp.dir>

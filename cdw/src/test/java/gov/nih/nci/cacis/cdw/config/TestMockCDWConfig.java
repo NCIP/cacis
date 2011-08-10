@@ -64,7 +64,7 @@ package gov.nih.nci.cacis.cdw.config;
 
 import gov.nih.nci.cacis.cdw.CDWLoader;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
-import gov.nih.nci.cacis.config.TransformConfig;
+import gov.nih.nci.cacis.config.TransformerConfig;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -80,7 +80,7 @@ import org.springframework.context.annotation.Import;
  * @since Jul 18, 2011
  */
 @Configuration
-@Import({ InMemorySesameJdbcConfig.class, TransformConfig.class })
+@Import({ InMemorySesameJdbcConfig.class, TransformerConfig.class })
 public class TestMockCDWConfig implements CDWConfig {
 
 

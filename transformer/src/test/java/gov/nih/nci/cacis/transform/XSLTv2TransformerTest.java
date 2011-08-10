@@ -44,38 +44,10 @@
 
 package gov.nih.nci.cacis.transform;
 
-import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
-import gov.nih.nci.cacis.config.RdfTransformerConfig;
-import junit.framework.Assert;
-import org.apache.camel.spring.javaconfig.test.JavaConfigContextLoader;
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -84,16 +56,29 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        locations = "gov.nih.nci.cacis.config.TransformConfig",
-        loader = JavaConfigContextLoader.class)
+@ContextConfiguration(locations = "classpath*:/applicationContext-transformer.xml")
 public class XSLTv2TransformerTest {
 
     @Autowired
@@ -132,7 +117,6 @@ public class XSLTv2TransformerTest {
         transform.transform(sampleMessageIS, os);
         assertNotNull(os);
         assertTrue(os.size() > 0);
-        System.out.println(os);
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true); // never forget this!
@@ -145,7 +129,6 @@ public class XSLTv2TransformerTest {
         XPathFactory xPathFactory = XPathFactory.newInstance();
         XPath xpath = xPathFactory.newXPath();
         XPathExpression expr = xpath.compile("/world/country[1]/city[1]");
-        System.out.println("city is" + expr.evaluate(doc));
 
         assertEquals("Tokyo", expr.evaluate(doc));
 

@@ -75,7 +75,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import(RdfTransformerConfig.class)
-public class TransformConfig {
+public class TransformerConfig {
 
     /**
      * Loads properties from classpath*:/"transformer-test.properties" location

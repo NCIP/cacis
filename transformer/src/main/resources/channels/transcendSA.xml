@@ -1,41 +1,41 @@
-<com.mirth.connect.model.Channel>
+<channel>
   <id>f093823c-e8be-43e0-a7a2-5319ccd8b06a</id>
   <name>transcendSA</name>
   <description></description>
   <enabled>true</enabled>
-  <version>2.0.1.5164</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1310141520669</time>
+    <time>1312830274035</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>29</revision>
+  <revision>30</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="binary">0</property>
-      <property name="fileFilter">*.xml</property>
-      <property name="password">anonymous</property>
-      <property name="regex">0</property>
-      <property name="username">anonymous</property>
-      <property name="moveToDirectory">${inputDir}/processed</property>
-      <property name="moveToErrorDirectory">${inputDir}/error</property>
-      <property name="timeout">10000</property>
-      <property name="pollingType">interval</property>
-      <property name="charsetEncoding">DEFAULT_ENCODING</property>
-      <property name="scheme">file</property>
-      <property name="host">${inputDir}</property>
-      <property name="secure">1</property>
-      <property name="pollingFrequency">1000</property>
-      <property name="validateConnections">1</property>
       <property name="DataType">File Reader</property>
-      <property name="processBatchFiles">0</property>
-      <property name="checkFileAge">1</property>
-      <property name="passive">1</property>
-      <property name="fileAge">1000</property>
-      <property name="sortAttribute">date</property>
       <property name="FTPAnonymous">1</property>
-      <property name="moveToPattern">transcendTrim-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
       <property name="autoDelete">0</property>
+      <property name="binary">0</property>
+      <property name="charsetEncoding">DEFAULT_ENCODING</property>
+      <property name="checkFileAge">1</property>
+      <property name="fileAge">1000</property>
+      <property name="fileFilter">*.xml</property>
+      <property name="host">${inputDir}</property>
+      <property name="moveToDirectory">${processedDir}</property>
+      <property name="moveToErrorDirectory">${errorDir}</property>
+      <property name="moveToPattern">transcendTrim-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
+      <property name="passive">1</property>
+      <property name="password">anonymous</property>
+      <property name="pollingFrequency">1000</property>
+      <property name="pollingType">interval</property>
+      <property name="processBatchFiles">0</property>
+      <property name="regex">0</property>
+      <property name="scheme">file</property>
+      <property name="secure">1</property>
+      <property name="sortAttribute">date</property>
+      <property name="timeout">10000</property>
+      <property name="username">anonymous</property>
+      <property name="validateConnections">1</property>
     </properties>
     <transformer>
       <steps/>
@@ -54,35 +54,16 @@
     <transportName>File Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.0.1.5164</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
-    <com.mirth.connect.model.Connector>
+    <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="dispatcherWsdlOperations">&lt;list&gt;
-  &lt;string&gt;acceptMessage&lt;/string&gt;
-&lt;/list&gt;</property>
-        <property name="queuePollInterval">200</property>
-        <property name="dispatcherAttachmentContents">&lt;list/&gt;</property>
-        <property name="dispatcherReplyChannelId">sink</property>
-        <property name="rotateQueue">0</property>
-        <property name="dispatcherAttachmentTypes">&lt;list/&gt;</property>
-        <property name="dispatcherOperation">acceptMessage</property>
-        <property name="dispatcherAttachmentNames">&lt;list/&gt;</property>
-        <property name="dispatcherService">{http://ws.connectors.connect.mirth.com/}DefaultAcceptMessageService</property>
-        <property name="dispatcherUseMtom">0</property>
-        <property name="dispatcherUseAuthentication">0</property>
-        <property name="dispatcherPort">{http://ws.connectors.connect.mirth.com/}DefaultAcceptMessagePort</property>
-        <property name="dispatcherSoapAction"></property>
-        <property name="host">localhost:9085/services/Mirth?wsdl</property>
-        <property name="dispatcherWsdlCacheId">http://localhost:9085/services/Mirth?wsdl</property>
-        <property name="dispatcherWsdlUrl">http://localhost:9085/services/Mirth?wsdl</property>
         <property name="DataType">Web Service Sender</property>
-        <property name="dispatcherPassword"></property>
-        <property name="usePersistentQueues">0</property>
-        <property name="reconnectMillisecs">10000</property>
-        <property name="dispatcherOneWay">0</property>
+        <property name="dispatcherAttachmentContents">&lt;list/&gt;</property>
+        <property name="dispatcherAttachmentNames">&lt;list/&gt;</property>
+        <property name="dispatcherAttachmentTypes">&lt;list/&gt;</property>
         <property name="dispatcherEnvelope">&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:ws=&quot;http://ws.connectors.connect.mirth.com/&quot;&gt;
 
    &lt;soapenv:Header/&gt;
@@ -101,7 +82,25 @@
 
 &lt;/soapenv:Envelope&gt;
 </property>
+        <property name="dispatcherOneWay">0</property>
+        <property name="dispatcherOperation">acceptMessage</property>
+        <property name="dispatcherPassword"></property>
+        <property name="dispatcherPort">{http://ws.connectors.connect.mirth.com/}DefaultAcceptMessagePort</property>
+        <property name="dispatcherReplyChannelId">sink</property>
+        <property name="dispatcherService">{http://ws.connectors.connect.mirth.com/}DefaultAcceptMessageService</property>
+        <property name="dispatcherSoapAction"></property>
+        <property name="dispatcherUseAuthentication">0</property>
+        <property name="dispatcherUseMtom">0</property>
         <property name="dispatcherUsername"></property>
+        <property name="dispatcherWsdlOperations">&lt;list&gt;
+  &lt;string&gt;acceptMessage&lt;/string&gt;
+&lt;/list&gt;</property>
+        <property name="dispatcherWsdlUrl">http://localhost:9085/services/Mirth?wsdl</property>
+        <property name="host">localhost:9085/services/Mirth?wsdl</property>
+        <property name="queuePollInterval">200</property>
+        <property name="reconnectMillisecs">10000</property>
+        <property name="rotateQueue">0</property>
+        <property name="usePersistentQueues">0</property>
       </properties>
       <transformer>
         <steps/>
@@ -122,19 +121,19 @@
       <transportName>Web Service Sender</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.0.1.5164</version>
-    </com.mirth.connect.model.Connector>
+      <version>2.1.1.5490</version>
+    </connector>
   </destinationConnectors>
   <properties>
-    <property name="synchronous">true</property>
     <property name="clearGlobalChannelMap">true</property>
-    <property name="transactional">false</property>
-    <property name="initialState">started</property>
     <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
     <property name="max_message_age">-1</property>
     <property name="store_messages">true</property>
-    <property name="encryptData">false</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
@@ -143,9 +142,11 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 globalChannelMap.put(&apos;inputDir&apos;,&apos;${trimInputDir}&apos;);
+globalChannelMap.put(&apos;processedDir&apos;,&apos;${trimProcessedDir}&apos;);
+globalChannelMap.put(&apos;errorDir&apos;,&apos;${trimErrorDir}&apos;);
 
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 return;</shutdownScript>
-</com.mirth.connect.model.Channel>
+</channel>
