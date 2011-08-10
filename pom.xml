@@ -66,6 +66,12 @@
         <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
         <!--NOTE - customize this property to OpenXDS location-->
         <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
+		
+		<!-- If windows, please replace the ${user.home} with absolute path,as the maven way of setting this value is not acceptable by Mirth -->
+		<outputRootdir>${user.home}</outputRootdir>
+		<cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
+		<xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
+		<trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
 
     </properties>
 
@@ -489,6 +495,7 @@
             <!--CI Profile. Will run the integration tests (needs external
              services and applications)-->
             <id>cacis-ci</id>
+            
             <build>
                 <plugins>
                     <plugin>

@@ -71,6 +71,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.cxf.test.AbstractCXFTest;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openrdf.model.URI;
 import org.openrdf.repository.Repository;
@@ -136,6 +137,14 @@ public class BaseVirtuosoIntegrationTest extends AbstractCXFTest {
     @After
     public void cleanUp() throws AuthzProvisioningException {
         virtuosoUtils.clearGraph(repoCon, graphIRI);
+    }
+    
+    /**
+     * Makes sure the graph is empty before testing
+     */
+    @Test
+    public void checkGraphIsEmpty() {
+        assertEquals(0, getNoOfTriples(dbaSimpleJdbcTemplate, graphIRI));
     }
 
 

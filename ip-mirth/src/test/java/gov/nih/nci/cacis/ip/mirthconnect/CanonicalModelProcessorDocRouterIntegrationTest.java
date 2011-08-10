@@ -76,8 +76,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Node;
 
 /**
- * Tests full round trip from CanonicalModelProcessor to Document router. Currently, the Document Router channel routes
- *  to a file (Mock implementation) so that we can test that it was called properly.
+ * Tests full round trip from CanonicalModelProcessor to Document router. 
+ * 
+ * TODO: add tests for various steps in the full round trip routing
  *
  * @author bpickeral
  * @since Aug 2, 2011

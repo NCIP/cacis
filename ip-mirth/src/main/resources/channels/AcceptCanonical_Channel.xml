@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1312311367493</time>
+    <time>1312992477994</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>53</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -17,7 +17,7 @@
       <property name="port">18081</property>
       <property name="receiverClassName">gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessor</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
-      <property name="receiverResponseValue">None</property>
+      <property name="receiverResponseValue">Destination 1</property>
       <property name="receiverServiceName">CanonicalModelProcessor</property>
       <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
@@ -673,7 +673,7 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 
-var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-cacis-cdw.xml&quot;);
+var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-cacis-cdw.xml&quot;);
 var loader = cdwContext.getBean(&quot;loader&quot;);
 
 globalChannelMap.put(&apos;cdwloader&apos;, loader);

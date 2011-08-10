@@ -85,6 +85,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
 
 /**
  * Tests DocRouterNotificationSender.
@@ -93,11 +94,13 @@ import com.icegreen.greenmail.util.GreenMail;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
-public class DocRouterNotificationSenderIntegrationTest {
+public class DocRouterNotificationSenderSystemTest {
     
+    private static final int TEST_SMTP_PORT = 4125;
+
     @Value("${ext.file.location}")
     private String extSupportedFilesLoc;
-    @Autowired
+    
     private GreenMail server;
     
     @Autowired
@@ -116,8 +119,9 @@ public class DocRouterNotificationSenderIntegrationTest {
      */
     @Before
     public void setup() {
-      //for some reason, the greenmail server doesnt start in time
+        //for some reason, the greenmail server doesnt start in time
         //will attempt max times to ensure all service gets startedup 
+        server = new GreenMail(new ServerSetup(TEST_SMTP_PORT, null, ServerSetup.PROTOCOL_SMTP));
         int i = 0;
         final int max = 2;
         while ( i < max ) {
@@ -131,6 +135,7 @@ public class DocRouterNotificationSenderIntegrationTest {
             }
             i = max;
         }
+        
     }
     
     /**
@@ -150,6 +155,8 @@ public class DocRouterNotificationSenderIntegrationTest {
         final String docCont = getValidMessage();
         final String docId = docHndlr.handleDocument(getDocumentMetadata(docCont));
         assertNotNull(docId);
+        final NotificationSenderImpl senderImpl = (NotificationSenderImpl) sender;
+        senderImpl.setPort(TEST_SMTP_PORT);
         sender.setCredentials("", "");
         List<String> docIds = Arrays.asList( new String[]{docId} );
         sender.send("some.one@somewhere.com", docIds);

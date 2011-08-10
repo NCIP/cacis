@@ -1,14 +1,14 @@
-<com.mirth.connect.model.Channel>
+<channel>
   <id>ec2b76be-923f-4d56-bb6f-0166a76dd50b</id>
   <name>DocumentRouter</name>
   <description></description>
   <enabled>true</enabled>
-  <version>2.0.1.5164</version>
+  <version>2.1.1.5490</version>
   <lastModified>
     <time>1312783038017</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>36</revision>
+  <revision>37</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -32,15 +32,15 @@
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.0.1.5164</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
-    <com.mirth.connect.model.Connector>
+    <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="script">return;</property>
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
+        <property name="script">return;</property>
       </properties>
       <transformer>
         <steps>
@@ -139,19 +139,19 @@ U1JlcXVlc3Q+</inboundTemplate>
       <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.0.1.5164</version>
-    </com.mirth.connect.model.Connector>
+      <version>2.1.1.5490</version>
+    </connector>
   </destinationConnectors>
   <properties>
-    <property name="synchronous">true</property>
     <property name="clearGlobalChannelMap">true</property>
-    <property name="transactional">false</property>
-    <property name="initialState">started</property>
     <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
     <property name="max_message_age">-1</property>
     <property name="store_messages">true</property>
-    <property name="encryptData">false</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
@@ -163,4 +163,4 @@ return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 return;</shutdownScript>
-</com.mirth.connect.model.Channel>
+</channel>

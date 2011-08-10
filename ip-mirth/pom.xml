@@ -28,6 +28,11 @@
     </properties>
 
     <dependencies>
+    	<dependency>
+    		<groupId>org.xeustechnologies</groupId>
+    		<artifactId>jcl-core</artifactId>
+    		<version>2.2.2</version>
+    	</dependency>
         <dependency>
             <groupId>com.mirthconnect</groupId>
             <artifactId>ws-server</artifactId>
@@ -161,8 +166,14 @@
                         <goals>
                             <goal>copy</goal>
                         </goals>
-                        <configuration>
+                        <configuration>                        
                             <artifactItems>
+                            	<artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>ip-mirth</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                                
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>esd-commons</artifactId>
@@ -172,6 +183,12 @@
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>cdw</artifactId>
                                     <version>${project.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>nav</artifactId>
+                                    <version>${project.version}</version>
+						            <type>test-jar</type>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
@@ -194,6 +211,25 @@
 									<artifactId>xds-authz-beans</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
+								
+								<artifactItem>
+									<groupId>gov.nih.nci.cacis</groupId>
+						            <artifactId>xds-client</artifactId>
+						            <version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>gov.nih.nci.cacis</groupId>
+						            <artifactId>xds-client</artifactId>
+						            <version>${project.version}</version>
+						            <type>test-jar</type>
+								</artifactItem>
+								
+								<artifactItem>
+                                    <groupId>org.xeustechnologies</groupId>
+						    		<artifactId>jcl-core</artifactId>
+						    		<version>2.2.2</version>
+                                </artifactItem>
+								
                                 <artifactItem>
                                     <groupId>log4j</groupId>
                                     <artifactId>log4j</artifactId>
@@ -485,12 +521,12 @@
                                     <version>4.0.8</version>
                                 </artifactItem>
                                 
-                                <!-- artifact list for xds-client - start -->
-                                <artifactItem>
-									<groupId>gov.nih.nci.cacis</groupId>
-						            <artifactId>xds-client</artifactId>
-						            <version>${project.version}</version>
-								</artifactItem>
+                                <!-- artifact list for xds-client dependencies - start -->                                
+								
+								<!-- Removing the dependency jars for XDS-client as axis2 jars are interfering with Mirth Connect
+									and currently we will use the dummy implementation that does not talk to openxds
+								 -->
+								 <!-- 
                                 <artifactItem>
 									<groupId>org.apache.axis2</groupId>
 									<artifactId>axis2</artifactId>
@@ -595,7 +631,8 @@
 								    <artifactId>woden-impl-dom</artifactId>
 								    <version>1.0M8</version>
        							</artifactItem>
-                                                                
+                                 -->
+                                                                 
                                 <!--  uncomment these once these jars are available in CBIIT 3rd party repo -->
                                 
                                 <!--<artifactItem>                                
@@ -625,6 +662,7 @@
                                 --><!-- artifact list for xds-client - end -->
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
+                            
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
@@ -706,6 +744,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    
                 </plugins>
             </build>
         </profile>

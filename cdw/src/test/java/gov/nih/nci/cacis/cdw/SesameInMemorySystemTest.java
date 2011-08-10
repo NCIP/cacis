@@ -64,6 +64,8 @@ package gov.nih.nci.cacis.cdw;
 
 
 import junit.framework.Assert;
+
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openrdf.repository.RepositoryConnection;
@@ -91,8 +93,9 @@ public class SesameInMemorySystemTest {
 
     @Autowired
     RepositoryConnection con;
+    
 
-      @Test
+    @Test
     public void repository() throws RepositoryException, IOException, RDFParseException, URISyntaxException {
 
           try {

@@ -2924,7 +2924,7 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
-var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-nav.xml&quot;);
+var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-nav-test.xml&quot;);
 var sender = navContext.getBean(&quot;sender&quot;);
 
 globalChannelMap.put(&apos;docSender&apos;, sender);

@@ -124,6 +124,7 @@ public class NAVConfig {
      * @return server
      */
     @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public GreenMail server() {
         return new GreenMail(new ServerSetup(3125, null, ServerSetup.PROTOCOL_SMTP));
     }
