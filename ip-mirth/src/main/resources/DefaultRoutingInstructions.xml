@@ -1,0 +1,17 @@
+<p:routingInstructions xmlns:p="http://cacis.nci.nih.gov">
+	<p:exchangeDocument exchangeFormat="HL7_V3_CLINICAL_NOTE">
+		<p:recipient>
+			<p:secureEmailAddress url="http://tempuri.org" />
+		</p:recipient>
+	</p:exchangeDocument>
+	<p:exchangeDocument exchangeFormat="HL7_V3_CLINICAL_NOTE">
+		<p:recipient>
+			<p:navEmailAddress url="monish.dombla@semanticbits.com" />
+		</p:recipient>
+	</p:exchangeDocument>
+	<p:exchangeDocument exchangeFormat="HL7_V3_CLINICAL_NOTE">
+		<p:recipient>
+			<p:ftpAddress url="ftp://tempuri.org" />
+		</p:recipient>
+	</p:exchangeDocument>
+</p:routingInstructions> 

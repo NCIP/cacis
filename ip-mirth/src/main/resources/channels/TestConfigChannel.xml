@@ -1,0 +1,110 @@
+<channel>
+  <id>daf22f71-ea96-402f-87da-78f24fbb7be0</id>
+  <name>TestConfigChannel</name>
+  <description>This channel is used to input message to ConfigChannel for testing purpose. &#xd;
+This channel will pool for folder for input.</description>
+  <enabled>true</enabled>
+  <version>2.1.1.5490</version>
+  <lastModified>
+    <time>1313002500911</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>13</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">File Reader</property>
+      <property name="FTPAnonymous">1</property>
+      <property name="autoDelete">1</property>
+      <property name="binary">0</property>
+      <property name="charsetEncoding">DEFAULT_ENCODING</property>
+      <property name="checkFileAge">1</property>
+      <property name="fileAge">1000</property>
+      <property name="fileFilter">*RoutingInstructions.xml</property>
+      <property name="host">${cacis.mc.temp.dir}</property>
+      <property name="moveToDirectory"></property>
+      <property name="moveToErrorDirectory"></property>
+      <property name="moveToPattern"></property>
+      <property name="passive">1</property>
+      <property name="password">anonymous</property>
+      <property name="pollingFrequency">1000</property>
+      <property name="pollingType">interval</property>
+      <property name="processBatchFiles">0</property>
+      <property name="regex">0</property>
+      <property name="scheme">file</property>
+      <property name="secure">1</property>
+      <property name="sortAttribute">date</property>
+      <property name="timeout">10000</property>
+      <property name="username">anonymous</property>
+      <property name="validateConnections">1</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>File Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5490</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>TestConfigChannelDestination</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">5e5873ae-5315-486f-acb2-3d2b0702a4dc</property>
+        <property name="synchronised">1</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>

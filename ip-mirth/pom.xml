@@ -25,6 +25,7 @@
         <xds.doc.location>${user.home}/.cacis/mc</xds.doc.location>
         <xds.doc.entry.file>${xds.doc.location}/docEntry.xml</xds.doc.entry.file>
         <xds.doc.submissionset.file>${xds.doc.location}/submissionSet.xml</xds.doc.submissionset.file>
+        <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
     </properties>
 
     <dependencies>
@@ -141,7 +142,7 @@
                            <goal>copy-resources</goal>
                        </goals>
                        <configuration>
-                           <outputDirectory>${xds.doc.location}</outputDirectory>
+                           <outputDirectory>${cacis.mc.support.files.dir}</outputDirectory>
                            <resources>
                                <resource>
                                    <directory>${basedir}/src/test/resources</directory>
@@ -150,6 +151,12 @@
                                    		<include>submissionSet.xml</include>
                                    </includes>
                                </resource>
+                               <resource>
+                                   <directory>${basedir}/src/main/resources</directory>
+                                   <includes>
+                                   		<include>DefaultRoutingInstructions.xml</include>
+                                   </includes>
+                               </resource>                               
                            </resources>
                        </configuration>
                    </execution>
