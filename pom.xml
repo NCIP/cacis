@@ -52,7 +52,7 @@
 
         <!--NOTE - customize this property to Mirth Connect location-->
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
-        <mirthConnect.server.dir>${user.home}/Applications/Mirth Connect</mirthConnect.server.dir>
+        <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
 
         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
@@ -444,6 +444,7 @@
                             <exclude>**/*Server.class</exclude>
                             <exclude>**/tolven/client/*.class</exclude>
                             <exclude>**/*Exception.class</exclude>
+                            <exclude>**/*Error.class</exclude>
                             <exclude>org/hl7/v3/*.class</exclude>
                             <exclude>generated/*.class</exclude>
                             <exclude>**/domain/*.class</exclude>
