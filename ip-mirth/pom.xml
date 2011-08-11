@@ -741,7 +741,7 @@
                         <version>1.1.1</version>
                         <executions>
                             <execution>
-                                <id>startMC</id>
+                                <id>RestartMC</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -749,7 +749,7 @@
                                 <configuration>
                                     <executable>${mirthConnect.server.dir}/mcservice</executable>
                                     <arguments>
-                                        <argument>start</argument>
+                                        <argument>restart</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

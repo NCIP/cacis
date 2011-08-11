@@ -139,10 +139,10 @@ public class ConfigChannelIntegrationTest {
         Thread.sleep(10000);
 
         final File outputFile = new File(inputDir + "/ConfigChannelResponse.xml");
-        assertTrue("Response file exists", outputFile.exists());
+        assertTrue(outputFile.exists());
 
         final Node root = getRoutingInstructions(outputFile);
-        assertNotNull("Root node should not be null", root);
+        assertNotNull(root);
         testUtilities.assertValid(
                 "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
                 root);
@@ -172,10 +172,10 @@ public class ConfigChannelIntegrationTest {
         Thread.sleep(10000);
 
         final File outputFile = new File(inputDir + "/ConfigChannelResponse.xml");
-        assertTrue("Response file exists", outputFile.exists());
+        assertTrue(outputFile.exists());
 
         final Node root = getRoutingInstructions(outputFile);
-        assertNotNull("Root node should not be null", root);
+        assertNotNull(root);
 
         testUtilities.assertValid(
                 "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V3_CLINICAL_NOTE']",
