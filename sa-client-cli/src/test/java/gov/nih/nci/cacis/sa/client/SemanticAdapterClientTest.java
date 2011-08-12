@@ -61,11 +61,7 @@
 package gov.nih.nci.cacis.sa.client;
 
 import gov.nih.nci.cacis.AcceptSourceFault;
-import gov.nih.nci.cacis.AcceptSourcePortType;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.ClinicalData;
 import gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapterServer;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -92,7 +88,10 @@ public class SemanticAdapterClientTest extends AbstractBusClientServerTestBase {
 
 
     /**
-     * Test the client
+     * Test the client. This test
+     * passes if the client does not
+     * throw an exception as a
+     * null response is expected
      *
      * @throws JAXBException     Exception
      * @throws AcceptSourceFault Web service fault
@@ -101,8 +100,7 @@ public class SemanticAdapterClientTest extends AbstractBusClientServerTestBase {
     public void invoke() throws JAXBException, AcceptSourceFault {
         final URL sampleFile = getClass().getClassLoader().getResource("sample_request.xml");
         final SemanticAdapterClient client = new SemanticAdapterClient();
-        String response =  client.invoke(sampleFile);
-        assertNotNull(response);
+        assertNull(client.invoke(sampleFile));
     }
 
 }

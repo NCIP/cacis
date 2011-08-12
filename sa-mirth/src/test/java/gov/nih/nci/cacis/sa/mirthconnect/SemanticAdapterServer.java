@@ -61,6 +61,8 @@
 package gov.nih.nci.cacis.sa.mirthconnect;
 
 import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
+import gov.nih.nci.cacis.AcceptSourcePortType;
+import gov.nih.nci.cacis.AcceptSourcePortTypeImpl;
 import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -83,7 +85,7 @@ public class SemanticAdapterServer extends AbstractBusTestServer {
      * Constructor.
      */
     public SemanticAdapterServer() {
-        super("semanticAdapter", ADDRESS, TestSemanticAdapterConfig.class, true);
+        super("acceptSourcePortType", ADDRESS, TestSemanticAdapterConfig.class, true);
     }
 
     /**
@@ -100,7 +102,10 @@ public class SemanticAdapterServer extends AbstractBusTestServer {
             return new SemanticAdapter(mockWebServiceMessageReceiver);
         }
 
-
+        @Bean
+        public AcceptSourcePortType acceptSourcePortType() {
+            return new AcceptSourcePortTypeImpl();
+        }
     }
 }
 

@@ -62,12 +62,16 @@ package gov.nih.nci.cacis.sa.mirthconnect;
 
 import gov.nih.nci.cacis.AcceptSourcePortType;
 import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.ClinicalData;
+import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import javax.xml.bind.JAXBContext;
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -100,11 +104,11 @@ public class SemanticAdapterServerSystemTest extends AbstractBusClientServerTest
     @Test
     public void invoke() throws Exception {
 
-        final CaCISRequest request = new CaCISRequest();
-        ClinicalData cData = new ClinicalData();
+        InputStream sampleMessageIS = FileUtils.openInputStream(new File(getClass().getClassLoader()
+                .getResource("SARequestSample.xml").toURI()));
 
-        request.setSourceData(cData);
-
+        JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
+        final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(sampleMessageIS);
         semanticAdapter.acceptSource(request);
 
 

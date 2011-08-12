@@ -85,9 +85,9 @@ public class SemanticAdapterClient {
 
     /**
      * @param requestFileUrl file that has the request to be submitted
+     * @return String response
      * @throws JAXBException     Exception
      * @throws AcceptSourceFault Service Fault
-     * @return String response
      */
     public String invoke(URL requestFileUrl) throws JAXBException, AcceptSourceFault {
         return this.invoke(requestFileUrl.getFile());
@@ -96,9 +96,9 @@ public class SemanticAdapterClient {
 
     /**
      * @param requestFileUrl file that has the request to be submitted
+     * @return String response
      * @throws JAXBException     Exception
      * @throws AcceptSourceFault Service Fault
-     * @return String response
      */
     public String invoke(String requestFileUrl) throws JAXBException, AcceptSourceFault {
         return this.invoke(new File(requestFileUrl));
@@ -106,9 +106,9 @@ public class SemanticAdapterClient {
 
     /**
      * @param requestFile file that has the request to be submitted
+     * @return String response
      * @throws JAXBException     Exception
      * @throws AcceptSourceFault Service Fault
-     * @return String response
      */
     public String invoke(File requestFile) throws JAXBException, AcceptSourceFault {
 
@@ -125,10 +125,13 @@ public class SemanticAdapterClient {
         //        todo serialize response
         final CaCISResponse response = saClient.acceptSource(request);
 
-        final StringWriter result = new StringWriter();
-        jc.createMarshaller().marshal(response,result);
+        if (response != null) {
+            final StringWriter result = new StringWriter();
+            jc.createMarshaller().marshal(response, result);
 
-        return result.toString();
+            return result.toString();
+        }
+        return null;
 
     }
 
