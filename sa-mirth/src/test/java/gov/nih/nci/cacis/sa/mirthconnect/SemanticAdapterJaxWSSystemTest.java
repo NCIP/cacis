@@ -88,7 +88,7 @@ public class SemanticAdapterJaxWSSystemTest extends AbstractJaxWsTest {
     /**
      * Cosntant value for the endpoint address
      */
-    protected static final String ADDRESS = "http://localhost:18081/services/SA?wsdl";
+    protected static final String ADDRESS = "http://localhost:18091/services/SA?wsdl";
     @Mock
     WebServiceMessageReceiver webServiceMessageReceiver;
 

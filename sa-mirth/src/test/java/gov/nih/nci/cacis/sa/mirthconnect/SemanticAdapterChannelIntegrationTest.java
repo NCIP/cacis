@@ -90,7 +90,7 @@ public class SemanticAdapterChannelIntegrationTest {
     @Value("${xccd.output.dir}")
     private String outputDir;
     
-    private static final String ADDRESS = "http://localhost:18081/services/SemanticAdapter?wsdl";
+    private static final String ADDRESS = "http://localhost:18091/services/SemanticAdapter?wsdl";
     
     /**
      * This test calls out acceptSource(..) operation on SematicAdapter WS. 
