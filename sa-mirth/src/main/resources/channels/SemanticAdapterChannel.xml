@@ -1,0 +1,93 @@
+<channel>
+  <id>87943a6f-6888-4973-a7e2-3fe941848201</id>
+  <name>SemanticAdapterChannel</name>
+  <description>This Channel takes input from SemanticAdapter WS.  Routes the recevied message to Trim-2-CCD-xslt Channel.</description>
+  <enabled>true</enabled>
+  <version>2.1.1.5490</version>
+  <lastModified>
+    <time>1313090017703</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>3</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Web Service Listener</property>
+      <property name="host">0.0.0.0</property>
+      <property name="port">18081</property>
+      <property name="receiverClassName">gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapter</property>
+      <property name="receiverPasswords">&lt;list/&gt;</property>
+      <property name="receiverResponseValue">None</property>
+      <property name="receiverServiceName">SemanticAdapter</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Web Service Listener</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5490</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>Trim-2-CCD</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</property>
+        <property name="synchronised">0</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>
