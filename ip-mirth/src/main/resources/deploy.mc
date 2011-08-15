@@ -1,4 +1,5 @@
 channel stop *
+channel undeploy *
 channel remove *
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml"
 import "${build.outputDirectory}/channels/navEmailAddressChannel.xml"
