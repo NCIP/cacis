@@ -168,7 +168,7 @@
                                 <configuration>
                                     <executable>${mirthConnect.server.dir}/mcservice</executable>
                                     <arguments>
-                                        <argument>start</argument>
+                                        <argument>restart</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
