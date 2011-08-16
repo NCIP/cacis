@@ -74,32 +74,26 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Node;
 
 /**
- *
- * @author monish.dombla@semanticbits.com
- * @since Aug 10, 2011
- *
+ * Integration test for Trans Split Channel
+ * @author bpickeral
+ * @since Aug 15, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
-
-
+public class TransSplitChannelIntegrationTest extends AbstractRoutingTest {
 
     /**
-     * Tests input message without routingInstructions.
+     * Tests Trans Split channel sends to HL7 V2 channel.
      *
      * @throws Exception fdsdf
      */
     @Test
-    public void testConfigChannelWithRouting() throws Exception { // NOPMD
+    public void testTransSplitChannelHL7V2() throws Exception { // NOPMD
 
         final File ipDir = new File(inputDir);
-        if (!ipDir.exists() && !ipDir.mkdirs()) {
-            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
-        }
 
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Input_With_RoutingInstructions.xml").toURI());
+                .getResource("HL7_V2_RoutingInstructions.xml").toURI());
         FileUtils.copyFileToDirectory(inputFile, ipDir);
 
         Thread.sleep(SLEEP_TIME);
@@ -115,16 +109,20 @@ public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
         testUtilities.assertInvalid(
                 "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
                 root);
+        testUtilities.assertInvalid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
+                root);
 
         FileUtils.deleteQuietly(outputFile);
     }
 
     /**
+     * Tests Trans Split channel sends to CCD channel.
      *
-     * @throws Exception excpetion
+     * @throws Exception fdsdf
      */
     @Test
-    public void testConfigChannelWithoutRouting() throws Exception { // NOPMD
+    public void testTransSplitChannelCCD() throws Exception { // NOPMD
 
         final File ipDir = new File(inputDir);
         if (!ipDir.exists() && !ipDir.mkdirs()) {
@@ -132,7 +130,44 @@ public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
         }
 
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Input_Without_RoutingInstructions.xml").toURI());
+                .getResource("CCD_RoutingInstructions.xml").toURI());
+        FileUtils.copyFileToDirectory(inputFile, ipDir);
+
+        Thread.sleep(SLEEP_TIME);
+
+        final File outputFile = new File(inputDir + "CCD_Output.xml");
+        assertTrue(outputFile.exists());
+
+        final Node root = getRoutingInstructions(outputFile);
+        assertNotNull(root);
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
+                root);
+        testUtilities.assertInvalid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
+                root);
+        testUtilities.assertInvalid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
+                root);
+
+        FileUtils.deleteQuietly(outputFile);
+    }
+
+    /**
+     * Tests Trans Split channel sends to XMLITS channel (HL7 V3).
+     *
+     * @throws Exception fdsdf
+     */
+    @Test
+    public void testTransSplitChannelHL7V3() throws Exception { // NOPMD
+
+        final File ipDir = new File(inputDir);
+        if (!ipDir.exists() && !ipDir.mkdirs()) {
+            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
+        }
+
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("HL7_V3_RoutingInstructions.xml").toURI());
         FileUtils.copyFileToDirectory(inputFile, ipDir);
 
         Thread.sleep(SLEEP_TIME);
@@ -142,9 +177,11 @@ public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
 
         final Node root = getRoutingInstructions(outputFile);
         assertNotNull(root);
-
         testUtilities.assertValid(
                 "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
+                root);
+        testUtilities.assertInvalid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
                 root);
         testUtilities.assertInvalid(
                 "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",

@@ -36,7 +36,7 @@
         	<trimErrorDir>${trimInputDir}/error</trimErrorDir>
 
 		<!--  Temporary directory for System test output file -->
-		<cacis.mc.temp.dir>/tmp</cacis.mc.temp.dir>
+		<cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
 
             </properties>
         </profile>

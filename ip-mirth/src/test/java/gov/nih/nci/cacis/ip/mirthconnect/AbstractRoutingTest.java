@@ -60,97 +60,58 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
-import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.cxf.test.TestUtilities;
+import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- *
- * @author monish.dombla@semanticbits.com
- * @since Aug 10, 2011
- *
+ * Base Test class for testing channel routing.
+ * @author bpickeral
+ * @since Aug 15, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
+public  abstract class AbstractRoutingTest {
 
+    @Value("${cacis.mc.temp.dir}")
+    protected String inputDir;
 
+    protected static final int SLEEP_TIME = 15000;
+
+    protected static TestUtilities testUtilities;
 
     /**
-     * Tests input message without routingInstructions.
-     *
-     * @throws Exception fdsdf
+     * Initialize
      */
-    @Test
-    public void testConfigChannelWithRouting() throws Exception { // NOPMD
-
-        final File ipDir = new File(inputDir);
-        if (!ipDir.exists() && !ipDir.mkdirs()) {
-            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
-        }
-
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Input_With_RoutingInstructions.xml").toURI());
-        FileUtils.copyFileToDirectory(inputFile, ipDir);
-
-        Thread.sleep(SLEEP_TIME);
-
-        final File outputFile = new File(inputDir + "HL7_V2_Output.xml");
-        assertTrue(outputFile.exists());
-
-        final Node root = getRoutingInstructions(outputFile);
-        assertNotNull(root);
-        testUtilities.assertValid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
-                root);
-
-        FileUtils.deleteQuietly(outputFile);
+    @Before
+    public void setUp() {
+        testUtilities = new TestUtilities(AbstractRoutingTest.class);
+        testUtilities.addDefaultNamespaces();
+        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov");
     }
 
     /**
      *
-     * @throws Exception excpetion
+     * @param responseFile response file
+     * @return root node
      */
-    @Test
-    public void testConfigChannelWithoutRouting() throws Exception { // NOPMD
+    protected Node getRoutingInstructions(final File responseFile) throws Exception { // NOPMD
 
-        final File ipDir = new File(inputDir);
-        if (!ipDir.exists() && !ipDir.mkdirs()) {
-            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
-        }
+        final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        docBuilderFactory.setNamespaceAware(true);
+        final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        final Document doc = docBuilder.parse(responseFile);
 
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Input_Without_RoutingInstructions.xml").toURI());
-        FileUtils.copyFileToDirectory(inputFile, ipDir);
-
-        Thread.sleep(SLEEP_TIME);
-
-        final File outputFile = new File(inputDir + "XMLITS_Output.xml");
-        assertTrue(outputFile.exists());
-
-        final Node root = getRoutingInstructions(outputFile);
-        assertNotNull(root);
-
-        testUtilities.assertValid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
-                root);
-
-        FileUtils.deleteQuietly(outputFile);
+        return doc.getDocumentElement();
     }
-
 }
