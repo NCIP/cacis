@@ -28,8 +28,11 @@ Deployment to Mirth Connect
 
 2. Startup Mirth
 
-3. Import src/main/resources/channels/AcceptCanonical_Channel.xml
-   into Mirth Connect (using the Mirth Connect web start application)
+3. Import the channels listed in src/main/resources/deploy.mc into Mirth Connect (using the Mirth Connect web
+start application)in the same order the channels are listed in the file. It is necessary to deploy mock channels
+in order to run integration tests.  The channels copied to the target directory listed (target/classes/channels) will be
+filtered with properties defined in the pom file (you can override these in profiles.xml).
+
 
 4. Once the channel is deployed, the AcceptCanonicalService
    should be available at
