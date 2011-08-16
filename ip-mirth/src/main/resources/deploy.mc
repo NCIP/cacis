@@ -11,7 +11,7 @@ import "${build.outputDirectory}/channels/CCD_Channel.xml"
 import "${build.outputDirectory}/channels/XMLITS_Channel.xml"
 import "${build.outputDirectory}/channels/TransSplitChannel.xml"
 import "${build.outputDirectory}/channels/ConfigChannel.xml"
-import "${build.testOutputDirectory}/channels/MockedConfigChannelSource.xml"
+import "${build.outputDirectory}/channels/MockedConfigChannelSource.xml"
 deploy
 channel start *
 channel list
