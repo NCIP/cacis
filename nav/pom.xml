@@ -59,7 +59,7 @@
             <artifactId>xds-client</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
-            <scope>test</scope>
+            <scope>test</scope>			
         </dependency>
    		
 		<dependency>
@@ -74,37 +74,7 @@
         	<version>20041127.091804</version>
         	<type>jar</type>
         	<scope>compile</scope>
-        </dependency>
-        <!-- xds-client jars can be removed, once these jars are added to the 3rd party CBIIT -->
-        <dependency>
-			<groupId>ihe.profiles.libs</groupId>
-			<artifactId>ihelibrary</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../lib/ihelibrary.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf.ecore</groupId>
-			<artifactId>xmi</artifactId>
-			<version>2.3.0-v200706262000</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../lib/xmi-2.3.0-v200706262000.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>app</artifactId>
-			<version>1.0.0-v20070606</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../lib/app_1.0.0-v20070606.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>nhhtp-lib</groupId>
-			<artifactId>sypase-nhhtp-lib</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../lib/synapse-nhttp-1.0.jar</systemPath>
-		</dependency>
+        </dependency>        
     </dependencies>
 
     <build>
