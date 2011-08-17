@@ -1,5 +1,7 @@
-caCIS Enterprise Services Development (ESD) 
-==================================================================
+===================================================================================
+caCIS Enterprise Services Development (ESD)
+===================================================================================
+
 Please refer to the team wiki for project information:
 https://wiki.nci.nih.gov/display/caEHR
 
@@ -11,32 +13,69 @@ Directory Structure:
 /pco                  - Source code artifacts
 /docs                 - Project Documentation
 
-==================================================================
-JDK Installation
-==================================================================
-If you dont have JDK installed, please download the correct JDK for your OS from here,
-http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u26-download-400750.html
 
-After you have installed the JDK, please download the Java Cryptography Extension
+===================================================================================
+Pre-requisites
+===================================================================================
+
+To compile and run the unit tests you will need the following
+
+- Oracle Java Runtime Environment version 1.6
+- Apache Maven version 2.x
+
+To install and use this software, the following software needs
+to be installed first
+
+- Virtuoso Database (http://virtuoso.openlinksw.com/)
+  Please look at this ESD document
+  (https://docs.google.com/a/semanticbits.com/document/d/
+  1VFO4LuoWZWZuQWF3S21wBil67O3jLqL6twKcYQqpxHI/edit?hl=en_US&pli=1)
+
+- PostgreSQL Database version version 8.x (recommended version 8.4)
+  http://www.postgresql.org/
+
+- Mirth Connect version 2.1
+  (http://www.mirthcorp.com/community/mirth-connect)
+  THis ESD document can help with installing and configuring Mirth
+  Connect (https://wiki.nci.nih.gov/display/caEHR/Mirth+Connect+Configuration+Guide)
+
+
+===================================================================================
+JRE Installation
+===================================================================================
+
+If you dont have JDK/JRE installed, please download
+JRE/JDK version 1.6 for your OS from here,
+
+http://www.oracle.com/technetwork/java/javase/downloads/
+
+After you have installed the JRE/JDK, please download the Java Cryptography Extension
 http://www.oracle.com/technetwork/java/javase/downloads/jce-6-download-429243.html
 
 and follow the installation instructions in the jce/README.txt of the zip file
-==================================================================
+
+
+===================================================================================
 Build the Project
-==================================================================
+===================================================================================
 
 There are several projects in the /pco directory.
 To build the project, run the following in /pco:
 
-mvn clean install
+ mvn clean install
 
 This will run all of the maven sub-projects using the parent
 pom.xml in /pco. To add a sub-project to the build, add the
 project as a module in pco/pom.xml.
 
-==================================================================
-Build sub-projects
-==================================================================
+Note: This will also run all Unit and System tests and can take
+some time to finish the build. To skip the tests from running, use
+
+ "mvn clean install -DskipTests -Dskip.static.analysis=true -Dcobertura.skip=true"
+
+===================================================================================
+Build sub-projects  (Optional)
+===================================================================================
 
 Several sub-projects exist in the /pco directory.
 
@@ -55,10 +94,29 @@ That is they don't produce any deployable artifacts, and
 only provide dependencies for other sub-projects
 
 
-==================================================================
-Repositories
-==================================================================
-The maven jar files are deployed to the following locations:
+===================================================================================
+Deployment
+===================================================================================
+
+To install the caCIS components, do the following
+
+- Copy profiles.xml.example to profiles.xml
+- Edit profiles.xml and fill in all the properties for your local environment
+- Start Virtuoso Database server
+- Run "mvn deploy"
+   or
+   "mvn deploy -DskipTests -Dskip.static.analysis=true -Dcobertura.skip=true"
+
+This will install all caCIS components in Mirth Connect. Once you start the
+   Mirth Connect server, you will see caCIS channels in Mirth Connect
+
+
+
+===================================================================================
+Snapshots Repositories
+===================================================================================
+
+The caCIS artifacts are deployed to the following locations:
 
 Snapshots:
 https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/
@@ -66,9 +124,11 @@ https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/
 Releases:
 https://ncimvn.nci.nih.gov/nexus/content/repositories/releases/
 
-==================================================================
+
+===================================================================================
 Maven Site
-==================================================================
+===================================================================================
+
 To generate and deploy a Maven Site execute
 
  mvn site
@@ -80,7 +140,7 @@ might not link to each other (and the parent) correctly.
 If you wish to generate a site which has links between
  modules correctly run the following
 
-mvn site:stage
+ mvn site:stage
 
 This will generate a site in the target/stage folder with
 modules correctly linking to each other

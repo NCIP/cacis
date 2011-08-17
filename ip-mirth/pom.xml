@@ -17,9 +17,6 @@
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>20</test.unit.linerate>
 
-        <!-- Temporary directory for System test output file -->
-        <outputRootdir>${user.home}</outputRootdir>
-        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
         <xds.doc.source.oid>1.3.6.1.4.1.21367.2010.1.2</xds.doc.source.oid>
         <xds.doc.oid>1.2.3.4</xds.doc.oid>
         <xds.doc.location>${user.home}/.cacis/mc</xds.doc.location>
@@ -121,13 +118,28 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
+            
             <!-- this plugin call can be removed once jars from the lib folder are added
             to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
             <plugin>
                <artifactId>maven-resources-plugin</artifactId>
                <version>2.5</version>
                <executions>
+               	<execution>
+                       <id>copy-mirth-resources-stage</id>
+                       <phase>compile</phase>
+                       <goals>
+                           <goal>copy-resources</goal>
+                       </goals>
+                       <configuration>
+                           <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
+                           <resources>
+                               <resource>
+                                   <directory>${basedir}/../lib</directory>
+                               </resource>
+                           </resources>
+                       </configuration>
+                   </execution>
                    <execution>
                        <id>copy-xds-support-files</id>
                        <phase>compile</phase>
@@ -149,7 +161,7 @@
                                    <includes>
                                    		<include>DefaultRoutingInstructions.xml</include>
                                    </includes>
-                               </resource>
+                               </resource>                               
                            </resources>
                        </configuration>
                    </execution>
@@ -166,14 +178,14 @@
                         <goals>
                             <goal>copy</goal>
                         </goals>
-                        <configuration>
+                        <configuration>                        
                             <artifactItems>
                             	<artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>ip-mirth</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
-
+                                
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>esd-commons</artifactId>
@@ -211,7 +223,7 @@
 									<artifactId>xds-authz-beans</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
-
+								
 								<artifactItem>
 									<groupId>gov.nih.nci.cacis</groupId>
 						            <artifactId>xds-client</artifactId>
@@ -223,13 +235,13 @@
 						            <version>${project.version}</version>
 						            <type>test-jar</type>
 								</artifactItem>
-
+								
 								<artifactItem>
                                     <groupId>org.xeustechnologies</groupId>
 						    		<artifactId>jcl-core</artifactId>
 						    		<version>2.2.2</version>
                                 </artifactItem>
-
+								
                                 <artifactItem>
                                     <groupId>log4j</groupId>
                                     <artifactId>log4j</artifactId>
@@ -520,13 +532,13 @@
                                     <artifactId>woodstox-core-asl</artifactId>
                                     <version>4.0.8</version>
                                 </artifactItem>
-
-                                <!-- artifact list for xds-client dependencies - start -->
-
+                                
+                                <!-- artifact list for xds-client dependencies - start -->                                
+								
 								<!-- Removing the dependency jars for XDS-client as axis2 jars are interfering with Mirth Connect
 									and currently we will use the dummy implementation that does not talk to openxds
 								 -->
-								 <!--
+								 <!-- 
                                 <artifactItem>
 									<groupId>org.apache.axis2</groupId>
 									<artifactId>axis2</artifactId>
@@ -588,16 +600,16 @@
 									<version>1.4.3</version>
                                 </artifactItem>
                                 <artifactItem>
-                                	<groupId>org.apache.ws.commons.axiom</groupId>
+                                	<groupId>org.apache.ws.commons.axiom</groupId>        
 									<artifactId>axiom-api</artifactId>
 									<version>1.2.8</version>
                                 </artifactItem>
 								<artifactItem>
-									<groupId>org.apache.ws.commons.axiom</groupId>
+									<groupId>org.apache.ws.commons.axiom</groupId>        
 									<artifactId>axiom-impl</artifactId>
 									<version>1.2.8</version>
                                 </artifactItem>
-
+                                
                                 <artifactItem>
 						            <groupId>org.eclipse.emf</groupId>
 									<artifactId>org.eclipse.emf.ecore</artifactId>
@@ -613,60 +625,80 @@
 									<artifactId>httpcore</artifactId>
 									<version>4.1.1</version>
                                 </artifactItem>
-
+                                
                                 <artifactItem>
 	                                <groupId>org.apache.httpcomponents</groupId>
 									<artifactId>httpcore-nio</artifactId>
 									<version>4.1.2</version>
 								</artifactItem>
-
+								
 								<artifactItem>
 									<groupId>org.apache.woden</groupId>
 								    <artifactId>woden-api</artifactId>
 								    <version>1.0M8</version>
        							</artifactItem>
-
+       							
        							<artifactItem>
 									<groupId>org.apache.woden</groupId>
 								    <artifactId>woden-impl-dom</artifactId>
 								    <version>1.0M8</version>
        							</artifactItem>
-
-								 <artifactItem>
+                                 -->
+                                                                 
+                                <!--  uncomment these once these jars are available in CBIIT 3rd party repo -->
+                                
+                                <!--<artifactItem>                                
 						            <groupId>ihe.profiles.libs</groupId>
 									<artifactId>ihelibrary</artifactId>
-									<version>1.0</version>
+									<version>1.0</version>								
                                 </artifactItem>
-
+                                
                                 <artifactItem>
 						            <groupId>org.eclipse.emf.ecore</groupId>
 									<artifactId>xmi</artifactId>
 									<version>2.3.0-v200706262000</version>
                                 </artifactItem>
-
+                                
                                 <artifactItem>
 						            <groupId>org.eclipse.equinox</groupId>
 									<artifactId>app</artifactId>
 									<version>1.0.0-v20070606</version>
                                 </artifactItem>
-
+                                
                                 <artifactItem>
-						            <groupId>org.apache.synapse</groupId>
-								    <artifactId>synapse-nhttp</artifactId>
-								    <version>1.0</version>
+						            <groupId>nhhtp-lib</groupId>
+									<artifactId>sypase-nhhtp-lib</artifactId>
+									<version>1.0</version>
                                 </artifactItem>
-
+			
                                 --><!-- artifact list for xds-client - end -->
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
-
+                            
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>gov.nih.nci.cacis</groupId>
+                <artifactId>mirthconnect-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <mirthConnect>${mirthConnect.cli}</mirthConnect>
+                    <script>${build.outputDirectory}/deploy.mc</script>
+                    <pause>${mirthConnect.server.pause}</pause>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>cli</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -693,7 +725,7 @@
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>2.5</version>
-                        <executions>
+                        <executions>                        	
                             <execution>
                                 <id>copy-mirth-resources</id>
                                 <phase>pre-integration-test</phase>
@@ -756,7 +788,7 @@
                             </execution>
                         </executions>
                     </plugin>
-
+                    
                 </plugins>
             </build>
         </profile>

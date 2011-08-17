@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>pco</artifactId>
         <groupId>gov.nih.nci.cacis</groupId>
@@ -15,11 +15,6 @@
     <properties>
         <test.unit.branchrate>35</test.unit.branchrate>
         <test.unit.linerate>35</test.unit.linerate>
-
-        <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
-        <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
-        <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
-        <cacis.virtuoso.db.driver>virtuoso.jdbc3.Driver</cacis.virtuoso.db.driver>
     </properties>
 
     <dependencies>
@@ -99,7 +94,52 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.4</version>
 
+                <dependencies>
+                    <dependency>
+                        <groupId>org.openlinksw</groupId>
+                        <artifactId>virt-jdbc</artifactId>
+                        <version>${virt.jdbc.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <!-- common configuration shared by all executions -->
+                <configuration>
+                    <driver>${cacis.virtuoso.db.driver}</driver>
+                    <url>${cacis.virtuoso.db.url}</url>
+                    <username>${cacis.virtuoso.db.username}</username>
+                    <password>${cacis.virtuoso.db.password}</password>
+                    <settingsKey>sensibleKey</settingsKey>
+                    <delimiter>/</delimiter>
+                    <delimiterType>row</delimiterType>
+                    <keepFormat>true</keepFormat>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>create-procedures</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <onError>continue</onError>
+                            <orderFile>ascending</orderFile>
+                            <fileset>
+                                <basedir>${basedir}</basedir>
+                                <includes>
+                                    <include>src/main/resources/procedures/*.sql</include>
+                                </includes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
     </build>

@@ -106,6 +106,48 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-mirth-resources</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${mirthConnect.server.dir}/custom-lib</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${build.directory}</directory>
+                                    <includes>
+                                        <include>${artifactId}-${project.version}.${packaging}</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>gov.nih.nci.cacis</groupId>
+                <artifactId>mirthconnect-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <mirthConnect>${mirthConnect.cli}</mirthConnect>
+                    <script>${build.outputDirectory}/deploy.mc</script>
+                    <pause>${mirthConnect.server.pause}</pause>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>cli</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
