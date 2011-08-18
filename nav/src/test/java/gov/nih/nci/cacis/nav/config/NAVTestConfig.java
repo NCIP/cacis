@@ -81,17 +81,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
+
 /**
  * Spreing config for NAV.
  * @author bpickeral
  * @since Aug 2, 2011
  */
 @Configuration
-public class NAVConfig {
-
+public class NAVTestConfig {
+    
     @Value("${xds.repo.oid}")
     private String repoOID;
-
+    
     @Autowired
     private DocumentHandler docHndlr;
 
@@ -115,21 +118,16 @@ public class NAVConfig {
 
     @Value("${nav.message.from}")
     private String mailFrom;
-
-    @Value("${nav.sender.host}")
-    private String host;
-
-    @Value("${nav.sender.port}")
-    private int port;
-
-    @Value("${nav.sender.protocol}")
-    private String protocol;
-
-    @Value("${nav.sender.user}")
-    private String user;
-
-    @Value("${nav.sender.pass}")
-    private String pass;
+    
+    /**
+     * GreenMail Bean.
+     * @return server
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public GreenMail server() {
+        return new GreenMail(new ServerSetup(3125, null, ServerSetup.PROTOCOL_SMTP));
+    }
 
     /**
      * Notification Sender.
@@ -140,26 +138,21 @@ public class NAVConfig {
     public NotificationSender notificationSender() {
         final NotificationSenderImpl notificationSender =
             new NotificationSenderImpl(null, null, null, null, "", null, 0, null);
-
-        final Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
+        
         notificationSender.setSignatureBuilder(signatureBuilder());
-        notificationSender.setHost(host);
-        notificationSender.setPort(port);
-        notificationSender.setProtocol(protocol);
+        notificationSender.setHost(server().getSmtp().getBindTo());
+        notificationSender.setPort(server().getSmtp().getPort());
+        notificationSender.setProtocol(server().getSmtp().getProtocol());
         notificationSender.setInstructions(instructions);
         notificationSender.setSubject(subject);
         notificationSender.setFrom(mailFrom);
-        notificationSender.setMailProperties(props);
-        notificationSender.setCredentials(user, pass);
-
+        notificationSender.setMailProperties(new Properties());
+        
         //username will be set sending time
-
+        
         return notificationSender;
     }
-
+    
     /**
      * Notification Signature builder.
      * @return notification signature builder
@@ -171,7 +164,7 @@ public class NAVConfig {
                 SignatureMethod.RSA_SHA1, DigestMethod.SHA1, keyStoreType,
                 keyStoreLocation, keyStorePassword, keyStoreKey);
     }
-
+    
     /**
      * XDS Document Resolver
      * @return notification sender

@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1312917799895</time>
+    <time>1313679941289</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>108</revision>
+  <revision>109</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -51,11 +51,8 @@
             <name>submitDocToXDS</name>
             <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
-var user=msg[&apos;@userName&apos;].toString();
-
 var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
 
-logger.error(&apos;user = &apos; + user);
 logger.error(&apos;navEmail = &apos; + navEmail);
 
 var docH = globalChannelMap.get(&apos;documentHandler&apos;);
@@ -95,7 +92,8 @@ try{
 var docIds = new Packages.java.util.ArrayList();
 docIds.add(docId);
 try{
-	navS.setCredentials(user, &quot;&quot;);
+	// Credentials of sender are set in the application context of NavConfig (always from the same address
+	navS.setCredentials(&apos;cacisnavtestuser&apos;, &apos;c2c1sn2v&apos;);
 	navS.send(navEmail, docIds);
 }catch(naverr) {
 	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + naverr.message));
@@ -110,10 +108,10 @@ function getXDSDocumentMetadata() {
 	docMd.setDocEntryContent(getDocEntryContent());
 	docMd.setSubmissionSetContent(getSubmissionSetContent());
 	docMd.setDocumentType(Packages.org.openhealthtools.ihe.xds.document.DocumentDescriptor.XML);
-	docMd.setDocOID(docOID); 
+	docMd.setDocOID(docOID);
 	docMd.setDocSourceOID(docSourceOID);
 	docMd.setDocumentContent(msg.toString());
-	
+
 	return docMd;
 }
 
@@ -122,7 +120,7 @@ function getDocEntryContent() {
 	//using hardcode default values for now
 	var docEntryF = globalChannelMap.get(&apos;docEntryFile&apos;);
 	var contents = FileUtil.read(docEntryF);
-	
+
 	return contents;
 }
 
@@ -131,7 +129,7 @@ function getSubmissionSetContent() {
 	//using hardcode default values for now
 	var ssF = globalChannelMap.get(&apos;submissionSetFile&apos;);
 	var contents = FileUtil.read(ssF);
-	
+
 	return contents;
 }</script>
             <type>JavaScript</type>
@@ -140,11 +138,8 @@ function getSubmissionSetContent() {
                 <string>Script</string>
                 <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
-var user=msg[&apos;@userName&apos;].toString();
-
 var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
 
-logger.error(&apos;user = &apos; + user);
 logger.error(&apos;navEmail = &apos; + navEmail);
 
 var docH = globalChannelMap.get(&apos;documentHandler&apos;);
@@ -184,7 +179,8 @@ try{
 var docIds = new Packages.java.util.ArrayList();
 docIds.add(docId);
 try{
-	navS.setCredentials(user, &quot;&quot;);
+	// Credentials of sender are set in the application context of NavConfig (always from the same address
+	navS.setCredentials(&apos;cacisnavtestuser&apos;, &apos;c2c1sn2v&apos;);
 	navS.send(navEmail, docIds);
 }catch(naverr) {
 	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + naverr.message));
@@ -199,10 +195,10 @@ function getXDSDocumentMetadata() {
 	docMd.setDocEntryContent(getDocEntryContent());
 	docMd.setSubmissionSetContent(getSubmissionSetContent());
 	docMd.setDocumentType(Packages.org.openhealthtools.ihe.xds.document.DocumentDescriptor.XML);
-	docMd.setDocOID(docOID); 
+	docMd.setDocOID(docOID);
 	docMd.setDocSourceOID(docSourceOID);
 	docMd.setDocumentContent(msg.toString());
-	
+
 	return docMd;
 }
 
@@ -211,7 +207,7 @@ function getDocEntryContent() {
 	//using hardcode default values for now
 	var docEntryF = globalChannelMap.get(&apos;docEntryFile&apos;);
 	var contents = FileUtil.read(docEntryF);
-	
+
 	return contents;
 }
 
@@ -220,7 +216,7 @@ function getSubmissionSetContent() {
 	//using hardcode default values for now
 	var ssF = globalChannelMap.get(&apos;submissionSetFile&apos;);
 	var contents = FileUtil.read(ssF);
-	
+
 	return contents;
 }</string>
               </entry>
@@ -271,7 +267,7 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 
-var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-nav-test.xml&apos;);
+var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-nav.xml&apos;);
 var documentHandler = navContext.getBean(&quot;documentHandler&quot;);
 var navSender = navContext.getBean(&quot;notificationSender&quot;);
 
@@ -295,31 +291,8 @@ var submissionSetFile=&apos;${xds.doc.submissionset.file}&apos;;
 globalChannelMap.put(&apos;docEntryFile&apos;,docEntryFile);
 globalChannelMap.put(&apos;submissionSetFile&apos;,submissionSetFile);
 
-//TODO:Remove this test server startup, once correct mail properties have been configured
-var ss = Packages.com.icegreen.greenmail.util.ServerSetup(3125, null, Packages.com.icegreen.greenmail.util.ServerSetup.PROTOCOL_SMTP);
-
-var gm = Packages.com.icegreen.greenmail.util.GreenMail(ss);
-
-var i = 0;
-var max = 2;
-while ( i &lt; max ) {
-	try {
-		gm.start();
-	} catch (err) { 
-		i++;
-		continue;
-	}
-	i = max;
-}
-
-globalChannelMap.put(&apos;greenmail&apos;,gm);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
-
-//TODO: this is test email server, will have to be removed, once actual server is configured
-var gm = globalChannelMap.get(&apos;greenmail&apos;);
-gm.stop();
-
 return;</shutdownScript>
 </channel>

@@ -36,6 +36,9 @@
                 <cacis.mc.temp.dir>${outputRootdir}/temp/output/</cacis.mc.temp.dir>
 
                 <maven.deploy.skip>true</maven.deploy.skip>
+
+		<!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
+		<nav.sender.pass>changeme</nav.sender.pass>
             </properties>
         </profile>
 
