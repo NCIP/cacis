@@ -85,7 +85,6 @@ public class TestXdsAuthzConfig {
       public PropertyPlaceholderConfigurer xdsTestPropertyPlaceholderConfigurer() {
           final PropertyPlaceholderConfigurer configurer =
                   new CommonsPropertyPlaceholderConfigurer("xds-test-authz", "test.properties");
-          configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
           configurer.setIgnoreUnresolvablePlaceholders(true);
           return configurer;
       }
