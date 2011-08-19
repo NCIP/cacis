@@ -14,8 +14,8 @@
     <name>esd-commons</name>
 
     <properties>
-        <test.unit.branchrate>50</test.unit.branchrate>
-        <test.unit.linerate>50</test.unit.linerate>
+        <test.unit.branchrate>45</test.unit.branchrate>
+        <test.unit.linerate>45</test.unit.linerate>
     </properties>
     <dependencies>
         <dependency>

@@ -63,23 +63,23 @@ package gov.nih.nci.cacis.nav;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
-import gov.nih.nci.cacis.xds.client.XDSDocumentMetadata;
-import gov.nih.nci.cacis.xds.client.XDSHandlerInfo;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openhealthtools.ihe.xds.document.DocumentDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -94,6 +94,7 @@ import com.icegreen.greenmail.util.ServerSetup;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" } )
+//@Ignore
 public class DocRouterNotificationSenderSystemTest {
     
     private static final int TEST_SMTP_PORT = 14125;
@@ -107,7 +108,8 @@ public class DocRouterNotificationSenderSystemTest {
     private NotificationSender sender;
     
     @Autowired
-    private DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docHndlr;
+    @Qualifier("wrapperDocumentHandler")
+    private DocumentHandler docHndlr;
 
     /**
      * Sample file name
@@ -164,16 +166,16 @@ public class DocRouterNotificationSenderSystemTest {
         assertTrue(server.getReceivedMessages().length == 1);
     }
     
-    private XDSDocumentMetadata getDocumentMetadata(String docContent) throws URISyntaxException, IOException {
-        final XDSDocumentMetadata docMd = new XDSDocumentMetadata();
-        docMd.setDocEntryContent(getFileContent(extSupportedFilesLoc + "/docEntry.xml"));
-        docMd.setSubmissionSetContent(getFileContent(extSupportedFilesLoc + "/submissionSet.xml"));
-        docMd.setDocumentType(DocumentDescriptor.XML);
-        docMd.setDocOID("1.2.3.4"); // NOPMD
-        docMd.setDocSourceOID("1.3.6.1.4.1.21367.2010.1.2");
-        docMd.setDocumentContent(getValidMessage());
+    private HashMap<String, String> getDocumentMetadata(String docContent) throws URISyntaxException, IOException {        
         
-        return docMd;
+        final HashMap<String, String> md = new HashMap<String, String>();
+        md.put("docentry", getFileContent(extSupportedFilesLoc + "/docEntry.xml"));
+        md.put("submissionset", getFileContent(extSupportedFilesLoc + "/submissionSet.xml"));
+        md.put("docoid", "1.2.3.4"); // NOPMD
+        md.put("docsourceoid", "1.3.6.1.4.1.21367.2010.1.2");
+        md.put("content", getValidMessage());
+        
+        return md;
     }
     
     private String getFileContent(String fileName) throws URISyntaxException, IOException {

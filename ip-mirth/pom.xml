@@ -15,17 +15,20 @@
     <properties>
         <!--WSDL generates a lot of classes. Need to set this low -->
         <test.unit.branchrate>0</test.unit.branchrate>
-        <test.unit.linerate>20</test.unit.linerate>
+        <test.unit.linerate>20</test.unit.linerate>        
 
+        <!-- Temporary directory for System test output file -->
+        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
         <xds.doc.source.oid>1.3.6.1.4.1.21367.2010.1.2</xds.doc.source.oid>
         <xds.doc.oid>1.2.3.4</xds.doc.oid>
-        <xds.doc.location>${user.home}/.cacis/mc</xds.doc.location>
+        <xds.doc.location>${outputRootdir}/.cacis/cacis-xds</xds.doc.location>
         <xds.doc.entry.file>${xds.doc.location}/docEntry.xml</xds.doc.entry.file>
         <xds.doc.submissionset.file>${xds.doc.location}/submissionSet.xml</xds.doc.submissionset.file>
         <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
     </properties>
 
     <dependencies>
+	
         <dependency>
             <groupId>com.mirthconnect</groupId>
             <artifactId>ws-server</artifactId>
@@ -45,7 +48,7 @@
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+ 
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>cdw</artifactId>
@@ -53,6 +56,7 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+<!--        
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>cdw</artifactId>
@@ -69,6 +73,7 @@
             <artifactId>xds-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+ -->        
     </dependencies>
 
     <build>
@@ -78,12 +83,6 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        <testResources>
-           <testResource>
-               <directory>src/test/resources</directory>
-               <filtering>true</filtering>
-           </testResource>
-        </testResources>
 
         <plugins>
             <plugin>
@@ -124,38 +123,16 @@
             <plugin>
                <artifactId>maven-resources-plugin</artifactId>
                <version>2.5</version>
-               <executions>
-               	<execution>
-                       <id>copy-mirth-resources-stage</id>
-                       <phase>compile</phase>
-                       <goals>
-                           <goal>copy-resources</goal>
-                       </goals>
-                       <configuration>
-                           <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
-                           <resources>
-                               <resource>
-                                   <directory>${basedir}/../lib</directory>
-                               </resource>
-                           </resources>
-                       </configuration>
-                   </execution>
+               <executions>               	
                    <execution>
-                       <id>copy-xds-support-files</id>
+                       <id>copy-support-files</id>
                        <phase>compile</phase>
                        <goals>
                            <goal>copy-resources</goal>
                        </goals>
                        <configuration>
                            <outputDirectory>${cacis.mc.support.files.dir}</outputDirectory>
-                           <resources>
-                               <resource>
-                                   <directory>${basedir}/src/test/resources</directory>
-                                   <includes>
-                                   		<include>docEntry.xml</include>
-                                   		<include>submissionSet.xml</include>
-                                   </includes>
-                               </resource>
+                           <resources>                               
                                <resource>
                                    <directory>${basedir}/src/main/resources</directory>
                                    <includes>
@@ -173,7 +150,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy</id>
+                        <id>prepare-mc-custom-lib</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
@@ -211,42 +188,8 @@
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>transformer</artifactId>
                                     <version>${project.version}</version>
-                                </artifactItem>
-
-                                <artifactItem>
-									<groupId>gov.nih.nci.cacis</groupId>
-									<artifactId>xds-authz-handlers</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<groupId>gov.nih.nci.cacis</groupId>
-									<artifactId>xds-authz-beans</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<groupId>gov.nih.nci.cacis</groupId>
-						            <artifactId>xds-client</artifactId>
-						            <version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<groupId>gov.nih.nci.cacis</groupId>
-						            <artifactId>xds-client</artifactId>
-						            <version>${project.version}</version>
-						            <type>test-jar</type>
-								</artifactItem>
-								
-								<artifactItem>
-                                    <groupId>org.xeustechnologies</groupId>
-						    		<artifactId>jcl-core</artifactId>
-						    		<version>2.2.2</version>
-                                </artifactItem>
-								
-                                <artifactItem>
-                                    <groupId>log4j</groupId>
-                                    <artifactId>log4j</artifactId>
-                                    <version>1.2.14</version>
-                                </artifactItem>
+                                </artifactItem>                               
+						
                                 <artifactItem>
                                     <groupId>org.apache.cxf</groupId>
                                     <artifactId>cxf-api</artifactId>
@@ -262,21 +205,7 @@
                                     <artifactId>cxf-rt-core</artifactId>
                                     <version>${cxf.version}</version>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.slf4j</groupId>
-                                    <artifactId>slf4j-api</artifactId>
-                                    <version>1.5.8</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.slf4j</groupId>
-                                    <artifactId>slf4j-log4j12</artifactId>
-                                    <version>1.5.8</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.slf4j</groupId>
-                                    <artifactId>slf4j-jdk14</artifactId>
-                                    <version>1.5.8</version>
-                                </artifactItem>
+					
                                 <artifactItem>
                                     <groupId>c3p0</groupId>
                                     <artifactId>c3p0</artifactId>
@@ -533,12 +462,93 @@
                                     <version>4.0.8</version>
                                 </artifactItem>
                                 
-                                <!-- artifact list for xds-client dependencies - start -->                                
+                                <artifactItem>
+	                                <groupId>org.apache.neethi</groupId>
+									<artifactId>neethi</artifactId>
+									<version>2.0.4</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.ws.commons.schema</groupId>
+									<artifactId>XmlSchema</artifactId>
+									<version>1.4.3</version>
+                                </artifactItem>
+                                
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
+                            
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>prepare-mc-cacis-lib</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>                        
+                            <artifactItems>
+                            <!-- cacis special jars for openxds client - start -->
+                            
+                            	<artifactItem>
+									<groupId>gov.nih.nci.cacis</groupId>
+									<artifactId>xds-authz-handlers</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>gov.nih.nci.cacis</groupId>
+									<artifactId>xds-authz-beans</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
 								
-								<!-- Removing the dependency jars for XDS-client as axis2 jars are interfering with Mirth Connect
-									and currently we will use the dummy implementation that does not talk to openxds
-								 -->
-								 <!-- 
+								<artifactItem>
+									<groupId>gov.nih.nci.cacis</groupId>
+						            <artifactId>xds-client</artifactId>
+						            <version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>gov.nih.nci.cacis</groupId>
+						            <artifactId>xds-client</artifactId>
+						            <version>${project.version}</version>
+						            <type>test-jar</type>
+								</artifactItem>
+								
+								<artifactItem>                                
+						            <groupId>ihe.profiles.libs</groupId>
+									<artifactId>ihelibrary</artifactId>
+									<version>1.0</version>								
+                                </artifactItem>
+                                
+                                <artifactItem>
+						            <groupId>org.eclipse.emf.ecore</groupId>
+									<artifactId>xmi</artifactId>
+									<version>2.3.0-v200706262000</version>
+                                </artifactItem>
+                                
+                                <artifactItem>
+						            <groupId>org.eclipse.equinox</groupId>
+									<artifactId>app</artifactId>
+									<version>1.0.0-v20070606</version>
+                                </artifactItem>
+                                
+                                <artifactItem>
+						            <groupId>org.apache.synapse</groupId>
+								    <artifactId>synapse-nhttp</artifactId>
+								    <version>1.0</version>
+                                </artifactItem>
+                                
+                                <artifactItem>
+						            <groupId>org.eclipse.emf</groupId>
+									<artifactId>org.eclipse.emf.ecore</artifactId>
+									<version>2.6.0.v20100614-1136</version>
+                                </artifactItem>
+                                <artifactItem>
+                                	<groupId>org.eclipse.emf</groupId>
+								    <artifactId>org.eclipse.emf.common</artifactId>
+								    <version>2.6.0.v20100614-1136</version>
+                                </artifactItem>
+                                
                                 <artifactItem>
 									<groupId>org.apache.axis2</groupId>
 									<artifactId>axis2</artifactId>
@@ -588,17 +598,7 @@
 									<groupId>org.apache.axis2</groupId>
 									<artifactId>axis2-transport-tcp</artifactId>
 									<version>1.0.0</version>
-								</artifactItem>
-                                <artifactItem>
-	                                <groupId>org.apache.neethi</groupId>
-									<artifactId>neethi</artifactId>
-									<version>2.0.4</version>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.apache.ws.commons.schema</groupId>
-									<artifactId>XmlSchema</artifactId>
-									<version>1.4.3</version>
-                                </artifactItem>
+								</artifactItem>                                
                                 <artifactItem>
                                 	<groupId>org.apache.ws.commons.axiom</groupId>        
 									<artifactId>axiom-api</artifactId>
@@ -611,94 +611,30 @@
                                 </artifactItem>
                                 
                                 <artifactItem>
-						            <groupId>org.eclipse.emf</groupId>
-									<artifactId>org.eclipse.emf.ecore</artifactId>
-									<version>2.6.0.v20100614-1136</version>
-                                </artifactItem>
-                                <artifactItem>
-                                	<groupId>org.eclipse.emf</groupId>
-								    <artifactId>org.eclipse.emf.common</artifactId>
-								    <version>2.6.0.v20100614-1136</version>
-                                </artifactItem>
-                                <artifactItem>
-						            <groupId>org.apache.httpcomponents</groupId>
-									<artifactId>httpcore</artifactId>
-									<version>4.1.1</version>
-                                </artifactItem>
+									<groupId>org.apache.geronimo.specs</groupId>
+    								<artifactId>geronimo-javamail_1.4_spec</artifactId>
+    								<version>1.7.1</version>
+    							</artifactItem>
+    							
+    							<artifactItem>
+    								<groupId>org.apache.httpcomponents</groupId>
+    								<artifactId>httpcore</artifactId>
+    								<version>4.1.1</version>
+    							</artifactItem>	
                                 
-                                <artifactItem>
-	                                <groupId>org.apache.httpcomponents</groupId>
-									<artifactId>httpcore-nio</artifactId>
-									<version>4.1.2</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<groupId>org.apache.woden</groupId>
-								    <artifactId>woden-api</artifactId>
-								    <version>1.0M8</version>
-       							</artifactItem>
-       							
-       							<artifactItem>
-									<groupId>org.apache.woden</groupId>
-								    <artifactId>woden-impl-dom</artifactId>
-								    <version>1.0M8</version>
-       							</artifactItem>
-                                 -->
-                                                                 
-                                <!--  uncomment these once these jars are available in CBIIT 3rd party repo -->
-                                
-                                <!--<artifactItem>                                
-						            <groupId>ihe.profiles.libs</groupId>
-									<artifactId>ihelibrary</artifactId>
-									<version>1.0</version>								
-                                </artifactItem>
-                                
-                                <artifactItem>
-						            <groupId>org.eclipse.emf.ecore</groupId>
-									<artifactId>xmi</artifactId>
-									<version>2.3.0-v200706262000</version>
-                                </artifactItem>
-                                
-                                <artifactItem>
-						            <groupId>org.eclipse.equinox</groupId>
-									<artifactId>app</artifactId>
-									<version>1.0.0-v20070606</version>
-                                </artifactItem>
-                                
-                                <artifactItem>
-						            <groupId>nhhtp-lib</groupId>
-									<artifactId>sypase-nhhtp-lib</artifactId>
-									<version>1.0</version>
-                                </artifactItem>
-			
-                                --><!-- artifact list for xds-client - end -->
+							<!-- cacis special jars for openxds client - end -->	
                             </artifactItems>
-                            <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
+                            
+                            <outputDirectory>${project.build.directory}/mc-cacis-lib</outputDirectory>
                             
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
                     </execution>
+                    
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>gov.nih.nci.cacis</groupId>
-                <artifactId>mirthconnect-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                    <mirthConnect>${mirthConnect.cli}</mirthConnect>
-                    <script>${build.outputDirectory}/deploy.mc</script>
-                    <pause>${mirthConnect.server.pause}</pause>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>cli</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
 
@@ -727,7 +663,7 @@
                         <version>2.5</version>
                         <executions>                        	
                             <execution>
-                                <id>copy-mirth-resources</id>
+                                <id>copy-mc-custom-lib</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>copy-resources</goal>
@@ -735,12 +671,28 @@
                                 <configuration>
                                     <outputDirectory>${mirthConnect.server.dir}/custom-lib</outputDirectory>
                                     <resources>
+                                    <!-- copy ip-mirth jar to the custom-lib  -->
                                         <resource>
                                             <directory>${build.directory}</directory>
                                             <includes>
                                                 <include>${artifactId}-${project.version}.${packaging}</include>
                                             </includes>
                                         </resource>
+                                        <resource>
+                                            <directory>${project.build.directory}/mc-custom-lib</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-mc-cacis-lib</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${mirthConnect.server.dir}/cacis-lib</outputDirectory>
+                                    <resources>
                                         <resource>
                                             <directory>${project.build.directory}/mc-custom-lib</directory>
                                         </resource>

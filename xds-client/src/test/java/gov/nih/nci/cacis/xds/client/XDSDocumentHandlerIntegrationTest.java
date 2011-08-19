@@ -70,16 +70,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openhealthtools.ihe.xds.document.DocumentDescriptor;
 import org.openhealthtools.ihe.xds.metadata.extract.MetadataExtractionException;
 import org.openhealthtools.ihe.xds.source.SubmitTransactionCompositionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -90,7 +91,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationContext-xds-test.xml")
+@ContextConfiguration(locations = "classpath*:applicationContext-xds-test.xml")
 public class XDSDocumentHandlerIntegrationTest {
 
     private static final String SUBJECT_DN = "EMAILADDRESS=kondayya.mullapudi@misys.com,"
@@ -98,6 +99,7 @@ public class XDSDocumentHandlerIntegrationTest {
             + " L=Chicago, ST=Illinois, C=US";
     
     @Autowired
+    @Qualifier("wrapperDocumentHandler")
     private DocumentHandler docHndlr;
 
     @Autowired
@@ -105,8 +107,8 @@ public class XDSDocumentHandlerIntegrationTest {
 
     @Autowired
     private DocumentAccessManager accessManager;
-
-    private XDSDocumentMetadata docMd;
+    
+    private final HashMap<String, String> md = new HashMap<String, String>();
 
     /**
      * set up method
@@ -116,14 +118,12 @@ public class XDSDocumentHandlerIntegrationTest {
      * @throws AuthzProvisioningException - exception thrown, if any
      */
     @Before
-    public void setup() throws URISyntaxException, IOException, AuthzProvisioningException {
-        docMd = new XDSDocumentMetadata();
-        docMd.setDocEntryContent(getFileContent("docEntry.xml"));
-        docMd.setSubmissionSetContent(getFileContent("submissionSet.xml"));
-        docMd.setDocumentType(DocumentDescriptor.XML);
-        docMd.setDocOID("1.2.3.4"); // NOPMD
-        docMd.setDocSourceOID("1.3.6.1.4.1.21367.2010.1.2");
-        docMd.setDocumentContent(getFileContent("person.xml"));
+    public void setup() throws URISyntaxException, IOException, AuthzProvisioningException {        
+        md.put("docentry", getFileContent("docEntry.xml"));
+        md.put("submissionset", getFileContent("submissionSet.xml"));
+        md.put("docoid", "1.2.3.4"); // NOPMD
+        md.put("docsourceoid", "1.3.6.1.4.1.21367.2010.1.2");
+        md.put("content", getFileContent("person.xml"));
 
         writeManager.grantStoreWrite(SUBJECT_DN);
     }
@@ -148,7 +148,7 @@ public class XDSDocumentHandlerIntegrationTest {
         String docUniqueId = null;
         InputStream ris = null;
         try {
-            docUniqueId = docHndlr.handleDocument(docMd);
+            docUniqueId = docHndlr.handleDocument(md);
             Assert.assertNotNull(docUniqueId);
 
             accessManager.grantDocumentAccess(docUniqueId, SUBJECT_DN);

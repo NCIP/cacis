@@ -69,7 +69,7 @@ import org.junit.Test;
  * @since Jun 22, 2011
  */
 public class DocumentReferenceValidationExceptionTest {
-    private final String MESSAGE = "test message";
+    private static final String MESSAGE = "test message";
 
     /**
      * Test DocumentReferenceValidationException passing message

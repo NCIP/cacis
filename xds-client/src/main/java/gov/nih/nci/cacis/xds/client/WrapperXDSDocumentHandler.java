@@ -1,10 +1,11 @@
 /**
  * The software subject to this notice and license includes both human readable source code form and machine readable,
- * binary, object code form. The nav Software was developed in conjunction with the National Cancer Institute (NCI) by
- * NCI employees and subcontracted parties. To the extent government employees are authors, any rights in such works
- * shall be subject to Title 17 of the United States Code, section 105.
+ * binary, object code form. The caEHR Software was developed in conjunction with the National Cancer Institute (NCI) by
+ * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
+ * To the extent government employees are authors, any rights in such works shall be subject to Title 17 of the United
+ * States Code, section 105.
  * 
- * This nav Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
+ * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
  * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
  * whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or
@@ -12,10 +13,10 @@
  * 
  * This License is granted provided that You agree to the conditions described below. NCI grants You a non-exclusive,
  * worldwide, perpetual, fully-paid-up, no-charge, irrevocable, transferable and royalty-free right and license in its
- * rights in the nav Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
- * display, publicly perform, and prepare derivative works of the nav Software; (ii) distribute and have distributed to
- * and by third parties the nav Software and any modifications and derivative works thereof; and (iii) sublicense the
- * foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
+ * rights in the caEHR Software to (i) use, install, access, operate, execute, copy, modify, translate, market, publicly
+ * display, publicly perform, and prepare derivative works of the caEHR Software; (ii) distribute and have distributed
+ * to and by third parties the caEHR Software and any modifications and derivative works thereof; and (iii) sublicense
+ * the foregoing rights set out in (i) and (ii) to third parties, including the right to license such rights to further
  * third parties. For sake of clarity, and not by way of limitation, NCI shall have no right of accounting or right of
  * payment from You or Your sub-licensees for the rights granted under this License. This License is granted at no
  * charge to You.
@@ -26,13 +27,13 @@
  * documentation and/or other materials provided with the distribution, if any.
  * 
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
- * product includes software developed by the National Cancer Institute and subcontracted parties. If You do not include
+ * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
  * such end-user documentation, You shall include this acknowledgment in the Software itself, wherever such third-party
  * acknowledgments normally appear.
  * 
- * You may not use the names "The National Cancer Institute", "NCI", or any subcontracted party to endorse or promote
+ * You may not use the names "The National Cancer Institute", "NCI", or any SubContractor party to endorse or promote
  * products derived from this Software. This License does not authorize You to use any trademarks, service marks, trade
- * names, logos or product names of either NCI or theany of the subcontracted parties, except as required to comply with
+ * names, logos or product names of either NCI or any of the subcontracted parties, except as required to comply with
  * the terms of this License.
  * 
  * For sake of clarity, and not by way of limitation, You may incorporate this Software into Your proprietary programs
@@ -57,45 +58,55 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-package gov.nih.nci.cacis.nav;
+package gov.nih.nci.cacis.xds.client;
 
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
+import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 
 import java.io.InputStream;
+import java.util.HashMap;
+
+import org.openhealthtools.ihe.xds.document.DocumentDescriptor;
 
 /**
- * XDSDocumentResolver implementation for openxds
+ * A wrapper DocumentHandler implementation for xds Document Handler
+ * This deals with xds client and document properties as hashtable
  * 
  * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
  * 
  */
-public class OpenXDSDocumentResolver implements XDSDocumentResolver {
-
-    private final String recommendedRegistry;
-
-    private final DocumentHandler docHandler;
-
+public class WrapperXDSDocumentHandler implements DocumentHandler<HashMap<String, String>, HashMap<String, String>> {
+    
+    private final DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docHndler;
     /**
-     * Resolver constructor
-     * @param recommendedRegistry - recommendedRegistry id 
-     * @param docHandler - instance of XDSDocumentHandler
+     * @param docHndler instance fo the XDSDocumentHandler
      */
-    public OpenXDSDocumentResolver(String recommendedRegistry,
-            DocumentHandler docHandler) {
+    public WrapperXDSDocumentHandler(DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docHndler) {
         super();
-        this.recommendedRegistry = recommendedRegistry;
-        this.docHandler = docHandler;
+        this.docHndler = docHndler;
     }
 
     @Override
-    public String getRecommendedRegistry() {
-        return recommendedRegistry;
+    public String handleDocument(HashMap<String, String> arg0) throws ApplicationRuntimeException { //NOPMD
+        final XDSDocumentMetadata docMd = new XDSDocumentMetadata();
+        docMd.setDocEntryContent(arg0.get("docentry"));
+        docMd.setSubmissionSetContent(arg0.get("submissionset"));
+        docMd.setDocumentType(DocumentDescriptor.XML);
+        docMd.setDocOID(arg0.get("docoid")); // NOPMD
+        docMd.setDocSourceOID(arg0.get("docsourceoid"));
+        docMd.setDocumentContent(arg0.get("content"));
+        
+        return docHndler.handleDocument(docMd);
     }
 
     @Override
-    public InputStream resolve(String documentId) throws XDSDocumentResolutionException {
-        return docHandler.retrieveDocument(documentId);
+    public void initialize(HashMap<String, String> arg0) throws ApplicationRuntimeException { //NOPMD
+        // need not do anything..as this class only delegates to the XDSDocumentHandler      
     }
 
+    @Override
+    public InputStream retrieveDocument(String arg0) throws ApplicationRuntimeException {
+        return docHndler.retrieveDocument(arg0);
+    }
+    
 }

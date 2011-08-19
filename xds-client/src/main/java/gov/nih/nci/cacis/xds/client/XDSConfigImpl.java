@@ -65,6 +65,8 @@ import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -106,7 +108,6 @@ public class XDSConfigImpl implements XDSConfig  {
     @Value("${xds.truststore.password}")
     private String xdsTruststorePassword;
     
-    
     /**
      * Bean for populating the XDSHandler info for initializing the document handler
      * @return XDSHandlerInfo
@@ -114,6 +115,7 @@ public class XDSConfigImpl implements XDSConfig  {
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public XDSHandlerInfo xdsHandlerInfo() {        
+        
         final XDSHandlerInfo hndlrInfo = new XDSHandlerInfo();
         hndlrInfo.setRegistryURL(registryURL);
         hndlrInfo.setRepositoryURL(repositoryURL);
@@ -140,6 +142,18 @@ public class XDSConfigImpl implements XDSConfig  {
         final DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docH = 
             new XDSDocumentHandler();
         docH.initialize(xdsHandlerInfo());
+        return docH;
+    }
+    
+    /**
+     * wrapper for xds doc handler
+     * @return DocumentHandler instance of Wrapper xds doc handler
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public DocumentHandler wrapperDocumentHandler() {
+        final DocumentHandler<HashMap<String, String>, HashMap<String, String>> docH = 
+            new WrapperXDSDocumentHandler(documentHandler());
         return docH;
     }
     
@@ -196,4 +210,5 @@ public class XDSConfigImpl implements XDSConfig  {
             }
         };
     }
+    
 }

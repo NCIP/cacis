@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1313679941289</time>
+    <time>1313696131052</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>109</revision>
+  <revision>13</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -51,10 +51,11 @@
             <name>submitDocToXDS</name>
             <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
+var user=msg[&apos;@userName&apos;].toString();
+
 var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
 
-logger.error(&apos;navEmail = &apos; + navEmail);
-
+var navctx = globalChannelMap.get(&apos;navContext&apos;);
 var docH = globalChannelMap.get(&apos;documentHandler&apos;);
 var navS = globalChannelMap.get(&apos;navSender&apos;);
 var docAccMngr = globalChannelMap.get(&apos;docAccMngr&apos;);
@@ -67,7 +68,6 @@ var docOID = globalChannelMap.get(&apos;docOID&apos;);
 var docId = &apos;&apos;;
 try{
 	docId = docH.handleDocument(getXDSDocumentMetadata());
-	logger.error(&apos;docId = &apos; + docId);
 
 	if(docId==&apos;undefined&apos; || docId == &apos;&apos;){
 		responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error handling XDS document. No document id returned&apos;));
@@ -92,8 +92,6 @@ try{
 var docIds = new Packages.java.util.ArrayList();
 docIds.add(docId);
 try{
-	// Credentials of sender are set in the application context of NavConfig (always from the same address
-	navS.setCredentials(&apos;cacisnavtestuser&apos;, &apos;c2c1sn2v&apos;);
 	navS.send(navEmail, docIds);
 }catch(naverr) {
 	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + naverr.message));
@@ -103,16 +101,15 @@ try{
 responseMap.put(&apos;navDestination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully sent NAV&apos;));
 
 function getXDSDocumentMetadata() {
-	var docMd = new Packages.gov.nih.nci.cacis.xds.client.XDSDocumentMetadata();
 
-	docMd.setDocEntryContent(getDocEntryContent());
-	docMd.setSubmissionSetContent(getSubmissionSetContent());
-	docMd.setDocumentType(Packages.org.openhealthtools.ihe.xds.document.DocumentDescriptor.XML);
-	docMd.setDocOID(docOID);
-	docMd.setDocSourceOID(docSourceOID);
-	docMd.setDocumentContent(msg.toString());
-
-	return docMd;
+	var md = new Packages.java.util.HashMap();
+	md.put(&quot;docentry&quot;, getDocEntryContent());
+	md.put(&quot;submissionset&quot;, getSubmissionSetContent());
+	md.put(&quot;docoid&quot;, docOID); // NOPMD
+	md.put(&quot;docsourceoid&quot;, docSourceOID);
+	md.put(&quot;content&quot;, msg.toString());
+	
+	return md;
 }
 
 function getDocEntryContent() {
@@ -120,7 +117,7 @@ function getDocEntryContent() {
 	//using hardcode default values for now
 	var docEntryF = globalChannelMap.get(&apos;docEntryFile&apos;);
 	var contents = FileUtil.read(docEntryF);
-
+	
 	return contents;
 }
 
@@ -129,7 +126,7 @@ function getSubmissionSetContent() {
 	//using hardcode default values for now
 	var ssF = globalChannelMap.get(&apos;submissionSetFile&apos;);
 	var contents = FileUtil.read(ssF);
-
+	
 	return contents;
 }</script>
             <type>JavaScript</type>
@@ -138,10 +135,11 @@ function getSubmissionSetContent() {
                 <string>Script</string>
                 <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
+var user=msg[&apos;@userName&apos;].toString();
+
 var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
 
-logger.error(&apos;navEmail = &apos; + navEmail);
-
+var navctx = globalChannelMap.get(&apos;navContext&apos;);
 var docH = globalChannelMap.get(&apos;documentHandler&apos;);
 var navS = globalChannelMap.get(&apos;navSender&apos;);
 var docAccMngr = globalChannelMap.get(&apos;docAccMngr&apos;);
@@ -154,7 +152,6 @@ var docOID = globalChannelMap.get(&apos;docOID&apos;);
 var docId = &apos;&apos;;
 try{
 	docId = docH.handleDocument(getXDSDocumentMetadata());
-	logger.error(&apos;docId = &apos; + docId);
 
 	if(docId==&apos;undefined&apos; || docId == &apos;&apos;){
 		responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error handling XDS document. No document id returned&apos;));
@@ -179,8 +176,6 @@ try{
 var docIds = new Packages.java.util.ArrayList();
 docIds.add(docId);
 try{
-	// Credentials of sender are set in the application context of NavConfig (always from the same address
-	navS.setCredentials(&apos;cacisnavtestuser&apos;, &apos;c2c1sn2v&apos;);
 	navS.send(navEmail, docIds);
 }catch(naverr) {
 	responseMap.put(&apos;navDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + naverr.message));
@@ -190,16 +185,15 @@ try{
 responseMap.put(&apos;navDestination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully sent NAV&apos;));
 
 function getXDSDocumentMetadata() {
-	var docMd = new Packages.gov.nih.nci.cacis.xds.client.XDSDocumentMetadata();
 
-	docMd.setDocEntryContent(getDocEntryContent());
-	docMd.setSubmissionSetContent(getSubmissionSetContent());
-	docMd.setDocumentType(Packages.org.openhealthtools.ihe.xds.document.DocumentDescriptor.XML);
-	docMd.setDocOID(docOID);
-	docMd.setDocSourceOID(docSourceOID);
-	docMd.setDocumentContent(msg.toString());
-
-	return docMd;
+	var md = new Packages.java.util.HashMap();
+	md.put(&quot;docentry&quot;, getDocEntryContent());
+	md.put(&quot;submissionset&quot;, getSubmissionSetContent());
+	md.put(&quot;docoid&quot;, docOID); // NOPMD
+	md.put(&quot;docsourceoid&quot;, docSourceOID);
+	md.put(&quot;content&quot;, msg.toString());
+	
+	return md;
 }
 
 function getDocEntryContent() {
@@ -207,7 +201,7 @@ function getDocEntryContent() {
 	//using hardcode default values for now
 	var docEntryF = globalChannelMap.get(&apos;docEntryFile&apos;);
 	var contents = FileUtil.read(docEntryF);
-
+	
 	return contents;
 }
 
@@ -216,7 +210,7 @@ function getSubmissionSetContent() {
 	//using hardcode default values for now
 	var ssF = globalChannelMap.get(&apos;submissionSetFile&apos;);
 	var contents = FileUtil.read(ssF);
-
+	
 	return contents;
 }</string>
               </entry>
@@ -267,8 +261,9 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 
-var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-nav.xml&apos;);
-var documentHandler = navContext.getBean(&quot;documentHandler&quot;);
+//var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-nav-test.xml&apos;);
+var navContext = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;C:/Mirth Connect/cacis-lib&apos;,&apos;classpath*:applicationContext-nav.xml&apos;);
+var documentHandler = navContext.getBean(&quot;wrapperDocumentHandler&quot;);
 var navSender = navContext.getBean(&quot;notificationSender&quot;);
 
 //TODO:ESD-3073 will change this from dummy to acutal access manager
