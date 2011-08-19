@@ -56,7 +56,7 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-<!--        
+
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>cdw</artifactId>
@@ -73,7 +73,7 @@
             <artifactId>xds-client</artifactId>
             <version>${project.version}</version>
         </dependency>
- -->        
+     
     </dependencies>
 
     <build>
