@@ -262,7 +262,7 @@ return;</postprocessingScript>
 // You only have access to the globalMap and globalChannelMap here to persist data
 
 //var navContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-nav-test.xml&apos;);
-var navContext = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;C:/Mirth Connect/cacis-lib&apos;,&apos;classpath*:applicationContext-nav.xml&apos;);
+var navContext = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-nav.xml&apos;);
 var documentHandler = navContext.getBean(&quot;wrapperDocumentHandler&quot;);
 var navSender = navContext.getBean(&quot;notificationSender&quot;);
 

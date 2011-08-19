@@ -13,8 +13,6 @@
         <module>mirthconnect-maven-plugin</module>
         <module>esd-commons</module>
         <module>nav</module>
-       <!-- <module>tolven-commons</module> -->
-        <module>trim-loader-client</module>
         <module>transformer</module>
         <module>ip-mirth</module>
         <module>cdw</module>
@@ -50,6 +48,7 @@
         <cargo.timeout>300000</cargo.timeout>
         <mirthConnect.server.pause>20000</mirthConnect.server.pause>
 
+        <openxds.http.base.url>localhost:21080/openxds-web</openxds.http.base.url>
         <!--NOTE - customize this property to Mirth Connect location-->
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
         <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
@@ -57,26 +56,31 @@
         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
         <skip.cargo.container>true</skip.cargo.container>
-        <!--NOTE - customize this property to your JBOSS location-->
-        <tolven.jboss.location>${JBOSS_HOME}</tolven.jboss.location>
-        <tolven.jboss.id>jboss42x</tolven.jboss.id>
-        <tolven.jboss.server>${tolven.jboss.location}/server/${tolven.jboss.configuration}</tolven.jboss.server>
-
-        <tolven.jboss.protocol>http</tolven.jboss.protocol>
-        <tolven.jboss.hostname>localhost</tolven.jboss.hostname>
-        <tolven.jboss.port>8080</tolven.jboss.port>
-        <tolven.jboss.url>${tolven.jboss.protocol}://${tolven.jboss.hostname}:${tolven.jboss.port}</tolven.jboss.url>
-        <tolven.jboss.configuration>tolven</tolven.jboss.configuration>
         <!--NOTE - customize this property to OpenXDS location-->
         <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
-		
+
+        <!--runtime properties-->
+         <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
+         <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
+         <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
+         <cacis.xds.authz.db.driver>org.postgresql.Driver</cacis.xds.authz.db.driver>
+         <cacis.xds.authz.db.hibernate.show.sql>true</cacis.xds.authz.db.hibernate.show.sql>
+         <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect
+         </cacis.xds.authz.db.hibernate.dialect>
+
+        <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
+        <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
+        <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
+        <cacis.virtuoso.db.driver>virtuoso.jdbc3.Driver</cacis.virtuoso.db.driver>
+
 		<!-- If windows, please replace the ${user.home} with absolute path,as the maven way of setting this value is not acceptable by Mirth -->
 		<outputRootdir>${user.home}</outputRootdir>
 		<cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
 		<xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
 		<trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
-		<cacis.mc.support.files.dir>${outputRootdir}/.cacis/mc</cacis.mc.support.files.dir>	
-		
+		<cacis.mc.support.files.dir>${user.home}/.cacis/mc</cacis.mc.support.files.dir>
+        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
+
     </properties>
 
     <organization>
@@ -442,7 +446,6 @@
                             <exclude>**/*Config.class</exclude>
                             <exclude>**/*ConfigImpl.class</exclude>
                             <exclude>**/*Server.class</exclude>
-                            <exclude>**/tolven/client/*.class</exclude>
                             <exclude>**/*Exception.class</exclude>
                             <exclude>**/*Error.class</exclude>
                             <exclude>org/hl7/v3/*.class</exclude>
@@ -520,57 +523,6 @@
                         </executions>
                     </plugin>
 
-                    <!--start/stop jboss for integration tests-->
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.1.0</version>
-
-                        <executions>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-
-                        <configuration>
-                            <skip>${skip.cargo.container}</skip>
-                            <wait>false</wait>
-                            <container>
-                                <containerId>${tolven.jboss.id}</containerId>
-                                <type>installed</type>
-                                <home>${tolven.jboss.location}</home>
-                                <log>${tolven.jboss.server}/log/server.log</log>
-                                <output>${tolven.jboss.server}/log/cargo.log</output>
-                                <append>false</append>
-                                <systemProperties>
-                                    <java.awt.headless>true</java.awt.headless>
-                                    <tolven.messaging.clustered>false</tolven.messaging.clustered>
-                                </systemProperties>
-                            </container>
-                            <configuration>
-                                <type>existing</type>
-                                <home>${tolven.jboss.server}</home>
-                                <properties>
-                                    <cargo.jboss.configuration>${tolven.jboss.configuration}</cargo.jboss.configuration>
-                                    <cargo.servlet.port>${tolven.jboss.port}</cargo.servlet.port>
-                                    <cargo.hostname>${tolven.jboss.hostname}</cargo.hostname>
-                                    <cargo.protocol>${tolven.jboss.protocol}</cargo.protocol>
-                                    <cargo.logging>high</cargo.logging>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
