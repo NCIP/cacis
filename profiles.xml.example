@@ -10,7 +10,7 @@
             <properties>
 
                 <!--Customize these for your local environment-->
-                <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
+                <openxds.web.dir>/Users/kherm/dev/tomcat-ehr/webapps/openxds-web</openxds.web.dir>
                 <openxds.http.base.url>localhost:21080/openxds-web</openxds.http.base.url>
                 <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
                 <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
@@ -28,7 +28,6 @@
                 <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
                 <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
 
-                <outputRootdir>${mirthConnect.server.dir}/temp/cacis</outputRootdir>
                 <cdfOutputDir>${outputRootdir}/mc/output/cdf/</cdfOutputDir>
                 <xccdOutputDir>${outputRootdir}/mc/output/xccd/</xccdOutputDir>
                 <trimInputDir>${outputRootdir}/mc/input/</trimInputDir>
@@ -37,8 +36,9 @@
 
                 <maven.deploy.skip>true</maven.deploy.skip>
 
-		<!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
-		<nav.sender.pass>changeme</nav.sender.pass>
+		        <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
+		        <nav.sender.pass>changeme</nav.sender.pass>
+
             </properties>
         </profile>
 
