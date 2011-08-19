@@ -75,6 +75,7 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openhealthtools.ihe.xds.metadata.extract.MetadataExtractionException;
@@ -91,7 +92,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:applicationContext-xds-test.xml")
+@ContextConfiguration(locations = "classpath*:applicationContext-xds.xml")
+@Ignore
 public class XDSDocumentHandlerIntegrationTest {
 
     private static final String SUBJECT_DN = "EMAILADDRESS=kondayya.mullapudi@misys.com,"
