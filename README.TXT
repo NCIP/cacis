@@ -5,6 +5,9 @@ caCIS Enterprise Services Development (ESD)
 Please refer to the team wiki for project information:
 https://wiki.nci.nih.gov/display/caEHR
 
+NAV IDE and Build Configuration:
+https://wiki.nci.nih.gov/display/caEHR/NAV+IDE+and+Build+Configuration
+
 Integration Platform IDE Guide:
 https://wiki.nci.nih.gov/display/caEHR/IPF+IDE+Configuration+Guide+and+Sample+Project
 
@@ -77,22 +80,38 @@ some time to finish the build. To skip the tests from running, use
 Build sub-projects  (Optional)
 ===================================================================================
 
-Several sub-projects exist in the /pco directory.
 
-To configure and build individual sub-projects
-look at the instructions of the sub-projects
+h3. Build Instructions for each sub-module (Optional)
+To configure and build individual sub-modules, refer to 
+the instructions of each sub-module.
 
-For eg. The configuration and build instructions
-for the Integration Platform are in
-/pco/ip/ReadMe.txt
+Example: The configuration and build instructions for the Integration Platform are 
+in /pco/ip-mirth/ReadMe.txt
 
-Note - sub-projects have their own Maven pom file to build
-and run tests/static analysis on the individual projects.
+Note: sub-projects have their own Maven pom file to build and run tests/static 
+analysis on the individual projects. Some of the sub-modules do not produce any 
+deployable artifacts, and only provide dependencies for other sub-projects.
 
-Note - Not all projects will need to be built directly.
-That is they don't produce any deployable artifacts, and
-only provide dependencies for other sub-projects
+===================================================================================
+Manually deploying Mirth Channels
+===================================================================================
+If you have credentials to deploy artifacts to the caCIS Maven repository and wish 
+to deploy artifacts, refer to the "Deploying artifacts" section below.  
 
+Import all of the channels (in the order the channels are listed) from the following 
+two scripts:
+pco/ip-mirth/target/classes/deploy.mc
+pco/transformer/target/classes/deploy.mc
+
+All of the channels should be imported from the "target/classes/channels" directory 
+under each of the sub-module project directories. During the full build, these 
+channels are injected with pom/profiles properties (in "target/classes/channels").  
+These channels are required to run the services and Integration tests (not required 
+for the main build).
+
+If you do not run deployment you will also have to copy all jar files from:
+1) ip-mirth/target/mc-custom-lib to MIRTH_CONNECT_LOCATION/custom-lib
+2) ip-mirth/target/mc-cacis-lib to ./cacis-lib/
 
 ===================================================================================
 Deployment
