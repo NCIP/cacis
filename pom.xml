@@ -47,12 +47,12 @@
         <skip.static.analysis>false</skip.static.analysis>
         <cargo.timeout>300000</cargo.timeout>
         <mirthConnect.server.pause>20000</mirthConnect.server.pause>
-
-        <openxds.http.base.url>localhost:21080/openxds-web</openxds.http.base.url>
-        <!--NOTE - customize this property to Mirth Connect location-->
+        
+        <!--NOTE - customize this property to Mirth Connect location-->		
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
         <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
-
+		<openxds.http.base.url>localhost:21080/openxds-web</openxds.http.base.url>
+		
         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
         <skip.cargo.container>true</skip.cargo.container>
@@ -78,7 +78,7 @@
 		<cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
 		<xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
 		<trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
-		<cacis.mc.support.files.dir>${user.home}/.cacis/mc</cacis.mc.support.files.dir>
+		<cacis.mc.support.files.dir>${outputRootdir}/.cacis/cacis-xds</cacis.mc.support.files.dir>
         <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
 
     </properties>
