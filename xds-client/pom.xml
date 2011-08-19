@@ -200,7 +200,7 @@
                 <executions>
                     <execution>
                         <id>copy-xds-support-files</id>
-                        <phase>install</phase>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
