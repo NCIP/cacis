@@ -655,6 +655,13 @@
 							  </includes>
 							  <followSymlinks>false</followSymlinks>
 							</fileset>
+							<fileset>
+							  <directory>${mirthConnect.server.dir}/cacis-lib</directory>
+							  <includes>
+								<include>**/*.*</include>
+							  </includes>
+							  <followSymlinks>false</followSymlinks>
+							</fileset>
 						  </filesets>
 						</configuration>
 					  </plugin>
@@ -694,14 +701,13 @@
                                     <outputDirectory>${mirthConnect.server.dir}/cacis-lib</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.build.directory}/mc-custom-lib</directory>
+                                            <directory>${project.build.directory}/mc-cacis-lib</directory>
                                         </resource>
                                     </resources>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
-
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
@@ -722,6 +728,7 @@
                             </execution>
                         </executions>
                     </plugin>
+				
                     <plugin>
                         <groupId>gov.nih.nci.cacis</groupId>
                         <artifactId>mirthconnect-maven-plugin</artifactId>
@@ -740,7 +747,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    
+	
                 </plugins>
             </build>
         </profile>
