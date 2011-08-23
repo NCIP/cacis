@@ -82,11 +82,15 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 public class GraphAuthzMgrImpl implements GraphAuthzMgr {
 
+    private static final String CREATE_GRAPH_GROUP_SQL = "{ call DB.DBA.RDF_GRAPH_GROUP_CREATE(?,?) }";;
+    
     private static final String INS_GRPH_TO_GRP_SQL = "{ call DB.DBA.RDF_GRAPH_GROUP_INS(?,?) }";
 
     private static final String DEL_GRPH_TO_GRP_SQL = "{ call DB.DBA.RDF_GRAPH_GROUP_DEL(?,?) }";
 
     private static final String GRP_USERS_PERM_TO_GRPH_SQL = "{ call caCIS_GRAPH_MEMBER_USER_PERMS_SET(?,?) }";
+
+
 
     private final SimpleJdbcTemplate jdbcTemplate;
     
@@ -107,6 +111,14 @@ public class GraphAuthzMgrImpl implements GraphAuthzMgr {
         validate(graph, graphGroups);
 
         try {
+
+            final List<Object[]> batchArgs = new ArrayList<Object[]>();
+            for (URI uri : graphGroups) {
+                final Object[] oneSet = { uri.toString(), Integer.valueOf(1) };
+                batchArgs.add(oneSet);
+            }   
+            jdbcTemplate.batchUpdate(CREATE_GRAPH_GROUP_SQL, batchArgs);
+            
             jdbcTemplate.batchUpdate(INS_GRPH_TO_GRP_SQL, prepareBatchArgs(graph, graphGroups));
 
             final Object[] args = { graph.toString(), Integer.valueOf(1) };

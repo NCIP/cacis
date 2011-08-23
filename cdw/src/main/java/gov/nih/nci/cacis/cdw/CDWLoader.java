@@ -69,7 +69,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -130,7 +132,12 @@ public class CDWLoader {
     private void load(InputStream xmlStream, URI context, String studyId, String siteId,
             String patientId) throws TransformerException, RepositoryException, RDFParseException, IOException,
             AuthzProvisioningException, SAXException, ParserConfigurationException {
-        final OutputStream os = transformer.transform(xmlStream);
+        
+        final Map<String,String> params = new HashMap<String,String>();
+        params.put("BaseURI", context.toString());
+        final OutputStream os = new ByteArrayOutputStream();
+        transformer.transform(params, xmlStream, os);
+       
         ByteArrayOutputStream bos = null;
         InputStream repoStream = null;
         try {
