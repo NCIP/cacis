@@ -66,7 +66,7 @@ package gov.nih.nci.cacis.transformer;
  * 
  * @author vinodh.rc
  */
-public class TranscendTrimToCCDTransformerIntegrationTest extends AbstractTransformerSystemTest {
+public class XSLT_CCDTransformerIntegrationTest extends AbstractTransformerSystemTest {
     
     /**
      * Constant for wsdl address

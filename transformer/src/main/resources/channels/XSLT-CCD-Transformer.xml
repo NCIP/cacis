@@ -1,29 +1,29 @@
-<com.mirth.connect.model.Channel>
+<channel>
   <id>6901f2f6-ed86-4f72-a31b-2f8462db49b0</id>
-  <name>Trim-2-CCD-xslt</name>
+  <name>XSLT-CCD-Transformer</name>
   <description>Base channel to take in Transcend Trim and convert it to Canonical data format(CCD) using Trim-to-ccd.xlt content&#xd;
 &#xd;
 This channel setup get the source as trim via the default AcceptMessage webservice and writes to a file as destination. &#xd;
 &#xd;
 TODO: Will need to configure the destination in the future, as required</description>
   <enabled>true</enabled>
-  <version>2.0.1.5164</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1309895140114</time>
+    <time>1314213060652</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>40</revision>
+  <revision>32</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="port">9085</property>
       <property name="DataType">Web Service Listener</property>
-      <property name="receiverUsernames">&lt;list/&gt;</property>
       <property name="host">0.0.0.0</property>
-      <property name="receiverServiceName">Mirth</property>
+      <property name="port">9085</property>
       <property name="receiverClassName">com.mirth.connect.connectors.ws.DefaultAcceptMessage</property>
-      <property name="receiverResponseValue">Destination 1</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
+      <property name="receiverResponseValue">Destination 1</property>
+      <property name="receiverServiceName">Mirth</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
     <transformer>
       <steps>
@@ -47,7 +47,12 @@ var arg = msgStr.substring(stIndex, endIndex+endStr.length);
 var defns = new Namespace(&apos;urn:tolven-org:trim:4.0&apos;);
 default xml namespace = defns;
 
-msg = new XML(arg);</script>
+msg = new XML(arg);
+
+var xstlTemplate = &apos;${xslt.template}&apos;;
+var xsltContent = FileUtil.read(xstlTemplate);
+
+globalChannelMap.put(&apos;xsltContent&apos;, xsltContent);</script>
           <type>JavaScript</type>
           <data class="map">
             <entry>
@@ -69,14 +74,19 @@ var arg = msgStr.substring(stIndex, endIndex+endStr.length);
 var defns = new Namespace(&apos;urn:tolven-org:trim:4.0&apos;);
 default xml namespace = defns;
 
-msg = new XML(arg);</string>
+msg = new XML(arg);
+
+var xstlTemplate = &apos;${xslt.template}&apos;;
+var xsltContent = FileUtil.read(xstlTemplate);
+
+globalChannelMap.put(&apos;xsltContent&apos;, xsltContent);</string>
             </entry>
           </data>
         </step>
         <step>
           <sequenceNumber>1</sequenceNumber>
           <name>process</name>
-          <script>tFactory = Packages.javax.xml.transform.TransformerFactory.newInstance();xsltTemplate = new Packages.java.io.StringReader(TRIM2CCD-XSLT);transformer = tFactory.newTransformer(new Packages.javax.xml.transform.stream.StreamSource(xsltTemplate));sourceVar = new Packages.java.io.StringReader(msg);resultVar = new Packages.java.io.StringWriter();transformer.transform(new Packages.javax.xml.transform.stream.StreamSource(sourceVar), new Packages.javax.xml.transform.stream.StreamResult(resultVar));channelMap.put(&apos;ccd&apos;, resultVar)</script>
+          <script>tFactory = Packages.javax.xml.transform.TransformerFactory.newInstance();xsltTemplate = new Packages.java.io.StringReader($(&apos;xsltContent&apos;));transformer = tFactory.newTransformer(new Packages.javax.xml.transform.stream.StreamSource(xsltTemplate));sourceVar = new Packages.java.io.StringReader(msg);resultVar = new Packages.java.io.StringWriter();transformer.transform(new Packages.javax.xml.transform.stream.StreamSource(sourceVar), new Packages.javax.xml.transform.stream.StreamResult(resultVar));channelMap.put(&apos;ccd&apos;, resultVar)</script>
           <type>XSLT Step</type>
           <data class="map">
             <entry>
@@ -89,7 +99,7 @@ msg = new XML(arg);</string>
             </entry>
             <entry>
               <string>XsltTemplate</string>
-              <string>TRIM2CCD-XSLT</string>
+              <string>$(&apos;xsltContent&apos;)</string>
             </entry>
           </data>
         </step>
@@ -111,27 +121,27 @@ msg = new XML(arg);</string>
     <transportName>Web Service Listener</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.0.1.5164</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
-    <com.mirth.connect.model.Connector>
+    <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="secure">1</property>
-        <property name="scheme">file</property>
-        <property name="binary">0</property>
-        <property name="username">anonymous</property>
-        <property name="outputPattern">${SYSTIME}.ccd</property>
-        <property name="validateConnections">1</property>
         <property name="DataType">File Writer</property>
         <property name="FTPAnonymous">1</property>
-        <property name="timeout">10000</property>
+        <property name="binary">0</property>
         <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="password">anonymous</property>
-        <property name="passive">1</property>
-        <property name="template">${ccd}</property>
+        <property name="host">${xccdOutputDir}</property>
         <property name="outputAppend">0</property>
-        <property name="host">CCD_OUTPUT_DIR</property>
+        <property name="outputPattern">${SYSTIME}.ccd</property>
+        <property name="passive">1</property>
+        <property name="password">anonymous</property>
+        <property name="scheme">file</property>
+        <property name="secure">1</property>
+        <property name="template">${ccd}</property>
+        <property name="timeout">10000</property>
+        <property name="username">anonymous</property>
+        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
@@ -150,19 +160,19 @@ msg = new XML(arg);</string>
       <transportName>File Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.0.1.5164</version>
-    </com.mirth.connect.model.Connector>
+      <version>2.1.1.5490</version>
+    </connector>
   </destinationConnectors>
   <properties>
-    <property name="synchronous">true</property>
     <property name="clearGlobalChannelMap">true</property>
-    <property name="transactional">false</property>
-    <property name="initialState">started</property>
     <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
     <property name="max_message_age">-1</property>
     <property name="store_messages">true</property>
-    <property name="encryptData">false</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
@@ -174,4 +184,4 @@ return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 return;</shutdownScript>
-</com.mirth.connect.model.Channel>
+</channel>
