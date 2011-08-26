@@ -110,7 +110,7 @@ public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
 
         final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
         final CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
+        request.getClinicalDocument().add(CanonicalModelProcessorTest.dummyClinicalDocument());
 
 
         client.acceptCanonical(request);
@@ -123,7 +123,7 @@ public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
 
         final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
         final CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
+        request.getClinicalDocument().add(CanonicalModelProcessorTest.dummyClinicalDocument());
 
 
         client.acceptCanonical(request);

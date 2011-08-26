@@ -99,6 +99,49 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--start MC and deploy channels during deploy phase
+            Since transformer is the 1st project, cleanup MC custom-lib here -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${mirthConnect.server.dir}/custom-lib</directory>
+                            <includes>
+                                <include>**/*.*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <id>restartMC</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${mirthConnect.server.dir}/mcservice</executable>
+                            <arguments>
+                                <argument>restart</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>gov.nih.nci.cacis</groupId>
                 <artifactId>mirthconnect-maven-plugin</artifactId>
@@ -124,7 +167,26 @@
             <id>cacis-ci</id>
             <build>
                 <plugins>
-
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>2.4.1</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${mirthConnect.server.dir}/custom-lib</directory>
+                                    <includes>
+                                        <include>**/*.*</include>
+                                    </includes>
+                                    <followSymlinks>false</followSymlinks>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
@@ -145,14 +207,14 @@
                             </execution>
                         </executions>
                     </plugin>
-
                     <plugin>
                         <groupId>gov.nih.nci.cacis</groupId>
                         <artifactId>mirthconnect-maven-plugin</artifactId>
                         <version>${project.version}</version>
                         <configuration>
                             <mirthConnect>${mirthConnect.cli}</mirthConnect>
-                            <script>${build.outputDirectory}/deploy.mc</script>
+                            <script>${build.testOutputDirectory}/test-deploy.mc</script>
+                            <!--<script>${build.testOutputDirectory}/test-deploy.mc</script>-->
                             <pause>${mirthConnect.server.pause}</pause>
                         </configuration>
                         <executions>

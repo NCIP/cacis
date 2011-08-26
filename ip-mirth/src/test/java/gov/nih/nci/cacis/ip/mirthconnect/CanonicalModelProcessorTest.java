@@ -82,7 +82,7 @@ public class CanonicalModelProcessorTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         request = new CaCISRequest();
-        request.setClinicalDocument(dummyClinicalDocument());
+        request.getClinicalDocument().add(dummyClinicalDocument());
 
         service = new CanonicalModelProcessor(webServiceMessageReceiver);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");

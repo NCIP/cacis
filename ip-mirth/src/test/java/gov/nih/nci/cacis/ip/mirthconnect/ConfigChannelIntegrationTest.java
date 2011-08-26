@@ -99,7 +99,7 @@ public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
         }
 
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Input_With_RoutingInstructions.xml").toURI());
+                .getResource("HL7_V2_RoutingInstructions.xml").toURI());
         FileUtils.copyFileToDirectory(inputFile, ipDir);
 
         Thread.sleep(SLEEP_TIME);

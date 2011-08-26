@@ -574,14 +574,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>CBIIT-Snapshot</id>
-            <name>CBIIT Snapshot Repository</name>
-            <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
+
         <repository>
             <id>Aduna</id>
             <name>Aduna software repository</name>

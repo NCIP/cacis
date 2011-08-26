@@ -84,7 +84,6 @@ import org.w3c.dom.Node;
 public class CanonicalModelProcessorMCIntegrationTest extends BaseVirtuosoIntegrationTest {
 
     public static final String ADDRESS = "http://localhost:18081/services/CanonicalModelProcessor?wsdl";
-    public static final String SOAP_MSG_FILENAME = "CanonicalModelProcessorMC_sample.xml";
     private static final Log LOG = LogFactory.getLog(CanonicalModelProcessorMCIntegrationTest.class);
 
     private static final String GRPH_GROUP_STUDY_ID = "mc_study_id";
@@ -116,7 +115,7 @@ public class CanonicalModelProcessorMCIntegrationTest extends BaseVirtuosoIntegr
 
         CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
         CaCISRequest request = new CaCISRequest();
-        request.setClinicalDocument(CanonicalModelProcessorTest.dummyClinicalDocument());
+        request.getClinicalDocument().add(CanonicalModelProcessorTest.dummyClinicalDocument());
 
         ClinicalMetadata meta = new ClinicalMetadata();
         meta.setPatientIdExtension("123");

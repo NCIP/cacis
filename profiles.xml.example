@@ -10,19 +10,21 @@
             <properties>
 
                 <!--Customize these for your local environment-->
-                <openxds.web.dir>/Users/kherm/dev/tomcat-ehr/webapps/openxds-web</openxds.web.dir>
-                <openxds.http.base.url>localhost:21080/openxds-web</openxds.http.base.url>
+                <openxds.web.dir>$CATALINA_HOME/webapps/openxds-web</openxds.web.dir>
+                <openxds.http.base.url>localhost:8080/openxds-web</openxds.http.base.url>
                 <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
                 <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
-                <outputRootdir>${mirthConnect.server.dir}/temp</outputRootdir>
+
+
+                <!--OPTIONAL - change these for your local environment-->
 
                 <!--XDS database properties-->
                 <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
                 <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
                 <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
 
+                <outputRootdir>${mirthConnect.server.dir}/temp</outputRootdir>
 
-                <!--OPTIONAL - change these for your local environment-->
                 <!--Virtuoso database properties-->
                 <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
                 <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>

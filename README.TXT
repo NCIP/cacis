@@ -160,6 +160,17 @@ This will install all caCIS components in Mirth Connect. Once you start the
    Mirth Connect server, you will see caCIS channels in Mirth Connect
 
 
+Restart the tomcat/JBoss service that is hosting the openXDS web application
+
+If there is a firewall on the server. The following ports need to be open
+
+- HTTP port 18080 (IP web service)
+- HTTP port 18091 (SA web service)
+- HTTP port 8080 (Mirth Connect)
+- 5432 Postgresql DB server
+- 1111 Virtuoso DB server
+- HTTP Port 8890
+
 
 ===================================================================================
 Snapshots Repositories

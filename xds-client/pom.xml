@@ -14,11 +14,9 @@
     <properties>
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>0</test.unit.linerate>
-        <!-- TODO: After ESD-3073, fix this property -->
-        <xds.base.url>${openxds.http.base.url}</xds.base.url>
 
-        <xds.repository.url>http://${xds.base.url}/services/DocumentRepository</xds.repository.url>
-        <xds.registry.url>http://${xds.base.url}/services/DocumentRegistry</xds.registry.url>
+        <xds.repository.url>http://${openxds.http.base.url}/services/DocumentRepository</xds.repository.url>
+        <xds.registry.url>http://${openxds.http.base.url}/services/DocumentRegistry</xds.registry.url>
 
         <xds.repo.oid>1.3.6.1.4.1.21367.13.1150</xds.repo.oid>
         <xds.doc.location>${outputRootdir}/.cacis/cacis-xds</xds.doc.location>

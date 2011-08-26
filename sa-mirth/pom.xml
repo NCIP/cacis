@@ -106,6 +106,8 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <!--start MC and deploy channels during deploy phase-->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
@@ -131,13 +133,32 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <id>startMC</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${mirthConnect.server.dir}/mcservice</executable>
+                            <arguments>
+                                <argument>restart</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>gov.nih.nci.cacis</groupId>
                 <artifactId>mirthconnect-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <configuration>
                     <mirthConnect>${mirthConnect.cli}</mirthConnect>
                     <script>${build.outputDirectory}/deploy.mc</script>
-                    <pause>${mirthConnect.server.pause}</pause>
                 </configuration>
                 <executions>
                     <execution>
@@ -151,26 +172,12 @@
         </plugins>
     </build>
 
+    <!--Maven Profile is for the CI server. Runs Integration tests-->
     <profiles>
         <profile>
             <id>cacis-ci</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-clean-plugin</artifactId>
-                        <version>2.4.1</version>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>${mirthConnect.server.dir}/custom-lib</directory>
-                                    <includes>
-                                        <include>**/*.*</include>
-                                    </includes>
-                                    <followSymlinks>false</followSymlinks>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>2.5</version>
@@ -222,7 +229,7 @@
                         <version>${project.version}</version>
                         <configuration>
                             <mirthConnect>${mirthConnect.cli}</mirthConnect>
-                            <script>${build.outputDirectory}/deploy.mc</script>
+                            <script>${build.testOutputDirectory}/test-deploy.mc</script>
                             <pause>${mirthConnect.server.pause}</pause>
                         </configuration>
                         <executions>

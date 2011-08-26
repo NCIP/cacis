@@ -17,7 +17,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="mediaType" type="xs:string" fixed="text/x-hl7-text+xml"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.Title" mixed="true">
@@ -31,7 +31,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="mediaType" type="xs:string" fixed="text/x-hl7-title+xml"/>
    </xs:complexType><!-- DELETE THIS, we don't need to define a global element for text
 	<xs:element name="text" type="text"/>
@@ -47,12 +47,12 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.Col">
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="span" type="xs:string" default="1"/>
       <xs:attribute name="width" type="xs:string"/>
       <xs:attribute name="align">
@@ -85,7 +85,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="span" type="xs:string" default="1"/>
       <xs:attribute name="width" type="xs:string"/>
       <xs:attribute name="align">
@@ -125,7 +125,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="revised">
          <xs:simpleType>
             <xs:restriction base="xs:NMTOKEN">
@@ -146,7 +146,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.Footnote" mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -162,7 +162,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.TitleFootnote" mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -173,12 +173,12 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.FootnoteRef">
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="IDREF" type="xs:IDREF" use="required"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.Item" mixed="true">
@@ -200,7 +200,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.LinkHtml" mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -214,7 +214,7 @@
       <xs:attribute name="title" type="xs:string"/>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.List">
       <xs:sequence>
@@ -223,7 +223,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="listType" default="unordered">
          <xs:simpleType>
             <xs:restriction base="xs:NMTOKEN">
@@ -249,7 +249,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.RenderMultiMedia">
       <xs:sequence>
@@ -258,7 +258,7 @@
       <xs:attribute name="referencedObject" type="xs:IDREFS" use="required"/>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
    </xs:complexType>
    <xs:complexType name="StrucDoc.Sub" mixed="true"/>
    <xs:complexType name="StrucDoc.Sup" mixed="true"/>
@@ -275,7 +275,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="summary" type="xs:string"/>
       <xs:attribute name="width" type="xs:string"/>
       <xs:attribute name="border" type="xs:string"/>
@@ -314,7 +314,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="align">
          <xs:simpleType>
             <xs:restriction base="xs:NMTOKEN">
@@ -354,7 +354,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="abbr" type="xs:string"/>
       <xs:attribute name="axis" type="xs:string"/>
       <xs:attribute name="headers" type="xs:IDREFS"/>
@@ -400,7 +400,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="align">
          <xs:simpleType>
             <xs:restriction base="xs:NMTOKEN">
@@ -438,7 +438,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="abbr" type="xs:string"/>
       <xs:attribute name="axis" type="xs:string"/>
       <xs:attribute name="headers" type="xs:IDREFS"/>
@@ -484,7 +484,7 @@
       </xs:sequence>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="align">
          <xs:simpleType>
             <xs:restriction base="xs:NMTOKEN">
@@ -516,7 +516,7 @@
       </xs:choice>
       <xs:attribute name="ID" type="xs:ID"/>
       <xs:attribute name="language" type="xs:NMTOKEN"/>
-      <xs:attribute name="styleCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="styleCode" type="xs:NMTOKENS"/>
       <xs:attribute name="align">
          <xs:simpleType>
             <xs:restriction base="xs:NMTOKEN">
