@@ -1,6 +1,6 @@
 <channel>
   <id>5e5873ae-5315-486f-acb2-3d2b0702a4dc</id>
-  <name>RoutingInstructionsValidationChannel</name>
+  <name>ConfigChannel</name>
   <description>This channel checks to see if the routing instructions are provided in the incoming message. &#xd;
 If routing instructions are not part of the message, then default routing instructions are added before the message is passed onto Trans Split Channel.</description>
   <enabled>true</enabled>
