@@ -16,8 +16,6 @@
     <properties>
         <test.unit.branchrate>35</test.unit.branchrate>
         <test.unit.linerate>35</test.unit.linerate>
-        <trimProcessedDir>${trimInputDir}/processed</trimProcessedDir>
-        <trimErrorDir>${trimInputDir}/error</trimErrorDir>
         <xslt.template>${basedir}/src/main/resources/xsl/BaselineNote.xslt</xslt.template>
 
         <cacis-pco.validation.xmltordf.xsl.baseClassPath>/xsl/</cacis-pco.validation.xmltordf.xsl.baseClassPath>
@@ -89,8 +87,6 @@
                                 <mkdir dir="${cdfOutputDir}"/>
                                 <mkdir dir="${xccdOutputDir}"/>
                                 <mkdir dir="${trimInputDir}"/>
-                                <mkdir dir="${trimProcessedDir}"/>
-                                <mkdir dir="${trimErrorDir}"/>
                             </tasks>
                         </configuration>
                         <goals>

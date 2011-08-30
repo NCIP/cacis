@@ -1,0 +1,79 @@
+<serverConfiguration>
+  <date>2011-08-26 15:56:20</date>
+  <alerts>
+    <alert>
+      <id>474aa4cd-d9a6-4396-aad5-68f31344c1d4</id>
+      <name>Alert 1</name>
+      <expression>ERROR</expression>
+      <template>The following error occurred when transforming the document:
+${systemTime} : ${channelName} : ${errorMessage}
+
+${error}</template>
+      <enabled>true</enabled>
+      <subject>Integration Platform: An Error occurred when transforming document</subject>
+      <channels>
+        <string>6901f2f6-ed86-4f72-a31b-2f8462db49b0</string>
+      </channels>
+      <emails>
+        <string>bpickeral@5amsolutions.com</string>
+      </emails>
+    </alert>
+  </alerts>
+  <codeTemplates/>
+  <serverSettings>
+    <clearGlobalMap>true</clearGlobalMap>
+    <maxQueueSize>0</maxQueueSize>
+    <smtpHost>${transformation.sender.host}</smtpHost>
+    <smtpPort>${transformation.sender.port}</smtpPort>
+    <smtpFrom>${transformation.sender.address}</smtpFrom>
+    <smtpSecure>tls</smtpSecure>
+    <smtpAuth>true</smtpAuth>
+    <smtpUsername>${transformation.sender.user}</smtpUsername>
+    <smtpPassword>${transformation.sender.pw}</smtpPassword>
+  </serverSettings>
+  <updateSettings>
+    <firstLogin>false</firstLogin>
+    <updatesEnabled>true</updatesEnabled>
+    <statsEnabled>true</statsEnabled>
+    <updateUrl>http://updates.mirthcorp.com</updateUrl>
+    <lastStatsTime>1314283923177</lastStatsTime>
+  </updateSettings>
+  <globalScripts>
+    <entry>
+      <string>Shutdown</string>
+      <string>// This script executes once when all channels shut down from a redeploy
+// You only have access to the globalMap here to persist data
+return;</string>
+    </entry>
+    <entry>
+      <string>Deploy</string>
+      <string>// This script executes once when all channels start up from a redeploy
+// You only have access to the globalMap here to persist data
+return;</string>
+    </entry>
+    <entry>
+      <string>Preprocessor</string>
+      <string>// Modify the message variable below to pre process data
+// This script applies across all channels
+return message;</string>
+    </entry>
+    <entry>
+      <string>Postprocessor</string>
+      <string>// This script executes once after a message has been processed
+// This script applies across all channels
+return;</string>
+    </entry>
+  </globalScripts>
+  <pluginProperties>
+    <entry>
+      <string>Message Pruner</string>
+      <properties>
+        <property name="allowBatchPruning">1</property>
+        <property name="interval">daily</property>
+        <property name="name">Message Pruner</property>
+        <property name="pruningBlockSize">0</property>
+        <property name="time">12:00 AM</property>
+      </properties>
+    </entry>
+  </pluginProperties>
+</serverConfiguration>

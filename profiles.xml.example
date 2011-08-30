@@ -38,8 +38,18 @@
 
                 <maven.deploy.skip>true</maven.deploy.skip>
 
-		        <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
-		        <nav.sender.pass>changeme</nav.sender.pass>
+		<!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
+		<nav.sender.pass>c2c1sn2v</nav.sender.pass>
+
+		<!--  Credentials for the system email that sends tranformation errors -->
+        	<transformation.sender.host>smtp.gmail.com</transformation.sender.host>
+        	<transformation.sender.port>587</transformation.sender.port>
+        	<transformation.sender.user>cacisnavtestuser</transformation.sender.user>
+        	<transformation.sender.pw>c2c1sn2v</transformation.sender.pw>
+        	<transformation.sender.address>cacisnavtestuser@gmail.com</transformation.sender.address>
+
+        	<!-- Sys Admin to receive errors -->
+        	<transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
 
             </properties>
         </profile>

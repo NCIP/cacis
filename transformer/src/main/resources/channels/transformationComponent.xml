@@ -1,6 +1,6 @@
 <channel>
   <id>6901f2f6-ed86-4f72-a31b-2f8462db49b0</id>
-  <name>XSLT-CCD-Transformer</name>
+  <name>transformationComponent</name>
   <description>Base channel to take in Transcend Trim and convert it to Canonical data format(CCD) using Trim-to-ccd.xlt content&#xd;
 &#xd;
 This channel setup get the source as trim via the default AcceptMessage webservice and writes to a file as destination. &#xd;
@@ -9,10 +9,10 @@ TODO: Will need to configure the destination in the future, as required</descrip
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314213060652</time>
+    <time>1314387437331</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>32</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -38,10 +38,6 @@ var msgStr = msg.toString();
 var stIndex = msgStr.indexOf(stStr);
 var endIndex = msgStr.indexOf(endStr);
 
-if(stIndex &lt; 0 || endIndex &lt; 0){
-	logger.error(&apos;Not a valid trim&apos;);
-}
-
 var arg = msgStr.substring(stIndex, endIndex+endStr.length);
 
 var defns = new Namespace(&apos;urn:tolven-org:trim:4.0&apos;);
@@ -64,10 +60,6 @@ var msgStr = msg.toString();
 
 var stIndex = msgStr.indexOf(stStr);
 var endIndex = msgStr.indexOf(endStr);
-
-if(stIndex &lt; 0 || endIndex &lt; 0){
-	logger.error(&apos;Not a valid trim&apos;);
-}
 
 var arg = msgStr.substring(stIndex, endIndex+endStr.length);
 
