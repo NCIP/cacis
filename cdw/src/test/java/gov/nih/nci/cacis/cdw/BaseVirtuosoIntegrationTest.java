@@ -107,7 +107,7 @@ public class BaseVirtuosoIntegrationTest extends AbstractCXFTest {
     protected String driver;
 
     protected static final String CACIS_NS = "http://cacis.nci.nih.gov/";
-    public static final String SOAP_MSG_FILENAME = "AcceptCanonical_sample_soap.xml";
+    public static final String SOAP_MSG_FILENAME = "CMP_sample_soap.xml";
 
     private static final String NOBODY = "nobody";
 

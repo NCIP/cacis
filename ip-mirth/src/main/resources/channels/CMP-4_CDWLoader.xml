@@ -1,0 +1,115 @@
+<channel>
+  <id>b911f981-f3a6-46e8-8c3f-df17c73f1785</id>
+  <name>CMP-4_CDWLoader</name>
+  <description>Arch name Clinical Data Warehouse Loader</description>
+  <enabled>true</enabled>
+  <version>2.1.1.5488</version>
+  <lastModified>
+    <time>1314807699908</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>7</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">None</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundProtocol>HL7V2</inboundProtocol>
+      <outboundProtocol>HL7V2</outboundProtocol>
+      <inboundProperties>
+        <property name="convertLFtoCR">true</property>
+        <property name="handleRepetitions">false</property>
+        <property name="handleSubcomponents">false</property>
+        <property name="stripNamespaces">true</property>
+        <property name="useStrictParser">false</property>
+        <property name="useStrictValidation">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="convertLFtoCR">true</property>
+        <property name="handleRepetitions">false</property>
+        <property name="handleSubcomponents">false</property>
+        <property name="stripNamespaces">true</property>
+        <property name="useStrictParser">false</property>
+        <property name="useStrictValidation">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5488</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>Destination 1</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">
+//load data into CDW
+
+var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-cacis-cdw.xml&quot;);
+var loader = cdwContext.getBean(&quot;loader&quot;);
+
+//call CDW loader after all the normal processing has occured
+loader.load(messageObject.getEncodedData(), loader.generateContext(), $(&apos;studyId&apos;), $(&apos;siteId&apos;), $(&apos;patientId&apos;));
+
+logger.info(&apos;Loading data into CDW&apos;);</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>HL7V2</inboundProtocol>
+        <outboundProtocol>HL7V2</outboundProtocol>
+        <inboundProperties>
+          <property name="convertLFtoCR">true</property>
+          <property name="handleRepetitions">false</property>
+          <property name="handleSubcomponents">false</property>
+          <property name="stripNamespaces">true</property>
+          <property name="useStrictParser">false</property>
+          <property name="useStrictValidation">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="convertLFtoCR">true</property>
+          <property name="handleRepetitions">false</property>
+          <property name="handleSubcomponents">false</property>
+          <property name="stripNamespaces">true</property>
+          <property name="useStrictParser">false</property>
+          <property name="useStrictValidation">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5488</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>

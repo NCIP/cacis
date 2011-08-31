@@ -1,0 +1,16 @@
+<list>
+  <alert>
+    <id>52f8ea6d-c330-4864-9702-3d2828f73bde</id>
+    <name>CDW Load Error</name>
+    <expression>ERROR</expression>
+    <template>${errorMessage} ${systemTime}</template>
+    <enabled>true</enabled>
+    <subject>Error in CDW Load</subject>
+    <channels>
+      <string>b911f981-f3a6-46e8-8c3f-df17c73f1785</string>
+    </channels>
+    <emails>
+      <string>kherm@semanticbits.com</string>
+    </emails>
+  </alert>
+</list>

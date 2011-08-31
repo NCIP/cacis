@@ -4,12 +4,12 @@
 			<p:secureEmailAddress url="http://tempuri.org" />
 		</p:recipient>
 	</p:exchangeDocument>
-	<p:exchangeDocument exchangeFormat="XMLITS">
+	<p:exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">
 		<p:recipient>
 			<p:navEmailAddress url="monish.dombla@semanticbits.com" />
 		</p:recipient>
 	</p:exchangeDocument>
-	<p:exchangeDocument exchangeFormat="XMLITS">
+	<p:exchangeDocument exchangeFormat="CCD">
 		<p:recipient>
 			<p:ftpAddress url="ftp://tempuri.org" />
 		</p:recipient>

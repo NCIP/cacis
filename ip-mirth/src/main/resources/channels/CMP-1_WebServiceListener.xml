@@ -1,0 +1,132 @@
+<channel>
+  <id>b7d85e4b-7e60-42b0-bd69-6ed96abdb7bf</id>
+  <name>CMP-1_WebServiceListener</name>
+  <description>Arch name WebServiceListenerChannel, PackageSoapResponseChannel UnpackageRequestChannel
+  All 3 Arch channels are combined into one</description>
+  <enabled>true</enabled>
+  <version>2.1.1.5488</version>
+  <lastModified>
+    <time>1314807626203</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>28</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Web Service Listener</property>
+      <property name="host">0.0.0.0</property>
+      <property name="port">18081</property>
+      <property name="receiverClassName">gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessor</property>
+      <property name="receiverPasswords">&lt;list/&gt;</property>
+      <property name="receiverResponseValue">SchemaValidation</property>
+      <property name="receiverServiceName">CanonicalModelProcessor</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Web Service Listener</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5488</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>SchemaValidation</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">12fb1591-0cd6-4c99-b452-a86b7df9d59f</property>
+        <property name="synchronised">0</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">true</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5488</version>
+    </connector>
+    <connector>
+      <name>SchematronValidation</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">fc379cb6-3ee6-46c3-ad31-063b83591f9e</property>
+        <property name="synchronised">0</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">true</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5488</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+
+logger.info(&apos;Sending message to CDW Loader Channel&apos;);
+router.routeMessage(&apos;CMP-4_CDWLoader&apos;, message, true);
+
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+
+var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-cacis-cdw.xml&quot;);
+var loader = cdwContext.getBean(&quot;loader&quot;);
+
+globalChannelMap.put(&apos;cdwloader&apos;, loader);
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>

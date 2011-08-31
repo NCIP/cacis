@@ -1,0 +1,107 @@
+<channel>
+  <id>abb4d999-2bc5-4be9-8f9f-fd443cb6cc97</id>
+  <name>CMP-3_CanonicalValidationAggregation</name>
+  <description>Arch name CanonicalValidationAggregationChannel</description>
+  <enabled>true</enabled>
+  <version>2.1.1.5488</version>
+  <lastModified>
+    <time>1314739331044</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>1</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">Destination 1</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundProtocol>HL7V2</inboundProtocol>
+      <outboundProtocol>HL7V2</outboundProtocol>
+      <inboundProperties>
+        <property name="convertLFtoCR">true</property>
+        <property name="handleRepetitions">false</property>
+        <property name="handleSubcomponents">false</property>
+        <property name="stripNamespaces">true</property>
+        <property name="useStrictParser">false</property>
+        <property name="useStrictValidation">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="convertLFtoCR">true</property>
+        <property name="handleRepetitions">false</property>
+        <property name="handleSubcomponents">false</property>
+        <property name="stripNamespaces">true</property>
+        <property name="useStrictParser">false</property>
+        <property name="useStrictValidation">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5488</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>Destination 1</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">ec2b76be-923f-4d56-bb6f-0166a76dd50b</property>
+        <property name="synchronised">0</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>HL7V2</inboundProtocol>
+        <outboundProtocol>HL7V2</outboundProtocol>
+        <inboundProperties>
+          <property name="convertLFtoCR">true</property>
+          <property name="handleRepetitions">false</property>
+          <property name="handleSubcomponents">false</property>
+          <property name="stripNamespaces">true</property>
+          <property name="useStrictParser">false</property>
+          <property name="useStrictValidation">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="convertLFtoCR">true</property>
+          <property name="handleRepetitions">false</property>
+          <property name="handleSubcomponents">false</property>
+          <property name="stripNamespaces">true</property>
+          <property name="useStrictParser">false</property>
+          <property name="useStrictValidation">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5488</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">true</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">true</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>

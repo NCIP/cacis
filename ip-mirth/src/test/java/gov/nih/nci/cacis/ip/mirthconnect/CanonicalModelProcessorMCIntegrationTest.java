@@ -60,7 +60,9 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
+import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
@@ -68,6 +70,7 @@ import gov.nih.nci.cacis.ClinicalMetadata;
 import gov.nih.nci.cacis.cdw.BaseVirtuosoIntegrationTest;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapTransportFactory;
@@ -140,4 +143,15 @@ public class CanonicalModelProcessorMCIntegrationTest extends BaseVirtuosoIntegr
 
     }
 
+
+    @Test
+    public void failSchemaValidation() throws Exception {
+
+        final URL url = getClass().getClassLoader().getResource("CMP_Invalid_schema_soap.xml");
+        String request = FileUtils.readFileToString(new File(url.toURI()));
+        final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
+                request.getBytes());
+        assertNotNull(res);
+
+    }
 }
