@@ -1,7 +1,7 @@
 <channel>
   <id>701bba16-d3ce-4749-8eb1-c1e83e5373e8</id>
   <name>TransSplitChannel</name>
-  <description>This is a TransSplitChannel. Takes input from ConfigChannel andsends the content to one of 3 channels depending on routing instructions.</description>
+  <description>This is a TransSplitChannel. Takes input from RoutingInstructionValidationChannel and sends the content to one of 3 channels depending on routing instructions.</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>

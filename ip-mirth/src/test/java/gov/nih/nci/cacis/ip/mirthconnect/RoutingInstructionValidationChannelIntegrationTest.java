@@ -81,7 +81,7 @@ import org.w3c.dom.Node;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
+public class RoutingInstructionValidationChannelIntegrationTest extends AbstractRoutingTest {
 
 
 
@@ -91,7 +91,7 @@ public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
      * @throws Exception fdsdf
      */
     @Test
-    public void testConfigChannelWithRouting() throws Exception { // NOPMD
+    public void testRoutingInstructionValidationChannelWithRouting() throws Exception { // NOPMD
 
         final File ipDir = new File(inputDir);
         if (!ipDir.exists() && !ipDir.mkdirs()) {
@@ -124,7 +124,7 @@ public class ConfigChannelIntegrationTest extends AbstractRoutingTest {
      * @throws Exception excpetion
      */
     @Test
-    public void testConfigChannelWithoutRouting() throws Exception { // NOPMD
+    public void testRoutingInstructionValidationChannelWithoutRouting() throws Exception { // NOPMD
 
         final File ipDir = new File(inputDir);
         if (!ipDir.exists() && !ipDir.mkdirs()) {

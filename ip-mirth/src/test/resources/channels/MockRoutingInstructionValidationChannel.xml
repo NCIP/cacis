@@ -1,15 +1,15 @@
 <channel>
   <id>daf22f71-ea96-402f-87da-78f24fbb7be0</id>
-  <name>MockedConfigChannelSource</name>
-  <description>This channel is used to input message to ConfigChannel for testing purpose. &#xd;
+  <name>MockRoutingInstructionValidationChannel</name>
+  <description>This channel is used to input message to RoutingInstructionValidationChannel for testing purpose. &#xd;
 This channel will pool for folder for input.</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1313087189365</time>
+    <time>1314735813404</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>14</revision>
+  <revision>4</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -59,11 +59,11 @@ This channel will pool for folder for input.</description>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>TestConfigChannelDestination</name>
+      <name>RoutingInstructionValidationChannel</name>
       <properties>
         <property name="DataType">Channel Writer</property>
-        <property name="host">5e5873ae-5315-486f-acb2-3d2b0702a4dc</property>
-        <property name="synchronised">1</property>
+        <property name="host">e91b5581-5aa1-48b5-90e4-8b8214a85d95</property>
+        <property name="synchronised">0</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>

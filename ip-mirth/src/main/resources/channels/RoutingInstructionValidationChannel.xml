@@ -1,15 +1,15 @@
 <channel>
-  <id>5e5873ae-5315-486f-acb2-3d2b0702a4dc</id>
-  <name>ConfigChannel</name>
+  <id>e91b5581-5aa1-48b5-90e4-8b8214a85d95</id>
+  <name>RoutingInstructionValidationChannel</name>
   <description>This channel checks to see if the routing instructions are provided in the incoming message. &#xd;
 If routing instructions are not part of the message, then default routing instructions are added before the message is passed onto Trans Split Channel.</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1313086773355</time>
+    <time>1314735638903</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>102</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
