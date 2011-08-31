@@ -147,7 +147,7 @@ public class CanonicalModelProcessorMCIntegrationTest extends BaseVirtuosoIntegr
     @Test
     public void failSchemaValidation() throws Exception {
 
-        final URL url = getClass().getClassLoader().getResource("CMP_Invalid_schema_soap.xml");
+        final URL url = getClass().getClassLoader().getResource("CMP_invalid_schema_soap.xml");
         String request = FileUtils.readFileToString(new File(url.toURI()));
         final Node res = invoke(ADDRESS, SoapTransportFactory.TRANSPORT_ID,
                 request.getBytes());
