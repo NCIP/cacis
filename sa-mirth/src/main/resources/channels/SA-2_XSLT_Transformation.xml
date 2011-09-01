@@ -44,7 +44,7 @@ Arch Name XSLT TransformationComponent</description>
         <property name="binary">0</property>
         <property name="charsetEncoding">DEFAULT_ENCODING</property>
         <property name="directory"></property>
-        <property name="host">/Users/kherm/dev/utils/Mirth_Connect/temp/mc/output/xccd/</property>
+        <property name="host">${xccdOutputDir}</property>
         <property name="outputAppend">1</property>
         <property name="outputPattern">Trim2CCDOutput.xml</property>
         <property name="passive">1</property>
