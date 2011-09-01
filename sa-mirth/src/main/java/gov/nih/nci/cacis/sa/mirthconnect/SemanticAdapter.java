@@ -135,14 +135,21 @@ public class SemanticAdapter extends AcceptMessage {
         }
 
         try {
-            webServiceMessageReceiver.processData(sw.toString());
+            final String mcResponse = webServiceMessageReceiver.processData(sw.toString());
 
+            LOG.info("MC RESPONSE:" + mcResponse);
+
+            if (mcResponse != null &&
+                    mcResponse.indexOf("Error") > -1) {
+                throw new AcceptSourceFault("Error processing Data from Source System: "
+                        + mcResponse);
+            }
             response.setStatus(ResponseStatusType.SUCCESS);
             return response;
             //CHECKSTYLE:OFF
         } catch (Exception ex) {
             //CHECKSTYLE:ON
-            LOG.warn(ex);
+            LOG.error(ex);
             throw new AcceptSourceFault("Error accepting Data from Source System", ex);
         }
     }

@@ -1,19 +1,26 @@
 <channel>
-  <id>f9460cc7-cf5e-413f-be05-23ba953d9f26</id>
-  <name>IdentifierAndVocabResolverChannel</name>
-  <description></description>
+  <id>87943a6f-6888-4973-a7e2-3fe941848201</id>
+  <name>SA-1_SourceSystemInterfacing</name>
+  <description>This Channel takes input from SemanticAdapter WS.  Routes the recevied message to Trim-2-CCD-xslt Channel.
+Arch name is SourceSystemInterfacingChannel</description>
   <enabled>true</enabled>
-  <version>2.1.1.5490</version>
+  <version>2.1.1.5488</version>
   <lastModified>
-    <time>1314802336963</time>
+    <time>1314912438251</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="DataType">Channel Reader</property>
-      <property name="responseValue">AcceptCanonical</property>
+      <property name="DataType">Web Service Listener</property>
+      <property name="host">0.0.0.0</property>
+      <property name="port">18091</property>
+      <property name="receiverClassName">gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapter</property>
+      <property name="receiverPasswords">&lt;list/&gt;</property>
+      <property name="receiverResponseValue">XSLT_Transform</property>
+      <property name="receiverServiceName">SemanticAdapter</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
     <transformer>
       <steps/>
@@ -29,17 +36,17 @@
     <filter>
       <rules/>
     </filter>
-    <transportName>Channel Reader</transportName>
+    <transportName>Web Service Listener</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5490</version>
+    <version>2.1.1.5488</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>AcceptCanonical</name>
+      <name>XSLT_Transform</name>
       <properties>
         <property name="DataType">Channel Writer</property>
-        <property name="host">b7d85e4b-7e60-42b0-bd69-6ed96abdb7bf</property>
+        <property name="host">ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</property>
         <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
@@ -60,7 +67,7 @@
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5490</version>
+      <version>2.1.1.5488</version>
     </connector>
   </destinationConnectors>
   <properties>

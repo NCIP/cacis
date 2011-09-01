@@ -1,13 +1,10 @@
 channel stop *
 channel undeploy *
+channel remove *
 
-channel remove Trim-2-CCD-xslt
-channel remove SemanticAdapterChannel
-channel remove IdentifierAndVocabResolverChannel
-
-import "${build.outputDirectory}/channels/Trim-2-CCD-xslt.xml" force
-import "${build.outputDirectory}/channels/SemanticAdapterChannel.xml" force
-import "${build.outputDirectory}/channels/IdentifierAndVocabResolverChannel.xml" force
+import "${build.outputDirectory}/channels/SA-1_SourceSystemInterfacing.xml" force
+import "${build.outputDirectory}/channels/SA-2_XSLT_Transformation.xml" force
+import "${build.outputDirectory}/channels/SA-3_IdentifierAndVocabResolver.xml" force
 
 deploy
 channel start *

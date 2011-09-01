@@ -60,7 +60,10 @@
  */
 package gov.nih.nci.cacis.sa.mirthconnect;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import gov.nih.nci.cacis.AcceptSourceFault;
 import gov.nih.nci.cacis.AcceptSourcePortType;
 import gov.nih.nci.cacis.CaCISRequest;
 
@@ -69,8 +72,13 @@ import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 
+import gov.nih.nci.cacis.CaCISResponse;
+import gov.nih.nci.cacis.ResponseStatusType;
 import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,10 +86,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * 
  * @author monish.dombla@semanticbits.com
  * @since Aug 11, 2011
- * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-sa-mirth-test.xml")
@@ -89,15 +95,22 @@ public class SemanticAdapterChannelIntegrationTest {
 
     @Value("${xccd.output.dir}")
     private String outputDir;
-    
+
     private static final String ADDRESS = "http://localhost:18091/services/SemanticAdapter?wsdl";
-    
+    private File outputFile;
+
+
+    @Before
+    public void setup() {
+         outputFile = new File(outputDir + "Trim2CCDOutput.xml");
+    }
+
     /**
-     * This test calls out acceptSource(..) operation on SematicAdapter WS. 
+     * This test calls out acceptSource(..) operation on SematicAdapter WS.
      * The SemanticAdapter WS is the source connector to SemanticAdapterChannel in Mirth.
      * SemanticAdapterChannel in mirth routes the incoming message to a Mock Trim-2-CCD-xslt channel.
-     * The Mock channel writes a file to the ${xccd.output.dir} folder.This test asserts that the file exits. 
-     *    
+     * The Mock channel writes a file to the ${xccd.output.dir} folder.This test asserts that the file exits.
+     *
      * @throws Exception exception
      */
     @Test
@@ -112,11 +125,41 @@ public class SemanticAdapterChannelIntegrationTest {
 
         final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
         final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(sampleMessageIS);
-        
-        client.acceptSource(request);
-        final File outputFile = new File(outputDir + "Trim2CCDOutput.xml");
+
+        final CaCISResponse response = client.acceptSource(request);
+        assertTrue(response.getStatus() == ResponseStatusType.SUCCESS);
+
         assertTrue(outputFile.exists());
-        
+    }
+
+    /**
+     * This test calls out acceptSource(..) operation on SematicAdapter WS.
+     * and expects the service to return an Exception
+     *
+     * @throws Exception exception
+     */
+    @Test(expected = AcceptSourceFault.class)
+    public void failure() throws Exception { //NOPMD
+        final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory.setServiceClass(AcceptSourcePortType.class);
+        factory.setAddress(ADDRESS);
+        final AcceptSourcePortType client = (AcceptSourcePortType) factory.create();
+
+        final InputStream sampleMessageIS = FileUtils.openInputStream(new File(getClass().getClassLoader()
+                .getResource("SARequestSample.xml").toURI()));
+
+        final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
+        final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(sampleMessageIS);
+
+//        this should fail the MC channel
+        outputFile.createNewFile();
+        outputFile.setReadOnly();
+
+        client.acceptSource(request);
+    }
+
+    @After
+    public void cleanup() {
         FileUtils.deleteQuietly(outputFile);
     }
 }

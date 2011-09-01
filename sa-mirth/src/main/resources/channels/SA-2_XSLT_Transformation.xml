@@ -1,25 +1,20 @@
 <channel>
-  <id>87943a6f-6888-4973-a7e2-3fe941848201</id>
-  <name>SemanticAdapterChannel</name>
-  <description>This Channel takes input from SemanticAdapter WS.  Routes the recevied message to Trim-2-CCD-xslt Channel.</description>
+  <id>ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</id>
+  <name>SA-2_XSLT_Transformation</name>
+  <description>This is a Mock implementation of the XSLT TransformationComponent channel. This will write the content as is to a file. Used for testing purpose.
+Arch Name XSLT TransformationComponent</description>
   <enabled>true</enabled>
-  <version>2.1.1.5490</version>
+  <version>2.1.1.5488</version>
   <lastModified>
-    <time>1313090017703</time>
+    <time>1314912538338</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="DataType">Web Service Listener</property>
-      <property name="host">0.0.0.0</property>
-      <property name="port">18091</property>
-      <property name="receiverClassName">gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapter</property>
-      <property name="receiverPasswords">&lt;list/&gt;</property>
-      <property name="receiverResponseValue">None</property>
-      <property name="receiverServiceName">SemanticAdapter</property>
-      <property name="receiverUsernames">&lt;list/&gt;</property>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">Destination 1</property>
     </properties>
     <transformer>
       <steps/>
@@ -35,19 +30,31 @@
     <filter>
       <rules/>
     </filter>
-    <transportName>Web Service Listener</transportName>
+    <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5490</version>
+    <version>2.1.1.5488</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Trim-2-CCD</name>
+      <name>Flle_Output</name>
       <properties>
-        <property name="DataType">Channel Writer</property>
-        <property name="host">ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</property>
-        <property name="synchronised">0</property>
+        <property name="DataType">File Writer</property>
+        <property name="FTPAnonymous">1</property>
+        <property name="binary">0</property>
+        <property name="charsetEncoding">DEFAULT_ENCODING</property>
+        <property name="directory"></property>
+        <property name="host">/Users/kherm/dev/utils/Mirth_Connect/temp/mc/output/xccd/</property>
+        <property name="outputAppend">1</property>
+        <property name="outputPattern">Trim2CCDOutput.xml</property>
+        <property name="passive">1</property>
+        <property name="password">anonymous</property>
+        <property name="scheme">file</property>
+        <property name="secure">1</property>
         <property name="template">${message.encodedData}</property>
+        <property name="timeout">10000</property>
+        <property name="username">anonymous</property>
+        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
@@ -63,10 +70,37 @@
       <filter>
         <rules/>
       </filter>
+      <transportName>File Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5488</version>
+    </connector>
+    <connector>
+      <name>IdentifierResolver</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">f9460cc7-cf5e-413f-be05-23ba953d9f26</property>
+        <property name="synchronised">1</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">true</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5490</version>
+      <version>2.1.1.5488</version>
     </connector>
   </destinationConnectors>
   <properties>

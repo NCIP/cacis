@@ -1,19 +1,19 @@
 <channel>
-  <id>ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</id>
-  <name>Trim-2-CCD-xslt</name>
-  <description>This is a Mock implementation of the Trim-2-CCD-xslt channel. This will write the content as is to a file. Used for testing purpose. </description>
+  <id>f9460cc7-cf5e-413f-be05-23ba953d9f26</id>
+  <name>SA-3_IdentifierAndVocabResolver</name>
+  <description>Arch name IdentifierAndVocabResolverChannel</description>
   <enabled>true</enabled>
-  <version>2.1.1.5490</version>
+  <version>2.1.1.5488</version>
   <lastModified>
-    <time>1313090101969</time>
+    <time>1314906803632</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">AcceptCanonical</property>
     </properties>
     <transformer>
       <steps/>
@@ -32,27 +32,16 @@
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5490</version>
+    <version>2.1.1.5488</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Destination 1</name>
+      <name>AcceptCanonical</name>
       <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">${xccdOutputDir}</property>
-        <property name="outputAppend">1</property>
-        <property name="outputPattern">Trim2CCDOutput.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">b7d85e4b-7e60-42b0-bd69-6ed96abdb7bf</property>
+        <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
@@ -68,10 +57,10 @@
       <filter>
         <rules/>
       </filter>
-      <transportName>File Writer</transportName>
+      <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5490</version>
+      <version>2.1.1.5488</version>
     </connector>
   </destinationConnectors>
   <properties>
