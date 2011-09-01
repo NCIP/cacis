@@ -1,6 +1,6 @@
 <channel>
   <id>daf22f71-ea96-402f-87da-78f24fbb7be0</id>
-  <name>MockRoutingInstructionValidationChannel</name>
+  <name>MockRoutingInstructionSource</name>
   <description>This channel is used to input message to RoutingInstructionValidationChannel for testing purpose. &#xd;
 This channel will pool for folder for input.</description>
   <enabled>true</enabled>

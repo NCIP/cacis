@@ -74,18 +74,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Node;
 
 /**
- * Integration test for Trans Split Channel
+ * Integration test for Document Router from RoutingInstructionValidationChannel to Document Router
  * @author bpickeral
  * @since Aug 15, 2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class TransSplitChannelIntegrationTest extends AbstractRoutingTest {
+public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
     /**
      * Tests Trans Split channel sends to HL7 V2 channel.
      *
-     * @throws Exception fdsdf
+     * @throws Exception on error
      */
     @Test
     public void testTransSplitChannelHL7V2() throws Exception { // NOPMD
@@ -119,7 +119,7 @@ public class TransSplitChannelIntegrationTest extends AbstractRoutingTest {
     /**
      * Tests Trans Split channel sends to CCD channel.
      *
-     * @throws Exception fdsdf
+     * @throws Exception on error
      */
     @Test
     public void testTransSplitChannelCCD() throws Exception { // NOPMD
@@ -135,20 +135,18 @@ public class TransSplitChannelIntegrationTest extends AbstractRoutingTest {
 
         Thread.sleep(SLEEP_TIME);
 
-        final File outputFile = new File(inputDir + "CCD_Output.xml");
+        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
         assertTrue(outputFile.exists());
+
+
+        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
 
         final Node root = getRoutingInstructions(outputFile);
         assertNotNull(root);
-        testUtilities.assertValid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
-                root);
+        testUtilities.assertXPathEquals(
+                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
+                + "rdf:Description/p:exchangeFormat", "CCD", root);
 
         FileUtils.deleteQuietly(outputFile);
     }
@@ -156,7 +154,7 @@ public class TransSplitChannelIntegrationTest extends AbstractRoutingTest {
     /**
      * Tests Trans Split channel sends to XMLITS channel (HL7 V3).
      *
-     * @throws Exception fdsdf
+     * @throws Exception on error
      */
     @Test
     public void testTransSplitChannelHL7V3() throws Exception { // NOPMD
