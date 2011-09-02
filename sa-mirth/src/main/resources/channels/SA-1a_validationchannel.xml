@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314987479838</time>
+    <time>1314994459246</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>55</revision>
+  <revision>10</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -61,35 +61,19 @@ if (crXsdValidationMsg != null) {
           <name>validateClinicalMetadata</name>
           <script>var cmd = msg[&apos;clinicalMetaData&apos;];
 
-if(cmd==null){
+if(cmd.length()==0){
 	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;ClinicalMetadata is not available!&apos;));
 	return;
 }
 
-var siteIdRoot = cmd[&apos;@siteIdRoot&apos;].toString();
-
-if(siteIdRoot==null){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Root is not available!&apos;));
-	return;
-}
-
-var siteIdExt = cmd[&apos;@siteIdExtension&apos;].toString();
-
-if(siteIdExt==null){
+var siteIdExt = cmd[&apos;@siteIdExtension&apos;];
+if(siteIdExt.toString().trim()==&apos;&apos;){
 	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Extension is not available!&apos;));
 	return;
 }
 
-var patIdRoot= cmd[&apos;@patientIdRoot&apos;].toString();
-
-if(patIdRoot==null){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Root is not available!&apos;));
-	return;
-}
-
-var patIDExt= cmd[&apos;@patientIdExtension&apos;].toString();
-
-if(patIDExt==null){
+var patIDExt= cmd[&apos;@patientIdExtension&apos;];
+if(patIDExt.toString().trim()==&apos;&apos;){
 	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Extension is not available!&apos;));
 	return;
 }</script>
@@ -99,35 +83,19 @@ if(patIDExt==null){
               <string>Script</string>
               <string>var cmd = msg[&apos;clinicalMetaData&apos;];
 
-if(cmd==null){
+if(cmd.length()==0){
 	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;ClinicalMetadata is not available!&apos;));
 	return;
 }
 
-var siteIdRoot = cmd[&apos;@siteIdRoot&apos;].toString();
-
-if(siteIdRoot==null){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Root is not available!&apos;));
-	return;
-}
-
-var siteIdExt = cmd[&apos;@siteIdExtension&apos;].toString();
-
-if(siteIdExt==null){
+var siteIdExt = cmd[&apos;@siteIdExtension&apos;];
+if(siteIdExt.toString().trim()==&apos;&apos;){
 	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Extension is not available!&apos;));
 	return;
 }
 
-var patIdRoot= cmd[&apos;@patientIdRoot&apos;].toString();
-
-if(patIdRoot==null){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Root is not available!&apos;));
-	return;
-}
-
-var patIDExt= cmd[&apos;@patientIdExtension&apos;].toString();
-
-if(patIDExt==null){
+var patIDExt= cmd[&apos;@patientIdExtension&apos;];
+if(patIDExt.toString().trim()==&apos;&apos;){
 	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Extension is not available!&apos;));
 	return;
 }</string>
