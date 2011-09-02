@@ -79,6 +79,7 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -138,6 +139,8 @@ public class SemanticAdapterChannelIntegrationTest {
      *
      * @throws Exception exception
      */
+    //ToDo Remove ignore after CDO-1257
+    @Ignore
     @Test(expected = AcceptSourceFault.class)
     public void failure() throws Exception { //NOPMD
         final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
