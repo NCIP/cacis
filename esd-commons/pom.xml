@@ -16,6 +16,13 @@
     <properties>
         <test.unit.branchrate>45</test.unit.branchrate>
         <test.unit.linerate>45</test.unit.linerate>
+        
+        <cacis.validation.cacisrequest.sa.schema.file>caCISSADataSharing.xsd</cacis.validation.cacisrequest.sa.schema.file>
+        <cacis.validation.cacisrequest.sa.sourcedata.schema.file>trim4.xsd</cacis.validation.cacisrequest.sa.sourcedata.schema.file>
+		<cacis.validation.schematron.extract.failures.xsl>extract-failures.xsl</cacis.validation.schematron.extract.failures.xsl>
+		<cacis.validation.cacisrequest.sa.sourcedata.schematron.xsl>cacis-request-sa-sourcedata-schematron.xsl</cacis.validation.cacisrequest.sa.sourcedata.schematron.xsl>
+		<cacis.validation.cacisrequest.schematron.xsl.baseClassPath>/xsl/</cacis.validation.cacisrequest.schematron.xsl.baseClassPath>
+		
     </properties>
     <dependencies>
         <dependency>
@@ -116,5 +123,25 @@
 
     </dependencies>
 
-
+	 <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                	<exclude>**/cacis-lib/*</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+    </build>
 </project>

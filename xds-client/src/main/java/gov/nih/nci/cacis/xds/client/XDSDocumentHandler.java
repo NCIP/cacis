@@ -110,10 +110,10 @@ public class XDSDocumentHandler implements DocumentHandler<XDSHandlerInfo, XDSDo
             // Setting axis2.xml to avoid SOAP HEADER NOT FOUND exception from openxds
             System.setProperty("axis2.xml", setupInfo.getAxis2XmlLocation());
             //set properties for SSL support
-            System.setProperty("javax.net.ssl.keyStore", setupInfo.getXdsKeystorePath());
+            /*System.setProperty("javax.net.ssl.keyStore", setupInfo.getXdsKeystorePath());
             System.setProperty("javax.net.ssl.keyStorePassword", setupInfo.getXdsKestorePassword());
             System.setProperty("javax.net.ssl.trustStore", setupInfo.getXdsTruststorePath());
-            System.setProperty("javax.net.ssl.trustStorePassword", setupInfo.getXdsTruststorePassword());
+            System.setProperty("javax.net.ssl.trustStorePassword", setupInfo.getXdsTruststorePassword());*/
             
             final URI repoURI = URI.create(setupInfo.getRepositoryURL());
             // XDS Document Source setup

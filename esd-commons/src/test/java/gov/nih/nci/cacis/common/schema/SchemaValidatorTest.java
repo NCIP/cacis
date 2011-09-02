@@ -58,136 +58,60 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.xds.client;
+package gov.nih.nci.cacis.common.schema;
 
-import gov.nih.nci.cacis.common.doc.DocumentHandler;
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
-import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
-import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.File;
+import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
-/** 
- * Config Impl for XDS client 
+/**
+ * Schema based validation for xml
  * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
  *
  */
-@Configuration
-public class TestXDSConfigImpl implements XDSConfig  {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath*:applicationContext-esd-commons-test.xml")
+public class SchemaValidatorTest {
+    
+    @Autowired
+    @Qualifier("cacisRequestSASchemaValidator")
+    private SchemaValidator validator;
     
     /**
-     * wrapper for xds doc handler
-     * @return DocumentHandler instance
+     * checks xsd validation with valid xml
+     * @throws IOException - exception thrown if any
      */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocumentHandler wrapperDocumentHandler() {
-        return documentHandler();
+    @Test
+    public void validateValidXML() throws IOException {
+        final String validXmlFile = 
+            getClass().getClassLoader().getResource("validXmlForSampleXSD.xml").getFile();
+        
+        final String xmlString = FileUtils.readFileToString(new File(validXmlFile));
+        Assert.assertNotNull(xmlString);
+        validator.validate(xmlString);
     }
     
     /**
-     * {@inheritDoc}
+     * checks xsd validation with invalid xml
+     * @throws IOException - exception thrown if any
      */
-    @Override
-    @Bean
-    //@Scope(value = BeanDefinition.SCOPE_PROTOTYPE)    
-    public DocumentHandler documentHandler() {
-        final DocumentHandler<HashMap<String, String>, HashMap<String, String>> docH = 
-            new DocumentHandler<HashMap<String, String>, HashMap<String, String>>() {
-                
-                private final Map<String, String> contHash = 
-                    Collections.synchronizedMap(new HashMap<String, String>());
-                
-                @Override
-                public String handleDocument(HashMap<String, String> documentMetadata) throws ApplicationRuntimeException {
-                    final String docId = UUID.randomUUID().toString();
-                    contHash.put(docId, documentMetadata.get("content"));
-                    return docId;
-                }
+    @Test(expected = ApplicationRuntimeException.class)
+    public void validateInValidXML() throws IOException {
+        final String validXmlFile = 
+            getClass().getClassLoader().getResource("invalidXmlForSampleXSD.xml").getFile();
+        final String xmlString = FileUtils.readFileToString(new File(validXmlFile));
+        Assert.assertNotNull(xmlString);
+        validator.validate(xmlString);
+    }
 
-                @Override
-                public void initialize(HashMap<String, String> setupInfo) throws ApplicationRuntimeException {
-                    // dummyImpl do not do anything                    
-                }
-
-                @Override
-                public InputStream retrieveDocument(String docUniqueID) throws ApplicationRuntimeException {
-                    final String cont = contHash.get(docUniqueID);
-                    if (StringUtils.isEmpty(cont)) {
-                        return null;
-                    } else {
-                        return new ByteArrayInputStream(cont.getBytes());
-                    }
-                    
-                }
-            };
-        return docH;
-    }
-    
-    /**
-     * Dummy XdsWriteAuthzManager until ESD-3073 lands, after that, has to be removed
-     * @return XdsWriteAuthzManager
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public XdsWriteAuthzManager dummyXdsWriteAuthzManager() {
-        return new XdsWriteAuthzManager() {
-            
-            @Override
-            public void revokeStoreWrite(String arg0) throws AuthzProvisioningException {
-                //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public void grantStoreWrite(String arg0) throws AuthzProvisioningException {
-                //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public boolean checkStoreWrite(String arg0) throws AuthzProvisioningException {
-                //always give access - this is dummy impl
-                return true;
-            }
-        };
-    }
-    
-    /**
-     * Dummy DocumentAccessManager until ESD-3073 lands, after that, has to be removed
-     * @return DocumentAccessManager
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocumentAccessManager dummyDocumentAccessManager() {
-        return new DocumentAccessManager() {
-            
-            @Override
-            public void revokeDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-              //do nothing - this is dummy impl                
-            }
-            
-            @Override
-            public void grantDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-              //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public boolean checkDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-                // always give access - this is dummy impl
-                return true;
-            }
-        };
-    }
 }

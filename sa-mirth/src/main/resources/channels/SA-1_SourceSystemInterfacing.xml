@@ -4,12 +4,12 @@
   <description>This Channel takes input from SemanticAdapter WS.  Routes the recevied message to Trim-2-CCD-xslt Channel.
 Arch name is SourceSystemInterfacingChannel</description>
   <enabled>true</enabled>
-  <version>2.1.1.5488</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314912438251</time>
+    <time>1314987505697</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -39,14 +39,14 @@ Arch name is SourceSystemInterfacingChannel</description>
     <transportName>Web Service Listener</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5488</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>XSLT_Transform</name>
+      <name>validation</name>
       <properties>
         <property name="DataType">Channel Writer</property>
-        <property name="host">ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</property>
+        <property name="host">b72f1a06-1ecc-4836-bb01-616235a27d94</property>
         <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
@@ -67,7 +67,7 @@ Arch name is SourceSystemInterfacingChannel</description>
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>

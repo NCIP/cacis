@@ -86,16 +86,34 @@
  */
 package gov.nih.nci.cacis.common;
 
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-/** 
- * @author ramakrishnanr
- * @since Mar 9, 2011 
+/**
+ * cacis-commons test config
  * 
+ * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
+ *
  */
 @Configuration
 public class CommonsTestConfig {
 
+    /**
+     * Loads properties from "classpath*:/c.properties" location
+     *
+     * @return the property place holder configures
+     */
+    @Bean
+    public PropertyPlaceholderConfigurer commonsPropertyPlaceholderConfigurer() {
+        final PropertyPlaceholderConfigurer configurer =
+                new CommonsPropertyPlaceholderConfigurer("cacis-commons", "cacis-commons-test.properties");
+        configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
+    }
 }
 

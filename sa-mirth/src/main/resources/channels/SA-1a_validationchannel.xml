@@ -1,0 +1,331 @@
+<channel>
+  <id>b72f1a06-1ecc-4836-bb01-616235a27d94</id>
+  <name>SA-1a_validationchannel</name>
+  <description>This channel is the validation channel for Semantic Adapater.&#xd;
+&#xd;
+It performs the following validations with the CaCISRequest message from the Semantic Adapter service,&#xd;
+&#xd;
+1) performs xsd validation of the CaCISRequest&#xd;
+2) performs the siteid and patientid validation of the ClinicalMetadata&#xd;
+3) performs xsd validation of the SourceData element of the CaCISRequest&#xd;
+4) performs schematron validation of the SourceData element of the CaCISRequest </description>
+  <enabled>true</enabled>
+  <version>2.1.1.5490</version>
+  <lastModified>
+    <time>1314987479838</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>55</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">validationMsg</property>
+    </properties>
+    <transformer>
+      <steps>
+        <step>
+          <sequenceNumber>0</sequenceNumber>
+          <name>xsdValidate_CaCISRequest</name>
+          <script>var valMsgKey = &apos;validationMsg&apos;;
+
+//put the placeholder msg, key has to be string, cannot use variable
+responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
+
+//perform schema validation for CaCISRequest
+var crXsdValidationMsg = xsdValidateSACaCISRequest(message);
+if (crXsdValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;CaCISRequest Schema Validation:&apos; + crXsdValidationMsg));
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>var valMsgKey = &apos;validationMsg&apos;;
+
+//put the placeholder msg, key has to be string, cannot use variable
+responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
+
+//perform schema validation for CaCISRequest
+var crXsdValidationMsg = xsdValidateSACaCISRequest(message);
+if (crXsdValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;CaCISRequest Schema Validation:&apos; + crXsdValidationMsg));
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+        <step>
+          <sequenceNumber>1</sequenceNumber>
+          <name>validateClinicalMetadata</name>
+          <script>var cmd = msg[&apos;clinicalMetaData&apos;];
+
+if(cmd==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;ClinicalMetadata is not available!&apos;));
+	return;
+}
+
+var siteIdRoot = cmd[&apos;@siteIdRoot&apos;].toString();
+
+if(siteIdRoot==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Root is not available!&apos;));
+	return;
+}
+
+var siteIdExt = cmd[&apos;@siteIdExtension&apos;].toString();
+
+if(siteIdExt==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Extension is not available!&apos;));
+	return;
+}
+
+var patIdRoot= cmd[&apos;@patientIdRoot&apos;].toString();
+
+if(patIdRoot==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Root is not available!&apos;));
+	return;
+}
+
+var patIDExt= cmd[&apos;@patientIdExtension&apos;].toString();
+
+if(patIDExt==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Extension is not available!&apos;));
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>var cmd = msg[&apos;clinicalMetaData&apos;];
+
+if(cmd==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;ClinicalMetadata is not available!&apos;));
+	return;
+}
+
+var siteIdRoot = cmd[&apos;@siteIdRoot&apos;].toString();
+
+if(siteIdRoot==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Root is not available!&apos;));
+	return;
+}
+
+var siteIdExt = cmd[&apos;@siteIdExtension&apos;].toString();
+
+if(siteIdExt==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Extension is not available!&apos;));
+	return;
+}
+
+var patIdRoot= cmd[&apos;@patientIdRoot&apos;].toString();
+
+if(patIdRoot==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Root is not available!&apos;));
+	return;
+}
+
+var patIDExt= cmd[&apos;@patientIdExtension&apos;].toString();
+
+if(patIDExt==null){
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Extension is not available!&apos;));
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+        <step>
+          <sequenceNumber>2</sequenceNumber>
+          <name>getSourceData</name>
+          <script>var srcDataEle = msg[&apos;sourceData&apos;];
+default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+
+var srcData = srcDataEle[&apos;trim&apos;];
+
+if (srcData==null) {
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData is empty!&apos;));
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>var srcDataEle = msg[&apos;sourceData&apos;];
+default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+
+var srcData = srcDataEle[&apos;trim&apos;];
+
+if (srcData==null) {
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData is empty!&apos;));
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+        <step>
+          <sequenceNumber>3</sequenceNumber>
+          <name>xsdValidate_SourceData</name>
+          <script>//perform schema validation for SourceData
+var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
+if (sdXsdValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg));
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>//perform schema validation for SourceData
+var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
+if (sdXsdValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg));
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+        <step>
+          <sequenceNumber>4</sequenceNumber>
+          <name>schematronValidate_SourceData</name>
+          <script>//perform schematron validation for SourceData
+var sdSchValidationMsg = schematronValidateSASourceData(srcData.toString());
+if (sdSchValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg));
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>//perform schematron validation for SourceData
+var sdSchValidationMsg = schematronValidateSASourceData(srcData.toString());
+if (sdSchValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg));
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+      </steps>
+      <inboundTemplate encoding="base64">PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGNhQ0lTUmVxdWVzdCB4bWxu
+cz0iaHR0cDovL2NhY2lzLm5jaS5uaWguZ292IgogICAgeG1sbnM6eHNpPSJodHRwOi8vd3d3Lncz
+Lm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIKICAgIHhtbG5zOmNkYT0idXJuOmhsNy1vcmc6
+djMiCiAgICA+CiAgICA8cm91dGluZ0luc3RydWN0aW9ucz4KCQk8ZXhjaGFuZ2VEb2N1bWVudCBl
+eGNoYW5nZUZvcm1hdD0iSEw3X1YyX0NMSU5JQ0FMX05PVEUiPgoJCQk8cmVjaXBpZW50PgoJCQkJ
+PHNlY3VyZUVtYWlsQWRkcmVzcyB1cmw9Im1haWx0bzp4QHgueCIvPgoJCQk8L3JlY2lwaWVudD4K
+CQk8L2V4Y2hhbmdlRG9jdW1lbnQ+CgkJPGV4Y2hhbmdlRG9jdW1lbnQgZXhjaGFuZ2VGb3JtYXQ9
+IkhMN19WMl9DTElOSUNBTF9OT1RFIj4KCQkJPHJlY2lwaWVudD4KCQkJCTxzZWN1cmVFbWFpbEFk
+ZHJlc3MgdXJsPSJtYWlsdG86eUB5LnkiLz4KCQkJPC9yZWNpcGllbnQ+CgkJPC9leGNoYW5nZURv
+Y3VtZW50PgoJPC9yb3V0aW5nSW5zdHJ1Y3Rpb25zPgoJPHNvdXJjZURhdGE+CgkJPHRyaW0geG1s
+bnM9InVybjp0b2x2ZW4tb3JnOnRyaW06NC4wIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3Jn
+LzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIj4KCQk8L3RyaW0+Cgk8L3NvdXJjZURhdGE+Cgk8Y2xp
+bmljYWxNZXRhRGF0YSBkb2N1bWVudFR5cGU9IkNMSU5JQ0FMX05PVEUiIHNpdGVJZFJvb3Q9IjIu
+My40LjAiIHBhdGllbnRJZFJvb3Q9IjIuMy40LjEiIHNpdGVJZEV4dGVuc2lvbj0ic2l0ZV9pZCIg
+cGF0aWVudElkRXh0ZW5zaW9uPSJwYXRpZW50X2lkIiBzdHVkeUlkUm9vdD0iMi4zLjQuMiIgc3R1
+ZHlJZEV4dGVuc2lvbj0ic3R1ZHlfaWQiLz4JCjwvY2FDSVNSZXF1ZXN0PgoKCg==</inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5490</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>transformation</name>
+      <properties>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</property>
+        <property name="synchronised">1</property>
+        <property name="template">${message.encodedData}</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules>
+          <rule>
+            <sequenceNumber>0</sequenceNumber>
+            <name>filterIfThereIsValidationFailure</name>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>var res = responseMap.get(&apos;validationMsg&apos;);
+
+if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
+	responseMap.put(&apos;validationMsg&apos;, res);
+	return false;
+} else {
+	return true;	
+}</string>
+              </entry>
+            </data>
+            <type>JavaScript</type>
+            <script>var res = responseMap.get(&apos;validationMsg&apos;);
+
+if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
+	responseMap.put(&apos;validationMsg&apos;, res);
+	return false;
+} else {
+	return true;	
+}</script>
+            <operator>NONE</operator>
+          </rule>
+        </rules>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+
+var res = responseMap.get(&apos;validationMsg&apos;);
+var trnsfrmRes = responseMap.get(&apos;transformation&apos;);
+
+//TODO: it seems this response is not set, fix it
+if ( res.toString().indexOf(&apos;SUCCESS&apos;) != -1 ) {
+	responseMap.put(&apos;validationMsg&apos;, trnsfrmRes);	
+} 
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>

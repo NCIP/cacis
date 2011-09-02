@@ -58,136 +58,70 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.xds.client;
+package gov.nih.nci.cacis.common.schema;
 
-import gov.nih.nci.cacis.common.doc.DocumentHandler;
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
-import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
-import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
+import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.StringReader;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
+import org.xml.sax.SAXException;
 
-/** 
- * Config Impl for XDS client 
+/**
+ * Schema based validation for xml
  * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
  *
  */
-@Configuration
-public class TestXDSConfigImpl implements XDSConfig  {
-    
-    /**
-     * wrapper for xds doc handler
-     * @return DocumentHandler instance
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocumentHandler wrapperDocumentHandler() {
-        return documentHandler();
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Bean
-    //@Scope(value = BeanDefinition.SCOPE_PROTOTYPE)    
-    public DocumentHandler documentHandler() {
-        final DocumentHandler<HashMap<String, String>, HashMap<String, String>> docH = 
-            new DocumentHandler<HashMap<String, String>, HashMap<String, String>>() {
-                
-                private final Map<String, String> contHash = 
-                    Collections.synchronizedMap(new HashMap<String, String>());
-                
-                @Override
-                public String handleDocument(HashMap<String, String> documentMetadata) throws ApplicationRuntimeException {
-                    final String docId = UUID.randomUUID().toString();
-                    contHash.put(docId, documentMetadata.get("content"));
-                    return docId;
-                }
+public class SchemaValidator {
 
-                @Override
-                public void initialize(HashMap<String, String> setupInfo) throws ApplicationRuntimeException {
-                    // dummyImpl do not do anything                    
-                }
+    // define the type of schema - we use W3C:
+    private static final String SCH_LANG = "http://www.w3.org/2001/XMLSchema";
+    
+    private final Validator validator;
+        
+    /**
+     * Constructor with the schema file location
+     * if not found in absoulute file location, will check classpath
+     * @param schemaFile - main schema file
+     */
+    public SchemaValidator(String schemaFile) {
+        super();
+        
+        try {
+            // get validation driver:
+            final SchemaFactory factory = SchemaFactory.newInstance(SCH_LANG);
+            factory.setResourceResolver(new ClassPathURIResolver(getClass()));
+            // create schema by reading it from an XSD file:
+            final InputStream is = getClass().getClassLoader().getResourceAsStream(schemaFile);
+            final Schema schema = factory.newSchema(new StreamSource(is));            
+            validator = schema.newValidator();
+        } catch (SAXException e) {
+            throw new ApplicationRuntimeException("Error initializing schema validator, " + e.getMessage(), e);
+        }
+    }
+    
+    
+    /**
+     * validate xml with schema
+     * @param xmlString - xml string to be validated
+     * @throws ApplicationRuntimeException - exception thrown, if any
+     */
+    public void validate(String xmlString) throws ApplicationRuntimeException {        
+        try {
+            //  perform validation:
+            validator.validate(new StreamSource(new StringReader(xmlString)));
 
-                @Override
-                public InputStream retrieveDocument(String docUniqueID) throws ApplicationRuntimeException {
-                    final String cont = contHash.get(docUniqueID);
-                    if (StringUtils.isEmpty(cont)) {
-                        return null;
-                    } else {
-                        return new ByteArrayInputStream(cont.getBytes());
-                    }
-                    
-                }
-            };
-        return docH;
-    }
-    
-    /**
-     * Dummy XdsWriteAuthzManager until ESD-3073 lands, after that, has to be removed
-     * @return XdsWriteAuthzManager
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public XdsWriteAuthzManager dummyXdsWriteAuthzManager() {
-        return new XdsWriteAuthzManager() {
-            
-            @Override
-            public void revokeStoreWrite(String arg0) throws AuthzProvisioningException {
-                //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public void grantStoreWrite(String arg0) throws AuthzProvisioningException {
-                //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public boolean checkStoreWrite(String arg0) throws AuthzProvisioningException {
-                //always give access - this is dummy impl
-                return true;
-            }
-        };
-    }
-    
-    /**
-     * Dummy DocumentAccessManager until ESD-3073 lands, after that, has to be removed
-     * @return DocumentAccessManager
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocumentAccessManager dummyDocumentAccessManager() {
-        return new DocumentAccessManager() {
-            
-            @Override
-            public void revokeDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-              //do nothing - this is dummy impl                
-            }
-            
-            @Override
-            public void grantDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-              //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public boolean checkDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-                // always give access - this is dummy impl
-                return true;
-            }
-        };
+        } catch (SAXException ex) {
+            throw new ApplicationRuntimeException("Validation error:" + ex.getMessage(), ex);
+        } catch (IOException e) {
+            throw new ApplicationRuntimeException("Error validating the source xml:" + e.getMessage(), e);
+        }
     }
 }

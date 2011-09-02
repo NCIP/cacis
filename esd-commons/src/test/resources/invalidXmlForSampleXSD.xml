@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<x:books xmlns:x="urn:books">
+   <book id="bk002">
+   	  <title>The Poet's First Poem</title>
+      <author>Poet</author>      
+      <genre>Poem</genre>
+      <price>24.95</price>
+      <review>Least poetic poems.</review>
+   </book>
+</x:books>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caCISRequest xmlns="http://cacis.nci.nih.gov" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cda="urn:hl7-org:v3" userName="user123">
+	<routingInstructions>
+		<exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">
+			<recipient>
+				<secureEmailAddress url="x@x.x"/>
+			</recipient>
+		</exchangeDocument>
+		<exchangeDocument exchangeFormat="CCD">
+			<recipient>
+				<secureEmailAddress url="x@x.x"/>
+			</recipient>
+		</exchangeDocument>
+		<exchangeDocument exchangeFormat="XMLITS">
+			<recipient>
+				<secureEmailAddress url="x@x.x"/>
+			</recipient>
+		</exchangeDocument>
+		<exchangeDocument exchangeFormat="XMLITS-extra">
+			<recipient>
+				<secureEmailAddress url="x@x.x"/>
+			</recipient>
+		</exchangeDocument>
+		
+	</routingInstructions>
+</caCISRequest>
