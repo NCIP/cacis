@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314894950162</time>
+    <time>1314912122237</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4557,8 +4557,12 @@ for each (seg in exchDocs) {
 	var chNm;
 	if (exFrmt == &apos;CCD&apos;) {
 		chNm = &apos;CDACCDTransformationChannel&apos;;
-	} else {
-		//TODO: Change channel names  of XSLT and HL7_V2_CLINICAL_NOTE_Channel
+	} 
+	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
+		chNm = &apos;HL7V2TransformationChannel&apos;;
+	} 
+	if (exFrmt == &apos;XMLITS&apos;) {
+		//TODO: Change channel names  of XSLT_Channel
 		chNm = exFrmt + &apos;_Channel&apos;;
 	}
 	
@@ -4599,8 +4603,12 @@ for each (seg in exchDocs) {
 	var chNm;
 	if (exFrmt == &apos;CCD&apos;) {
 		chNm = &apos;CDACCDTransformationChannel&apos;;
-	} else {
-		//TODO: Change channel names  of XSLT and HL7_V2_CLINICAL_NOTE_Channel
+	} 
+	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
+		chNm = &apos;HL7V2TransformationChannel&apos;;
+	} 
+	if (exFrmt == &apos;XMLITS&apos;) {
+		//TODO: Change channel names  of XSLT_Channel
 		chNm = exFrmt + &apos;_Channel&apos;;
 	}
 	

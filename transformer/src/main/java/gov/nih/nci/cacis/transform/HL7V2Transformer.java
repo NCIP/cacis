@@ -58,134 +58,21 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
+package gov.nih.nci.cacis.transform;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.w3c.dom.Node;
+import javax.xml.transform.Transformer;
 
 /**
- * Integration test for Document Router from RoutingInstructionValidationChannel to Document Router
  * @author bpickeral
- * @since Aug 15, 2011
+ * @since Sep 2, 2011
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
-
+public class HL7V2Transformer extends XSLTTransformer {
     /**
-     * TODO: Once we get the HL7V2 XSLT, replace test input file and assert with the corresponding
-     * HL7V2 file and assert.
-     * Tests Trans Split channel sends to HL7 V2 channel.
+     * Constructor
      *
-     * @throws Exception on error
+     * @param transformer xslt transformer
      */
-    @Test
-    public void testHL7V2TransformationChannel() throws Exception { // NOPMD
-
-        final File ipDir = new File(inputDir);
-
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("HL7_V2_RoutingInstructions.xml").toURI());
-        FileUtils.copyFileToDirectory(inputFile, ipDir);
-
-        Thread.sleep(SLEEP_TIME);
-
-        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
-        assertTrue(outputFile.exists());
-
-
-        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
-
-        final Node root = getRoutingInstructions(outputFile);
-        assertNotNull(root);
-        testUtilities.assertXPathEquals(
-                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
-                + "rdf:Description/p:exchangeFormat", "HL7_V2_CLINICAL_NOTE", root);
-
-        FileUtils.deleteQuietly(outputFile);
+    public HL7V2Transformer(Transformer transformer) {
+        super(transformer);
     }
-
-    /**
-     * Tests Trans Split channel sends to CCD channel.
-     *
-     * @throws Exception on error
-     */
-    @Test
-    public void testCDACCDTransformationChannel() throws Exception { // NOPMD
-
-        final File ipDir = new File(inputDir);
-        if (!ipDir.exists() && !ipDir.mkdirs()) {
-            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
-        }
-
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("CCD_RoutingInstructions.xml").toURI());
-        FileUtils.copyFileToDirectory(inputFile, ipDir);
-
-        Thread.sleep(SLEEP_TIME);
-
-        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
-        assertTrue(outputFile.exists());
-
-
-        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
-
-        final Node root = getRoutingInstructions(outputFile);
-        assertNotNull(root);
-        testUtilities.assertXPathEquals(
-                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
-                + "rdf:Description/p:exchangeFormat", "CCD", root);
-
-        FileUtils.deleteQuietly(outputFile);
-    }
-
-    /**
-     * Tests Trans Split channel sends to XMLITS channel (HL7 V3).
-     *
-     * @throws Exception on error
-     */
-    @Test
-    public void testHL7V3TransformationChannel() throws Exception { // NOPMD
-
-        final File ipDir = new File(inputDir);
-        if (!ipDir.exists() && !ipDir.mkdirs()) {
-            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
-        }
-
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("HL7_V3_RoutingInstructions.xml").toURI());
-        FileUtils.copyFileToDirectory(inputFile, ipDir);
-
-        Thread.sleep(SLEEP_TIME);
-
-        final File outputFile = new File(inputDir + "XMLITS_Output.xml");
-        assertTrue(outputFile.exists());
-
-        final Node root = getRoutingInstructions(outputFile);
-        assertNotNull(root);
-        testUtilities.assertValid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
-                root);
-
-        FileUtils.deleteQuietly(outputFile);
-    }
-
 }

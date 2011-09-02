@@ -74,7 +74,7 @@ import org.springframework.context.annotation.Import;
  *         project
  */
 @Configuration
-@Import(RdfTransformerConfig.class)
+@Import(XSLTTransformerConfig.class)
 public class TransformerConfig {
 
     /**

@@ -1,14 +1,14 @@
 <channel>
-  <id>aa2c8a8a-1507-42bd-9b60-2dd2f4adf313</id>
-  <name>HL7_V2_CLINICAL_NOTE_Channel</name>
+  <id>34c4f801-0031-46fd-8405-3514a5bb95a3</id>
+  <name>HL7V2TransformationChannel</name>
   <description></description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1313434927740</time>
+    <time>1314994965292</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4488,24 +4488,60 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
     <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">${cacis.mc.temp.dir}</property>
-        <property name="outputAppend">0</property>
-        <property name="outputPattern">HL7_V2_Output.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">0a6503b9-01f9-4020-a1d3-3ef0196b078b</property>
+        <property name="synchronised">0</property>
         <property name="template">${message.encodedData}</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
       </properties>
       <transformer>
-        <steps/>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>transform</name>
+            <script>var hL7V2Transformer = globalChannelMap.get(&apos;hL7V2Transformer&apos;);
+var os;
+var is;
+
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+
+	hL7V2Transformer.transform(null, is, os);
+
+	var temp = new Packages.java.lang.String(os.toByteArray());
+
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
+}</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>var hL7V2Transformer = globalChannelMap.get(&apos;hL7V2Transformer&apos;);
+var os;
+var is;
+
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+
+	hL7V2Transformer.transform(null, is, os);
+
+	var temp = new Packages.java.lang.String(os.toByteArray());
+
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
+}</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
@@ -4518,7 +4554,7 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
       <filter>
         <rules/>
       </filter>
-      <transportName>File Writer</transportName>
+      <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
@@ -4541,6 +4577,11 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+
+var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
+var hL7V2Transformer = transformerContext.getBean(&quot;hL7V2Transformer&quot;);
+
+globalChannelMap.put(&apos;hL7V2Transformer&apos;, hL7V2Transformer);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

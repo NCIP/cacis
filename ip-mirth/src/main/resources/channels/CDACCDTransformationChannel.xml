@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314882978561</time>
+    <time>1314995004001</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>14</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4497,33 +4497,45 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
         <steps>
           <step>
             <sequenceNumber>0</sequenceNumber>
-            <name>New Step</name>
+            <name>transform</name>
             <script>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
+var os;
+var is;
 
-var os = new Packages.java.io.ByteArrayOutputStream();
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	xmlToRdfTransformer.transform(null, is, os);
 
-xmlToRdfTransformer.transform(null, is, os);
+	var temp = new Packages.java.lang.String(os.toByteArray());
 
-var temp = new Packages.java.lang.String(os.toByteArray());
-
-msg = temp;</script>
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
+}</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
                 <string>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
+var os;
+var is;
 
-var os = new Packages.java.io.ByteArrayOutputStream();
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	xmlToRdfTransformer.transform(null, is, os);
 
-xmlToRdfTransformer.transform(null, is, os);
+	var temp = new Packages.java.lang.String(os.toByteArray());
 
-var temp = new Packages.java.lang.String(os.toByteArray());
-
-msg = temp;</string>
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
+}</string>
               </entry>
             </data>
           </step>

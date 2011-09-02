@@ -58,63 +58,52 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.config;
+package gov.nih.nci.cacis.transform;
 
-import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
-import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * @author bpickeral
+ * @since Sep 2, 2011
  */
-@Configuration
-public class RdfTransformerConfig {
-
-    @Value("${cacis-pco.validation.xmltordf.xsl}")
-    private String rdfToXmlXsl;
-
-    @Value("${cacis-pco.validation.xmltordf.xsl.baseClassPath}")
-    private String xslBaseClassPath;
-
+public class XSLTTransformer {
 
     /**
-     * {@inheritDoc}
+     * Transformer using XSLT.
      */
-    public URIResolver xslUriResolver() {
-        return new ClassPathURIResolver(RdfTransformerConfig.class);
+    private final Transformer transformer;
+
+    /**
+     * Constructor
+     *
+     * @param transformer xslt transformer
+     */
+    public XSLTTransformer(Transformer transformer) {
+        this.transformer = transformer;
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Bean
-    public TransformerFactory xslTransformerFactory() {
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        tf.setURIResolver(xslUriResolver());
-        return tf;
-    }
-
-
-    /**
-     * XML To RDF Transformer
-     * @return RdfToXmlTransformer transformer
+     * Transform XML to RDF
+     *
+     * @param params the set of parameters to pass to the transformation, may be null
+     * @param in XML input stream
+     * @param out XML output stream
      * @throws TransformerException exception
      */
-    @Bean
-    @Scope("prototype")
-    public XmlToRdfTransformer xmlToRdfTransformer() throws TransformerException {
-        final Transformer xslTransformer = xslTransformerFactory().
-                newTransformer(xslUriResolver().resolve(rdfToXmlXsl, xslBaseClassPath));
-        return new XmlToRdfTransformer(xslTransformer);
+    public void transform(Map<String, String> params, InputStream in, OutputStream out) throws TransformerException {
+        if (params != null) {
+            for (Entry<String, String> entry : params.entrySet()) {
+                transformer.setParameter(entry.getKey(), entry.getValue());
+            }
+        }
+        transformer.transform(new StreamSource(in), new StreamResult(out));
     }
-
-
 }
