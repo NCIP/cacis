@@ -51,6 +51,8 @@
         	<!-- Sys Admin to receive errors -->
         	<transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
 
+			<!-- Mirth base URL -->
+        	<mirth.base.url>http://localhost</mirth.base.url>
             </properties>
         </profile>
 

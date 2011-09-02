@@ -90,6 +90,9 @@
 
         <!-- Sys Admin to receive errors -->
         <transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
+        
+        <!-- WSDL location of IP-Canonical Model Processor -->
+        <mirth.base.url>http://localhost</mirth.base.url> 
     </properties>
 
     <organization>
