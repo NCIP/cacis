@@ -1,22 +1,24 @@
 <channel>
-  <id>f9460cc7-cf5e-413f-be05-23ba953d9f26</id>
-  <name>SA-3_IdentifierAndVocabResolver</name>
-  <description>Responsible for invoking the Identifier Resolver and Vocabulary Resolver external components to map the source identifiers and codes in the canonical data to standardized identifiers and codes. At this juncture this is just a pass through channel. Later release might have the actual implementation.</description>
+  <id>0954b5b5-e525-4ca0-912d-11a06987f5da</id>
+  <name>SA-4_InvokeIPCMPChannel</name>
+  <description>Responsible for invoking the Canonical Model Processor service and sending the canonical data and the associated source data for processing to the caCIS Integration Platform.</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314975086359</time>
+    <time>1314977468899</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">InvokeIPCMPDestination</property>
+      <property name="responseValue">IP-CMP-Destination</property>
     </properties>
     <transformer>
       <steps/>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
       <inboundProtocol>XML</inboundProtocol>
       <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
@@ -36,12 +38,30 @@
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>InvokeIPCMPDestination</name>
+      <name>IP-CMP-Destination</name>
       <properties>
-        <property name="DataType">Channel Writer</property>
-        <property name="host">0954b5b5-e525-4ca0-912d-11a06987f5da</property>
-        <property name="synchronised">1</property>
-        <property name="template">${message.encodedData}</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">//Invoke the java client, which in turn, will invoke the IP Canonical Model Processor Service. &#xd;//The Mirth Connect channel for this component should monitor errors and Mirth Connect Alerts should be sent, 
+//in case of errors, to the system administrator.
+
+var cmpWsdlUrl = &apos;${cacis-ip.cmp.service.url}&apos;;
+var wsdlURL = new Packages.java.net.URL(cmpWsdlUrl);
+
+try{
+	var client = new Packages.gov.nih.nci.cacis.CanonicalModelProcessor(wsdlURL).getCanonicalModelProcessorPortSoap11();
+	var jaxbContext = Packages.javax.xml.bind.JAXBContext.newInstance(&apos;gov.nih.nci.cacis&apos;);
+	var caCisRequest = jaxbContext.createUnmarshaller().unmarshal(new Packages.java.io.ByteArrayInputStream(messageObject.getEncodedData().getBytes()));
+	client.acceptCanonical(caCisRequest); 
+}catch(cmpInvokeErr) {
+	responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getFailureResponse(&apos;Error invoking IP-Canonical Model Processor.&apos; + cmpInvokeErr.message));
+	return;
+}
+responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully invoked IP-Canonical Model Processor&apos;));
+
+
+
+</property>
       </properties>
       <transformer>
         <steps/>
@@ -57,7 +77,7 @@
       <filter>
         <rules/>
       </filter>
-      <transportName>Channel Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>

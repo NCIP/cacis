@@ -20,7 +20,8 @@
         <!--WSDL generates a lot of classes. Need to set this low -->
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>20</test.unit.linerate>
-
+		
+		<cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url> 
     </properties>
 
     <dependencies>
