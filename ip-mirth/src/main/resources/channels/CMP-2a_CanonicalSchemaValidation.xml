@@ -3,37 +3,68 @@
   <name>CMP-2a_CanonicalSchemaValidation</name>
   <description>Arch name CanonicalSchemaValidationChannel</description>
   <enabled>true</enabled>
-  <version>2.1.1.5488</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314804795950</time>
+    <time>1314997593486</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>8</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">validationMsg</property>
     </properties>
     <transformer>
-      <steps/>
-      <inboundProtocol>HL7V2</inboundProtocol>
-      <outboundProtocol>HL7V2</outboundProtocol>
+      <steps>
+        <step>
+          <sequenceNumber>0</sequenceNumber>
+          <name>xsdValidation</name>
+          <script>logger.info(messageObject.getId());
+logger.info(messageObject.getSource());
+
+var valMsgKey = &apos;validationMsg&apos;;
+
+//put the placeholder msg, key has to be string, cannot use variable
+responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
+
+//perform schema validation for canonical
+var cdfXsdValidationMsg = xsdValidateCanonical(message);
+if (cdfXsdValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;Canonical Schema Validation:&apos; + cdfXsdValidationMsg));
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>logger.info(messageObject.getId());
+logger.info(messageObject.getSource());
+
+var valMsgKey = &apos;validationMsg&apos;;
+
+//put the placeholder msg, key has to be string, cannot use variable
+responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
+
+//perform schema validation for canonical
+var cdfXsdValidationMsg = xsdValidateCanonical(message);
+if (cdfXsdValidationMsg != null) { 
+	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;Canonical Schema Validation:&apos; + cdfXsdValidationMsg));
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+      </steps>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
-        <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
+        <property name="stripNamespaces">false</property>
       </inboundProperties>
       <outboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
-        <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
+        <property name="stripNamespaces">false</property>
       </outboundProperties>
     </transformer>
     <filter>
@@ -42,36 +73,26 @@
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5488</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Destination 1</name>
+      <name>schematronValidation</name>
       <properties>
         <property name="DataType">Channel Writer</property>
-        <property name="host">abb4d999-2bc5-4be9-8f9f-fd443cb6cc97</property>
-        <property name="synchronised">0</property>
+        <property name="host">fc379cb6-3ee6-46c3-ad31-063b83591f9e</property>
+        <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
         <steps/>
-        <inboundProtocol>HL7V2</inboundProtocol>
-        <outboundProtocol>HL7V2</outboundProtocol>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
-          <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
+          <property name="stripNamespaces">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
-          <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
+          <property name="stripNamespaces">false</property>
         </outboundProperties>
       </transformer>
       <filter>
@@ -80,7 +101,7 @@
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
@@ -99,6 +120,15 @@
 // You only have access to the globalMap and globalChannelMap here to persist data
 return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
+
+
+var res = responseMap.get(&apos;validationMsg&apos;);
+var schVldnRes = responseMap.get(&apos;schematronValidation&apos;);
+
+//TODO: it seems this response is not set, fix it
+if ( res.toString().indexOf(&apos;SUCCESS&apos;) != -1 ) {
+	responseMap.put(&apos;validationMsg&apos;, schVldnRes);	
+} 
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data

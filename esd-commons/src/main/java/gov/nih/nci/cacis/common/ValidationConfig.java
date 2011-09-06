@@ -70,6 +70,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -87,6 +88,9 @@ public class ValidationConfig {
     
     @Value("${cacis.validation.cacisrequest.sa.sourcedata.schema.file}")
     private String cacisReqSrcDataSchemaFile;
+    
+    @Value("${cacis.validation.canonical.schema.file}")
+    private String canonicalSchemaFile;
     
     @Value("${cacis.validation.schematron.extract.failures.xsl}")
     private String extractFailuresSchematronXsl;
@@ -146,7 +150,7 @@ public class ValidationConfig {
      * @throws TransformerException exception
      */
     @Bean
-    @Scope("prototype")
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public SchematronValidator cacisRequestSASourceDataSchematronValidator() throws TransformerException {
         return new SchematronValidator(cacisRequestSASourceDataSchematronTransformer(), 
                 extractSchematronFailuresTransformer());
@@ -157,7 +161,7 @@ public class ValidationConfig {
      * @return SchemaValidator Cacis request schema validator
      */
     @Bean
-    @Scope("prototype")
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public SchemaValidator cacisRequestSASchemaValidator() {
         return new SchemaValidator(cacisReqSASchemaFile);
     }
@@ -167,9 +171,19 @@ public class ValidationConfig {
      * @return SchemaValidator Cacis request source data schema validator
      */
     @Bean
-    @Scope("prototype")
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public SchemaValidator cacisRequestSASourceDataSchemaValidator() {
         return new SchemaValidator(cacisReqSrcDataSchemaFile);
+    }
+    
+    /**
+     * Canonical schema validator
+     * @return SchemaValidator canonical schema validator
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public SchemaValidator canonicalSchemaValidator() {
+        return new SchemaValidator(canonicalSchemaFile);
     }
 
 

@@ -3,9 +3,9 @@
   <name>CMP-2b_CanonicalSchematronValidation</name>
   <description>Arch name CanonicalSchematronValidationChannel</description>
   <enabled>true</enabled>
-  <version>2.1.1.5488</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314739345380</time>
+    <time>1314997006518</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -17,23 +17,13 @@
     </properties>
     <transformer>
       <steps/>
-      <inboundProtocol>HL7V2</inboundProtocol>
-      <outboundProtocol>HL7V2</outboundProtocol>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
-        <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
+        <property name="stripNamespaces">false</property>
       </inboundProperties>
       <outboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
-        <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
+        <property name="stripNamespaces">false</property>
       </outboundProperties>
     </transformer>
     <filter>
@@ -42,36 +32,26 @@
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5488</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
       <name>Destination 1</name>
       <properties>
         <property name="DataType">Channel Writer</property>
-        <property name="host">abb4d999-2bc5-4be9-8f9f-fd443cb6cc97</property>
+        <property name="host">sink</property>
         <property name="synchronised">0</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
         <steps/>
-        <inboundProtocol>HL7V2</inboundProtocol>
-        <outboundProtocol>HL7V2</outboundProtocol>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
-          <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
+          <property name="stripNamespaces">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
-          <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
+          <property name="stripNamespaces">false</property>
         </outboundProperties>
       </transformer>
       <filter>
@@ -80,7 +60,7 @@
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
