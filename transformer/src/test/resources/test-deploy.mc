@@ -1,7 +1,6 @@
 channel stop *
 channel undeploy *
 channel remove *
-import "${build.outputDirectory}/channels/transformationComponent.xml" force
 import "${build.outputDirectory}/channels/WS2F-CDF-XCCD.xml" force
 import "${build.outputDirectory}/channels/WS2F-XCCD-CDF.xml" force
 deploy
