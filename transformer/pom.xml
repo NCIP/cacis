@@ -16,7 +16,7 @@
     <properties>
         <test.unit.branchrate>35</test.unit.branchrate>
         <test.unit.linerate>35</test.unit.linerate>
-        <xslt.template>${basedir}/src/main/resources/xsl/BaselineNote.xslt</xslt.template>
+        <xslt.template>BaselineNote.xslt</xslt.template>
 
         <cacis-pco.validation.xmltordf.xsl.baseClassPath>/xsl/</cacis-pco.validation.xmltordf.xsl.baseClassPath>
         <cacis-pco.validation.xmltordf.xsl>xml2rdf3.xsl</cacis-pco.validation.xmltordf.xsl>

@@ -62,6 +62,7 @@ package gov.nih.nci.cacis.config;
 
 import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
 import gov.nih.nci.cacis.transform.HL7V2Transformer;
+import gov.nih.nci.cacis.transform.Trim2CCDTransformer;
 import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
 
 import javax.xml.transform.Transformer;
@@ -85,6 +86,9 @@ public class XSLTTransformerConfig {
 
     @Value("${cacis-pco.validation.xmltordf.xsl.baseClassPath}")
     private String xslBaseClassPath;
+
+    @Value("${xslt.template}")
+    private String xsltTemplateName;
 
     /**
      * {@inheritDoc}
@@ -129,6 +133,19 @@ public class XSLTTransformerConfig {
         final Transformer transformer = xslTransformerFactory().
                 newTransformer(xslUriResolver().resolve(rdfToXmlXsl, xslBaseClassPath));
         return new HL7V2Transformer(transformer);
+    }
+
+    /**
+     * Trim to CCD Transformer
+     * @return HL7V2Transformer transformer
+     * @throws TransformerException exception
+     */
+    @Bean
+    @Scope("prototype")
+    public Trim2CCDTransformer trim2CCDTransformer() throws TransformerException {
+        final Transformer transformer = xslTransformerFactory().
+                newTransformer(xslUriResolver().resolve(xsltTemplateName, xslBaseClassPath));
+        return new Trim2CCDTransformer(transformer);
     }
 
 

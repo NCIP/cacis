@@ -1,0 +1,19 @@
+<list>
+  <alert>
+    <id>1f99f27b-efd5-48a5-b175-abafd0f89265</id>
+    <name>SA-Alerts</name>
+    <expression>ERROR</expression>
+    <template>The following error occurred when transforming the document:
+${systemTime} : ${channelName} : ${errorMessage}
+
+${error}</template>
+    <enabled>true</enabled>
+    <subject>Integration Platform: An Error occurred when transforming document</subject>
+    <channels>
+      <string>ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</string>
+    </channels>
+    <emails>
+      <string>${transformation.sysadmin.address}</string>
+    </emails>
+  </alert>
+</list>

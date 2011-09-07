@@ -4,17 +4,17 @@
   <description>This is a Mock implementation of the XSLT TransformationComponent channel. This will write the content as is to a file. Used for testing purpose.
 Arch Name XSLT TransformationComponent</description>
   <enabled>true</enabled>
-  <version>2.1.1.5488</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314912538338</time>
+    <time>1315343298568</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">IdentifierResolver</property>
     </properties>
     <transformer>
       <steps/>
@@ -33,58 +33,66 @@ Arch Name XSLT TransformationComponent</description>
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5488</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
-    <connector>
-      <name>Flle_Output</name>
-      <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="directory"></property>
-        <property name="host">${xccdOutputDir}</property>
-        <property name="outputAppend">1</property>
-        <property name="outputPattern">Trim2CCDOutput.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
-      </properties>
-      <transformer>
-        <steps/>
-        <inboundProtocol>XML</inboundProtocol>
-        <outboundProtocol>XML</outboundProtocol>
-        <inboundProperties>
-          <property name="stripNamespaces">false</property>
-        </inboundProperties>
-        <outboundProperties>
-          <property name="stripNamespaces">false</property>
-        </outboundProperties>
-      </transformer>
-      <filter>
-        <rules/>
-      </filter>
-      <transportName>File Writer</transportName>
-      <mode>DESTINATION</mode>
-      <enabled>true</enabled>
-      <version>2.1.1.5488</version>
-    </connector>
     <connector>
       <name>IdentifierResolver</name>
       <properties>
         <property name="DataType">Channel Writer</property>
         <property name="host">f9460cc7-cf5e-413f-be05-23ba953d9f26</property>
-        <property name="synchronised">1</property>
+        <property name="synchronised">0</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
-        <steps/>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>transform</name>
+            <script>var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
+var os;
+var is;
+
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+
+	trim2CCDTransformer.transform(null, is, os);
+
+	var temp = new Packages.java.lang.String(os.toByteArray());
+
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
+}</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
+var os;
+var is;
+
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+
+	trim2CCDTransformer.transform(null, is, os);
+
+	var temp = new Packages.java.lang.String(os.toByteArray());
+
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
+}</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
@@ -100,7 +108,7 @@ Arch Name XSLT TransformationComponent</description>
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
@@ -120,6 +128,10 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
+var trim2CCDTransformer = transformerContext.getBean(&quot;trim2CCDTransformer&quot;);
+
+globalChannelMap.put(&apos;trim2CCDTransformer&apos;, trim2CCDTransformer);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
