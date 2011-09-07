@@ -46,8 +46,8 @@
             <artifactId>esd-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-		
-		<dependency>
+
+        <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>sa-mirth</artifactId>
             <version>${project.version}</version>
@@ -85,7 +85,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                	<exclude>**/schema/*</exclude>
+                    <exclude>**/schema/*</exclude>
                 </excludes>
                 <filtering>true</filtering>
             </resource>
@@ -168,7 +168,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                 <executions>
                     <execution>
                         <id>prepare-mc-custom-lib</id>
-                        <phase>package</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -179,14 +179,9 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <artifactId>ip-mirth</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
-								<artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>sa-mirth</artifactId>
-                                    <version>${project.version}</version>
-                                </artifactItem>
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>esd-commons</artifactId>
+                                    <artifactId>sa-mirth</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
                                 <artifactItem>
@@ -198,45 +193,9 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>nav</artifactId>
                                     <version>${project.version}</version>
-                                    <type>test-jar</type>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>nav</artifactId>
-                                    <version>${project.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>transformer</artifactId>
-                                    <version>${project.version}</version>
                                 </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>net.sourceforge.saxon</groupId>
-                                    <artifactId>saxonhe</artifactId>
-                                    <version>9.2.1.5</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.cxf</groupId>
-                                    <artifactId>cxf-api</artifactId>
-                                    <version>${cxf.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.cxf</groupId>
-                                    <artifactId>cxf-common-utilities</artifactId>
-                                    <version>${cxf.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.cxf</groupId>
-                                    <artifactId>cxf-rt-core</artifactId>
-                                    <version>${cxf.version}</version>
-                                </artifactItem>
 
-                                <artifactItem>
-                                    <groupId>c3p0</groupId>
-                                    <artifactId>c3p0</artifactId>
-                                    <version>0.9.1.2</version>
-                                </artifactItem>
                                 <artifactItem>
                                     <groupId>info.aduna.commons</groupId>
                                     <artifactId>aduna-commons-collections</artifactId>
@@ -282,21 +241,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <artifactId>aduna-commons-xml</artifactId>
                                     <version>2.7.0</version>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>asm</groupId>
-                                    <artifactId>asm</artifactId>
-                                    <version>3.1</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>cglib</groupId>
-                                    <artifactId>cglib</artifactId>
-                                    <version>2.2</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.google.collections</groupId>
-                                    <artifactId>google-collections</artifactId>
-                                    <version>1.0</version>
-                                </artifactItem>
+
                                 <artifactItem>
                                     <groupId>com.icegreen</groupId>
                                     <artifactId>greenmail</artifactId>
@@ -407,66 +352,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <artifactId>sesame-sail-memory</artifactId>
                                     <version>${sesame.version}</version>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-aop</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-asm</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-beans</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-context</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-context-support</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-core</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-expression</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-jdbc</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-orm</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-orm</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-tx</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.springframework</groupId>
-                                    <artifactId>spring-web</artifactId>
-                                    <version>${spring.version}</version>
-                                </artifactItem>
+
                                 <artifactItem>
                                     <groupId>org.codehaus.woodstox</groupId>
                                     <artifactId>stax2-api</artifactId>
@@ -493,12 +379,6 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <artifactId>neethi</artifactId>
                                     <version>2.0.4</version>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.ws.commons.schema</groupId>
-                                    <artifactId>XmlSchema</artifactId>
-                                    <version>1.4.3</version>
-                                </artifactItem>
-
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
 
@@ -509,7 +389,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
 
                     <execution>
                         <id>prepare-mc-cacis-lib</id>
-                        <phase>package</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -533,13 +413,6 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <artifactId>xds-client</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>xds-client</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>test-jar</type>
-                                </artifactItem>
-
                                 <artifactItem>
                                     <groupId>ihe.profiles.libs</groupId>
                                     <artifactId>ihelibrary</artifactId>
@@ -730,6 +603,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                 <artifactId>mirthconnect-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <configuration>
+                    <pause>${mirthConnect.server.pause}</pause>
                     <mirthConnect>${mirthConnect.cli}</mirthConnect>
                     <script>${build.outputDirectory}/deploy.mc</script>
                 </configuration>

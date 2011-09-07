@@ -145,6 +145,7 @@
                 <configuration>
                     <mirthConnect>${mirthConnect.cli}</mirthConnect>
                     <script>${build.outputDirectory}/deploy.mc</script>
+                    <pause>${mirthConnect.server.pause}</pause>
                 </configuration>
                 <executions>
                     <execution>

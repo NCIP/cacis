@@ -20,8 +20,8 @@
         <!--WSDL generates a lot of classes. Need to set this low -->
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>20</test.unit.linerate>
-		
-		<cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url> 
+
+		<cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url>
     </properties>
 
     <dependencies>
@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
-            <artifactId>esd-commons</artifactId>
+            <artifactId>transformer</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -115,6 +115,146 @@
                 </dependencies>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prepare-mc-custom-lib</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>esd-commons</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>transformer</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-aop</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-asm</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-beans</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-context</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-context-support</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-core</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-expression</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-jdbc</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-orm</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-orm</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-tx</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-web</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.cxf</groupId>
+                                    <artifactId>cxf-api</artifactId>
+                                    <version>${cxf.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.cxf</groupId>
+                                    <artifactId>cxf-common-utilities</artifactId>
+                                    <version>${cxf.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.cxf</groupId>
+                                    <artifactId>cxf-rt-core</artifactId>
+                                    <version>${cxf.version}</version>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>c3p0</groupId>
+                                    <artifactId>c3p0</artifactId>
+                                    <version>0.9.1.2</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.google.collections</groupId>
+                                    <artifactId>google-collections</artifactId>
+                                    <version>1.0</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>asm</groupId>
+                                    <artifactId>asm</artifactId>
+                                    <version>3.1</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>cglib</groupId>
+                                    <artifactId>cglib</artifactId>
+                                    <version>2.2</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>net.sourceforge.saxon</groupId>
+                                    <artifactId>saxonhe</artifactId>
+                                    <version>9.2.1.5</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.ws.commons.schema</groupId>
+                                    <artifactId>XmlSchema</artifactId>
+                                    <version>1.4.3</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
+
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
             <!--start MC and deploy channels during deploy phase-->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -135,6 +275,9 @@
                                         <include>${artifactId}-${project.version}.${packaging}</include>
                                     </includes>
                                 </resource>
+                                <resource>
+                                    <directory>${project.build.directory}/mc-custom-lib</directory>
+                                </resource>
                             </resources>
                         </configuration>
                     </execution>
@@ -146,7 +289,7 @@
                 <version>1.1.1</version>
                 <executions>
                     <execution>
-                        <id>startMC</id>
+                        <id>RestartMC</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>exec</goal>
@@ -165,6 +308,7 @@
                 <artifactId>mirthconnect-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <configuration>
+                    <pause>${mirthConnect.server.pause}</pause>
                     <mirthConnect>${mirthConnect.cli}</mirthConnect>
                     <script>${build.outputDirectory}/deploy.mc</script>
                 </configuration>
@@ -191,7 +335,7 @@
                         <version>2.5</version>
                         <executions>
                             <execution>
-                                <id>copy-mirth-resources</id>
+                                <id>copy-mc-custom-lib</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>copy-resources</goal>
@@ -205,6 +349,9 @@
                                                 <include>${artifactId}-${project.version}.${packaging}</include>
                                             </includes>
                                         </resource>
+                                        <resource>
+                                            <directory>${project.build.directory}/mc-custom-lib</directory>
+                                        </resource>
                                     </resources>
                                 </configuration>
                             </execution>
@@ -217,7 +364,7 @@
                         <version>1.1.1</version>
                         <executions>
                             <execution>
-                                <id>startMC</id>
+                                <id>RestartMC</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>exec</goal>

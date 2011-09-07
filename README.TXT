@@ -38,16 +38,22 @@ to be installed first
   (https://docs.google.com/a/semanticbits.com/document/d/
   1VFO4LuoWZWZuQWF3S21wBil67O3jLqL6twKcYQqpxHI/edit?hl=en_US&pli=1)
 
+Note* On some Linux system you might have to install openssl-dev packages
+to compile virtuoso
+
 - PostgreSQL Database version version 8.x (recommended version 8.4)
   http://www.postgresql.org/
 
 - Mirth Connect version 2.1
   (http://www.mirthcorp.com/community/mirth-connect)
-  THis ESD document can help with installing and configuring Mirth
+  This ESD document can help with installing and configuring Mirth
   Connect (https://wiki.nci.nih.gov/display/caEHR/Mirth+Connect+Configuration+Guide)
 
 - OpenXDS version 1.2
  (https://www.projects.openhealthtools.org/sf/frs/do/listReleases/projects.openxds/frs.openxds_releases)
+
+
+- JBOSS 5.x/Tomcat 6.x
 
 
     OpenXDS Configuration
@@ -57,7 +63,9 @@ to be installed first
 	openxds-web.war/WEB-INF/classes/conf/actors
 	 folder contains a few xml files.
 
-	Change port to 8080 from 8010
+	Change port 8010  to 8080  (JBOSS/Tomcat port)
+	and Change port 8011 to 8443  (JBOSS/Tomcat HTTPS port)
+
 	Change UrlPath to have /openxds-web/services/<......> accordingly.
 	Here are the files which might need change
 	XcaInitiatingGatewayConnections.xml
