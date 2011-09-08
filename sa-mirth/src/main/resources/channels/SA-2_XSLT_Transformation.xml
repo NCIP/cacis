@@ -1,8 +1,7 @@
 <channel>
   <id>ba0aa2df-d0e2-4dbd-b77d-46b8c2e67a5f</id>
   <name>SA-2_XSLT_Transformation</name>
-  <description>This is a Mock implementation of the XSLT TransformationComponent channel. This will write the content as is to a file. Used for testing purpose.
-Arch Name XSLT TransformationComponent</description>
+  <description>This is the implementation of the XSLT TransformationComponent channel. Arch Name XSLT TransformationComponent</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>

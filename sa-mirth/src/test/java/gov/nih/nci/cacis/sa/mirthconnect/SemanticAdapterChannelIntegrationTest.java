@@ -60,29 +60,23 @@
  */
 package gov.nih.nci.cacis.sa.mirthconnect;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import gov.nih.nci.cacis.AcceptSourceFault;
 import gov.nih.nci.cacis.AcceptSourcePortType;
 import gov.nih.nci.cacis.CaCISRequest;
+import gov.nih.nci.cacis.CaCISResponse;
+import gov.nih.nci.cacis.ResponseStatusType;
 
 import java.io.File;
 import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 
-import gov.nih.nci.cacis.CaCISResponse;
-import gov.nih.nci.cacis.ResponseStatusType;
 import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -94,17 +88,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath*:applicationContext-sa-mirth-test.xml")
 public class SemanticAdapterChannelIntegrationTest {
 
-    @Value("${xccd.output.dir}")
-    private String outputDir;
-
     private static final String ADDRESS = "http://localhost:18091/services/SemanticAdapter?wsdl";
-    private File outputFile;
 
-
-    @Before
-    public void setup() {
-         outputFile = new File(outputDir + "Trim2CCDOutput.xml");
-    }
 
     /**
      * This test calls out acceptSource(..) operation on SematicAdapter WS.
@@ -130,7 +115,6 @@ public class SemanticAdapterChannelIntegrationTest {
         final CaCISResponse response = client.acceptSource(request);
         assertTrue(response.getStatus() == ResponseStatusType.SUCCESS);
 
-        assertTrue(outputFile.exists());
     }
 
     /**
@@ -154,16 +138,8 @@ public class SemanticAdapterChannelIntegrationTest {
         final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
         final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(sampleMessageIS);
 
-//        this should fail the MC channel
-        outputFile.createNewFile();
-        outputFile.setReadOnly();
-
         client.acceptSource(request);
     }
 
-    @After
-    public void cleanup() {
-        FileUtils.deleteQuietly(outputFile);
-    }
 }
 
