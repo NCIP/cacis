@@ -170,20 +170,18 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
         Thread.sleep(SLEEP_TIME);
 
-        final File outputFile = new File(inputDir + "XMLITS_Output.xml");
+        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
         assertTrue(outputFile.exists());
+
+
+        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
 
         final Node root = getRoutingInstructions(outputFile);
         assertNotNull(root);
-        testUtilities.assertValid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
-                root);
-        testUtilities.assertInvalid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
-                root);
+        testUtilities.assertXPathEquals(
+                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
+                + "rdf:Description/p:exchangeFormat", "XMLITS", root);
 
         FileUtils.deleteQuietly(outputFile);
     }

@@ -9,7 +9,7 @@ channel remove DocumentRouterMuxDemuxChannel
 channel remove AcceptCanonical_Channel
 channel remove HL7V2TransformationChannel
 channel remove CDACCDTransformationChannel
-channel remove XMLITS_Channel
+channel remove RIMITSTransformationChannel
 channel remove TransSplitChannel
 channel remove CMP-1_WebServiceListener
 channel remove CMP-2a_CanonicalSchemaValidation
@@ -25,7 +25,7 @@ import "${build.outputDirectory}/channels/DocumentRouterMuxDemuxChannel.xml"  fo
 import "${build.outputDirectory}/channels/AcceptCanonical_Channel.xml" force
 import "${build.outputDirectory}/channels/HL7V2TransformationChannel"  force
 import "${build.outputDirectory}/channels/CDACCDTransformationChannel.xml"  force
-import "${build.outputDirectory}/channels/XMLITS_Channel.xml"   force
+import "${build.outputDirectory}/channels/RIMITSTransformationChannel.xml"   force
 import "${build.outputDirectory}/channels/TransSplitChannel.xml"  force
 import "${build.outputDirectory}/channels/RoutingInstructionValidationChannel.xml"  force
 import "${build.outputDirectory}/channels/CMP-1_WebServiceListener.xml"  force

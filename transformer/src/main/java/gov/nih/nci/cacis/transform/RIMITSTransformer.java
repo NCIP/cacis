@@ -58,112 +58,21 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.config;
-
-import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
-import gov.nih.nci.cacis.transform.HL7V2Transformer;
-import gov.nih.nci.cacis.transform.RIMITSTransformer;
-import gov.nih.nci.cacis.transform.Trim2CCDTransformer;
-import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
+package gov.nih.nci.cacis.transform;
 
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 /**
- * @author kherm manav.kher@semanticbits.com
+ * @author bpickeral
+ * @since Sep 2, 2011
  */
-@Configuration
-public class XSLTTransformerConfig {
-
-    @Value("${cacis-pco.validation.xmltordf.xsl}")
-    private String rdfToXmlXsl;
-
-    @Value("${cacis-pco.validation.xmltordf.xsl.baseClassPath}")
-    private String xslBaseClassPath;
-
-    @Value("${xslt.template}")
-    private String xsltTemplateName;
-
-    private static final String PROTOTYPE = "prototype";
-
+public class RIMITSTransformer extends XSLTTransformer {
     /**
-     * {@inheritDoc}
+     * Constructor
+     *
+     * @param transformer xslt transformer
      */
-    public URIResolver xslUriResolver() {
-        return new ClassPathURIResolver(XSLTTransformerConfig.class);
+    public RIMITSTransformer(Transformer transformer) {
+        super(transformer);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Bean
-    public TransformerFactory xslTransformerFactory() {
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        tf.setURIResolver(xslUriResolver());
-        return tf;
-    }
-
-
-    /**
-     * XML To RDF Transformer
-     * @return XmlToRdfTransformer transformer
-     * @throws TransformerException exception
-     */
-    @Bean
-    @Scope(PROTOTYPE)
-    public XmlToRdfTransformer xmlToRdfTransformer() throws TransformerException {
-        final Transformer transformer = xslTransformerFactory().
-                newTransformer(xslUriResolver().resolve(rdfToXmlXsl, xslBaseClassPath));
-        return new XmlToRdfTransformer(transformer);
-    }
-
-    /**
-     * TODO: Once we get the HL7V2 XSLT, replace rdfToXmlXsl with file name.
-     * XML To HL7v2 Transformer
-     * @return HL7V2Transformer transformer
-     * @throws TransformerException exception
-     */
-    @Bean
-    @Scope(PROTOTYPE)
-    public HL7V2Transformer hL7V2Transformer() throws TransformerException {
-        final Transformer transformer = xslTransformerFactory().
-                newTransformer(xslUriResolver().resolve(rdfToXmlXsl, xslBaseClassPath));
-        return new HL7V2Transformer(transformer);
-    }
-
-    /**
-     * TODO: Once we get the XMLITS XSLT, replace rdfToXmlXsl with file name.
-     * XML To RIMITS Transformer
-     * @return HL7V2Transformer transformer
-     * @throws TransformerException exception
-     */
-    @Bean
-    @Scope(PROTOTYPE)
-    public RIMITSTransformer rIMITSTransformer() throws TransformerException {
-        final Transformer transformer = xslTransformerFactory().
-                newTransformer(xslUriResolver().resolve(rdfToXmlXsl, xslBaseClassPath));
-        return new RIMITSTransformer(transformer);
-    }
-
-    /**
-     * Trim to CCD Transformer
-     * @return HL7V2Transformer transformer
-     * @throws TransformerException exception
-     */
-    @Bean
-    @Scope(PROTOTYPE)
-    public Trim2CCDTransformer trim2CCDTransformer() throws TransformerException {
-        final Transformer transformer = xslTransformerFactory().
-                newTransformer(xslUriResolver().resolve(xsltTemplateName, xslBaseClassPath));
-        return new Trim2CCDTransformer(transformer);
-    }
-
-
 }
