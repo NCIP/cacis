@@ -62,4 +62,25 @@ function schematronValidateSASourceData(srcData) {
     <scope>0</scope>
     <version>2.1.1.5490</version>
   </codeTemplate>
+  <codeTemplate>
+    <id>f472369e-bca8-471f-af51-e0c544f7276c</id>
+    <name>xsdValidateCanonical template</name>
+    <tooltip>template function for xsdValidateCanonical</tooltip>
+    <code>// modify function_name and parameters as you wish.
+// one function per template is recommended. i.e.) create a new code template for each new function.
+function xsdValidateCanonical(reqMsg) {
+
+	var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+	try{
+		var cdfXsdValidator = commonsCtx.getBean(&quot;canonicalSchemaValidator&quot;);
+		cdfXsdValidator.validate(reqMsg);
+	}catch(err) {
+		return err.message;
+	}
+    return null;
+}</code>
+    <type>FUNCTION</type>
+    <scope>0</scope>
+    <version>2.1.1.5490</version>
+  </codeTemplate>
 </list>
