@@ -1,0 +1,32 @@
+<map>
+  <entry>
+    <string>Shutdown</string>
+    <string>// This script executes once when all channels shut down from a redeploy
+// You only have access to the globalMap here to persist data
+return;</string>
+  </entry>
+  <entry>
+    <string>Deploy</string>
+    <string>// This script executes once when all channels start up from a redeploy
+// You only have access to the globalMap here to persist data
+var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+
+if(commonsCtx == null) {
+  	commonsCtx = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-esd-commons.xml&apos;);	
+	globalMap.put(&apos;commonsctx&apos;, commonsCtx);
+}
+return;</string>
+  </entry>
+  <entry>
+    <string>Preprocessor</string>
+    <string>// Modify the message variable below to pre process data
+// This script applies across all channels
+return message;</string>
+  </entry>
+  <entry>
+    <string>Postprocessor</string>
+    <string>// This script executes once after a message has been processed
+// This script applies across all channels
+return;</string>
+  </entry>
+</map>

@@ -10,6 +10,7 @@ channel remove SA-3_IdentifierAndVocabResolver
 channel remove SA-4_InvokeIPCMPChannel
 
 importcodetemplates "${build.outputDirectory}/templates/cacis-code-templates.xml" force
+importscripts "${build.outputDirectory}/scripts/cacis-global-scripts.xml" force
 
 import "${build.outputDirectory}/channels/SA-1_SourceSystemInterfacing.xml" force
 import "${build.outputDirectory}/channels/SA-1a_validationchannel.xml" force
