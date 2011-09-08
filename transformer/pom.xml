@@ -53,29 +53,6 @@
 
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <includeProjectDependencies>true</includeProjectDependencies>
-                    <includePluginDependencies>true</includePluginDependencies>
-                    <mainClass>gov.nih.nci.cacis.mirth.XSLForMirthFormatter</mainClass>
-                    <arguments>
-                        <argument>${build.outputDirectory}/xsl/</argument>
-                        <!-- List the xlst files one by one -->
-                        <argument>${basedir}/src/main/resources/xsl/BaselineNote.xslt</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.6</version>
                 <executions>
