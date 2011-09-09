@@ -1,11 +1,11 @@
 <channel>
-  <id>f4924f3c-448c-48ff-955f-2512eb29e436</id>
-  <name>CDACCDTransformationChannel</name>
+  <id>34c4f801-0031-46fd-8405-3514a5bb95a3</id>
+  <name>DR-2b_HL7v2Transformation</name>
   <description></description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314995004001</time>
+    <time>1314994965292</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -4498,7 +4498,7 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>transform</name>
-            <script>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
+            <script>var hL7V2Transformer = globalChannelMap.get(&apos;hL7V2Transformer&apos;);
 var os;
 var is;
 
@@ -4506,7 +4506,7 @@ try {
 	os = new Packages.java.io.ByteArrayOutputStream();
 	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-	xmlToRdfTransformer.transform(null, is, os);
+	hL7V2Transformer.transform(null, is, os);
 
 	var temp = new Packages.java.lang.String(os.toByteArray());
 
@@ -4519,7 +4519,7 @@ try {
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
+                <string>var hL7V2Transformer = globalChannelMap.get(&apos;hL7V2Transformer&apos;);
 var os;
 var is;
 
@@ -4527,7 +4527,7 @@ try {
 	os = new Packages.java.io.ByteArrayOutputStream();
 	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-	xmlToRdfTransformer.transform(null, is, os);
+	hL7V2Transformer.transform(null, is, os);
 
 	var temp = new Packages.java.lang.String(os.toByteArray());
 
@@ -4579,9 +4579,9 @@ return;</postprocessingScript>
 // You only have access to the globalMap and globalChannelMap here to persist data
 
 var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
-var xmlToRdfTransformer = transformerContext.getBean(&quot;xmlToRdfTransformer&quot;);
+var hL7V2Transformer = transformerContext.getBean(&quot;hL7V2Transformer&quot;);
 
-globalChannelMap.put(&apos;xmlToRdfTransformer&apos;, xmlToRdfTransformer);
+globalChannelMap.put(&apos;hL7V2Transformer&apos;, hL7V2Transformer);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

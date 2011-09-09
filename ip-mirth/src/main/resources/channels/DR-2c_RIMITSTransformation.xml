@@ -1,66 +1,22 @@
 <channel>
-  <id>e91b5581-5aa1-48b5-90e4-8b8214a85d95</id>
-  <name>RoutingInstructionValidationChannel</name>
-  <description>This channel checks to see if the routing instructions are provided in the incoming message. &#xd;
-If routing instructions are not part of the message, then default routing instructions are added before the message is passed onto Trans Split Channel.</description>
+  <id>9e2e878f-babd-4ad8-b037-331f33985759</id>
+  <name>DR-2c_RIMITSTransformation</name>
+  <description></description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315424061670</time>
+    <time>1315421575914</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">processRoutingInstructions</property>
+      <property name="responseValue">Destination 1</property>
     </properties>
     <transformer>
-      <steps>
-        <step>
-          <sequenceNumber>0</sequenceNumber>
-          <name>Log routing instructions</name>
-          <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-
-logger.info(msg.routingInstructions.length());
-
-if(msg.routingInstructions.length() == 0.0) {
-	//var defaultRoutingInstructionsFile = &apos;/Users/Moni/Misc/Mirth/config/DefaultRoutingIns.xml&apos;;
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
-	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
-	var routInsSeg = new XML(routingInstructionsContent);
-	msg.prependChild(routInsSeg);
-	responseMap.put(&apos;TransSplitChannel&apos;, ResponseFactory.getSuccessResponse(&apos;Default routing instructions added&apos;));
-}else{
-	responseMap.put(&apos;TransSplitChannel&apos;, ResponseFactory.getSuccessResponse(&apos;Routing instructions provided in incoming message&apos;));
-}
-
-logger.info(&apos;Response Message -- &apos;+ responseMap.get(&apos;TransSplitChannel&apos;));</script>
-          <type>JavaScript</type>
-          <data class="map">
-            <entry>
-              <string>Script</string>
-              <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-
-logger.info(msg.routingInstructions.length());
-
-if(msg.routingInstructions.length() == 0.0) {
-	//var defaultRoutingInstructionsFile = &apos;/Users/Moni/Misc/Mirth/config/DefaultRoutingIns.xml&apos;;
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
-	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
-	var routInsSeg = new XML(routingInstructionsContent);
-	msg.prependChild(routInsSeg);
-	responseMap.put(&apos;TransSplitChannel&apos;, ResponseFactory.getSuccessResponse(&apos;Default routing instructions added&apos;));
-}else{
-	responseMap.put(&apos;TransSplitChannel&apos;, ResponseFactory.getSuccessResponse(&apos;Routing instructions provided in incoming message&apos;));
-}
-
-logger.info(&apos;Response Message -- &apos;+ responseMap.get(&apos;TransSplitChannel&apos;));</string>
-            </entry>
-          </data>
-        </step>
-      </steps>
+      <steps/>
       <inboundTemplate encoding="base64">PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHA6Y2FDSVNSZXF1ZXN0IHVz
 ZXJOYW1lPSIiIHhtbG5zOnA9Imh0dHA6Ly9jYWNpcy5uY2kubmloLmdvdiIgeG1sbnM6cDE9InVy
 bjpobDctb3JnOnYzIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1h
@@ -4511,7 +4467,6 @@ c2xhdGlvbj4KICAgICAgICA8L3AxOmNvbmZpZGVudGlhbGl0eUNvZGU+CiAgICAgICAgPHAxOmxh
 bmd1YWdlQ29kZSBjb2RlPSJ0b2tlbiIgbnVsbEZsYXZvcj0iIi8+CiAgICAgIDwvcDE6bm9uWE1M
 Qm9keT4KICAgIDwvcDE6Y29tcG9uZW50PgogIDwvcDE6Q2xpbmljYWxEb2N1bWVudD4KPC9wOmNh
 Q0lTUmVxdWVzdD4K</inboundTemplate>
-      <outboundTemplate encoding="base64"></outboundTemplate>
       <inboundProtocol>XML</inboundProtocol>
       <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
@@ -4531,118 +4486,61 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>processRoutingInstructions</name>
+      <name>Destination 1</name>
       <properties>
-        <property name="DataType">JavaScript Writer</property>
-        <property name="host">sink</property>
-        <property name="script">return;</property>
+        <property name="DataType">Channel Writer</property>
+        <property name="host">0a6503b9-01f9-4020-a1d3-3ef0196b078b</property>
+        <property name="synchronised">0</property>
+        <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
         <steps>
           <step>
             <sequenceNumber>0</sequenceNumber>
-            <name>Process Routing Instructions</name>
-            <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+            <name>transform</name>
+            <script>var rIMITSTransformer = globalChannelMap.get(&apos;rIMITSTransformer&apos;);
+var os;
+var is;
 
-var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-var responseMsg = &apos;&apos;;
+	rIMITSTransformer.transform(null, is, os);
 
-for each (seg in exchDocs) {
-	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+	var temp = new Packages.java.lang.String(os.toByteArray());
 
-	var rec = seg[&apos;recipient&apos;].child(0);
-	var recTyp = rec.localName();
-	var url = rec[&apos;@url&apos;].toString();
-	var chNm;
-	if (exFrmt == &apos;CCD&apos;) {
-		chNm = &apos;CDACCDTransformationChannel&apos;;
-	}
-	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
-		chNm = &apos;HL7V2TransformationChannel&apos;;
-	}
-	if (exFrmt == &apos;XMLITS&apos;) {
-		//TODO: Change channel names  of XSLT_Channel
-		chNm = &apos;RIMITSTransformationChannel&apos;;
-	}
-
-	var msgToRoute = msg.copy();
-	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
-	processRoute(chNm, msgToRoute, recTyp, url);
-}
-
-responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
-
-function processRoute(channelName, msgToRoute, recTyp, url) {
-	var response = router.routeMessage(channelName, msgToRoute, false);
-	handleResponse(response, recTyp, url );
-}
-
-function handleResponse(response, recTyp, url ) {
-	responseMsg = responseMsg
-			+ &apos;Processed routing for &apos;
-			+ recTyp + &apos;, &apos; + url
-			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
 }</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+                <string>var rIMITSTransformer = globalChannelMap.get(&apos;rIMITSTransformer&apos;);
+var os;
+var is;
 
-var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+try {
+	os = new Packages.java.io.ByteArrayOutputStream();
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-var responseMsg = &apos;&apos;;
+	rIMITSTransformer.transform(null, is, os);
 
-for each (seg in exchDocs) {
-	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+	var temp = new Packages.java.lang.String(os.toByteArray());
 
-	var rec = seg[&apos;recipient&apos;].child(0);
-	var recTyp = rec.localName();
-	var url = rec[&apos;@url&apos;].toString();
-	var chNm;
-	if (exFrmt == &apos;CCD&apos;) {
-		chNm = &apos;CDACCDTransformationChannel&apos;;
-	}
-	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
-		chNm = &apos;HL7V2TransformationChannel&apos;;
-	}
-	if (exFrmt == &apos;XMLITS&apos;) {
-		//TODO: Change channel names  of XSLT_Channel
-		chNm = &apos;RIMITSTransformationChannel&apos;;
-	}
-
-	var msgToRoute = msg.copy();
-	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
-	processRoute(chNm, msgToRoute, recTyp, url);
-}
-
-responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
-
-function processRoute(channelName, msgToRoute, recTyp, url) {
-	var response = router.routeMessage(channelName, msgToRoute, false);
-	handleResponse(response, recTyp, url );
-}
-
-function handleResponse(response, recTyp, url ) {
-	responseMsg = responseMsg
-			+ &apos;Processed routing for &apos;
-			+ recTyp + &apos;, &apos; + url
-			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
+	msg = temp;
+} finally {
+	is.close();
+	os.close();
 }</string>
               </entry>
             </data>
           </step>
         </steps>
-        <inboundTemplate encoding="base64">PHA6Y2FDSVNSZXF1ZXN0IHVzZXJOYW1lPSIiIHhtbG5zOnA9Imh0dHA6Ly9jYWNpcy5uY2kubmlo
-LmdvdiIgeG1sbnM6cDE9InVybjpobDctb3JnOnYzIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMu
-b3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly9j
-YWNpcy5uY2kubmloLmdvdiBjYUNJU0RhdGFTaGFyaW5nLnhzZCAiPgogICA8cDpyb3V0aW5nSW5z
-dHJ1Y3Rpb25zPgogICA8cDpleGNoYW5nZURvY3VtZW50IGV4Y2hhbmdlRm9ybWF0PSJITDdfVjJf
-Q0xJTklDQUxfTk9URSI+CiAgICAgPHA6cmVjaXBpZW50PgogICAgICAgPHA6c2VjdXJlRW1haWxB
-ZGRyZXNzIHVybD0iaHR0cDovL3RlbXB1cmkub3JnIi8+CiAgICAgPC9wOnJlY2lwaWVudD4KICAg
-PC9wOmV4Y2hhbmdlRG9jdW1lbnQ+CiA8L3A6cm91dGluZ0luc3RydWN0aW9ucz4KPC9wOmNhQ0lT
-UmVxdWVzdD4=</inboundTemplate>
+        <inboundTemplate encoding="base64"></inboundTemplate>
         <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
@@ -4656,14 +4554,14 @@ UmVxdWVzdD4=</inboundTemplate>
       <filter>
         <rules/>
       </filter>
-      <transportName>JavaScript Writer</transportName>
+      <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">false</property>
+    <property name="clearGlobalChannelMap">true</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
@@ -4680,6 +4578,10 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 
+var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
+var rIMITSTransformer = transformerContext.getBean(&quot;rIMITSTransformer&quot;);
+
+globalChannelMap.put(&apos;rIMITSTransformer&apos;, rIMITSTransformer);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

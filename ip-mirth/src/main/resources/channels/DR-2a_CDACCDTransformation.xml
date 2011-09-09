@@ -1,14 +1,14 @@
 <channel>
-  <id>9e2e878f-babd-4ad8-b037-331f33985759</id>
-  <name>RIMITSTransformationChannel</name>
+  <id>f4924f3c-448c-48ff-955f-2512eb29e436</id>
+  <name>DR-2a_CDACCDTransformation</name>
   <description></description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315421575914</time>
+    <time>1314995004001</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4498,7 +4498,7 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>transform</name>
-            <script>var rIMITSTransformer = globalChannelMap.get(&apos;rIMITSTransformer&apos;);
+            <script>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
 var os;
 var is;
 
@@ -4506,7 +4506,7 @@ try {
 	os = new Packages.java.io.ByteArrayOutputStream();
 	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-	rIMITSTransformer.transform(null, is, os);
+	xmlToRdfTransformer.transform(null, is, os);
 
 	var temp = new Packages.java.lang.String(os.toByteArray());
 
@@ -4519,7 +4519,7 @@ try {
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var rIMITSTransformer = globalChannelMap.get(&apos;rIMITSTransformer&apos;);
+                <string>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
 var os;
 var is;
 
@@ -4527,7 +4527,7 @@ try {
 	os = new Packages.java.io.ByteArrayOutputStream();
 	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
 
-	rIMITSTransformer.transform(null, is, os);
+	xmlToRdfTransformer.transform(null, is, os);
 
 	var temp = new Packages.java.lang.String(os.toByteArray());
 
@@ -4579,9 +4579,9 @@ return;</postprocessingScript>
 // You only have access to the globalMap and globalChannelMap here to persist data
 
 var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
-var rIMITSTransformer = transformerContext.getBean(&quot;rIMITSTransformer&quot;);
+var xmlToRdfTransformer = transformerContext.getBean(&quot;xmlToRdfTransformer&quot;);
 
-globalChannelMap.put(&apos;rIMITSTransformer&apos;, rIMITSTransformer);
+globalChannelMap.put(&apos;xmlToRdfTransformer&apos;, xmlToRdfTransformer);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

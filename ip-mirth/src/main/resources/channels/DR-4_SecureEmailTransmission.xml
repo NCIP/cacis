@@ -1,6 +1,6 @@
 <channel>
   <id>e2a35dfa-fc18-4f54-b276-a731f40dcce6</id>
-  <name>secureEmailAddressChannel</name>
+  <name>DR-4_SecureEmailTransmission</name>
   <description></description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>

@@ -1,14 +1,15 @@
 <channel>
   <id>ec2b76be-923f-4d56-bb6f-0166a76dd50b</id>
   <name>DocumentRouter</name>
-  <description></description>
+  <description>TODO: ESD-3103 - remove this channel once the contents is taken and put into DocumentRouterMuxDemux.
+This is the old DocumentRouter channel that will be used to implement DocumentRouterMuxDemux, which is currently a mock channel that writes to a file. </description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1312783038017</time>
+    <time>1315514088258</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>37</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -57,7 +58,13 @@ for each (seg in exchDocs) {
 	var rec = seg[&apos;recipient&apos;].child(0);
 	var recTyp = rec.localName();
 	var url = rec[&apos;@url&apos;].toString();
-	var chNm = recTyp + &apos;Channel&apos;;
+	var chNm;
+	if (recTyp == &apos;secureEmailAddress&apos;) {
+		chNm = &apos;DR-4_SecureEmailTransmission&apos;;
+	} else {
+		chNm = recTyp + &apos;Channel&apos;;
+	}
+	 
 	var msgToRoute = msg.copy();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
 	processRoute(chNm, msgToRoute, recTyp, url);
@@ -90,7 +97,13 @@ for each (seg in exchDocs) {
 	var rec = seg[&apos;recipient&apos;].child(0);
 	var recTyp = rec.localName();
 	var url = rec[&apos;@url&apos;].toString();
-	var chNm = recTyp + &apos;Channel&apos;;
+	var chNm;
+	if (recTyp == &apos;secureEmailAddress&apos;) {
+		chNm = &apos;DR-4_SecureEmailTransmission&apos;;
+	} else {
+		chNm = recTyp + &apos;Channel&apos;;
+	}
+	 
 	var msgToRoute = msg.copy();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
 	processRoute(chNm, msgToRoute, recTyp, url);
