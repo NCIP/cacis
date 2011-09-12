@@ -61,12 +61,19 @@
 package gov.nih.nci.cacis.xds.client;
 
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
+import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -108,6 +115,9 @@ public class XDSConfigImpl implements XDSConfig  {
     @Value("${xds.truststore.password}")
     private String xdsTruststorePassword;
     
+    private final Map<String, String> contHash = 
+        Collections.synchronizedMap(new HashMap<String, String>());
+    
     /**
      * Bean for populating the XDSHandler info for initializing the document handler
      * @return XDSHandlerInfo
@@ -132,28 +142,73 @@ public class XDSConfigImpl implements XDSConfig  {
         return hndlrInfo;
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocumentHandler documentHandler() {
-        final DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docH = 
-            new XDSDocumentHandler();
-        docH.initialize(xdsHandlerInfo());
-        return docH;
-    }
+//    /**
+//     * {@inheritDoc}
+//     */
+//    @Override
+//    @Bean
+//    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+//    public DocumentHandler documentHandler() {
+//        final DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docH = 
+//            new XDSDocumentHandler();
+//        docH.initialize(xdsHandlerInfo());
+//        return docH;
+//    }
+//    
+//    /**
+//     * wrapper for xds doc handler
+//     * @return DocumentHandler instance of Wrapper xds doc handler
+//     */
+//    @Bean
+//    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+//    public DocumentHandler wrapperDocumentHandler() {
+//        final DocumentHandler<HashMap<String, String>, HashMap<String, String>> docH = 
+//            new WrapperXDSDocumentHandler(documentHandler());
+//        return docH;
+//    }
     
     /**
      * wrapper for xds doc handler
-     * @return DocumentHandler instance of Wrapper xds doc handler
+     * @return DocumentHandler instance
      */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public DocumentHandler wrapperDocumentHandler() {
-        final DocumentHandler<HashMap<String, String>, HashMap<String, String>> docH = 
-            new WrapperXDSDocumentHandler(documentHandler());
+        return documentHandler();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Bean    
+    public DocumentHandler documentHandler() {
+        final DocumentHandler<Map<String, String>, Map<String, String>> docH = 
+            new DocumentHandler<Map<String, String>, Map<String, String>>() {
+                
+                @Override
+                public String handleDocument(Map<String, String> documentMetadata) throws ApplicationRuntimeException {
+                    final String docId = UUID.randomUUID().toString();
+                    contHash.put(docId, documentMetadata.get("content"));
+                    return docId;
+                }
+
+                @Override
+                public void initialize(Map<String, String> setupInfo) throws ApplicationRuntimeException {
+                    // dummyImpl do not do anything                    
+                }
+
+                @Override
+                public InputStream retrieveDocument(String docUniqueID) throws ApplicationRuntimeException {
+                    final String cont = contHash.get(docUniqueID);
+                    if (StringUtils.isEmpty(cont)) {
+                        return null;
+                    } else {
+                        return new ByteArrayInputStream(cont.getBytes());
+                    }
+                    
+                }
+            };
         return docH;
     }
     

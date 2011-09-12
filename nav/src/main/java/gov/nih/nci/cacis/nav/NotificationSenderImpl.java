@@ -185,7 +185,7 @@ public class NotificationSenderImpl implements NotificationSender {
 
     private void sendEmail(String to, Node sig) throws AddressException, MessagingException,
             TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError,
-            UnsupportedEncodingException { 
+            UnsupportedEncodingException {
 
         final MimeMessage msg = mailSender.createMimeMessage();
 
@@ -206,33 +206,12 @@ public class NotificationSenderImpl implements NotificationSender {
         final StringWriter xmlAsWriter = new StringWriter();
         final StreamResult result = new StreamResult(xmlAsWriter);
         TransformerFactory.newInstance().newTransformer().transform(source, result);
-        final ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlAsWriter.toString().getBytes("UTF-8"));
+        
         final String contentType = "application/xml; charset=UTF-8";
         final String fileName = "IHEXDSNAV-" + UUID.randomUUID() + ".xml";
 
-        final DataSource ds = new DataSource() {
+        final DataSource ds = new AttachmentDS(fileName, xmlAsWriter.toString(), contentType);
 
-            @Override
-            public String getContentType() {
-                return contentType;
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return inputStream;
-            }
-
-            @Override
-            public String getName() {
-                return fileName;
-            }
-
-            @Override
-            public OutputStream getOutputStream() throws IOException {
-                throw new IllegalArgumentException("getOutputStream should not be called.");
-            }
-
-        };
         mbp2.setDataHandler(new DataHandler(ds));
         mbp2.setFileName(fileName);
         mbp2.setHeader("Content-Type", contentType);
@@ -392,5 +371,53 @@ public class NotificationSenderImpl implements NotificationSender {
         if (StringUtils.isNotEmpty(protocol)) {
             mailSender.setProtocol(protocol);
         }
+    }
+
+    /**
+     * DataSource for the mail attachment
+     * 
+     * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
+     * 
+     */
+    public static class AttachmentDS implements DataSource {
+
+        private final String fileName;
+        private final String content;
+        private final String contentType;
+
+        /**
+         * Constructor for supplying the content
+         * 
+         * @param fileName - filename of the attachment
+         * @param content - attachment as String content
+         * @param contentType - attachment type
+         */
+        public AttachmentDS(String fileName, String content, String contentType) {
+            super();
+            this.fileName = fileName;
+            this.content = content;
+            this.contentType = contentType;
+        }
+
+        @Override
+        public String getContentType() {
+            return contentType;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(content.getBytes("UTF-8"));
+        }
+
+        @Override
+        public String getName() {
+            return fileName;
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            throw new IllegalArgumentException("getOutputStream should not be called.");
+        }
+
     }
 }
