@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>pco</artifactId>
+        <groupId>gov.nih.nci.cacis</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xds-proxy-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>xds-proxy-service</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openhealthtools.openxds</groupId>
+            <artifactId>apache-axis2</artifactId>
+            <version>1.0.1</version>
+            <type>pom</type>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-aar-maven-plugin</artifactId>
+                <version>1.5</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>aar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+
+                    <servicesXmlFile>${basedir}/src/main/resources/services.xml</servicesXmlFile>
+                    <includeDependencies>false</includeDependencies>
+                    <wsdlFile>${basedir}/src/main/resources/cacis-proxy-xdsrepositoryb.wsdl</wsdlFile>
+                    <wsdlFileName>cacis-proxy-xdsrepositoryb.wsdl</wsdlFileName>
+                    <classesDirectory></classesDirectory>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${basedir}/src/main/resources/axis2repository</directory>
+                            <outputDirectory>axis2repository</outputDirectory>
+                        </fileSet>
+                        <fileSet>
+                            <directory>${project.build.outputDirectory}</directory>
+                        </fileSet>
+                    </fileSets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

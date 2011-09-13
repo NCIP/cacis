@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5.4  Built on : Dec 19, 2010 (08:18:42 CET) -->
+<serviceGroup>
+    <service name="cacis-proxy-xdsrepositoryb">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="gov.nist.registry.common2.service.XDSRawXMLInOutMessageReceiver"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">gov.nih.nci.cacis.XdsRegistryProxy</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="getServiceName" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://serviceclasses.ws.registry.nist.gov">
+            <actionMapping>urn:getServiceName</actionMapping>
+            <outputActionMapping>urn:getServiceNameResponse</outputActionMapping>
+        </operation>
+        <operation name="provideAndRegisterDocumentSetRequest" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://serviceclasses.ws.registry.nist.gov">
+            <actionMapping>urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</actionMapping>
+            <outputActionMapping>urn:ProvideAndRegisterDocumentSetRequestResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

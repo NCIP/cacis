@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://serviceclasses.ws.registry.nist.gov" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://serviceclasses.ws.registry.nist.gov" xmlns:ax2356="http://registry.common2.registry.nist.gov/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ax2353="http://exception.common2.registry.nist.gov/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+<wsdl:documentation>xdsrepositoryb</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://registry.common2.registry.nist.gov/xsd">
+            <xs:complexType name="Metadata">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="allDefinedIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="allLeafClasses" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="allObjects" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="allUids" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="assocReferences" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="associationIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="associations" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="classifications" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="documentUidMap" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="extrinsicObjectIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="extrinsicObjects" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="folderIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="folders" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="grokMetadata" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="idsOfReferencedObjects" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="leafClassObjects" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="majorObjects" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="metadata" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="metadataAsObjectRefs" nillable="true" type="ax2356:Metadata"/>
+                    <xs:element minOccurs="0" name="metadataDescription" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nonObjectRefs" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="objectIdsToDeprecate" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="objectRefIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="objectRefs" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="objectRefsOnly" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="original" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="patientIdConsistent" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="patientIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="referencedObjectsThatMustHaveSamePatientId" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="registryPackageClassificationBroken" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="registryPackageIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="registryPackages" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="root" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="submissionSet" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="submissionSetId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="submissionSetIds" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="submissionSetPatientId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="submissionSetUniqueId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="submissionSets" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="uidHashMap" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="uidMap" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="uriChunkSize" type="xs:int"/>
+                    <xs:element minOccurs="0" name="v2" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="v2SubmitObjectsRequest" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="v3" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="v3SubmitObjectsRequest" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="version2" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="wrapper" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Response">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="errorsAndWarnings" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="response" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="root" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.common2.registry.nist.gov/xsd" xmlns:ax2354="http://serviceclasses.ws.registry.nist.gov">
+            <xs:import namespace="http://serviceclasses.ws.registry.nist.gov"/>
+            <xs:complexType name="XdsException">
+                <xs:complexContent>
+                    <xs:extension base="ax2354:Exception">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="MetadataException">
+                <xs:complexContent>
+                    <xs:extension base="ax2353:XdsException">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://serviceclasses.ws.registry.nist.gov" xmlns:ax2355="http://exception.common2.registry.nist.gov/xsd" xmlns:ax2357="http://registry.common2.registry.nist.gov/xsd">
+            <xs:import namespace="http://exception.common2.registry.nist.gov/xsd"/>
+            <xs:import namespace="http://registry.common2.registry.nist.gov/xsd"/>
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="MetadataException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="MetadataException" nillable="true" type="ax2353:MetadataException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="runContentValidationService">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="m" nillable="true" type="ax2356:Metadata"/>
+                        <xs:element minOccurs="0" name="response" nillable="true" type="ax2356:Response"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="runContentValidationServiceResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceNameResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="ProvideAndRegisterDocumentSetRequestRequest">
+  </wsdl:message>
+  <wsdl:message name="MetadataException">
+    <wsdl:part name="parameters" element="ns:MetadataException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getServiceNameResponse">
+    <wsdl:part name="parameters" element="ns:getServiceNameResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="RetrieveDocumentSetRequestResponse">
+  </wsdl:message>
+  <wsdl:message name="RetrieveDocumentSetRequestRequest">
+  </wsdl:message>
+  <wsdl:message name="runContentValidationServiceRequest">
+    <wsdl:part name="parameters" element="ns:runContentValidationService">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ProvideAndRegisterDocumentSetRequestResponse">
+  </wsdl:message>
+  <wsdl:message name="runContentValidationServiceResponse">
+    <wsdl:part name="parameters" element="ns:runContentValidationServiceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getServiceNameRequest">
+  </wsdl:message>
+  <wsdl:portType name="xdsrepositorybPortType">
+    <wsdl:operation name="runContentValidationService">
+      <wsdl:input message="ns:runContentValidationServiceRequest" wsaw:Action="urn:runContentValidationService">
+    </wsdl:input>
+      <wsdl:output message="ns:runContentValidationServiceResponse" wsaw:Action="urn:runContentValidationServiceResponse">
+    </wsdl:output>
+      <wsdl:fault name="MetadataException" message="ns:MetadataException" wsaw:Action="urn:runContentValidationServiceMetadataException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveDocumentSetRequest">
+      <wsdl:input message="ns:RetrieveDocumentSetRequestRequest" wsaw:Action="urn:ihe:iti:2007:RetrieveDocumentSet">
+    </wsdl:input>
+      <wsdl:output message="ns:RetrieveDocumentSetRequestResponse" wsaw:Action="urn:RetrieveDocumentSetRequestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProvideAndRegisterDocumentSetRequest">
+      <wsdl:input message="ns:ProvideAndRegisterDocumentSetRequestRequest" wsaw:Action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b">
+    </wsdl:input>
+      <wsdl:output message="ns:ProvideAndRegisterDocumentSetRequestResponse" wsaw:Action="urn:ProvideAndRegisterDocumentSetRequestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceName">
+      <wsdl:input message="ns:getServiceNameRequest" wsaw:Action="urn:getServiceName">
+    </wsdl:input>
+      <wsdl:output message="ns:getServiceNameResponse" wsaw:Action="urn:getServiceNameResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="xdsrepositorybSoap12Binding" type="ns:xdsrepositorybPortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="runContentValidationService">
+      <soap12:operation soapAction="urn:runContentValidationService" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MetadataException">
+        <soap12:fault name="MetadataException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveDocumentSetRequest">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProvideAndRegisterDocumentSetRequest">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceName">
+      <soap12:operation soapAction="urn:getServiceName" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="xdsrepositorybSoap11Binding" type="ns:xdsrepositorybPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="runContentValidationService">
+      <soap:operation soapAction="urn:runContentValidationService" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MetadataException">
+        <soap:fault name="MetadataException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveDocumentSetRequest">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProvideAndRegisterDocumentSetRequest">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceName">
+      <soap:operation soapAction="urn:getServiceName" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="xdsrepositorybHttpBinding" type="ns:xdsrepositorybPortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="runContentValidationService">
+      <http:operation location="xdsrepositoryb/runContentValidationService"/>
+      <wsdl:input>
+        <mime:content part="runContentValidationService" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="runContentValidationService" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveDocumentSetRequest">
+      <http:operation location="xdsrepositoryb/RetrieveDocumentSetRequest"/>
+      <wsdl:input>
+        <mime:content part="RetrieveDocumentSetRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="RetrieveDocumentSetRequest" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProvideAndRegisterDocumentSetRequest">
+      <http:operation location="xdsrepositoryb/ProvideAndRegisterDocumentSetRequest"/>
+      <wsdl:input>
+        <mime:content part="ProvideAndRegisterDocumentSetRequest" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="ProvideAndRegisterDocumentSetRequest" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceName">
+      <http:operation location="xdsrepositoryb/getServiceName"/>
+      <wsdl:input>
+        <mime:content part="getServiceName" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getServiceName" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="xdsrepositoryb">
+    <wsdl:port name="xdsrepositorybHttpSoap11Endpoint" binding="ns:xdsrepositorybSoap11Binding">
+      <soap:address location="localhost/axis2/services/xdsrepositoryb.xdsrepositorybHttpSoap11Endpoint/"/>
+    </wsdl:port>
+    <wsdl:port name="xdsrepositorybHttpSoap12Endpoint" binding="ns:xdsrepositorybSoap12Binding">
+      <soap12:address location="localhost/axis2/services/xdsrepositoryb.xdsrepositorybHttpSoap12Endpoint/"/>
+    </wsdl:port>
+    <wsdl:port name="xdsrepositorybHttpEndpoint" binding="ns:xdsrepositorybHttpBinding">
+      <http:address location="localhost/axis2/services/xdsrepositoryb.xdsrepositorybHttpEndpoint/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
