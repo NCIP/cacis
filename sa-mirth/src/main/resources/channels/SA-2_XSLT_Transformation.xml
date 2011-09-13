@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315512007662</time>
+    <time>1315935965410</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>19</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -40,7 +40,7 @@
       <properties>
         <property name="DataType">Channel Writer</property>
         <property name="host">f9460cc7-cf5e-413f-be05-23ba953d9f26</property>
-        <property name="synchronised">1</property>
+        <property name="synchronised">0</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
@@ -48,44 +48,66 @@
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>transform</name>
-            <script>var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
+            <script>var srcDataEle = msg[&apos;sourceData&apos;];
+default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+
+var trim = srcDataEle[&apos;trim&apos;];
+
+var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
 var os;
 var is;
 
 try {
+	//transform source data (transcen trim) to CanonicalDataFormat(ClinicalDocument)
 	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(trim).getBytes());
 
 	trim2CCDTransformer.transform(null, is, os);
 
 	var temp = new Packages.java.lang.String(os.toByteArray());
+	
+	//add the clinical document to the cacisrequest
+	default xml namespace = &apos;http://cacis.nci.nih.gov&apos;;
+	createSegment(&apos;ClinicalDocument&apos;, msg);
+	msg[&apos;ClinicalDocument&apos;] = new XML(temp);
 
-	msg = temp;
-} finally {
+}finally {
 	is.close();
 	os.close();
-}</script>
+}
+return;</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
+                <string>var srcDataEle = msg[&apos;sourceData&apos;];
+default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+
+var trim = srcDataEle[&apos;trim&apos;];
+
+var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
 var os;
 var is;
 
 try {
+	//transform source data (transcen trim) to CanonicalDataFormat(ClinicalDocument)
 	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(trim).getBytes());
 
 	trim2CCDTransformer.transform(null, is, os);
 
 	var temp = new Packages.java.lang.String(os.toByteArray());
+	
+	//add the clinical document to the cacisrequest
+	default xml namespace = &apos;http://cacis.nci.nih.gov&apos;;
+	createSegment(&apos;ClinicalDocument&apos;, msg);
+	msg[&apos;ClinicalDocument&apos;] = new XML(temp);
 
-	msg = temp;
-} finally {
+}finally {
 	is.close();
 	os.close();
-}</string>
+}
+return;</string>
               </entry>
             </data>
           </step>
@@ -95,10 +117,10 @@ try {
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="stripNamespaces">true</property>
+          <property name="stripNamespaces">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="stripNamespaces">true</property>
+          <property name="stripNamespaces">false</property>
         </outboundProperties>
       </transformer>
       <filter>

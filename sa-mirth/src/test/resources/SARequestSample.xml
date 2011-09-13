@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<caCISRequest xmlns="http://cacis.nci.nih.gov"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:cda="urn:hl7-org:v3"
-    >
-    <routingInstructions>
+<caCISRequest xmlns="http://cacis.nci.nih.gov" xmlns:cda="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+	<routingInstructions>
 		<exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">
 			<recipient>
 				<secureEmailAddress url="mailto:x@x.x"/>
 			</recipient>
 		</exchangeDocument>
-		<exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">
+		<exchangeDocument exchangeFormat="XMLITS">
 			<recipient>
-				<secureEmailAddress url="mailto:y@y.y"/>
+				<secureEmailAddress url="mailto:x@x.x"/>
 			</recipient>
-		</exchangeDocument>
+		</exchangeDocument>		
 	</routingInstructions>
 	<sourceData>
 		<trim xmlns="urn:tolven-org:trim:4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -230,7 +227,5 @@
 			</act>
 		</trim>
 	</sourceData>
-	<clinicalMetaData documentType="CLINICAL_NOTE" siteIdRoot="2.3.4.0" patientIdRoot="2.3.4.1" siteIdExtension="site_id" patientIdExtension="patient_id" studyIdRoot="2.3.4.2" studyIdExtension="study_id"/>
-</caCISRequest>
-
-
+	<clinicalMetaData documentType="CLINICAL_NOTE" siteIdRoot="2.16.840.1.113883.2" patientIdRoot="2.16.840.1.113883.3" siteIdExtension="site_id" patientIdExtension="patient_id_1" studyIdRoot="2.16.840.1.113883.1" studyIdExtension="study_id"/>
+	</caCISRequest>

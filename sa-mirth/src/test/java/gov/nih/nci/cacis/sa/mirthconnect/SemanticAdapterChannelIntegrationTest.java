@@ -137,7 +137,6 @@ public class SemanticAdapterChannelIntegrationTest {
 
         final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
         final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(sampleMessageIS);
-
         client.acceptSource(request);
     }
 

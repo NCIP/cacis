@@ -90,7 +90,7 @@ public class SemanticAdapterJaxWSSystemTest extends AbstractJaxWsTest {
      */
     protected static final String ADDRESS = "http://localhost:18091/services/SA?wsdl";
     @Mock
-    WebServiceMessageReceiver webServiceMessageReceiver;
+    private WebServiceMessageReceiver webServiceMessageReceiver;
 
     private EndpointImpl ep;
     private JaxWsProxyFactoryBean factory;
@@ -116,6 +116,9 @@ public class SemanticAdapterJaxWSSystemTest extends AbstractJaxWsTest {
         MockitoAnnotations.initMocks(this);
 
         final SemanticAdapter service = new SemanticAdapter(webServiceMessageReceiver);
+        //for testing
+        service.setCustomLibDir("./target");
+        
         ep = new EndpointImpl(getBus(), service);
         ep.publish(ADDRESS);
 
