@@ -63,7 +63,7 @@ public class XdsRepositoryProxy {
      * @throws AxisFault Fault
      */
     public OMElement retrieveDocumentSetRequest(OMElement request) throws AxisFault {
-        LOG.debug("in Proxy provideAndRegisterDocumentSetRequest");
+        LOG.debug("in Proxy retrieveDocumentSetRequest");
 
               OMElement response = null;
               try {

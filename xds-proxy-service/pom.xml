@@ -17,27 +17,39 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <test.unit.branchrate>50</test.unit.branchrate>
         <test.unit.linerate>50</test.unit.linerate>
+        <axis2.version>1.5</axis2.version>
+        <spring.version>2.5.6</spring.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.openhealthtools.openxds</groupId>
-            <artifactId>apache-axis2</artifactId>
-            <version>1.0.1</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>addressing</artifactId>
-            <version>1.5</version>
-            <type>pom</type>
-        </dependency>
-
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>xds-authz-handlers</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-http</artifactId>
+            <version>1.5a</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-local</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-kernel</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -153,7 +165,7 @@
                 </executions>
             </plugin>
 
-        <!--update openxds-web lib to work with caCIS-->
+            <!--update openxds-web lib to work with caCIS-->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.4.1</version>
@@ -197,7 +209,7 @@
                                     <artifactId>esd-commons</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
-                                 <artifactItem>
+                                <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>xds-authz-beans</artifactId>
                                     <version>${project.version}</version>
@@ -214,25 +226,43 @@
                                     <version>3.2.1.ga</version>
                                 </artifactItem>
                                 <artifactItem>
-+									<groupId>org.hibernate</groupId>
-+									<artifactId>hibernate-entitymanager</artifactId>
-+									<version>3.2.1.ga</version>
-+								</artifactItem>
+                                    +
+                                    <groupId>org.hibernate</groupId>
+                                    +
+                                    <artifactId>hibernate-entitymanager</artifactId>
+                                    +
+                                    <version>3.2.1.ga</version>
+                                    +
+                                </artifactItem>
                                 <artifactItem>
-+									<groupId>javassist</groupId>
-+									<artifactId>javassist</artifactId>
-+									<version>3.3.GA</version>
-+								</artifactItem>
-+								<artifactItem>
-+									<groupId>xerces</groupId>
-+									<artifactId>xercesImpl</artifactId>
-+									<version>2.8.1</version>
-+								</artifactItem>
-+								<artifactItem>
-+									<groupId>jboss</groupId>
-+									<artifactId>jboss-archive-browsing</artifactId>
-+									<version>5.0.0alpha-200607201-119</version>
-+								</artifactItem>
+                                    +
+                                    <groupId>javassist</groupId>
+                                    +
+                                    <artifactId>javassist</artifactId>
+                                    +
+                                    <version>3.3.GA</version>
+                                    +
+                                </artifactItem>
+                                +
+                                <artifactItem>
+                                    +
+                                    <groupId>xerces</groupId>
+                                    +
+                                    <artifactId>xercesImpl</artifactId>
+                                    +
+                                    <version>2.8.1</version>
+                                    +
+                                </artifactItem>
+                                +
+                                <artifactItem>
+                                    +
+                                    <groupId>jboss</groupId>
+                                    +
+                                    <artifactId>jboss-archive-browsing</artifactId>
+                                    +
+                                    <version>5.0.0alpha-200607201-119</version>
+                                    +
+                                </artifactItem>
                             </artifactItems>
 
                             <outputDirectory>${openxds.web.dir}/WEB-INF/lib</outputDirectory>

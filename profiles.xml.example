@@ -22,7 +22,7 @@
         <!--OPTIONAL - change these for your local environment. Most cases defaults are fine-->
 
         <!-- cacis proxy for xds -->
-        <cacis.xds.proxy.repository.url>${openxds.http.base.url}/services/cacis-proxy-xdsrepositoryb</cacis.xds.proxy.repository.url>
+        <cacis.xds.proxy.repository.url>http://${openxds.http.base.url}/services/cacis-proxy-xdsrepositoryb</cacis.xds.proxy.repository.url>
 
         <!-- openXDS deployed services -->
         <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>

@@ -22,6 +22,7 @@
         <module>xds-client</module>
         <module>sa-mirth</module>
         <module>sa-client-cli</module>
+        <module>xds-proxy-service</module>
     </modules>
     <packaging>pom</packaging>
 
