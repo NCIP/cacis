@@ -15,6 +15,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <test.unit.branchrate>50</test.unit.branchrate>
+        <test.unit.linerate>50</test.unit.linerate>
     </properties>
 
     <dependencies>
@@ -24,10 +26,39 @@
             <version>1.0.1</version>
             <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>addressing</artifactId>
+            <version>1.5</version>
+            <type>pom</type>
+        </dependency>
 
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>xds-authz-handlers</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>web.xml</exclude>
+                    <exclude>*.wsdl</exclude>
+                    <exclude>services.*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.axis2</groupId>
@@ -43,22 +74,173 @@
                     </execution>
                 </executions>
                 <configuration>
-
+                    <aarName>${artifactId}</aarName>
                     <servicesXmlFile>${basedir}/src/main/resources/services.xml</servicesXmlFile>
                     <includeDependencies>false</includeDependencies>
                     <wsdlFile>${basedir}/src/main/resources/cacis-proxy-xdsrepositoryb.wsdl</wsdlFile>
                     <wsdlFileName>cacis-proxy-xdsrepositoryb.wsdl</wsdlFileName>
-                    <classesDirectory></classesDirectory>
-                    <fileSets>
-                        <fileSet>
-                            <directory>${basedir}/src/main/resources/axis2repository</directory>
-                            <outputDirectory>axis2repository</outputDirectory>
-                        </fileSet>
-                        <fileSet>
-                            <directory>${project.build.outputDirectory}</directory>
-                        </fileSet>
-                    </fileSets>
                 </configuration>
+            </plugin>
+
+            <!--deploy artifacts to openxds-webapp-->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>update-openxds-webxml</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${openxds.web.dir}/WEB-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>web.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>update-openxds-axisconf</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${openxds.web.dir}/WEB-INF/conf</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/conf</directory>
+                                    <includes>
+                                        <include>axis2.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>deploy-openxds-proxy-service</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${openxds.web.dir}/WEB-INF/services</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>*.aar</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>services.list</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        <!--update openxds-web lib to work with caCIS-->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <filesets>
+                        <fileset>
+                            <directory>${openxds.web.dir}/WEB-INF/lib</directory>
+                            <includes>
+                                <include>hibernate-annotations-3.3.0.ga.jar</include>
+                                <include>xercesImpl-2.0.2.jar</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+                <!--explicitly run during deploy-->
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>esd-commons</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                                 <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>xds-authz-beans</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>xds-authz-handlers</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-annotations</artifactId>
+                                    <version>3.2.1.ga</version>
+                                </artifactItem>
+                                <artifactItem>
++									<groupId>org.hibernate</groupId>
++									<artifactId>hibernate-entitymanager</artifactId>
++									<version>3.2.1.ga</version>
++								</artifactItem>
+                                <artifactItem>
++									<groupId>javassist</groupId>
++									<artifactId>javassist</artifactId>
++									<version>3.3.GA</version>
++								</artifactItem>
++								<artifactItem>
++									<groupId>xerces</groupId>
++									<artifactId>xercesImpl</artifactId>
++									<version>2.8.1</version>
++								</artifactItem>
++								<artifactItem>
++									<groupId>jboss</groupId>
++									<artifactId>jboss-archive-browsing</artifactId>
++									<version>5.0.0alpha-200607201-119</version>
++								</artifactItem>
+                            </artifactItems>
+
+                            <outputDirectory>${openxds.web.dir}/WEB-INF/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

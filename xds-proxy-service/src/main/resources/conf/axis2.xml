@@ -465,7 +465,19 @@
                 <order phase="Addressing"/>
             </handler>
         </phase>
-        <phase name="Security"/>
+
+        <!--cacis handlers-->
+        <phase name="Security">
+            <handler name="CacisXdsDocumentAuthzOutHandler"
+                     class="gov.nih.nci.cacis.xds.auth.axis.CacisXdsDocumentAuthzOutHandler">
+                <order phase="Security"/>
+            </handler>
+            <handler name="CacisXdsDocumentAuthzInHandler"
+                     class="gov.nih.nci.cacis.xds.auth.axis.CacisXdsWriteAuthzInHandler">
+                <order phase="Security"/>
+            </handler>
+        </phase>
+
         <phase name="PreDispatch"/>
         <phase name="Dispatch" class="org.apache.axis2.engine.DispatchPhase">
             <handler name="RequestURIBasedDispatcher"

@@ -1,60 +1,70 @@
 <profilesXml>
 
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+  <profiles>
+    <profile>
+      <id>local</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
 
-            <properties>
+      <properties>
 
-                <!--Customize these for your local environment-->
-                <openxds.web.dir>$CATALINA_HOME/webapps/openxds-web</openxds.web.dir>
-                <openxds.http.base.url>localhost:8080/openxds-web</openxds.http.base.url>
-                <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
-                <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
+        <!--CUSTOMIZE these for your local environment-->
+
+        <openxds.web.dir>$CATALINA_HOME/webapps/openxds-web</openxds.web.dir>
+        <openxds.http.base.url>localhost:8080/openxds-web</openxds.http.base.url>
+
+        <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
+        <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
 
 
-                <!--OPTIONAL - change these for your local environment-->
 
-                <!--XDS database properties-->
-                <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
-                <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
-                <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
+        <!--OPTIONAL - change these for your local environment. Most cases defaults are fine-->
 
-                <outputRootdir>${mirthConnect.server.dir}/temp</outputRootdir>
+        <!-- cacis proxy for xds -->
+        <cacis.xds.proxy.repository.url>${openxds.http.base.url}/services/cacis-proxy-xdsrepositoryb</cacis.xds.proxy.repository.url>
 
-                <!--Virtuoso database properties-->
-                <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
-                <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
-                <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
+        <!-- openXDS deployed services -->
+        <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
+        <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
 
-                <cdfOutputDir>${outputRootdir}/mc/output/cdf/</cdfOutputDir>
-                <xccdOutputDir>${outputRootdir}/mc/output/xccd/</xccdOutputDir>
-                <trimInputDir>${outputRootdir}/mc/input/</trimInputDir>
-                <!--  Temporary directory for System test output file -->
-                <cacis.mc.temp.dir>${outputRootdir}/temp/output/</cacis.mc.temp.dir>
+        <!--XDS database properties-->
+        <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
+        <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
+        <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
 
-                <maven.deploy.skip>true</maven.deploy.skip>
+        <outputRootdir>${mirthConnect.server.dir}/temp</outputRootdir>
 
-		<!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
-		<nav.sender.pass>c2c1sn2v</nav.sender.pass>
+        <!--Virtuoso database properties-->
+        <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
+        <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
+        <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
 
-		<!--  Credentials for the system email that sends tranformation errors -->
-        	<transformation.sender.host>smtp.gmail.com</transformation.sender.host>
-        	<transformation.sender.port>587</transformation.sender.port>
-        	<transformation.sender.user>cacisnavtestuser</transformation.sender.user>
-        	<transformation.sender.pw>c2c1sn2v</transformation.sender.pw>
-        	<transformation.sender.address>cacisnavtestuser@gmail.com</transformation.sender.address>
+        <cdfOutputDir>${outputRootdir}/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${outputRootdir}/mc/output/xccd/</xccdOutputDir>
+        <trimInputDir>${outputRootdir}/mc/input/</trimInputDir>
+        <!--  Temporary directory for System test output file -->
+        <cacis.mc.temp.dir>${outputRootdir}/temp/output/</cacis.mc.temp.dir>
 
-        	<!-- Sys Admin to receive errors -->
-        	<transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
-			<!-- Mirth base URL -->
-        	<mirth.base.url>http://localhost</mirth.base.url>
-            </properties>
-        </profile>
+        <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
+        <nav.sender.pass>c2c1sn2v</nav.sender.pass>
 
-    </profiles>
+        <!--  Credentials for the system email that sends tranformation errors -->
+        <transformation.sender.host>smtp.gmail.com</transformation.sender.host>
+        <transformation.sender.port>587</transformation.sender.port>
+        <transformation.sender.user>cacisnavtestuser</transformation.sender.user>
+        <transformation.sender.pw>c2c1sn2v</transformation.sender.pw>
+        <transformation.sender.address>cacisnavtestuser@gmail.com</transformation.sender.address>
+
+        <!-- Sys Admin to receive errors -->
+        <transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
+
+        <!-- Mirth base URL -->
+        <mirth.base.url>http://localhost</mirth.base.url>
+      </properties>
+    </profile>
+
+  </profiles>
 </profilesXml>

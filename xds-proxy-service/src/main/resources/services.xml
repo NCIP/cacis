@@ -4,19 +4,27 @@
 <serviceGroup>
     <service name="cacis-proxy-xdsrepositoryb">
         <messageReceivers>
-            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="gov.nist.registry.common2.service.XDSRawXMLInOutMessageReceiver"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out"
+                             class="gov.nist.registry.common2.service.XDSRawXMLInOutMessageReceiver"/>
         </messageReceivers>
-        <parameter name="ServiceClass">gov.nih.nci.cacis.XdsRegistryProxy</parameter>
-        <parameter name="useOriginalwsdl">true</parameter>
-
+        <parameter name="ServiceClass">gov.nih.nci.cacis.openxds.service.XdsRepositoryProxy</parameter>
+        <parameter name="useOriginalwsdl">false</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
-        <operation name="getServiceName" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://serviceclasses.ws.registry.nist.gov">
+
+        <operation name="getServiceName" mep="http://www.w3.org/ns/wsdl/in-out"
+                   namespace="http://serviceclasses.ws.registry.nist.gov">
             <actionMapping>urn:getServiceName</actionMapping>
             <outputActionMapping>urn:getServiceNameResponse</outputActionMapping>
         </operation>
-        <operation name="provideAndRegisterDocumentSetRequest" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://serviceclasses.ws.registry.nist.gov">
+        <operation name="provideAndRegisterDocumentSetRequest" mep="http://www.w3.org/ns/wsdl/in-out"
+                   namespace="http://serviceclasses.ws.registry.nist.gov">
             <actionMapping>urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</actionMapping>
             <outputActionMapping>urn:ProvideAndRegisterDocumentSetRequestResponse</outputActionMapping>
+        </operation>
+        <operation name="retrieveDocumentSetRequest" mep="http://www.w3.org/ns/wsdl/in-out"
+                   namespace="http://serviceclasses.ws.registry.nist.gov">
+            <actionMapping>urn:ihe:iti:2007:RetrieveDocumentSet</actionMapping>
+            <outputActionMapping>urn:RetrieveDocumentSetRequestResponse</outputActionMapping>
         </operation>
     </service>
 </serviceGroup>
