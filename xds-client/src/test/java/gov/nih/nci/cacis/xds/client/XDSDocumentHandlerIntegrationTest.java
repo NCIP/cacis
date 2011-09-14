@@ -60,6 +60,7 @@
  */
 package gov.nih.nci.cacis.xds.client;
 
+import static org.junit.Assert.fail;
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
@@ -71,6 +72,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -96,9 +98,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @Ignore
 public class XDSDocumentHandlerIntegrationTest {
 
-    private static final String SUBJECT_DN = "EMAILADDRESS=kondayya.mullapudi@misys.com,"
-            + " CN=XDSb_REP_MOSS.ihe.net, OU=MOSS, O=\"Misys Open Source Solutions, LLC.\","
-            + " L=Chicago, ST=Illinois, C=US";
+    private static final String SUBJECT_DN =
+    "CN=XDSb_REG_MISYS.ihe.net, OU=Connectathon, O=IHE International, L=Chicago, ST=Illinois, C=US";
     
     @Autowired
     @Qualifier("wrapperDocumentHandler")
@@ -110,7 +111,7 @@ public class XDSDocumentHandlerIntegrationTest {
     @Autowired
     private DocumentAccessManager accessManager;
     
-    private final HashMap<String, String> md = new HashMap<String, String>();
+    private final Map<String, String> md = new HashMap<String, String>();
 
     /**
      * set up method
@@ -143,20 +144,28 @@ public class XDSDocumentHandlerIntegrationTest {
      * @throws MetadataExtractionException - exception thrown, if any
      * @throws IOException - exception thrown, if any
      * @throws AuthzProvisioningException - exception thrown, if any
+     * @throws InterruptedException - asds
      */
+    @SuppressWarnings("unchecked")
     @Test
     public void handleAndRetrieveDocument() throws ApplicationRuntimeException, MetadataExtractionException,
-            SubmitTransactionCompositionException, IOException, AuthzProvisioningException {
+            SubmitTransactionCompositionException, IOException, AuthzProvisioningException, InterruptedException {
         String docUniqueId = null;
         InputStream ris = null;
         try {
             docUniqueId = docHndlr.handleDocument(md);
+            
             Assert.assertNotNull(docUniqueId);
 
             accessManager.grantDocumentAccess(docUniqueId, SUBJECT_DN);
 
             ris = docHndlr.retrieveDocument(docUniqueId);
             Assert.assertNotNull(ris);
+            //CHECKSTYLE:OFF
+        } catch (Exception e) {
+            //CHECKSTYLE:ON            
+            fail("Not Expecting any exception -- " + e.getMessage());
+            
         } finally {
             if (docUniqueId != null) {
                 accessManager.revokeDocumentAccess(docUniqueId, SUBJECT_DN);

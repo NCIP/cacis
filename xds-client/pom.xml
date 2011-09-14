@@ -15,12 +15,12 @@
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>0</test.unit.linerate>
 
-         <xds.repo.oid>1.3.6.1.4.1.21367.13.1150</xds.repo.oid>
+         <xds.repo.oid>1.3.6.1.4.1.21367.2010.1.2.1125</xds.repo.oid>
         <xds.doc.location>${outputRootdir}/.cacis/cacis-xds</xds.doc.location>
         <axis2.xml.location>${xds.doc.location}/axis2.xml</axis2.xml.location>
-        <xds.keystore.path>${xds.doc.location}/OpenXDS_2011_Keystore.jks</xds.keystore.path>
+        <xds.keystore.path>${xds.doc.location}/OpenXDS_2010_Keystore.jks</xds.keystore.path>
         <xds.keystore.password>password</xds.keystore.password>
-        <xds.truststore.path>${xds.doc.location}/OpenXDS_2011_Truststore.jks</xds.truststore.path>
+        <xds.truststore.path>${xds.doc.location}/OpenXDS_2010_Truststore.jks</xds.truststore.path>
         <xds.truststore.password>password</xds.truststore.password>
     </properties>
 
@@ -167,7 +167,14 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+				<excludes>
+					<exclude>*.jks</exclude>
+				</excludes>                
             </resource>
         </resources>
         <testResources>
@@ -201,6 +208,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${xds.doc.location}</outputDirectory>
+                            <overwrite>true</overwrite>
                             <resources>
                                 <resource>
                                     <directory>${project.build.outputDirectory}</directory>
@@ -208,8 +216,8 @@
                                         <include>axis2.xml</include>
                                         <include>docEntry.xml</include>
                                         <include>submissionSet.xml</include>
-                                        <include>OpenXDS_2011_Keystore.jks</include>
-                                        <include>OpenXDS_2011_Truststore.jks</include>
+                                        <include>OpenXDS_2010_Keystore.jks</include>
+                                        <include>OpenXDS_2010_Truststore.jks</include>
                                         <include>cacis-xds.properties</include>
                                     </includes>
                                 </resource>
