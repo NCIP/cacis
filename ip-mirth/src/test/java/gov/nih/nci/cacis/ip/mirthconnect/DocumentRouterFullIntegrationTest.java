@@ -82,6 +82,10 @@ import org.w3c.dom.Node;
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
 public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
+    private final String SECURE_EMAIL_FILE = "SecureEmail_Output.xml";
+    private final String SECURE_NAV_FILE = "SecureNAV_Output.xml";
+    private final String SECURE_FILE_TRANSFER_FILE = "SecureFile_Output.xml";
+
     /**
      * TODO: Once we get the HL7V2 XSLT, replace test input file and assert with the corresponding
      * HL7V2 file and assert.
@@ -100,24 +104,20 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
         Thread.sleep(SLEEP_TIME);
 
-        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
+        final File outputFile = new File(inputDir + SECURE_EMAIL_FILE);
         assertTrue(outputFile.exists());
-
-
-        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
 
         final Node root = getRoutingInstructions(outputFile);
         assertNotNull(root);
-        testUtilities.assertXPathEquals(
-                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
-                + "rdf:Description/p:exchangeFormat", "HL7_V2_CLINICAL_NOTE", root);
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='HL7_V2_CLINICAL_NOTE']",
+                root);
 
         FileUtils.deleteQuietly(outputFile);
     }
 
     /**
-     * Tests Trans Split channel sends to CCD channel.
+     * Tests Document Router sends to CCD channel.
      *
      * @throws Exception on error
      */
@@ -135,24 +135,21 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
         Thread.sleep(SLEEP_TIME);
 
-        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
+        final File outputFile = new File(inputDir + SECURE_EMAIL_FILE);
         assertTrue(outputFile.exists());
-
-
-        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
 
         final Node root = getRoutingInstructions(outputFile);
         assertNotNull(root);
-        testUtilities.assertXPathEquals(
-                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
-                + "rdf:Description/p:exchangeFormat", "CCD", root);
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
+                root);
+
 
         FileUtils.deleteQuietly(outputFile);
     }
 
     /**
-     * Tests Trans Split channel sends to XMLITS channel (HL7 V3).
+     * Tests Document Router sends to XMLITS channel (HL7 V3).
      *
      * @throws Exception on error
      */
@@ -170,18 +167,74 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
         Thread.sleep(SLEEP_TIME);
 
-        final File outputFile = new File(inputDir + "DocumentRouter_Output.xml");
+        final File outputFile = new File(inputDir + SECURE_EMAIL_FILE);
         assertTrue(outputFile.exists());
-
-
-        testUtilities.addNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        testUtilities.addNamespace("p", "http://cacis.nci.nih.gov#");
 
         final Node root = getRoutingInstructions(outputFile);
         assertNotNull(root);
-        testUtilities.assertXPathEquals(
-                "//rdf:RDF/rdf:Description/p:routingInstructions/rdf:Description/p:exchangeDocument/"
-                + "rdf:Description/p:exchangeFormat", "XMLITS", root);
+
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='XMLITS']",
+                root);
+
+        FileUtils.deleteQuietly(outputFile);
+    }
+
+    /**
+     * Tests DocumentRouterMuxDemux sends all transmission types.
+     *
+     * @throws Exception on error
+     */
+    @Test
+    public void testAllTransmissionTypes() throws Exception { // NOPMD
+
+        final File ipDir = new File(inputDir);
+        if (!ipDir.exists() && !ipDir.mkdirs()) {
+            throw new IOException("Error creating input directory, " + ipDir.getCanonicalPath());
+        }
+
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("All_Transmissions_RoutingInstructions.xml").toURI());
+        FileUtils.copyFileToDirectory(inputFile, ipDir);
+
+        Thread.sleep(SLEEP_TIME);
+
+        // Make sure XDS NAV was triggered
+        File outputFile = new File(inputDir + SECURE_NAV_FILE);
+        assertTrue(outputFile.exists());
+
+        Node root = getRoutingInstructions(outputFile);
+        assertNotNull(root);
+
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
+                root);
+
+        FileUtils.deleteQuietly(outputFile);
+
+        // Make sure secure email was triggered
+        outputFile = new File(inputDir + SECURE_EMAIL_FILE);
+        assertTrue(outputFile.exists());
+
+        root = getRoutingInstructions(outputFile);
+        assertNotNull(root);
+
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
+                root);
+
+        FileUtils.deleteQuietly(outputFile);
+
+        // Make sure secure file was triggered
+        outputFile = new File(inputDir + SECURE_FILE_TRANSFER_FILE);
+        assertTrue(outputFile.exists());
+
+        root = getRoutingInstructions(outputFile);
+        assertNotNull(root);
+
+        testUtilities.assertValid(
+                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
+                root);
 
         FileUtils.deleteQuietly(outputFile);
     }

@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314995004001</time>
+    <time>1316012159438</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4498,44 +4498,28 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>transform</name>
-            <script>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
-var os;
-var is;
+            <script>// Transform Clinical Document
+default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
 
-try {
-	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+var documentToTransform = msg[&apos;ClinicalDocument&apos;];
 
-	xmlToRdfTransformer.transform(null, is, os);
+var transformedDocument = drTransformDocument(documentToTransform, &apos;xmlToRdfTransformer&apos;);
 
-	var temp = new Packages.java.lang.String(os.toByteArray());
-
-	msg = temp;
-} finally {
-	is.close();
-	os.close();
-}</script>
+//Construct message
+msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var xmlToRdfTransformer = globalChannelMap.get(&apos;xmlToRdfTransformer&apos;);
-var os;
-var is;
+                <string>// Transform Clinical Document
+default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
 
-try {
-	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+var documentToTransform = msg[&apos;ClinicalDocument&apos;];
 
-	xmlToRdfTransformer.transform(null, is, os);
+var transformedDocument = drTransformDocument(documentToTransform, &apos;xmlToRdfTransformer&apos;);
 
-	var temp = new Packages.java.lang.String(os.toByteArray());
-
-	msg = temp;
-} finally {
-	is.close();
-	os.close();
-}</string>
+//Construct message
+msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</string>
               </entry>
             </data>
           </step>

@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314994965292</time>
+    <time>1316012266234</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -4498,44 +4498,28 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>transform</name>
-            <script>var hL7V2Transformer = globalChannelMap.get(&apos;hL7V2Transformer&apos;);
-var os;
-var is;
+            <script>// Transform Clinical Document
+default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
 
-try {
-	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+var documentToTransform = msg[&apos;ClinicalDocument&apos;];
 
-	hL7V2Transformer.transform(null, is, os);
+var transformedDocument = drTransformDocument(documentToTransform, &apos;hL7V2Transformer&apos;);
 
-	var temp = new Packages.java.lang.String(os.toByteArray());
-
-	msg = temp;
-} finally {
-	is.close();
-	os.close();
-}</script>
+//Construct message
+msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var hL7V2Transformer = globalChannelMap.get(&apos;hL7V2Transformer&apos;);
-var os;
-var is;
+                <string>// Transform Clinical Document
+default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
 
-try {
-	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+var documentToTransform = msg[&apos;ClinicalDocument&apos;];
 
-	hL7V2Transformer.transform(null, is, os);
+var transformedDocument = drTransformDocument(documentToTransform, &apos;hL7V2Transformer&apos;);
 
-	var temp = new Packages.java.lang.String(os.toByteArray());
-
-	msg = temp;
-} finally {
-	is.close();
-	os.close();
-}</string>
+//Construct message
+msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</string>
               </entry>
             </data>
           </step>

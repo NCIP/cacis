@@ -1,14 +1,14 @@
 <channel>
-  <id>e2a35dfa-fc18-4f54-b276-a731f40dcce6</id>
-  <name>DR-4_SecureEmailTransmission</name>
+  <id>b6bf99a9-6934-4375-942f-9c619c4714f3</id>
+  <name>DR-4b_XDSNAVTransmission</name>
   <description></description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1312783012226</time>
+    <time>1315938069535</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -38,10 +38,21 @@
     <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="DataType">JavaScript Writer</property>
-        <property name="host">sink</property>
-        <property name="script">logger.error(&apos;TODO: Sending secure email!&apos;);
-return;</property>
+        <property name="DataType">File Writer</property>
+        <property name="FTPAnonymous">1</property>
+        <property name="binary">0</property>
+        <property name="charsetEncoding">DEFAULT_ENCODING</property>
+        <property name="host">${cacis.mc.temp.dir}</property>
+        <property name="outputAppend">0</property>
+        <property name="outputPattern">SecureNAV_Output.xml</property>
+        <property name="passive">1</property>
+        <property name="password">anonymous</property>
+        <property name="scheme">file</property>
+        <property name="secure">1</property>
+        <property name="template">${message.encodedData}</property>
+        <property name="timeout">10000</property>
+        <property name="username">anonymous</property>
+        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
@@ -57,7 +68,7 @@ return;</property>
       <filter>
         <rules/>
       </filter>
-      <transportName>JavaScript Writer</transportName>
+      <transportName>File Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>

@@ -1,0 +1,32 @@
+<list>
+  <codeTemplate>
+    <id>f1153690-4d7d-4af8-a45e-a129a0ce8f02</id>
+    <name>drTransformDocument template</name>
+    <tooltip>template function for drTransformDocument</tooltip>
+    <code>function drTransformDocument(documentToTransform, transformerName) {
+	var transformer = globalChannelMap.get(transformerName);
+	var os;
+	var is;
+	try {
+		os = new Packages.java.io.ByteArrayOutputStream();
+		is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(documentToTransform).getBytes());
+
+		transformer.transform(null, is, os);
+
+		transformedDocument = new Packages.java.lang.String(os.toByteArray());
+
+	} finally {
+		if (is != null) {
+			is.close();
+		}
+		if (os != null) {
+			os.close();
+		}
+	}
+	return transformedDocument;
+}</code>
+    <type>FUNCTION</type>
+    <scope>0</scope>
+    <version>2.1.1.5490</version>
+  </codeTemplate>
+</list>

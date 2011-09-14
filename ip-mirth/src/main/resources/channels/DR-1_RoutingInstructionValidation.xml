@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315503658964</time>
+    <time>1315949153968</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -26,7 +26,7 @@ If routing instructions are not part of the message, then default routing instru
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
+	var defaultRoutingInstructionsFile = &apos;/Users/bpickeral/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);
@@ -45,7 +45,7 @@ logger.info(&apos;Response Message -- &apos;+ responseMap.get(&apos;processRouti
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
+	var defaultRoutingInstructionsFile = &apos;/Users/bpickeral/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);
@@ -4549,9 +4549,6 @@ var responseMsg = &apos;&apos;;
 for each (seg in exchDocs) {
 	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
 
-	var rec = seg[&apos;recipient&apos;].child(0);
-	var recTyp = rec.localName();
-	var url = rec[&apos;@url&apos;].toString();
 	var chNm;
 	if (exFrmt == &apos;CCD&apos;) {
 		chNm = &apos;DR-2a_CDACCDTransformation&apos;;
@@ -4566,21 +4563,20 @@ for each (seg in exchDocs) {
 
 	var msgToRoute = msg.copy();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
-	processRoute(chNm, msgToRoute, recTyp, url);
+	processRoute(chNm, msgToRoute, exFrmt);
 }
 
 responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
 
-function processRoute(channelName, msgToRoute, recTyp, url) {
+function processRoute(channelName, msgToRoute, exFrmt) {
 	var response = router.routeMessage(channelName, msgToRoute, false);
-	handleResponse(response, recTyp, url );
+	handleResponse(response, exFrmt);
 }
 
-function handleResponse(response, recTyp, url ) {
+function handleResponse(response, exFrmt) {
 	responseMsg = responseMsg
 			+ &apos;Processed routing for &apos;
-			+ recTyp + &apos;, &apos; + url
-			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
+			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
 }</script>
             <type>JavaScript</type>
             <data class="map">
@@ -4595,9 +4591,6 @@ var responseMsg = &apos;&apos;;
 for each (seg in exchDocs) {
 	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
 
-	var rec = seg[&apos;recipient&apos;].child(0);
-	var recTyp = rec.localName();
-	var url = rec[&apos;@url&apos;].toString();
 	var chNm;
 	if (exFrmt == &apos;CCD&apos;) {
 		chNm = &apos;DR-2a_CDACCDTransformation&apos;;
@@ -4612,21 +4605,20 @@ for each (seg in exchDocs) {
 
 	var msgToRoute = msg.copy();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
-	processRoute(chNm, msgToRoute, recTyp, url);
+	processRoute(chNm, msgToRoute, exFrmt);
 }
 
 responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
 
-function processRoute(channelName, msgToRoute, recTyp, url) {
+function processRoute(channelName, msgToRoute, exFrmt) {
 	var response = router.routeMessage(channelName, msgToRoute, false);
-	handleResponse(response, recTyp, url );
+	handleResponse(response, exFrmt);
 }
 
-function handleResponse(response, recTyp, url ) {
+function handleResponse(response, exFrmt) {
 	responseMsg = responseMsg
 			+ &apos;Processed routing for &apos;
-			+ recTyp + &apos;, &apos; + url
-			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
+			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
 }</string>
               </entry>
             </data>

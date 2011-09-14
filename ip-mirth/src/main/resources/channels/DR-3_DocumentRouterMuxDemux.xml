@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314814051389</time>
+    <time>1315949425473</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>4</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4486,26 +4486,110 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Destination 1</name>
+      <name>routeDocument</name>
       <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">${cacis.mc.temp.dir}</property>
-        <property name="outputAppend">0</property>
-        <property name="outputPattern">DocumentRouter_Output.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">return;</property>
       </properties>
       <transformer>
-        <steps/>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>routeDocument</name>
+            <script>var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+
+var responseMsg = &apos;&apos;;
+
+for each (seg in exchDocs) {
+	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+	for each (rec in seg[&apos;recipient&apos;]) {
+		var url;
+		if (rec[&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(&apos;DR-4a_SecureEmailTransmission&apos;,  &apos;secureEmailAddress&apos;);
+		} else if (rec[&apos;navEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(&apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
+		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(&apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
+		} else {
+			logger.error(&apos;Recipient type unknown.&apos;);
+		}
+	}
+}
+
+responseMap.put(&apos;Destination 1&apos;, responseMsg);
+
+function processRoute(chNm, recipientType) {
+	var msgToRoute = msg.copy();
+	var url = rec[recipientType][&apos;@url&apos;].toString();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
+		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][recipientType].copy();	
+	var response = router.routeMessage(chNm, msgToRoute, false);
+	handleResponse(response, chNm, url);
+}
+
+function handleResponse(response, chNm, url) {
+	responseMsg = responseMsg 
+			+ &apos;Processed routing for &apos;
+			+ chNm + &apos;, &apos; + url 
+			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;		
+}</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+
+var responseMsg = &apos;&apos;;
+
+for each (seg in exchDocs) {
+	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+	for each (rec in seg[&apos;recipient&apos;]) {
+		var url;
+		if (rec[&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(&apos;DR-4a_SecureEmailTransmission&apos;,  &apos;secureEmailAddress&apos;);
+		} else if (rec[&apos;navEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(&apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
+		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(&apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
+		} else {
+			logger.error(&apos;Recipient type unknown.&apos;);
+		}
+	}
+}
+
+responseMap.put(&apos;Destination 1&apos;, responseMsg);
+
+function processRoute(chNm, recipientType) {
+	var msgToRoute = msg.copy();
+	var url = rec[recipientType][&apos;@url&apos;].toString();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
+		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][recipientType].copy();	
+	var response = router.routeMessage(chNm, msgToRoute, false);
+	handleResponse(response, chNm, url);
+}
+
+function handleResponse(response, chNm, url) {
+	responseMsg = responseMsg 
+			+ &apos;Processed routing for &apos;
+			+ chNm + &apos;, &apos; + url 
+			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;		
+}</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64">PGNhQ0lTUmVxdWVzdCB4bWxucz0iaHR0cDovL2NhY2lzLm5jaS5uaWguZ292IiB4bWxuczp4c2k9
+Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4bWxuczpjZGE9InVy
+bjpobDctb3JnOnYzIiB1c2VyTmFtZT0idXNlciI+Cgk8cm91dGluZ0luc3RydWN0aW9ucz4KCQk8
+ZXhjaGFuZ2VEb2N1bWVudCBleGNoYW5nZUZvcm1hdD0iSEw3X1YyX0NMSU5JQ0FMX05PVEUiPgoJ
+CQk8cmVjaXBpZW50PgoJCQkJPHNlY3VyZUVtYWlsQWRkcmVzcyB1cmw9Im1haWx0bzp4QHgueCIv
+PgoJCQk8L3JlY2lwaWVudD4KCQk8L2V4Y2hhbmdlRG9jdW1lbnQ+CgkJPGV4Y2hhbmdlRG9jdW1l
+bnQgZXhjaGFuZ2VGb3JtYXQ9IlJJTV9JVFNfQ0xJTklDQUxfTk9URSI+CgkJCTxyZWNpcGllbnQ+
+CgkJCQk8c2VjdXJlRW1haWxBZGRyZXNzIHVybD0ibWFpbHRvOnlAeS55Ii8+CgkJCTwvcmVjaXBp
+ZW50PgoJCTwvZXhjaGFuZ2VEb2N1bWVudD4KCTwvcm91dGluZ0luc3RydWN0aW9ucz4KPC9jYUNJ
+U1JlcXVlc3Q+</inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
@@ -4518,7 +4602,7 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
       <filter>
         <rules/>
       </filter>
-      <transportName>File Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>

@@ -5,7 +5,9 @@ channel remove ftpAddressChannel
 channel remove navEmailAddressChannel
 channel remove DocumentRouter
 channel remove AcceptCanonical_Channel
-channel remove DR-4_SecureEmailTransmission
+channel remove DR-4c_SecureFileTransfer
+channel remove DR-4b_XDSNAVTransmission
+channel remove DR-4a_SecureEmailTransmission
 channel remove DR-3_DocumentRouterMuxDemux
 channel remove DR-2c_RIMITSTransformation
 channel remove DR-2b_HL7v2Transformation
@@ -17,11 +19,15 @@ channel remove CMP-2b_CanonicalSchematronValidation
 channel remove CMP-3_CanonicalValidationAggregation
 channel remove CMP-4_CDWLoader
 
+importcodetemplates "${build.outputDirectory}/templates/dr-code-templates.xml" force
+
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml" force
 import "${build.outputDirectory}/channels/navEmailAddressChannel.xml"  force
 import "${build.outputDirectory}/channels/DocumentRouter.xml"  force
 import "${build.outputDirectory}/channels/AcceptCanonical_Channel.xml" force
-import "${build.outputDirectory}/channels/DR-4_SecureEmailTransmission.xml"  force
+import "${build.outputDirectory}/channels/DR-4c_SecureFileTransfer.xml"  force
+import "${build.outputDirectory}/channels/DR-4b_XDSNAVTransmission.xml"  force
+import "${build.outputDirectory}/channels/DR-4a_SecureEmailTransmission.xml"  force
 import "${build.outputDirectory}/channels/DR-3_DocumentRouterMuxDemux.xml"  force
 import "${build.outputDirectory}/channels/DR-2c_RIMITSTransformation.xml"   force
 import "${build.outputDirectory}/channels/DR-2b_HL7v2Transformation.xml"  force
