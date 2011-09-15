@@ -1,39 +1,29 @@
 <channel>
-  <id>b911f981-f3a6-46e8-8c3f-df17c73f1785</id>
-  <name>CMP-4_CDWLoader</name>
+  <id>327633a6-7d84-4b56-82fc-e3ebb88a42f8</id>
+  <name>CMP-3_CDWLoader</name>
   <description>Arch name Clinical Data Warehouse Loader</description>
   <enabled>true</enabled>
   <version>2.1.1.5488</version>
   <lastModified>
-    <time>1314807699908</time>
+    <time>1316125637250</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>7</revision>
+  <revision>15</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">None</property>
+      <property name="responseValue">Destination 1</property>
     </properties>
     <transformer>
       <steps/>
-      <inboundProtocol>HL7V2</inboundProtocol>
-      <outboundProtocol>HL7V2</outboundProtocol>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
         <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
       </inboundProperties>
       <outboundProperties>
-        <property name="convertLFtoCR">true</property>
-        <property name="handleRepetitions">false</property>
-        <property name="handleSubcomponents">false</property>
         <property name="stripNamespaces">true</property>
-        <property name="useStrictParser">false</property>
-        <property name="useStrictValidation">false</property>
       </outboundProperties>
     </transformer>
     <filter>
@@ -56,30 +46,46 @@
 var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-cacis-cdw.xml&quot;);
 var loader = cdwContext.getBean(&quot;loader&quot;);
 
-//call CDW loader after all the normal processing has occured
 loader.load(messageObject.getEncodedData(), loader.generateContext(), $(&apos;studyId&apos;), $(&apos;siteId&apos;), $(&apos;patientId&apos;));
 
 logger.info(&apos;Loading data into CDW&apos;);</property>
       </properties>
       <transformer>
-        <steps/>
-        <inboundProtocol>HL7V2</inboundProtocol>
-        <outboundProtocol>HL7V2</outboundProtocol>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>setvars</name>
+            <script>default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
+
+var clinicalMetaData = msg[&apos;clinicalMetaData&apos;];
+
+var siteId = clinicalMetaData[&apos;@siteIdRoot&apos;] + clinicalMetaData[&apos;@siteIdExtension&apos;];
+var studyId = clinicalMetaData[&apos;@studyIdRoot&apos;] + clinicalMetaData[&apos;@studyIdExtension&apos;];
+var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[&apos;@patientIdExtension&apos;];</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
+
+var clinicalMetaData = msg[&apos;clinicalMetaData&apos;];
+
+var siteId = clinicalMetaData[&apos;@siteIdRoot&apos;] + clinicalMetaData[&apos;@siteIdExtension&apos;];
+var studyId = clinicalMetaData[&apos;@studyIdRoot&apos;] + clinicalMetaData[&apos;@studyIdExtension&apos;];
+var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[&apos;@patientIdExtension&apos;];</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
           <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="convertLFtoCR">true</property>
-          <property name="handleRepetitions">false</property>
-          <property name="handleSubcomponents">false</property>
           <property name="stripNamespaces">true</property>
-          <property name="useStrictParser">false</property>
-          <property name="useStrictValidation">false</property>
         </outboundProperties>
       </transformer>
       <filter>

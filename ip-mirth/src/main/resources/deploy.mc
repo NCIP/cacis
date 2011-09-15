@@ -14,10 +14,8 @@ channel remove DR-2b_HL7v2Transformation
 channel remove DR-2a_CDACCDTransformation
 channel remove DR-1_RoutingInstructionValidation
 channel remove CMP-1_WebServiceListener
-channel remove CMP-2a_CanonicalSchemaValidation
-channel remove CMP-2b_CanonicalSchematronValidation
-channel remove CMP-3_CanonicalValidationAggregation
-channel remove CMP-4_CDWLoader
+channel remove CMP-2_CanonicalValidation
+channel remove CMP-3_CDWLoader
 
 importcodetemplates "${build.outputDirectory}/templates/dr-code-templates.xml" force
 
@@ -33,11 +31,9 @@ import "${build.outputDirectory}/channels/DR-2c_RIMITSTransformation.xml"   forc
 import "${build.outputDirectory}/channels/DR-2b_HL7v2Transformation.xml"  force
 import "${build.outputDirectory}/channels/DR-2a_CDACCDTransformation.xml"  force
 import "${build.outputDirectory}/channels/DR-1_RoutingInstructionValidation.xml"  force
-import "${build.outputDirectory}/channels/CMP-1_WebServiceListener.xml"  force
-import "${build.outputDirectory}/channels/CMP-2a_CanonicalSchemaValidation.xml"  force
-import "${build.outputDirectory}/channels/CMP-2b_CanonicalSchematronValidation.xml"  force
-import "${build.outputDirectory}/channels/CMP-3_CanonicalValidationAggregation.xml"  force
-import "${build.outputDirectory}/channels/CMP-4_CDWLoader.xml"  force
+import "${build.outputDirectory}/channels/CMP-1_WebServiceListener"  force
+import "${build.outputDirectory}/channels/CMP-2_CanonicalValidation"  force
+import "${build.outputDirectory}/channels/CMP-3_CDWLoader"  force
 
 importalerts "${build.outputDirectory}/alerts/CMP-alerts.xml"
 

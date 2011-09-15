@@ -6,10 +6,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5488</version>
   <lastModified>
-    <time>1314807626203</time>
+    <time>1316125591284</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>28</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -115,7 +115,7 @@ return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
 
 logger.info(&apos;Sending message to CDW Loader Channel&apos;);
-router.routeMessage(&apos;CMP-4_CDWLoader&apos;, message, true);
+router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
 
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed

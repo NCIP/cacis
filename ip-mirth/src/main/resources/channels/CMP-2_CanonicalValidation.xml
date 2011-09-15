@@ -1,14 +1,14 @@
 <channel>
   <id>12fb1591-0cd6-4c99-b452-a86b7df9d59f</id>
-  <name>CMP-2a_CanonicalSchemaValidation</name>
-  <description>Arch name CanonicalSchemaValidationChannel</description>
+  <name>CMP-2_CanonicalValidation</name>
+  <description>Arch name CanonicalSchemaValidationChannel and CanonicalSchematronValidationChannel</description>
   <enabled>true</enabled>
-  <version>2.1.1.5490</version>
+  <version>2.1.1.5488</version>
   <lastModified>
-    <time>1314997593486</time>
+    <time>1316123607717</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>8</revision>
+  <revision>5</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -73,14 +73,14 @@ if (cdfXsdValidationMsg != null) {
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5490</version>
+    <version>2.1.1.5488</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>schematronValidation</name>
+      <name>CdwLoadProcessStart</name>
       <properties>
         <property name="DataType">Channel Writer</property>
-        <property name="host">fc379cb6-3ee6-46c3-ad31-063b83591f9e</property>
+        <property name="host">e91b5581-5aa1-48b5-90e4-8b8214a85d95</property>
         <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
@@ -101,7 +101,7 @@ if (cdfXsdValidationMsg != null) {
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5490</version>
+      <version>2.1.1.5488</version>
     </connector>
   </destinationConnectors>
   <properties>
@@ -122,13 +122,7 @@ return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
 
 
-var res = responseMap.get(&apos;validationMsg&apos;);
-var schVldnRes = responseMap.get(&apos;schematronValidation&apos;);
 
-//TODO: it seems this response is not set, fix it
-if ( res.toString().indexOf(&apos;SUCCESS&apos;) != -1 ) {
-	responseMap.put(&apos;validationMsg&apos;, schVldnRes);	
-} 
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
