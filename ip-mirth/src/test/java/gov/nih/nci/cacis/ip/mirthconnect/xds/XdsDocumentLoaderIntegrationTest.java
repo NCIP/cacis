@@ -63,6 +63,7 @@ package gov.nih.nci.cacis.ip.mirthconnect.xds;
 import gov.nih.nci.cacis.ip.mirthconnect.utils.SerializerUtilsTest;
 import gov.nih.nci.cacis.ip.xds.XdsDocumentLoader;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ import java.net.URISyntaxException;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
+@Ignore
 public class XdsDocumentLoaderIntegrationTest {
 
 
