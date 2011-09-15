@@ -64,11 +64,23 @@ package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
+import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.ssl.SslConfigurationFactory;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Config for CDW tests.
@@ -78,6 +90,55 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import(TestCDWConfig.class)
 public class TestIPMirthConfig {
+
+    private final int ftpPort = 2221;
+
+    private static final String keyStoreFilename = "src/test/resources/ftpkeystore.jks";
+    private static final String keyStorePassword = "changeit";
+
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public FtpServer sftpServer() throws URISyntaxException {
+        FtpServerFactory serverFactory = new FtpServerFactory();
+
+        ListenerFactory factory = new ListenerFactory();
+
+        // set the port of the listener
+        factory.setPort(ftpPort);
+
+        // define SSL configuration
+        SslConfigurationFactory ssl = new SslConfigurationFactory();
+        ssl.setKeystoreFile(new File(keyStoreFilename));
+        ssl.setKeystorePassword(keyStorePassword);
+
+        // set the SSL configuration for the listener
+        factory.setSslConfiguration(ssl.createSslConfiguration());
+        factory.setImplicitSsl(true);
+
+        // replace the default listener
+        serverFactory.addListener("default", factory.createListener());
+
+        PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+        userManagerFactory.setFile(new File(Thread.currentThread().getContextClassLoader()
+                .getResource("ftpusers.properties").toURI()));
+
+        serverFactory.setUserManager(userManagerFactory.createUserManager());
+
+        return serverFactory.createServer();
+    }
+
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public FTPSSender sender() {
+        return new FTPSSender();
+    }
+
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public FTPSClient ftpsCient() {
+        return new FTPSClient("TLS", true);
+    }
+
     @Bean
     public PropertyPlaceholderConfigurer testPropertyPlaceholderConfigurer() {
         final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("ip-mirth",
