@@ -117,7 +117,7 @@ public class CanonicalModelProcessorJaxWSSystemTest extends AbstractJaxWsTest {
     }
 
 
-    @Test(expected = SOAPFaultException.class)
+    @Test(expected = AcceptCanonicalFault.class)
     public void exception() throws Exception {
         when(webServiceMessageReceiver.processData(anyString())).thenThrow(new RuntimeException());
 

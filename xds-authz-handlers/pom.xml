@@ -51,7 +51,13 @@
 
 	<dependencies>
 
-		<dependency>
+        <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>xds-authz-beans</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.2.1.ga</version>
@@ -86,12 +92,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>gov.nih.nci.cacis</groupId>
-			<artifactId>xds-authz-beans</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -158,56 +158,6 @@
 						</executions>
 					</plugin>
 
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<dependencies>
-							<dependency>
-								<groupId>com.oopsconsultancy</groupId>
-								<artifactId>xmltask</artifactId>
-								<version>1.14</version>
-							</dependency>
-						</dependencies>
-						<executions>
-							<execution>
-								<phase>deploy</phase>
-								<configuration>
-									<skip>${skip.axis2.configuration}</skip>
-									<tasks>
-										<echo message="Modifying Axis2 configuration" />
-										<taskdef name="xmltask"
-											classname="com.oopsconsultancy.xmltask.ant.XmlTask"
-											classpathref="maven.plugin.classpath" />
-										<xmltask source="${openxds.web.dir}/WEB-INF/conf/axis2.xml"
-											dest="${openxds.web.dir}/WEB-INF/conf/axis2.xml"
-											preserveType="true">
-
-											<remove
-												path="/axisconfig/phaseOrder[@type='InFlow']/phase[@name='Security']" />
-
-											<insert
-												path="/axisconfig/phaseOrder[@type='InFlow']/phase[@name='Addressing']"
-												position="after"> 
-						      <![CDATA[ 
-						      	<phase name="Security">
-									<handler name="CacisXdsDocumentAuthzOutHandler" class="gov.nih.nci.cacis.xds.auth.axis.CacisXdsDocumentAuthzOutHandler">
-										<order phase="Security" />
-									</handler>        
-									<handler name="CacisXdsDocumentAuthzInHandler" class="gov.nih.nci.cacis.xds.auth.axis.CacisXdsWriteAuthzInHandler">
-										<order phase="Security" />
-									</handler>        			
-						        </phase>
-						      ]]>
-											</insert>
-
-										</xmltask>
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
 
 				</plugins>
 			</build>

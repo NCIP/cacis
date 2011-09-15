@@ -43,12 +43,6 @@
 
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
-            <artifactId>esd-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>gov.nih.nci.cacis</groupId>
             <artifactId>sa-mirth</artifactId>
             <version>${project.version}</version>
         </dependency>

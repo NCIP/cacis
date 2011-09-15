@@ -26,7 +26,6 @@
 
         <!-- openXDS deployed services -->
         <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
-        <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
 
         <!--XDS database properties-->
         <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
