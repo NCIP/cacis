@@ -1,0 +1,124 @@
+<list>
+    <codeTemplate>
+        <id>f1153690-4d7d-4af8-a45e-a129a0ce8f02</id>
+        <name>drTransformDocument template</name>
+        <tooltip>template function for drTransformDocument</tooltip>
+        <code>function drTransformDocument(documentToTransform, transformerName) {
+            var transformer = globalChannelMap.get(transformerName);
+            var os;
+            var is;
+            try {
+            os = new Packages.java.io.ByteArrayOutputStream();
+            is = new Packages.java.io.ByteArrayInputStream(new
+            Packages.java.lang.String(documentToTransform).getBytes());
+
+            transformer.transform(null, is, os);
+
+            transformedDocument = new Packages.java.lang.String(os.toByteArray());
+
+            } finally {
+            if (is != null) {
+            is.close();
+            }
+            if (os != null) {
+            os.close();
+            }
+            }
+            return transformedDocument;
+            }
+        </code>
+        <type>FUNCTION</type>
+        <scope>0</scope>
+        <version>2.1.1.5490</version>
+    </codeTemplate>
+
+
+    <codeTemplate>
+        <id>7608a1c9-3235-41d1-a057-718b74524f0d</id>
+        <name>xsdValidateSACaCISRequest template</name>
+        <tooltip>template function for xsdValidateSACaCISRequest</tooltip>
+        <code>// modify function_name and parameters as you wish.
+            // one function per template is recommended. i.e.) create a new code template for each new function.
+            function xsdValidateSACaCISRequest(reqMsg) {
+
+            var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+            try{
+            var saXsdValidator = commonsCtx.getBean(&quot;cacisRequestSASchemaValidator&quot;);
+            saXsdValidator.validate(reqMsg);
+            }catch(err) {
+            return err.message;
+            }
+            return null;
+            }
+        </code>
+        <type>FUNCTION</type>
+        <scope>0</scope>
+        <version>2.1.1.5490</version>
+    </codeTemplate>
+    <codeTemplate>
+        <id>8f2dec07-a0e3-423e-ae18-bc0f9fc6e8a3</id>
+        <name>xsdValidateSASourceData template</name>
+        <tooltip>template function for xsdValidateSASourceData</tooltip>
+        <code>// modify function_name and parameters as you wish.
+            // one function per template is recommended. i.e.) create a new code template for each new function.
+            function xsdValidateSASourceData(srcData) {
+
+            var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+            try{
+            var srcdataXsdValidator = commonsCtx.getBean(&quot;cacisRequestSASourceDataSchemaValidator&quot;);
+            srcdataXsdValidator.validate(srcData);
+            }catch(err) {
+            return err.message;
+            }
+            return null;
+            }
+        </code>
+        <type>FUNCTION</type>
+        <scope>0</scope>
+        <version>2.1.1.5490</version>
+    </codeTemplate>
+    <codeTemplate>
+        <id>eb209e50-1c07-4b5e-b7ff-af43c9dd663d</id>
+        <name>schematronValidateSASourceData template</name>
+        <tooltip>template for schematronValidateSASourceData</tooltip>
+        <code>// modify function_name and parameters as you wish.
+            // one function per template is recommended. i.e.) create a new code template for each new function.
+            function schematronValidateSASourceData(srcData) {
+
+            var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+            try{
+            var saSrcDataSchValidator = commonsCtx.getBean(&quot;cacisRequestSASourceDataSchematronValidator&quot;);
+            saSrcDataSchValidator.validate(srcData);
+            }catch(err) {
+            return err.message;
+            }
+            return null;
+            }
+        </code>
+        <type>FUNCTION</type>
+        <scope>0</scope>
+        <version>2.1.1.5490</version>
+    </codeTemplate>
+    <codeTemplate>
+        <id>f472369e-bca8-471f-af51-e0c544f7276c</id>
+        <name>xsdValidateCanonical template</name>
+        <tooltip>template function for xsdValidateCanonical</tooltip>
+        <code>// modify function_name and parameters as you wish.
+            // one function per template is recommended. i.e.) create a new code template for each new function.
+            function xsdValidateCanonical(reqMsg) {
+
+            var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+            try{
+            var cdfXsdValidator = commonsCtx.getBean(&quot;canonicalSchemaValidator&quot;);
+            cdfXsdValidator.validate(reqMsg);
+            }catch(err) {
+            return err.message;
+            }
+            return null;
+            }
+        </code>
+        <type>FUNCTION</type>
+        <scope>0</scope>
+        <version>2.1.1.5490</version>
+    </codeTemplate>
+</list>

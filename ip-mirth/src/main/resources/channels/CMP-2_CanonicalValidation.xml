@@ -73,7 +73,7 @@ if (cdfXsdValidationMsg != null) {
     <transportName>Channel Reader</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.1.1.5488</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
     <connector>

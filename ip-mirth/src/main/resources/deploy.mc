@@ -17,7 +17,7 @@ channel remove CMP-1_WebServiceListener
 channel remove CMP-2_CanonicalValidation
 channel remove CMP-3_CDWLoader
 
-importcodetemplates "${build.outputDirectory}/templates/dr-code-templates.xml" force
+importcodetemplates "${build.outputDirectory}/templates/mc-code-templates.xml" force
 
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml" force
 import "${build.outputDirectory}/channels/navEmailAddressChannel.xml"  force
@@ -31,9 +31,9 @@ import "${build.outputDirectory}/channels/DR-2c_RIMITSTransformation.xml"   forc
 import "${build.outputDirectory}/channels/DR-2b_HL7v2Transformation.xml"  force
 import "${build.outputDirectory}/channels/DR-2a_CDACCDTransformation.xml"  force
 import "${build.outputDirectory}/channels/DR-1_RoutingInstructionValidation.xml"  force
-import "${build.outputDirectory}/channels/CMP-1_WebServiceListener"  force
-import "${build.outputDirectory}/channels/CMP-2_CanonicalValidation"  force
-import "${build.outputDirectory}/channels/CMP-3_CDWLoader"  force
+import "${build.outputDirectory}/channels/CMP-1_WebServiceListener.xml"  force
+import "${build.outputDirectory}/channels/CMP-2_CanonicalValidation.xml"  force
+import "${build.outputDirectory}/channels/CMP-3_CDWLoader.xml"  force
 
 importalerts "${build.outputDirectory}/alerts/CMP-alerts.xml"
 
