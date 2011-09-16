@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5488</version>
   <lastModified>
-    <time>1316125637250</time>
+    <time>1316187219429</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>15</revision>
+  <revision>13</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -20,10 +20,10 @@
       <inboundProtocol>XML</inboundProtocol>
       <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
-        <property name="stripNamespaces">true</property>
+        <property name="stripNamespaces">false</property>
       </inboundProperties>
       <outboundProperties>
-        <property name="stripNamespaces">true</property>
+        <property name="stripNamespaces">false</property>
       </outboundProperties>
     </transformer>
     <filter>
@@ -82,10 +82,10 @@ var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="stripNamespaces">true</property>
+          <property name="stripNamespaces">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="stripNamespaces">true</property>
+          <property name="stripNamespaces">false</property>
         </outboundProperties>
       </transformer>
       <filter>
