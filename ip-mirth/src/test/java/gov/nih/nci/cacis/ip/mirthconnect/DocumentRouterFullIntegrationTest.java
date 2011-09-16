@@ -60,15 +60,22 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.ftpserver.FtpServer;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Node;
@@ -84,7 +91,22 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
     private final String SECURE_EMAIL_FILE = "SecureEmail_Output.xml";
     private final String SECURE_NAV_FILE = "SecureNAV_Output.xml";
-    private final String SECURE_FILE_TRANSFER_FILE = "SecureFile_Output.xml";
+
+    @Autowired
+    private FtpServer server;
+
+    @Autowired
+    private FTPSSender sender;
+
+    @Before
+    public void before() throws Exception {
+        server.start();
+    }
+
+    @After
+    public void tearDown() {
+        server.stop();
+    }
 
     /**
      * TODO: Once we get the HL7V2 XSLT, replace test input file and assert with the corresponding
@@ -187,6 +209,8 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
      */
     @Test
     public void testAllTransmissionTypes() throws Exception { // NOPMD
+        // Check number of files on ftp server
+        int numFiles = getNumFiles();
 
         final File ipDir = new File(inputDir);
         if (!ipDir.exists() && !ipDir.mkdirs()) {
@@ -225,18 +249,16 @@ public class DocumentRouterFullIntegrationTest extends AbstractRoutingTest {
 
         FileUtils.deleteQuietly(outputFile);
 
-        // Make sure secure file was triggered
-        outputFile = new File(inputDir + SECURE_FILE_TRANSFER_FILE);
-        assertTrue(outputFile.exists());
+        // Make sure secure file transfer was triggered and file was stored
+        assertEquals(numFiles + 1, getNumFiles());
+    }
 
-        root = getRoutingInstructions(outputFile);
-        assertNotNull(root);
-
-        testUtilities.assertValid(
-                "//p:caCISRequest/p:routingInstructions/p:exchangeDocument[1][@exchangeFormat='CCD']",
-                root);
-
-        FileUtils.deleteQuietly(outputFile);
+    private int getNumFiles() throws Exception {
+        sender.connect();
+        final FTPSClient ftpsClient = sender.getFtpsClient();
+        int numFiles = ftpsClient.listFiles().length;
+        sender.disconnect();
+        return numFiles;
     }
 
 }

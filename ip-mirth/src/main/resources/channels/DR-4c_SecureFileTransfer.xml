@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315938098188</time>
+    <time>1316190071307</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>5</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">sendToSFTP</property>
     </properties>
     <transformer>
       <steps/>
@@ -36,26 +36,34 @@
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Destination 1</name>
+      <name>sendToSFTP</name>
       <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">${cacis.mc.temp.dir}</property>
-        <property name="outputAppend">0</property>
-        <property name="outputPattern">SecureFile_Output.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">return;
+</property>
       </properties>
       <transformer>
-        <steps/>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>sendToSFTP</name>
+            <script>var ftpsSender = globalMap.get(&apos;ftpsSender&apos;);
+var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+ftpsSender.sendDocument(is);</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>var ftpsSender = globalMap.get(&apos;ftpsSender&apos;);
+var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+ftpsSender.sendDocument(is);</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
@@ -68,7 +76,7 @@
       <filter>
         <rules/>
       </filter>
-      <transportName>File Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
@@ -91,6 +99,10 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-ip-mirth.xml&quot;);
+var ftpsSender = transformerContext.getBean(&quot;sender&quot;);
+
+globalChannelMap.put(&apos;ftpsSender&apos;, ftpsSender);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

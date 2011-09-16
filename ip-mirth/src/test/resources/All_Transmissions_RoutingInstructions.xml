@@ -12,7 +12,7 @@
                 <secureEmailAddress url="mailto:x@x.x"/>
             </recipient>
             <recipient>
-                <ftpAddress url="mailto:x@x.x"/>
+                <ftpAddress url="localhost"/>
             </recipient>
         </exchangeDocument>
     </routingInstructions>

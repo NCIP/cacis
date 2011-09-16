@@ -60,6 +60,8 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect.ftps;
 
+import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
@@ -70,6 +72,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -84,9 +87,13 @@ public class FTPSSender {
 
     private static final int FTP_PORT = 2221;
 
+    //TODO: ESD-3196 Create server configuration
+    private static final String FTP_SITE = "localhost";
+
     /**
      * Sends Document to SFTP Server.
      * @param file Input Stream.
+     * @param ftpAddress the ftp address in which to store the file.
      * @throws IOException on I/O error
      * @throws NoSuchProviderException on Provider error
      * @throws KeyStoreException on Keystore error
@@ -94,14 +101,27 @@ public class FTPSSender {
      * @throws CertificateException on certificate error
      * @throws UnrecoverableKeyException if key is not recoverable
      */
-    public void sendDocument(InputStream file) throws IOException, NoSuchProviderException, KeyStoreException,
-            NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+    public void sendDocument(InputStream file, String ftpAddress) throws IOException, NoSuchProviderException,
+            KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
         connect();
 
         ftpsClient.setFileTransferMode(FTPSClient.BLOCK_TRANSFER_MODE);
+        navigateToDirectory(ftpAddress);
         ftpsClient.storeFile("IHEXDSNAV-" + UUID.randomUUID() + ".xml", file);
 
         disconnect();
+    }
+
+    private void navigateToDirectory(String ftpAddress) throws IOException {
+        if (!ftpAddress.startsWith(FTP_SITE)) {
+            throw new ApplicationRuntimeException(
+                    "FTP Address in Request does not match the configured address in the Integration Platform.");
+        }
+
+        if (ftpAddress.length() > FTP_SITE.length()) {
+            final String directory = StringUtils.substring(ftpAddress, FTP_SITE.length(), ftpAddress.length());
+            ftpsClient.changeWorkingDirectory(directory);
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>pco</artifactId>
         <groupId>gov.nih.nci.cacis</groupId>
@@ -141,8 +141,8 @@
                 </dependencies>
             </plugin>
 
-            <!-- this plugin call can be removed once jars from the lib folder are added
-to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
+            <!-- this plugin call can be removed once jars from the lib folder are added to the CBIIT 3rd party jars repo
+                and the lib folder has been deleted -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
@@ -185,7 +185,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <artifactId>ip-mirth</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
-								<artifactItem>
+                                <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>sa-mirth</artifactId>
                                     <version>${project.version}</version>
@@ -499,6 +499,18 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                     <version>1.4.3</version>
                                 </artifactItem>
 
+                                <artifactItem>
+                                    <groupId>commons-net</groupId>
+                                    <artifactId>commons-net</artifactId>
+                                    <version>3.0.1</version>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.apache.ftpserver</groupId>
+                                    <artifactId>ftpserver-core</artifactId>
+                                    <version>1.0.5</version>
+                                </artifactItem>
+
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
 
@@ -654,7 +666,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                 </executions>
             </plugin>
 
-            <!--start MC and deploy channels during deploy phase-->
+            <!--start MC and deploy channels during deploy phase -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
@@ -668,7 +680,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                         <configuration>
                             <outputDirectory>${mirthConnect.server.dir}/custom-lib</outputDirectory>
                             <resources>
-                                <!-- copy ip-mirth jar to the custom-lib  -->
+                                <!-- copy ip-mirth jar to the custom-lib -->
                                 <resource>
                                     <directory>${build.directory}</directory>
                                     <includes>
@@ -739,13 +751,13 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
         </plugins>
     </build>
 
-    <!--Maven Profile is for the CI server. Runs Integration tests-->
+    <!--Maven Profile is for the CI server. Runs Integration tests -->
     <profiles>
         <profile>
             <id>cacis-ci</id>
             <build>
                 <plugins>
-                     <plugin>
+                    <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <version>2.4.1</version>
                         <configuration>
@@ -778,7 +790,7 @@ to the CBIIT 3rd party jars repo and the lib folder has been deleted -->
                                 <configuration>
                                     <outputDirectory>${mirthConnect.server.dir}/custom-lib</outputDirectory>
                                     <resources>
-                                        <!-- copy ip-mirth jar to the custom-lib  -->
+                                        <!-- copy ip-mirth jar to the custom-lib -->
                                         <resource>
                                             <directory>${build.directory}</directory>
                                             <includes>

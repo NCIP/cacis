@@ -62,6 +62,7 @@ package gov.nih.nci.cacis.ip.mirthconnect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
 import java.io.File;
@@ -109,11 +110,33 @@ public class FTPSenderTest {
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("Sample_SFTP_File.xml").toURI());
         final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream);
+        sender.sendDocument(inputStream, "localhost");
 
         assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
 
         assertEquals(numFiles + 1, getNumFiles());
+    }
+
+    @Test
+    public void sendDocument3() throws Exception {
+        final FTPSClient ftpsClient = sender.getFtpsClient();
+        int numFiles = getNumFiles();
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("Sample_SFTP_File.xml").toURI());
+        final InputStream inputStream = new FileInputStream(inputFile);
+        sender.sendDocument(inputStream, "localhost/");
+
+        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
+
+        assertEquals(numFiles + 1, getNumFiles());
+    }
+
+    @Test (expected = ApplicationRuntimeException.class)
+    public void sendException() throws Exception {
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("Sample_SFTP_File.xml").toURI());
+        final InputStream inputStream = new FileInputStream(inputFile);
+        sender.sendDocument(inputStream, "no-such-address");
     }
 
     private int getNumFiles() throws Exception {
