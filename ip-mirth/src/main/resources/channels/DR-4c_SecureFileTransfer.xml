@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316190071307</time>
+    <time>1316206603660</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>10</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -48,16 +48,16 @@
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>sendToSFTP</name>
-            <script>var ftpsSender = globalMap.get(&apos;ftpsSender&apos;);
+            <script>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
 var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-ftpsSender.sendDocument(is);</script>
+ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var ftpsSender = globalMap.get(&apos;ftpsSender&apos;);
+                <string>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
 var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-ftpsSender.sendDocument(is);</string>
+ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</string>
               </entry>
             </data>
           </step>
@@ -100,7 +100,14 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-ip-mirth.xml&quot;);
+var names = transformerContext.getBeanDefinitionNames();
+for (var i = 0; i &lt; names.length; i++) {
+	logger.error(&apos;Name: &apos; + names[i]);
+}
+
 var ftpsSender = transformerContext.getBean(&quot;sender&quot;);
+
+
 
 globalChannelMap.put(&apos;ftpsSender&apos;, ftpsSender);
 return;</deployScript>

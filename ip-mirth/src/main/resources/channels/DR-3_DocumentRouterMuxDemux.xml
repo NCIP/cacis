@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315949425473</time>
+    <time>1316205912312</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4523,7 +4523,7 @@ function processRoute(chNm, recipientType) {
 	var msgToRoute = msg.copy();
 	var url = rec[recipientType][&apos;@url&apos;].toString();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
-		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][recipientType].copy();	
+		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][recipientType].copy();	
 	var response = router.routeMessage(chNm, msgToRoute, false);
 	handleResponse(response, chNm, url);
 }
@@ -4564,7 +4564,7 @@ function processRoute(chNm, recipientType) {
 	var msgToRoute = msg.copy();
 	var url = rec[recipientType][&apos;@url&apos;].toString();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
-		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][recipientType].copy();	
+		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][recipientType].copy();	
 	var response = router.routeMessage(chNm, msgToRoute, false);
 	handleResponse(response, chNm, url);
 }
