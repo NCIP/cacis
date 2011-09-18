@@ -62,23 +62,13 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
-import java.io.File;
-import java.net.URISyntaxException;
-
 import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 
-import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.ssl.SslConfigurationFactory;
-import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
 
 /**
  * Config for CDW tests.
@@ -86,56 +76,20 @@ import org.springframework.context.annotation.Scope;
  * @since Aug 2, 2011
  */
 @Configuration
-@Import( { TestCDWConfig.class, IPMirthConfig.class } )
+@Import( { TestCDWConfig.class, IPMirthConfig.class} )
 public class TestIPMirthConfig {
 
-    private static final int FTP_PORT = 2221;
-
-    private static final String KEYSTORE_FILE_NAME = "src/test/resources/ftpkeystore.jks";
-    private static final String KEYSTORE_PASSWORD = "changeit";
-
     /**
-     * Creates FTP Server.
-     * @return ftp server
-     * @throws URISyntaxException if URI can not be parsed
+     * Property file config used in both ip-mirth and ip-mirth-test.
+     * @return PropertyPlaceholderConfigurer
      */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public FtpServer sftpServer() throws URISyntaxException {
-        final FtpServerFactory serverFactory = new FtpServerFactory();
-
-        final ListenerFactory factory = new ListenerFactory();
-
-        // set the port of the listener
-        factory.setPort(FTP_PORT);
-
-        // define SSL configuration
-        final SslConfigurationFactory ssl = new SslConfigurationFactory();
-        ssl.setKeystoreFile(new File(KEYSTORE_FILE_NAME));
-        ssl.setKeystorePassword(KEYSTORE_PASSWORD);
-
-        // set the SSL configuration for the listener
-        factory.setSslConfiguration(ssl.createSslConfiguration());
-        factory.setImplicitSsl(true);
-
-        // replace the default listener
-        serverFactory.addListener("default", factory.createListener());
-
-        final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
-        userManagerFactory.setFile(new File(Thread.currentThread().getContextClassLoader()
-                .getResource("ftpusers.properties").toURI()));
-
-        serverFactory.setUserManager(userManagerFactory.createUserManager());
-
-        return serverFactory.createServer();
-    }
-
     @Bean
     public PropertyPlaceholderConfigurer testPropertyPlaceholderConfigurer() {
         final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("ip-mirth-test",
-                "cacis-ip-mirth.properties");
+                "cacis-ip-mirth-test.properties");
         configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
         configurer.setIgnoreUnresolvablePlaceholders(true);
         return configurer;
     }
+
 }

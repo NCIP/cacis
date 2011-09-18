@@ -17,6 +17,7 @@
     <!-- enable processing of annotations such as @Autowired and @Configuration -->
     <context:annotation-config/>
     <bean class="gov.nih.nci.cacis.ip.mirthconnect.config.TestIPMirthConfig"/>
+    <bean class="gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthPropsConfig"/>
 
     <bean class="gov.nih.nci.cacis.ip.xds.XdsDocumentLoaderConfig"/>
 

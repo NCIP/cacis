@@ -69,7 +69,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Spreing config for NAV.
+ * Spring config for NAV.
  * @author bpickeral
  * @since Aug 2, 2011
  */
@@ -88,5 +88,5 @@ public class NAVPropsConfig {
         configurer.setIgnoreUnresolvablePlaceholders(true);
         return configurer;
     }
-    
+
 }

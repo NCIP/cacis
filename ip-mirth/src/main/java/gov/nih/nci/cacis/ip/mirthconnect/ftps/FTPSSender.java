@@ -75,6 +75,7 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author bpickeral
@@ -85,10 +86,8 @@ public class FTPSSender {
     @Autowired
     private FTPSClient ftpsClient;
 
-    private static final int FTP_PORT = 2221;
-
-    //TODO: ESD-3196 Create server configuration
-    private static final String FTP_SITE = "localhost";
+    @Value("${ftp.site}")
+    private String ftpSite;
 
     /**
      * Sends Document to SFTP Server.
@@ -107,19 +106,19 @@ public class FTPSSender {
 
         ftpsClient.setFileTransferMode(FTPSClient.BLOCK_TRANSFER_MODE);
         navigateToDirectory(ftpAddress);
-        ftpsClient.storeFile("IHEXDSNAV-" + UUID.randomUUID() + ".xml", file);
+        ftpsClient.storeFile("IHEXIPFTP-" + UUID.randomUUID() + ".xml", file);
 
         disconnect();
     }
 
     private void navigateToDirectory(String ftpAddress) throws IOException {
-        if (!ftpAddress.startsWith(FTP_SITE)) {
+        if (!ftpAddress.startsWith(ftpSite)) {
             throw new ApplicationRuntimeException(
                     "FTP Address in Request does not match the configured address in the Integration Platform.");
         }
 
-        if (ftpAddress.length() > FTP_SITE.length()) {
-            final String directory = StringUtils.substring(ftpAddress, FTP_SITE.length(), ftpAddress.length());
+        if (ftpAddress.length() > ftpSite.length()) {
+            final String directory = StringUtils.substring(ftpAddress, ftpSite.length(), ftpAddress.length());
             ftpsClient.changeWorkingDirectory(directory);
         }
     }
@@ -130,7 +129,7 @@ public class FTPSSender {
      * @throws IOException on I/O error
      */
     public void connect() throws SocketException, IOException {
-        ftpsClient.connect("localhost", FTP_PORT);
+        ftpsClient.connect("localhost", 2221);
         ftpsClient.login("admin", "admin");
     }
 

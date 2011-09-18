@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316206603660</time>
+    <time>1316300185430</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>10</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -101,13 +101,8 @@ return;</postprocessingScript>
 // You only have access to the globalMap and globalChannelMap here to persist data
 var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-ip-mirth.xml&quot;);
 var names = transformerContext.getBeanDefinitionNames();
-for (var i = 0; i &lt; names.length; i++) {
-	logger.error(&apos;Name: &apos; + names[i]);
-}
 
 var ftpsSender = transformerContext.getBean(&quot;sender&quot;);
-
-
 
 globalChannelMap.put(&apos;ftpsSender&apos;, ftpsSender);
 return;</deployScript>

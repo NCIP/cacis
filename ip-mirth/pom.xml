@@ -23,6 +23,12 @@
         <xds.doc.entry.file>${xds.doc.location}/docEntry.xml</xds.doc.entry.file>
         <xds.doc.submissionset.file>${xds.doc.location}/submissionSet.xml</xds.doc.submissionset.file>
         <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
+
+        <!-- Document Router FTP Server Config -->
+        <ftp.keystore.location>${user.home}/ftpkeystore.jks</ftp.keystore.location>
+        <ftp.port>2221</ftp.port>
+        <ftp.site>localhost</ftp.site>
+        <ftp.keystore.password>changeit</ftp.keystore.password>
     </properties>
 
     <dependencies>
@@ -160,6 +166,24 @@
                                     <directory>${basedir}/src/main/resources</directory>
                                     <includes>
                                         <include>DefaultRoutingInstructions.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-keystore</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${user.home}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/test/resources</directory>
+                                    <includes>
+                                        <include>ftpkeystore.jks</include>
                                     </includes>
                                 </resource>
                             </resources>
