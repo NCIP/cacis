@@ -60,16 +60,17 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect.xds;
 
+import static junit.framework.Assert.assertNotNull;
+import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.ip.mirthconnect.utils.SerializerUtilsTest;
 import gov.nih.nci.cacis.ip.xds.StaticXdsMetadataSupplier;
-import org.hl7.v3.POCDMT000040ClinicalDocument;
-import org.junit.Test;
 
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static junit.framework.Assert.assertNotNull;
+import javax.xml.bind.JAXBException;
+
+import org.junit.Test;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -79,13 +80,21 @@ public class StaticXdsMetadataSupplierTest {
     private final StaticXdsMetadataSupplier staticXdsMetadataSupplier =
             new StaticXdsMetadataSupplier();
 
-    private POCDMT000040ClinicalDocument document;
+    private CaCISRequest document;
 
+    /**
+     * Initialize method
+     * @throws JAXBException exception
+     *@throws URISyntaxException exception
+     */
     public void init() throws JAXBException, URISyntaxException {
-        document = SerializerUtilsTest.sampleCaCISRequest().getClinicalDocument().get(0);
+        document = SerializerUtilsTest.sampleCaCISRequest();
     }
 
-
+    /**
+     * 
+     * @throws IOException exception
+     */
     @Test
     public void createMetadata() throws IOException {
         assertNotNull(staticXdsMetadataSupplier.createDocEntry(document));
@@ -94,6 +103,4 @@ public class StaticXdsMetadataSupplierTest {
         assertNotNull(staticXdsMetadataSupplier.createSubmissionSet(document));
 
     }
-
-
 }

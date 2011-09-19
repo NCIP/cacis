@@ -60,40 +60,70 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect.utils;
 
+import static org.junit.Assert.assertNotNull;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.ip.utils.SerializerUtils;
-import org.junit.Test;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.net.URISyntaxException;
 
-import static org.junit.Assert.assertNotNull;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
 
 /**
  * @author kherm manav.kher@semanticbits.com
  */
 public class SerializerUtilsTest {
 
-    public static final String SAMPLE_MESSAGE_FILE = "Input_Without_RoutingInstructions.xml";
+    private static final String SAMPLE_MESSAGE_FILE = "Input_Without_RoutingInstructions.xml";
+    private static final Log LOG = LogFactory.getLog(SerializerUtilsTest.class);
 
+    /**
+     * 
+     * @throws URISyntaxException exception
+     * @throws JAXBException exception
+     */
     @Test
     public void serialize() throws URISyntaxException, JAXBException {
 
-        CaCISRequest caCISRequest = sampleCaCISRequest();
+        final CaCISRequest caCISRequest = sampleCaCISRequest();
 
-        String serializedDoc = SerializerUtils.serialize(caCISRequest.getClinicalDocument().get(0));
+        final String serializedDoc = SerializerUtils.serialize(caCISRequest.getClinicalDocument().get(0));
         assertNotNull(serializedDoc);
-        System.out.println(serializedDoc);
+        LOG.info(serializedDoc);
 
     }
 
+    /**
+     * 
+     * @return cacisrequest
+     * @throws JAXBException exception
+     * @throws URISyntaxException exception
+     */
     public static CaCISRequest sampleCaCISRequest() throws JAXBException, URISyntaxException {
-        JAXBContext ctx = JAXBContext.newInstance(CaCISRequest.class);
+        final JAXBContext ctx = JAXBContext.newInstance(CaCISRequest.class);
 
-        File soap = new File(SerializerUtilsTest.class.
+        final File soap = new File(SerializerUtilsTest.class.
                 getClassLoader().getResource(SAMPLE_MESSAGE_FILE).toURI());
+        return (CaCISRequest) ctx.createUnmarshaller().unmarshal(soap);
+    }
+    
+    /**
+     * 
+         * @param fileName sample file name
+         * @return CaisRequest 
+         * @throws JAXBException exception
+         * @throws URISyntaxException exception
+     */ 
+    public static CaCISRequest sampleCaCISRequest(String fileName) throws JAXBException, URISyntaxException {
+        final JAXBContext ctx = JAXBContext.newInstance(CaCISRequest.class);
+
+        final File soap = new File(SerializerUtilsTest.class.
+                getClassLoader().getResource(fileName).toURI());
         return (CaCISRequest) ctx.createUnmarshaller().unmarshal(soap);
     }
 }
