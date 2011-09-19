@@ -79,6 +79,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -122,9 +123,6 @@ public class SendSignedMail extends AbstractSendMail {
 
     private static final Logger LOG = Logger.getLogger(SendSignedMail.class);
 
-    private final String smtpServer;
-    private final String smtpPort;
-
     private final String keystore;
     private final String storepass;
     private final String keyAlias;
@@ -133,19 +131,23 @@ public class SendSignedMail extends AbstractSendMail {
     private PrivateKey privateKey;
 
     /**
-     * Initialize Mail Signer 
+     * Initialize mail signer
      * 
-     * @param smtpServer - smtp server host name
-     * @param smtpPort - smtp port
-     * @param keystore - keystore
-     * @param storepass - keystore password(same for key)
-     * @param keyAlias - key alias
-     * @throws MessagingException - error thrown, if any
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @param host - email server host
+     * @param port - email server port
+     * @param protocol - email protocol
+     * @param keystore - keystore to use for signing mail
+     * @param storepass - keystore password
+     * @param keyAlias - key alias to use
+     * @throws MessagingException - exception thrown, if any
      */
-    public SendSignedMail(String smtpServer, String smtpPort, String keystore, String storepass,
-            String keyAlias) throws MessagingException {
-        this.smtpServer = smtpServer;
-        this.smtpPort = smtpPort;
+    @SuppressWarnings( { "PMD.ExcessiveParameterList" })
+    // CHECKSTYLE:OFF
+    public SendSignedMail(Properties mailProperties, String from, String host, int port, String protocol,
+            String keystore, String storepass, String keyAlias) throws MessagingException {
+        super(mailProperties, from, host, port, protocol);
         this.keystore = keystore;
         this.storepass = storepass;
         this.keyAlias = keyAlias;
@@ -153,16 +155,20 @@ public class SendSignedMail extends AbstractSendMail {
         init();
     }
 
+    // CHECKSTYLE:ON
     /**
-     * Initialize Mail Signer. Uses localhost smtp server and default port
+     * Initialize mail signer. Uses local host and default port
      * 
-     * @param keystore - keystore path
-     * @param storepass - keystore password(same for key)
-     * @param keyAlias - key alias
-     * @throws MessagingException - error thrown, if any
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @param keystore - keystore to use for signing mail
+     * @param storepass - keystore password
+     * @param keyAlias - key alias to use
+     * @throws MessagingException - exception thrown, if any
      */
-    public SendSignedMail(String keystore, String storepass, String keyAlias) throws MessagingException {
-        this("localhost", String.valueOf(SMTP_PORT), keystore, storepass, keyAlias);
+    public SendSignedMail(Properties mailProperties, String from, String keystore, String storepass, String keyAlias)
+            throws MessagingException {
+        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP", keystore, storepass, keyAlias);
     }
 
     private void init() throws MessagingException {
@@ -189,7 +195,6 @@ public class SendSignedMail extends AbstractSendMail {
             throw new MessagingException("Error initalising signer!", ex);
         }
     }
-   
 
     /**
      * signing of mail
@@ -199,7 +204,7 @@ public class SendSignedMail extends AbstractSendMail {
      */
     public MimeMessage signMail(MimeMessage message) {
         /* Create the message to sign and encrypt */
-        final Session session = createSession(smtpServer, smtpPort);
+        final Session session = createSession(getHost(), String.valueOf(getPort()), getMailProperties());
         return signMail(message, session);
     }
 
@@ -220,7 +225,6 @@ public class SendSignedMail extends AbstractSendMail {
         }
         return null;
     }
-
 
     private MimeMessage signMessage(MimeMessage message, Session session, Certificate[] chain, PrivateKey privateKey)
             throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException,
@@ -260,9 +264,9 @@ public class SendSignedMail extends AbstractSendMail {
             keystoreRef = KeyStore.getInstance(STORE_TYPE, PROVIDER_TYPE);
             is = new FileInputStream(keystore);
             keystoreRef.load(is, storepass.toCharArray());
-            //CHECKSTYLE:OFF
-        } catch (Exception e) { //NOPMD
-            //CHECKSTYLE:ON
+            // CHECKSTYLE:OFF
+        } catch (Exception e) { // NOPMD
+            // CHECKSTYLE:ON
             throw new KeyStoreException("Error loading keystore!", e);
         } finally {
             if (is != null) {

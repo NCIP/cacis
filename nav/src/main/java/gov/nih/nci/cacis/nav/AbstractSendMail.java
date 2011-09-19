@@ -60,22 +60,41 @@
  */
 package gov.nih.nci.cacis.nav;
 
+import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.activation.CommandMap;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.MailcapCommandMap;
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
  * Common methods for sending mails
+ *
  * @author vinodh.rc@semanticbits.com
  *
  */
+
 public abstract class AbstractSendMail {
     
     private static final Logger LOG = Logger.getLogger(AbstractSendMail.class);
@@ -94,17 +113,72 @@ public abstract class AbstractSendMail {
      */
     public static final int SMTP_PORT = 3025;
     
+    private JavaMailSenderImpl mailSender;
+    private Properties mailProperties;
+    private String from;
+    private String userName;
+    private String password;
+    private String host;
+    private int port;
+    private String protocol;
+    
+    /**
+     * Default constructor
+     */
+    public AbstractSendMail() {
+        super();
+        mailSender = new JavaMailSenderImpl();
+    }
+    
+    
+
+    /**
+     * constructor with Mail sender configuration 
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @param host - email server host
+     * @param port - email server port
+     * @param protocol - email protocol
+     *
+     */
+    @SuppressWarnings( { "PMD.ExcessiveParameterList" })
+    // CHECKSTYLE:OFF
+    public AbstractSendMail(Properties mailProperties, String from, 
+            String host, int port, String protocol) {
+        this();
+        this.mailProperties=mailProperties;
+        this.from=from;
+        this.host=host;
+        this.port=port;
+        this.protocol=protocol;
+        mailSender.setJavaMailProperties(mailProperties);
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        if (StringUtils.isNotEmpty(protocol)) {
+            mailSender.setProtocol(protocol);
+        }
+    }
+    // CHECKSTYLE:ON
+
+
     /**
      * Sends MimeMessage(mail) over transport
      * 
      * @param message - MimeMessage
      */
-    public void sendMail(MimeMessage message) {
-        try {
-            Transport.send(message);
-        } catch (MessagingException e) {
-            LOG.error("Error sending mail", e);
-        }
+    public void sendMail(MimeMessage message) {       
+            mailSender.send(message);       
+    }
+    /**
+     * Setting sender email account credentials
+     * @param userName - username 
+     * @param password - password
+     */
+    public void setLoginDetails(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+        mailSender.setUsername(userName);
+        mailSender.setPassword(password);
     }
     
     /**
@@ -131,15 +205,251 @@ public abstract class AbstractSendMail {
      * Create a java mail session for a smtp server and port
      * @param smtpServer - server host name
      * @param smtpPort - smtp port
+     * @param mailprops - Properties for the mail sender
      * @return instance of java mail session
      */
-    protected Session createSession(String smtpServer, String smtpPort) {
-        final Properties props = System.getProperties();
+    protected Session createSession(String smtpServer, String smtpPort, Properties mailprops) {
+        Properties props = mailprops;
+        if ( props == null) {
+            props = System.getProperties();
+        }
         props.put("mail.smtp.host", smtpServer);
         props.setProperty("mail.smtp.port", smtpPort);
         final Session session = Session.getDefaultInstance(props, null);
 
         return session;
     }
+    /**
+     * Creates MimeMessage with supplied values
+     * @param to - to email address
+     * @param docType - String value for the attached document type
+     * @param subject - Subject for the email
+     * @param instructions - email body
+     * @param content - content to be sent as attachment
+     * @return MimeMessage instance
+     */
+    public MimeMessage createMessage(String to, String docType, String subject, String instructions, String content) {
+        final MimeMessage msg = mailSender.createMimeMessage();
+
+        try {
+            msg.setFrom(new InternetAddress(getFrom()));
+            msg.setSubject(subject);
+            msg.setSentDate(new Date());
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+
+            // The readable part
+            final MimeBodyPart mbp1 = new MimeBodyPart();
+            mbp1.setText(instructions);
+            mbp1.setHeader("Content-Type", "text/plain");
+
+            // The notification
+            final MimeBodyPart mbp2 = new MimeBodyPart();
+            
+            final String contentType = "application/xml; charset=UTF-8";
+            final String fileName = docType + UUID.randomUUID() + ".xml";
+
+            final DataSource ds = new AttachmentDS(fileName, content, contentType);
+
+            mbp2.setDataHandler(new DataHandler(ds));
+            mbp2.setFileName(fileName);
+            mbp2.setHeader("Content-Type", contentType);
+
+            final Multipart mp = new MimeMultipart();
+            mp.addBodyPart(mbp1);
+            mp.addBodyPart(mbp2);
+            msg.setContent(mp);
+            msg.setSentDate(new Date());
+        } catch (AddressException e) {
+            LOG.error("Error creating email message!");
+            throw new ApplicationRuntimeException("Error creating message!", e);
+        } catch (MessagingException e) {
+            LOG.error("Error creating email message!");
+            throw new ApplicationRuntimeException("Error creating message!", e);
+        }
+        
+        return msg;
+    }
+
+   
+    /**
+     * @return the mailProperties
+     */
+    public Properties getMailProperties() {
+        return mailProperties;
+    }
+
     
+    /**
+     * @param mailProperties the mailProperties to set
+     */
+    public void setMailProperties(Properties mailProperties) {
+        this.mailProperties = mailProperties;
+        mailSender.setJavaMailProperties(mailProperties);
+    }
+    
+    /**
+     * @return the from
+     */
+    public String getFrom() {
+        return from;
+    }
+
+    
+    /**
+     * @param from the from to set
+     */
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+        mailSender.setPassword(password);
+    }
+
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+        mailSender.setUsername(userName);
+    }
+
+    
+    /**
+     * @return the host
+     */
+    public String getHost() {
+        return host;
+    }
+
+    
+    /**
+     * @param host the host to set
+     */
+    public void setHost(String host) {
+        this.host = host;
+        mailSender.setHost(host);
+    }
+
+    
+    /**
+     * @return the port
+     */
+    public int getPort() {
+        return port;
+    }
+
+    
+    /**
+     * @param port the port to set
+     */
+    public void setPort(int port) {
+        this.port = port;
+        mailSender.setPort(port);
+    }
+
+    
+    /**
+     * @return the protocol
+     */
+    public String getProtocol() {
+        return protocol;
+    }
+
+    
+    /**
+     * @param protocol the protocol to set
+     */
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+        if (StringUtils.isNotEmpty(protocol)) {
+            mailSender.setProtocol(protocol);
+        }
+    }    
+    
+    /**
+     * @return the mailSender
+     */
+    public JavaMailSenderImpl getMailSender() {
+        return mailSender;
+    }
+    
+    /**
+     * @param mailSender the mailSender to set
+     */
+    public void setMailSender(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
+    }
+
+
+
+    /**
+     * DataSource for the mail attachment
+     * 
+     * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
+     * 
+     */
+    public static class AttachmentDS implements DataSource {
+
+        private final String fileName;
+        private final String content;
+        private final String contentType;
+
+        /**
+         * Constructor for supplying the content
+         * 
+         * @param fileName - filename of the attachment
+         * @param content - attachment as String content
+         * @param contentType - attachment type
+         */
+        public AttachmentDS(String fileName, String content, String contentType) {
+            super();
+            this.fileName = fileName;
+            this.content = content;
+            this.contentType = contentType;
+        }
+
+        @Override
+        public String getContentType() {
+            return contentType;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(content.getBytes("UTF-8"));
+        }
+
+        @Override
+        public String getName() {
+            return fileName;
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            throw new IllegalArgumentException("getOutputStream should not be called.");
+        }
+
+    }
+
 }

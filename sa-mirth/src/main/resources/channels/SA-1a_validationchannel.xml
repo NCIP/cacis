@@ -12,45 +12,35 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314994459246</time>
+    <time>1316181174590</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>10</revision>
+  <revision>35</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">validationMsg</property>
+      <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
       <steps>
         <step>
           <sequenceNumber>0</sequenceNumber>
           <name>xsdValidate_CaCISRequest</name>
-          <script>var valMsgKey = &apos;validationMsg&apos;;
-
-//put the placeholder msg, key has to be string, cannot use variable
-responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
-
-//perform schema validation for CaCISRequest
+          <script>//perform schema validation for CaCISRequest
 var crXsdValidationMsg = xsdValidateSACaCISRequest(message);
 if (crXsdValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;CaCISRequest Schema Validation:&apos; + crXsdValidationMsg));
+	handleErrorStr(&apos;CaCISRequest Schema Validation:&apos; +crXsdValidationMsg);
 	return;
 }</script>
           <type>JavaScript</type>
           <data class="map">
             <entry>
               <string>Script</string>
-              <string>var valMsgKey = &apos;validationMsg&apos;;
-
-//put the placeholder msg, key has to be string, cannot use variable
-responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
-
-//perform schema validation for CaCISRequest
+              <string>//perform schema validation for CaCISRequest
 var crXsdValidationMsg = xsdValidateSACaCISRequest(message);
 if (crXsdValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;CaCISRequest Schema Validation:&apos; + crXsdValidationMsg));
+	handleErrorStr(&apos;CaCISRequest Schema Validation:&apos; +crXsdValidationMsg);
 	return;
 }</string>
             </entry>
@@ -62,19 +52,19 @@ if (crXsdValidationMsg != null) {
           <script>var cmd = msg[&apos;clinicalMetaData&apos;];
 
 if(cmd.length()==0){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;ClinicalMetadata is not available!&apos;));
+	handleErrorStr(&apos;ClinicalMetadata is not available&apos;);
 	return;
 }
 
 var siteIdExt = cmd[&apos;@siteIdExtension&apos;];
 if(siteIdExt.toString().trim()==&apos;&apos;){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Extension is not available!&apos;));
+	handleErrorStr(&apos;SiteId Extension is not available&apos;);
 	return;
 }
 
 var patIDExt= cmd[&apos;@patientIdExtension&apos;];
 if(patIDExt.toString().trim()==&apos;&apos;){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Extension is not available!&apos;));
+	handleErrorStr(&apos;PatientId Extension is not available&apos;);
 	return;
 }</script>
           <type>JavaScript</type>
@@ -84,19 +74,19 @@ if(patIDExt.toString().trim()==&apos;&apos;){
               <string>var cmd = msg[&apos;clinicalMetaData&apos;];
 
 if(cmd.length()==0){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;ClinicalMetadata is not available!&apos;));
+	handleErrorStr(&apos;ClinicalMetadata is not available&apos;);
 	return;
 }
 
 var siteIdExt = cmd[&apos;@siteIdExtension&apos;];
 if(siteIdExt.toString().trim()==&apos;&apos;){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SiteId Extension is not available!&apos;));
+	handleErrorStr(&apos;SiteId Extension is not available&apos;);
 	return;
 }
 
 var patIDExt= cmd[&apos;@patientIdExtension&apos;];
 if(patIDExt.toString().trim()==&apos;&apos;){
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;PatientId Extension is not available!&apos;));
+	handleErrorStr(&apos;PatientId Extension is not available&apos;);
 	return;
 }</string>
             </entry>
@@ -110,8 +100,8 @@ default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 
 var srcData = srcDataEle[&apos;trim&apos;];
 
-if (srcData==null) {
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData is empty!&apos;));
+if (srcData.length()==0) {
+	handleErrorStr(&apos;SourceData is empty&apos;);
 	return;
 }</script>
           <type>JavaScript</type>
@@ -123,8 +113,8 @@ default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 
 var srcData = srcDataEle[&apos;trim&apos;];
 
-if (srcData==null) {
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData is empty!&apos;));
+if (srcData.length()==0) {
+	handleErrorStr(&apos;SourceData is empty&apos;);
 	return;
 }</string>
             </entry>
@@ -136,7 +126,7 @@ if (srcData==null) {
           <script>//perform schema validation for SourceData
 var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
 if (sdXsdValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg));
+	handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
 	return;
 }</script>
           <type>JavaScript</type>
@@ -146,7 +136,7 @@ if (sdXsdValidationMsg != null) {
               <string>//perform schema validation for SourceData
 var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
 if (sdXsdValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg));
+	handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
 	return;
 }</string>
             </entry>
@@ -158,7 +148,7 @@ if (sdXsdValidationMsg != null) {
           <script>//perform schematron validation for SourceData
 var sdSchValidationMsg = schematronValidateSASourceData(srcData.toString());
 if (sdSchValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg));
+	handleErrorStr(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg);
 	return;
 }</script>
           <type>JavaScript</type>
@@ -168,7 +158,7 @@ if (sdSchValidationMsg != null) {
               <string>//perform schematron validation for SourceData
 var sdSchValidationMsg = schematronValidateSASourceData(srcData.toString());
 if (sdSchValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg));
+	handleErrorStr(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg);
 	return;
 }</string>
             </entry>
@@ -238,10 +228,9 @@ ZHlJZEV4dGVuc2lvbj0ic3R1ZHlfaWQiLz4JCjwvY2FDSVNSZXF1ZXN0PgoKCg==</inboundTemplat
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var res = responseMap.get(&apos;validationMsg&apos;);
+                <string>var res = responseMap.get(&apos;error&apos;);
 
-if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
-	responseMap.put(&apos;validationMsg&apos;, res);
+if ( res != null ) {
 	return false;
 } else {
 	return true;	
@@ -249,10 +238,9 @@ if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
               </entry>
             </data>
             <type>JavaScript</type>
-            <script>var res = responseMap.get(&apos;validationMsg&apos;);
+            <script>var res = responseMap.get(&apos;error&apos;);
 
-if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
-	responseMap.put(&apos;validationMsg&apos;, res);
+if ( res != null ) {
 	return false;
 } else {
 	return true;	
@@ -262,6 +250,36 @@ if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
         </rules>
       </filter>
       <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+    <connector>
+      <name>handleResponse</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var desArr = new Array(&quot;transformation&quot;);
+
+handleResponse(&apos;handleResponse&apos;, desArr);
+
+return;</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
@@ -281,14 +299,6 @@ if ( res.toString().indexOf(&apos;SUCCESS&apos;) == -1 ) {
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
-
-var res = responseMap.get(&apos;validationMsg&apos;);
-var trnsfrmRes = responseMap.get(&apos;transformation&apos;);
-
-//TODO: it seems this response is not set, fix it
-if ( res.toString().indexOf(&apos;SUCCESS&apos;) != -1 ) {
-	responseMap.put(&apos;validationMsg&apos;, trnsfrmRes);	
-} 
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data

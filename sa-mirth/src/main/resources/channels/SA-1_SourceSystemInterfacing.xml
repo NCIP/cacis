@@ -6,10 +6,10 @@ Arch name is SourceSystemInterfacingChannel</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314987505697</time>
+    <time>1316127332852</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -18,7 +18,7 @@ Arch name is SourceSystemInterfacingChannel</description>
       <property name="port">18091</property>
       <property name="receiverClassName">gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapter</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
-      <property name="receiverResponseValue">XSLT_Transform</property>
+      <property name="receiverResponseValue">validation</property>
       <property name="receiverServiceName">SemanticAdapter</property>
       <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
@@ -84,7 +84,8 @@ Arch name is SourceSystemInterfacingChannel</description>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
-return;</postprocessingScript>
+return;
+</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 return;</deployScript>

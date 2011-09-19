@@ -73,12 +73,14 @@ import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
+import java.util.Properties;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.mail.smime.SMIMEEnvelopedGenerator;
@@ -110,84 +112,95 @@ public class SendEncryptedMail extends AbstractSendMail {
     private static final Logger LOG = Logger.getLogger(SendEncryptedMail.class);
     private static final String ERROR_INITALISING_ENCRYPTER = "Error initalising encrypter!";
 
-    private final String smtpServer;
-    private final String smtpPort;
-
     private String truststore = null;
     private String storepass = null;
-    private String keyAlias = null;
-
-    private Certificate[] chain;
+    
+    private KeyStore trustStoreRef;
 
     /**
      * Initialize Mail Encrypter
      * 
-     * @param smtpServer - smtp server host name
-     * @param smtpPort - smtp port
-     * @param truststore - truststore
-     * @param storepass - truststore password(same for key)
-     * @param keyAlias - key alias
-     * @throws MessagingException - error thrown, if any
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @param host - email server host
+     * @param port - email server port
+     * @param protocol - email protocol
+     * @param truststore - truststore to use for encrypting mail
+     * @param storepass - truststore password
+     * @throws MessagingException - exception thrown, if any
+     * @throws KeyStoreException - exception thrown, if any
      */
-    public SendEncryptedMail(String smtpServer, String smtpPort, String truststore, String storepass, String keyAlias)
-            throws MessagingException {
-        this.smtpServer = smtpServer;
-        this.smtpPort = smtpPort;
+    @SuppressWarnings( { "PMD.ExcessiveParameterList" })
+    // CHECKSTYLE:OFF
+    public SendEncryptedMail(Properties mailProperties, String from, String host,
+            int port, String protocol, String truststore, String storepass) throws MessagingException, KeyStoreException {
+        super(mailProperties, from, host, port, protocol);
         this.truststore = truststore;
         this.storepass = storepass;
-        this.keyAlias = keyAlias;
 
-        initWithTrustStore();
+        init();
     }
-
+    //CHECKSTYLE:ON
     /**
      * Initialize Mail Encrypter. Uses localhost smtp server and default port
      * 
-     * @param truststore - truststore path
-     * @param storepass - truststore password(same for key)
-     * @param keyAlias - key alias
-     * @throws MessagingException - error thrown, if any
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @param truststore - truststore to use for encrypting mail
+     * @param storepass - truststore password
+     * @throws MessagingException - exception thrown, if any
+     * @throws KeyStoreException - exception thrown, if any
      */
-    public SendEncryptedMail(String truststore, String storepass, String keyAlias) throws MessagingException {
-        this("localhost", String.valueOf(SMTP_PORT), truststore, storepass, keyAlias);
+    public SendEncryptedMail(Properties mailProperties,String from, 
+            String truststore, String storepass) throws MessagingException, KeyStoreException {
+        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP", truststore, storepass);
     }
-
+    
     /**
      * Initialize Mail Encrypter
      * 
-     * @param smtpServer - smtp server host name
-     * @param smtpPort - smtp port
-     * @param trustedCert - trusted certificate to be used for encryption
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @param host - email server host
+     * @param port - email server port
+     * @param protocol - email protocol
+     * @throws MessagingException - exception thrown, if any
+     * @throws KeyStoreException - exception thrown, if any
      */
-    public SendEncryptedMail(String smtpServer, String smtpPort, Certificate trustedCert) {
-        this.smtpServer = smtpServer;
-        this.smtpPort = smtpPort;
-
-        initWithTrustedCert(trustedCert);
+    public SendEncryptedMail(Properties mailProperties, String from, String host,
+            int port, String protocol) throws MessagingException, KeyStoreException {
+        super(mailProperties, from, host, port, protocol);
+        init();
     }
 
     /**
      * Initialize Mail Encrypter. Uses localhost smtp server and default port
      * 
-     * @param trustedCert - trusted certificate to be used for encryption
+     * @param mailProperties - properties for mail sender
+     * @param from - from email address
+     * @throws MessagingException - exception thrown, if any
+     * @throws KeyStoreException - exception thrown, if any
      */
-    public SendEncryptedMail(Certificate trustedCert) {
-        this("localhost", String.valueOf(SMTP_PORT), trustedCert);
+    public SendEncryptedMail(Properties mailProperties,String from) throws MessagingException, KeyStoreException {
+        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP");
     }
 
-    private void initWithTrustStore() throws MessagingException {
+    private void init() throws MessagingException, KeyStoreException {
+        /* CommandCap setting */
+        setCommandCap();
+
+        /* Add BC */
+        Security.addProvider(new BouncyCastleProvider());
+        
+        if (!StringUtils.isEmpty(truststore)) {
+            trustStoreRef = getTrustStoreRef();
+        }
+    }
+
+    private Certificate getCert(String keyAlias) throws MessagingException {
         try {
-            /* CommandCap setting */
-            setCommandCap();
-
-            /* Add BC */
-            Security.addProvider(new BouncyCastleProvider());
-
-            /* Get truststore ref */
-            final KeyStore truststoreRef = getTrustStoreRef();
-            chain = new Certificate[1];
-            chain[0] = truststoreRef.getCertificate(keyAlias);
-
+                        
+            return trustStoreRef.getCertificate(keyAlias);
             // CHECKSTYLE:OFF
         } catch (Exception ex) { // NOPMD
             // CHECKSTYLE:ON
@@ -196,39 +209,55 @@ public class SendEncryptedMail extends AbstractSendMail {
         }
     }
 
-    private void initWithTrustedCert(Certificate trustedCert) {        
-            /* CommandCap setting */
-            setCommandCap();
-
-            /* Add BC */
-            Security.addProvider(new BouncyCastleProvider());
-
-            chain = new Certificate[1];
-            chain[0] = trustedCert;
+    /**
+     * encrypting of mail
+     * 
+     * @param message - MimeMessage to be encrypted
+     * @param keyAlias - keyAlias for the certificate
+     * @return MimeMessage - encrypted MimeMessage
+     * @throws MessagingException - exception thrown if any
+     */
+    public MimeMessage encryptMail(MimeMessage message, String keyAlias) throws MessagingException {
+        return encryptMail(message, getCert(keyAlias));
     }
 
     /**
      * encrypting of mail
      * 
      * @param message - MimeMessage to be encrypted
+     * @param cert - trusted Certificate
      * @return MimeMessage - encrypted MimeMessage
      */
-    public MimeMessage encryptMail(MimeMessage message) {
+    public MimeMessage encryptMail(MimeMessage message, Certificate cert) {
         /* Create the message to sign and encrypt */
-        final Session session = createSession(smtpServer, smtpPort);
-        return encryptMail(message, session);
+        final Session session = createSession(getHost(), String.valueOf(getPort()), getMailProperties());
+        return encryptMail(message, session, cert);
     }
 
     /**
-     * ncrypting of mail
+     * encrypting of mail
      * 
      * @param message - MimeMessage to be encrypted
      * @param session - Mail Session
+     * @param keyAlias - keyAlias for the certificate
+     * @return MimeMessage - encrypted MimeMessage
+     * @throws MessagingException - exception thrown, if any
+     */
+    public MimeMessage encryptMail(MimeMessage message, Session session, String keyAlias) throws MessagingException {
+        return encryptMail(message, session, getCert(keyAlias));
+    }
+
+    /**
+     * encrypting of mail
+     * 
+     * @param message - MimeMessage to be encrypted
+     * @param session - Mail Session
+     * @param cert - trusted Certificate
      * @return MimeMessage - encrypted MimeMessage
      */
-    public MimeMessage encryptMail(MimeMessage message, Session session) {
+    public MimeMessage encryptMail(MimeMessage message, Session session, Certificate cert) {
         try {
-            return encryptMessage(message, session);
+            return encryptMessage(message, session, cert);
             // CHECKSTYLE:OFF
         } catch (Exception ex) { // NOPMD
             // CHECKSTYLE:ON
@@ -237,11 +266,11 @@ public class SendEncryptedMail extends AbstractSendMail {
         return null;
     }
 
-    private MimeMessage encryptMessage(MimeMessage message, Session session) throws NoSuchAlgorithmException,
-            NoSuchProviderException, SMIMEException, MessagingException, IOException {
+    private MimeMessage encryptMessage(MimeMessage message, Session session, Certificate cert)
+            throws NoSuchAlgorithmException, NoSuchProviderException, SMIMEException, MessagingException, IOException {
         /* Create the encrypter */
         final SMIMEEnvelopedGenerator encrypter = new SMIMEEnvelopedGenerator();
-        encrypter.addKeyTransRecipient((X509Certificate) chain[0]);
+        encrypter.addKeyTransRecipient((X509Certificate) cert);
 
         /* Encrypt the message */
         final MimeBodyPart encryptedPart = encrypter.generate(message, SMIMEEnvelopedGenerator.RC2_CBC, PROVIDER_TYPE);

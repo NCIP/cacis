@@ -189,7 +189,7 @@ public class ValidateSignedMail {
         final MimeMessage msg = new MimeMessage(session, new FileInputStream("signed.message"));
 
         final ValidateSignedMail vsm = new ValidateSignedMail(false);
-        vsm.validate(msg, "securemail.p12", "changeit", "securemailpkcs12");
+        vsm.validate(msg, "securemail.p12", "changeit", "cacisnavtestuser@gmail.com");
     }
 
     /**

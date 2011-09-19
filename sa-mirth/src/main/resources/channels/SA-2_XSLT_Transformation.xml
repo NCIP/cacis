@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315935965410</time>
+    <time>1316179922258</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>19</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -40,7 +40,7 @@
       <properties>
         <property name="DataType">Channel Writer</property>
         <property name="host">f9460cc7-cf5e-413f-be05-23ba953d9f26</property>
-        <property name="synchronised">0</property>
+        <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>

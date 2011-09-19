@@ -66,11 +66,15 @@ import gov.nih.nci.cacis.nav.DefaultXDSNotificationSignatureBuilder;
 import gov.nih.nci.cacis.nav.NotificationSender;
 import gov.nih.nci.cacis.nav.NotificationSenderImpl;
 import gov.nih.nci.cacis.nav.OpenXDSDocumentResolver;
+import gov.nih.nci.cacis.nav.SendEncryptedMail;
+import gov.nih.nci.cacis.nav.SendSignedMail;
 import gov.nih.nci.cacis.nav.XDSDocumentResolver;
 import gov.nih.nci.cacis.nav.XDSNotificationSignatureBuilder;
 
+import java.security.KeyStoreException;
 import java.util.Properties;
 
+import javax.mail.MessagingException;
 import javax.xml.crypto.dsig.DigestMethod;
 import javax.xml.crypto.dsig.SignatureMethod;
 
@@ -89,6 +93,8 @@ import org.springframework.context.annotation.Scope;
  */
 @Configuration
 public class NAVConfig {
+
+    private static final String TRUE = "true";
 
     @Value("${xds.repo.oid}")
     private String repoOID;
@@ -132,6 +138,41 @@ public class NAVConfig {
 
     @Value("${nav.sender.pass}")
     private String pass;
+    
+    @Value("${sec.email.keystore.location}")
+    private String secEmailKeyStoreLocation;
+
+    @Value("${sec.email.keystore.password}")
+    private String secEmailKeyStorePassword;
+    
+    //email address is being used as keyalias
+    @Value("${sec.email.message.from}")
+    private String secEmailKeyStoreKey;
+
+    @Value("${sec.email.truststore.location}")
+    private String secEmailTrustStoreLocation;
+
+    @Value("${sec.email.truststore.password}")
+    private String secEmailTrustStorePassword;
+
+    @Value("${sec.email.message.from}")
+    private String secEmailFrom;
+
+    @Value("${sec.email.sender.host}")
+    private String secEmailHost;
+
+    @Value("${sec.email.sender.port}")
+    private int secEmailPort;
+
+    @Value("${sec.email.sender.protocol}")
+    private String secEmailProtocol;
+
+    @Value("${sec.email.sender.user}")
+    private String secEmailUser;
+
+    @Value("${sec.email.sender.pass}")
+    private String secEmailPass;
+
 
     /**
      * Notification Sender.
@@ -144,8 +185,8 @@ public class NAVConfig {
             new NotificationSenderImpl(null, null, null, null, "", null, 0, null);
 
         final Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", TRUE);
+        props.put("mail.smtp.starttls.enable", TRUE);
 
         notificationSender.setSignatureBuilder(signatureBuilder());
         notificationSender.setHost(host);
@@ -155,7 +196,7 @@ public class NAVConfig {
         notificationSender.setSubject(subject);
         notificationSender.setFrom(mailFrom);
         notificationSender.setMailProperties(props);
-        notificationSender.setCredentials(user, pass);
+        notificationSender.setLoginDetails(user, pass);
 
         //username will be set sending time
 
@@ -182,5 +223,45 @@ public class NAVConfig {
     public XDSDocumentResolver documentResolver() {
         return new OpenXDSDocumentResolver(repoOID, docHndlr);
     }
+    
+    /**
+     * Secure signed mail Sender.
+     * 
+     * @return SendSignedMail sender
+     * @throws MessagingException  exception thrown, if any
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public SendSignedMail signedMailSender() throws MessagingException {
+        final SendSignedMail sender = new SendSignedMail(new Properties(), secEmailFrom, 
+                secEmailHost, secEmailPort, secEmailProtocol, secEmailKeyStoreLocation,
+                secEmailKeyStorePassword, secEmailKeyStoreKey);
+        sender.setLoginDetails(secEmailUser, secEmailPass);
+
+        return sender;
+    }
+    
+    /**
+     * Secure encrypted mail Sender.
+     * 
+     * @return SendEncryptedMail sender
+     * @throws MessagingException  exception thrown, if any
+     * @throws KeyStoreException exception thrown, if any
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public SendEncryptedMail encryptedMailSender() throws MessagingException, KeyStoreException {
+        final Properties props = new Properties();
+        props.put("mail.smtp.auth", TRUE);
+        props.put("mail.smtp.starttls.enable", TRUE);
+        
+        final SendEncryptedMail sender = new SendEncryptedMail(props, secEmailFrom, 
+                secEmailHost, secEmailPort, secEmailProtocol, secEmailTrustStoreLocation,
+                secEmailTrustStorePassword);
+        sender.setLoginDetails(secEmailUser, secEmailPass);
+
+        return sender;
+    }
+
 
 }

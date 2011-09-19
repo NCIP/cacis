@@ -88,11 +88,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
@@ -105,35 +108,55 @@ import com.icegreen.greenmail.util.ServerSetupTest;
  * @author vinodh.rc@semanticbits.com
  * 
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath*:/applicationContext-nav-test.xml" })
 public class SendSignedMailTest {
-    
+
     private static final String INBOX = "INBOX";
 
     private static final String POP3_TYPE = "pop3";
 
     private static final String MAIL_POP3_PORT_KEY = "mail.pop3.port";
 
-    private static final String KEYALIAS = "securemailpkcs12";
-
-    private static final String STOREPASS = "changeit";
-
-    private static final String KEYSTORE = "securemail.p12";
-    
-    private static final String TRUSTSTORE = "securemail_ts.p12";
-
     private static final String UNEXPECTED_EXCEPTION = "Unexpected exception: ";
-    
-    private static final String EMAIL = "some.one@somewhere.com";
-    private static final String LOGIN = "another.one";
-    private static final String PASSWORD = "secret";
 
     private static final Logger LOG = Logger.getLogger(TestMail.class);
-    
+
     private static final String LOCALHOST = "localhost";
     private static final int SMTP_PORT = 3025;
     private static final int POP3_PORT = 3110;
 
     private GreenMail server;
+
+    @Value("${sec.email.keystore.location}")
+    private String secEmailKeyStoreLocation;
+
+    @Value("${sec.email.keystore.password}")
+    private String secEmailKeyStorePassword;
+
+    // Using the from email address to get the matching key
+    @Value("${sec.email.message.from}")
+    private String secEmailKeyStoreKey;
+
+    @Value("${sec.email.truststore.location}")
+    private String secEmailTrustStoreLocation;
+
+    @Value("${sec.email.truststore.password}")
+    private String secEmailTrustStorePassword;
+
+    @Value("${sec.email.message.from}")
+    private String secEmailFrom;
+
+    // Using the same email address for from and to
+    // as the test truststore has key for the from address only
+    @Value("${sec.email.message.from}")
+    private String secEmailTo;
+
+    @Value("${sec.email.sender.user}")
+    private String secEmailUser;
+
+    @Value("${sec.email.sender.pass}")
+    private String secEmailPass;
 
     /**
      * starts GreenMain server for testing
@@ -141,16 +164,16 @@ public class SendSignedMailTest {
     @Before
     public void setUp() {
         server = new GreenMail(ServerSetupTest.ALL);
-        //for some reason, the greenmail server doesnt start in time
-        //will attempt max times to ensure all service gets startedup 
+        // for some reason, the greenmail server doesnt start in time
+        // will attempt max times to ensure all service gets startedup
         int i = 0;
         final int max = 2;
-        while ( i < max ) {
+        while (i < max) {
             try {
                 server.start();
-                //CHECKSTYLE:OFF
-            } catch (RuntimeException e) { //NOPMD
-              //CHECKSTYLE:ON
+                // CHECKSTYLE:OFF
+            } catch (RuntimeException e) { // NOPMD
+                // CHECKSTYLE:ON
                 i++;
                 continue;
             }
@@ -165,41 +188,43 @@ public class SendSignedMailTest {
     public void tearDown() {
         server.stop();
     }
-    
+
     /**
      * tests error on invalid keystore
      * 
      * @throws MessagingException - exception thrown
      */
-    @Test(expected = MessagingException.class)   
+    @Test(expected = MessagingException.class)
     public void supplyInvalidKeystore() throws MessagingException {
-        final SendSignedMail ssem = 
-            new SendSignedMail("invalid keystore", STOREPASS, KEYALIAS);
-        //shouldnt reach this line
+        final SendSignedMail ssem = new SendSignedMail(new Properties(), secEmailFrom, "invalid keystore",
+                secEmailKeyStorePassword, secEmailKeyStoreKey);
+        // shouldnt reach this line
         ssem.signMail(null);
     }
-        
+
     /**
      * tests receiving signed mail
      * 
      * @throws IOException - io exception thrown
      */
     @Test
-    public void receiveSignedMessage() throws IOException {               
+    public void receiveSignedMessage() throws IOException {
         try {
-            final String fromemail = "another.one@somewhere.com";
 
             final MimeMessage msg = createMessage();
-            //TODO:fix sample certificate for email address
-            msg.setFrom(new InternetAddress(fromemail));
-            
-            final String keystore = getClass().getClassLoader().getResource(KEYSTORE).getFile();
-            final SendSignedMail ssem = 
-                new SendSignedMail(keystore , STOREPASS, KEYALIAS);
-            
+            // TODO:fix sample certificate for email address
+            msg.setFrom(new InternetAddress(secEmailFrom));
+
+            final Properties smtpprops = new Properties();
+            smtpprops.put("mail.smtp.auth", "true");
+            smtpprops.put("mail.smtp.starttls.enable", "true");
+
+            final SendSignedMail ssem = new SendSignedMail(smtpprops, secEmailFrom, secEmailKeyStoreLocation,
+                    secEmailKeyStorePassword, secEmailKeyStoreKey);
+
             final MimeMessage signedMsg = ssem.signMail(msg);
 
-            final GreenMailUser user = server.setUser(EMAIL, LOGIN, PASSWORD);
+            final GreenMailUser user = server.setUser(secEmailTo, secEmailUser, secEmailPass);
             user.deliver(signedMsg);
             assertEquals(1, server.getReceivedMessages().length);
 
@@ -209,7 +234,7 @@ public class SendSignedMailTest {
             session.setDebug(true);
 
             final Store store = session.getStore(POP3_TYPE);
-            store.connect("localhost", LOGIN, PASSWORD);
+            store.connect("localhost", secEmailUser, secEmailPass);
             final Folder folder = store.getFolder(INBOX);
             folder.open(Folder.READ_ONLY);
 
@@ -217,36 +242,36 @@ public class SendSignedMailTest {
             assertTrue(messages != null);
             assertTrue(messages.length == 1);
 
-            final MimeMessage retMsg = (MimeMessage)messages[0];
-            
-            final String trustStore = getClass().getClassLoader().getResource(TRUSTSTORE).getFile();
+            final MimeMessage retMsg = (MimeMessage) messages[0];
+
             final ValidateSignedMail vsm = new ValidateSignedMail(false);
-            vsm.validate(retMsg, trustStore, STOREPASS, KEYALIAS);
-            
+            // TO email public key is tied to the email address itself, so using it as keyalias
+            vsm.validate(retMsg, secEmailTrustStoreLocation, secEmailTrustStorePassword, secEmailTo);
+
             final Multipart mp = (Multipart) retMsg.getContent();
-            assertTrue(mp.getCount() == 2);           
-            
-            final Multipart origMsgMp = (Multipart) msg.getContent(); 
-            
+            assertTrue(mp.getCount() == 2);
+
+            final Multipart origMsgMp = (Multipart) msg.getContent();
+
             final Part actualMsgPart = mp.getBodyPart(0);
             final Multipart actualMsgMp = (Multipart) actualMsgPart.getContent();
-            
+
             validateMsgParts(origMsgMp, actualMsgMp);
-            
+
             // CHECKSTYLE:OFF
         } catch (Exception e) { // NOPMD
             // CHECKSTYLE:ON
             fail(UNEXPECTED_EXCEPTION + e);
         }
-    }    
-    
+    }
+
     private void validateMsgParts(Multipart origMsgMp, Multipart actualMsgMp) {
         try {
             final String textpart = (String) actualMsgMp.getBodyPart(0).getContent();
             assertNotNull(textpart);
-            assertEquals((String)origMsgMp.getBodyPart(0).getContent(), textpart);
-            
-            final String attachPart = getPartContent(actualMsgMp.getBodyPart(1));            
+            assertEquals((String) origMsgMp.getBodyPart(0).getContent(), textpart);
+
+            final String attachPart = getPartContent(actualMsgMp.getBodyPart(1));
             assertNotNull(attachPart);
             assertEquals(getPartContent(origMsgMp.getBodyPart(1)), attachPart);
         } catch (IOException e) {
@@ -285,8 +310,6 @@ public class SendSignedMailTest {
 
     private MimeMessage createMessage() throws Exception { // NOPMD
 
-        final String from = "some.one@somewhere.com";
-        final String to = "another.one@somewhere.com";
         final String subject = "Notification of Document Availability";
 
         final Properties mailProps = new Properties();
@@ -297,10 +320,10 @@ public class SendSignedMailTest {
         session.setDebug(true);
 
         final MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(from));
+        msg.setFrom(new InternetAddress(secEmailFrom));
         msg.setSubject(subject);
         msg.setSentDate(new Date());
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(secEmailTo));
 
         final MimeBodyPart mbp1 = new MimeBodyPart();
         mbp1.setText("Instructions to the user.");

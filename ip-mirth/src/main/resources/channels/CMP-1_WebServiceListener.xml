@@ -120,11 +120,6 @@ router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
-
-var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-cacis-cdw.xml&quot;);
-var loader = cdwContext.getBean(&quot;loader&quot;);
-
-globalChannelMap.put(&apos;cdwloader&apos;, loader);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

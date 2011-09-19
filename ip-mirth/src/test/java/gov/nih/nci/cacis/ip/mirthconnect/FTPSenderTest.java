@@ -74,6 +74,7 @@ import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.ftpserver.FtpServer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author bpickeral
  * @since Sep 14, 2011
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
 public class FTPSenderTest {

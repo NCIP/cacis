@@ -132,7 +132,7 @@ public class SemanticAdapter extends AcceptMessage {
 
             LOG.info("MC RESPONSE:" + mcResponse);
 
-            if (mcResponse != null && mcResponse.indexOf("Error") > -1) {
+            if (mcResponse != null && mcResponse.indexOf("Error") > -1) {                
                 throw new AcceptSourceFault("Error processing Data from Source System: " + mcResponse);
             }
             response.setStatus(ResponseStatusType.SUCCESS);

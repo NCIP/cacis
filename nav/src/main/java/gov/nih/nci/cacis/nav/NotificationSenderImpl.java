@@ -59,10 +59,6 @@
  */
 package gov.nih.nci.cacis.nav;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -87,8 +83,6 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.w3c.dom.Node;
 
 /**
@@ -96,24 +90,18 @@ import org.w3c.dom.Node;
  * @since May 20, 2011
  * 
  */
-public class NotificationSenderImpl implements NotificationSender {
+public class NotificationSenderImpl extends AbstractSendMail implements NotificationSender {
 
-    private JavaMailSenderImpl mailSender;
-    private XDSNotificationSignatureBuilder signatureBuilder;
-    private Properties mailProperties;
+    
+    private XDSNotificationSignatureBuilder signatureBuilder;    
     private String subject;
-    private String from;
     private String instructions;
-    private String userName;
-    private String host;
-    private int port;
-    private String protocol;
 
     /**
      * Default constructor
      */
     public NotificationSenderImpl() { // NOPMD
-        mailSender = new JavaMailSenderImpl();
+        super();
     }
 
     /**
@@ -130,18 +118,10 @@ public class NotificationSenderImpl implements NotificationSender {
     // CHECKSTYLE:OFF
     public NotificationSenderImpl(XDSNotificationSignatureBuilder signatureBuilder, Properties mailProperties,
             String subject, String from, String instructions, String host, int port, String protocol) { // NOPMD
-
+        super(mailProperties, from, host, port, protocol);
         this.signatureBuilder = signatureBuilder;
         this.subject = subject;
-        this.from = from;
         this.instructions = instructions;
-        mailSender = new JavaMailSenderImpl();
-        mailSender.setJavaMailProperties(mailProperties);
-        mailSender.setHost(host);
-        mailSender.setPort(port);
-        if (StringUtils.isNotEmpty(protocol)) {
-            mailSender.setProtocol(protocol);
-        }
     }
 
     // CHECKSTYLE:ON
@@ -179,15 +159,14 @@ public class NotificationSenderImpl implements NotificationSender {
      */
     @Override
     public void setCredentials(String userName, String password) {
-        mailSender.setUsername(userName);
-        mailSender.setPassword(password);
+        setLoginDetails(userName, password);
     }
 
     private void sendEmail(String to, Node sig) throws AddressException, MessagingException,
             TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError,
             UnsupportedEncodingException {
 
-        final MimeMessage msg = mailSender.createMimeMessage();
+        final MimeMessage msg = getMailSender().createMimeMessage();
 
         msg.setFrom(new InternetAddress(getFrom()));
         msg.setSubject(getSubject());
@@ -222,22 +201,8 @@ public class NotificationSenderImpl implements NotificationSender {
         msg.setContent(mp);
         msg.setSentDate(new Date());
 
-        mailSender.send(msg);
+        getMailSender().send(msg);
 
-    }
-
-    /**
-     * @return the mailSender
-     */
-    public JavaMailSenderImpl getMailSender() {
-        return mailSender;
-    }
-
-    /**
-     * @param mailSender the mailSender to set
-     */
-    public void setMailSender(JavaMailSenderImpl mailSender) {
-        this.mailSender = mailSender;
     }
 
     /**
@@ -254,21 +219,7 @@ public class NotificationSenderImpl implements NotificationSender {
         this.signatureBuilder = signatureBuilder;
     }
 
-    /**
-     * @return the mailProperties
-     */
-    public Properties getMailProperties() {
-        return mailProperties;
-    }
-
-    /**
-     * @param mailProperties the mailProperties to set
-     */
-    public void setMailProperties(Properties mailProperties) {
-        this.mailProperties = mailProperties;
-        mailSender.setJavaMailProperties(mailProperties);
-    }
-
+   
     /**
      * @return the subject
      */
@@ -283,20 +234,7 @@ public class NotificationSenderImpl implements NotificationSender {
         this.subject = subject;
     }
 
-    /**
-     * @return the from
-     */
-    public String getFrom() {
-        return from;
-    }
-
-    /**
-     * @param from the from to set
-     */
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
+    
     /**
      * @return the instructions
      */
@@ -311,113 +249,4 @@ public class NotificationSenderImpl implements NotificationSender {
         this.instructions = instructions;
     }
 
-    /**
-     * @return the userName
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-    /**
-     * @param userName the userName to set
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-        mailSender.setUsername(userName);
-    }
-
-    /**
-     * @return the host
-     */
-    public String getHost() {
-        return host;
-    }
-
-    /**
-     * @param host the host to set
-     */
-    public void setHost(String host) {
-        this.host = host;
-        mailSender.setHost(host);
-    }
-
-    /**
-     * @return the port
-     */
-    public int getPort() {
-        return port;
-    }
-
-    /**
-     * @param port the port to set
-     */
-    public void setPort(int port) {
-        this.port = port;
-        mailSender.setPort(port);
-    }
-
-    /**
-     * @return the protocol
-     */
-    public String getProtocol() {
-        return protocol;
-    }
-
-    /**
-     * @param protocol the protocol to set
-     */
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-        if (StringUtils.isNotEmpty(protocol)) {
-            mailSender.setProtocol(protocol);
-        }
-    }
-
-    /**
-     * DataSource for the mail attachment
-     * 
-     * @author <a href="mailto:vinodh.rc@semanticbits.com">Vinodh Chandrasekaran</a>
-     * 
-     */
-    public static class AttachmentDS implements DataSource {
-
-        private final String fileName;
-        private final String content;
-        private final String contentType;
-
-        /**
-         * Constructor for supplying the content
-         * 
-         * @param fileName - filename of the attachment
-         * @param content - attachment as String content
-         * @param contentType - attachment type
-         */
-        public AttachmentDS(String fileName, String content, String contentType) {
-            super();
-            this.fileName = fileName;
-            this.content = content;
-            this.contentType = contentType;
-        }
-
-        @Override
-        public String getContentType() {
-            return contentType;
-        }
-
-        @Override
-        public InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(content.getBytes("UTF-8"));
-        }
-
-        @Override
-        public String getName() {
-            return fileName;
-        }
-
-        @Override
-        public OutputStream getOutputStream() throws IOException {
-            throw new IllegalArgumentException("getOutputStream should not be called.");
-        }
-
-    }
 }

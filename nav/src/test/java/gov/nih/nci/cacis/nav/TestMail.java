@@ -115,7 +115,7 @@ public class TestMail {
 
     private static final String MAIL_POP3_PORT_KEY = "mail.pop3.port";
 
-    private static final String KEYALIAS = "securemailpkcs12";
+    private static final String KEYALIAS = "cacisnavtestuser@gmail.com";
 
     private static final String STOREPASS = "changeit";
 
@@ -257,15 +257,15 @@ public class TestMail {
             final String trustStore = getClass().getClassLoader().getResource(TRUSTSTORE).getFile();
             
             final SendSignedMail ssm = 
-                new SendSignedMail(LOCALHOST, String.valueOf(POP3_PORT),
+                new SendSignedMail(new Properties(), fromemail, LOCALHOST, POP3_PORT, "POP3",
                     keystore , STOREPASS, KEYALIAS);            
             
             final SendEncryptedMail sem = 
-                new SendEncryptedMail(LOCALHOST, String.valueOf(POP3_PORT),
-                    trustStore, STOREPASS, KEYALIAS);
+                new SendEncryptedMail(new Properties(), fromemail, LOCALHOST, POP3_PORT, "POP3",
+                    trustStore, STOREPASS);
             
             final MimeMessage signedMsg = ssm.signMail(msg);
-            final MimeMessage msgToBeSent = sem.encryptMail(signedMsg);
+            final MimeMessage msgToBeSent = sem.encryptMail(signedMsg, KEYALIAS);
                         
             final GreenMailUser user = server.setUser(EMAIL, LOGIN, PASSWORD);
             user.deliver(msgToBeSent);

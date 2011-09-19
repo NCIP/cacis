@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1314977468899</time>
+    <time>1316181619998</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>5</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">IP-CMP-Destination</property>
+      <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
       <steps/>
@@ -54,11 +54,12 @@ try{
 	var caCisRequest = jaxbContext.createUnmarshaller().unmarshal(new Packages.java.io.ByteArrayInputStream(messageObject.getEncodedData().getBytes()));
 	client.acceptCanonical(caCisRequest); 
 }catch(cmpInvokeErr) {
-	responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getFailureResponse(&apos;Error invoking IP-Canonical Model Processor.&apos; + cmpInvokeErr.message));
+	//responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getFailureResponse(&apos;Error invoking IP-Canonical Model Processor.&apos; + cmpInvokeErr.message));
+	handleErrorStr(cmpInvokeErr.message);
 	return;
 }
-responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully invoked IP-Canonical Model Processor&apos;));
-
+//responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully invoked IP-Canonical Model Processor&apos;));
+return;
 
 
 </property>
@@ -72,6 +73,36 @@ responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessRespon
         </inboundProperties>
         <outboundProperties>
           <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+    <connector>
+      <name>handleResponse</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var destArr = new Arra(&quot;IP-CMP-Destination&quot;);
+
+handleResponse(&apos;handleResponse&apos;, destArr);
+
+return;</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">true</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
         </outboundProperties>
       </transformer>
       <filter>

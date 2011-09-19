@@ -15,9 +15,10 @@
     <properties>
         <test.unit.branchrate>65</test.unit.branchrate>
         <test.unit.linerate>65</test.unit.linerate>
-
+		
+		<base.nav.folder>${user.home}/.cacis/nav/</base.nav.folder>
         <nav.keystore.type>JKS</nav.keystore.type>
-        <nav.keystore.folder>${user.home}</nav.keystore.folder>
+        <nav.keystore.folder>${base.nav.folder}</nav.keystore.folder>
         <nav.keystore.location>${nav.keystore.folder}/keystore.jks</nav.keystore.location>
         <nav.keystore.password>changeit</nav.keystore.password>
         <nav.keystore.key>nav_test</nav.keystore.key>
@@ -27,7 +28,21 @@
         <nav.sender.port>587</nav.sender.port>
         <nav.sender.protocol>smtp</nav.sender.protocol>
         <nav.sender.user>cacisnavtestuser</nav.sender.user>
-        <nav.sender.pass>changeme</nav.sender.pass>
+        <nav.sender.pass>c2c1sn2v</nav.sender.pass>
+        
+        <sec.email.folder>${base.nav.folder}</sec.email.folder>
+        <sec.email.keystore.location>${sec.email.folder}/securemail.p12</sec.email.keystore.location>
+		<sec.email.keystore.password>changeit</sec.email.keystore.password>
+		<sec.email.truststore.location>${sec.email.folder}/securemail_ts.p12</sec.email.truststore.location>
+		<sec.email.truststore.password>changeit</sec.email.truststore.password>
+		<sec.email.message.from>cacisnavtestuser@gmail.com</sec.email.message.from>
+		<sec.email.sender.host>smtp.gmail.com</sec.email.sender.host>
+		<sec.email.sender.port>587</sec.email.sender.port>
+		<sec.email.sender.protocol>smtp</sec.email.sender.protocol>
+		<sec.email.sender.user>cacisnavtestuser</sec.email.sender.user>
+		<sec.email.sender.pass>c2c1sn2v</sec.email.sender.pass>
+
+
     </properties>
 
     <dependencies>
@@ -88,9 +103,32 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+        			<exclude>keystore.jks</exclude>
+        			<exclude>securemail.p12</exclude>
+        			<exclude>securemail_ts.p12</exclude>
+        			<exclude>securemailpkcs12.cert</exclude>
+        		</excludes>
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <testResources>
+        	<testResource>
+        		<directory>src/test/resources</directory>
+                <filtering>false</filtering>
+        	</testResource>
+        	<testResource>
+        		<directory>src/test/resources</directory>
+        		<excludes>
+        			<exclude>keystore.jks</exclude>
+        		</excludes>
+                <filtering>true</filtering>
+        	</testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -103,12 +141,15 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${nav.keystore.folder}</outputDirectory>
+                            <outputDirectory>${base.nav.folder}</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/resources</directory>
                                     <includes>
                                         <include>keystore.jks</include>
+					        			<include>securemail.p12</include>
+					        			<include>securemail_ts.p12</include>
+					        			<include>securemailpkcs12.cert</include>
                                     </includes>
                                 </resource>
                             </resources>

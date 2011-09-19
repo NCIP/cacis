@@ -20,6 +20,6 @@
     <bean class="gov.nih.nci.cacis.xds.client.XDSPropsConfig" />
      <bean class="gov.nih.nci.cacis.xds.client.TestXDSConfigImpl" />
     <bean class="gov.nih.nci.cacis.nav.X509CertConfigImpl" />
-    <bean class="gov.nih.nci.cacis.nav.config.NAVPropsConfig" />
+    <bean class="gov.nih.nci.cacis.nav.config.NAVPropsTestConfig" />
     <bean class="gov.nih.nci.cacis.nav.config.NAVTestConfig" />
 </beans>
