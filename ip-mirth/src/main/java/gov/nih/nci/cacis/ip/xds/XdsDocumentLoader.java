@@ -110,11 +110,11 @@ public class XdsDocumentLoader {
         for (POCDMT000040ClinicalDocument doc : docs) {
 
             final XDSDocumentMetadata docMd = new XDSDocumentMetadata();
-            docMd.setDocEntryContent(docEntryProvider.createDocEntry(doc));
-            docMd.setSubmissionSetContent(docEntryProvider.createSubmissionSet(doc));
+            docMd.setDocEntryContent(docEntryProvider.createDocEntry(request));
+            docMd.setSubmissionSetContent(docEntryProvider.createSubmissionSet(request));
             docMd.setDocumentType(DocumentDescriptor.XML);
-            docMd.setDocOID(docEntryProvider.createDocOID(doc));
-            docMd.setDocSourceOID(docEntryProvider.createDocSourceOID(doc));
+            docMd.setDocOID(docEntryProvider.createDocOID(request));
+            docMd.setDocSourceOID(docEntryProvider.createDocSourceOID(request));
             docMd.setDocumentContent(SerializerUtils.serialize(doc));
 
             docHndler.handleDocument(docMd);
