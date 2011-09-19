@@ -88,7 +88,7 @@ return;
       <properties>
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
-        <property name="script">var destArr = new Arra(&quot;IP-CMP-Destination&quot;);
+        <property name="script">var destArr = new Array(&quot;IP-CMP-Destination&quot;);
 
 handleResponse(&apos;handleResponse&apos;, destArr);
 
