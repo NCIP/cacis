@@ -60,41 +60,78 @@
  */
 package gov.nih.nci.cacis.ip.xds;
 
-
 import gov.nih.nci.cacis.CaCISRequest;
+import gov.nih.nci.cacis.ExchangeFormat;
+import gov.nih.nci.cacis.RoutingInstructions.ExchangeDocument;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * Supplies static metadata loaded
- * from files
- *
- * @author kherm manav.kher@semanticbits.com
+ * Supplies metadata available from the caCISRequest
+ * 
+ * @author monish.domblar@semanticbits.com
  */
-public class StaticXdsMetadataSupplier implements XdsMetadataSupplier {
+public class DefaultXdsMetadataSupplier implements XdsMetadataSupplier {
+    
+    private static final Log LOG = LogFactory.getLog(DefaultXdsMetadataSupplier.class);
+    private final SimpleDateFormat dtFrmt = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
 
     @Override
     public String createDocEntry(CaCISRequest request) throws IOException {
-        final InputStream staticDocEntry = getClass().getClassLoader().getResourceAsStream("docEntry.xml");
-        final StringWriter writer = new StringWriter();
-        IOUtils.copy(staticDocEntry, writer);
-        return writer.toString();
+        String docEntryMetaData = null;
+        try {
+            docEntryMetaData = getFileContent("DocumnetEntryMetadata_Template.xml");
+            docEntryMetaData = 
+                docEntryMetaData.replace("$PATIENT_ID_NUMBER$", request.getClinicalMetaData().getPatientIdExtension());
+            docEntryMetaData = docEntryMetaData.replace("$CREATION_TIME$", dtFrmt.format(new Date()));
+            
+            final List<ExchangeDocument> rtIns = request.getRoutingInstructions().getExchangeDocument();
+            final String formatCode = rtIns.get(0).getExchangeFormat().value();
+            if (ExchangeFormat.HL_7_V_2_CLINICAL_NOTE.value().equals(formatCode)) {
+                docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_code$", "HLv2 OBX Message");
+                docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_LocalizedString$", "HLv2 OBX Message");
+            } else if (ExchangeFormat.CCD.value().equals(formatCode)) {
+                docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_code$", "CDA/CCD");
+                docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_LocalizedString$", "CDA/CCD");
+            } else if (ExchangeFormat.XMLITS.value().equals(formatCode)) {
+                docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_code$", "RIM/ITS");
+                docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_LocalizedString$", "RIM/ITS");
+            }
+        } catch (URISyntaxException e) {
+            LOG.error("Excption while extracting metadata",e);
+        }
+        return docEntryMetaData;
     }
-
-
+    
+    private String getFileContent(String fileName) throws URISyntaxException, IOException {
+        final File docEntryFile = new File(getClass().getClassLoader().getResource(fileName).toURI());
+        return FileUtils.readFileToString(docEntryFile);
+    }
+    
     @Override
     public String createSubmissionSet(CaCISRequest request) throws IOException {
-        final InputStream staticSubSet = getClass().getClassLoader().
-                getResourceAsStream("submissionSet.xml");
-        final StringWriter writer = new StringWriter();
-        IOUtils.copy(staticSubSet, writer);
-        return writer.toString();
+        String submissionSetMetaData = null;
+        try {
+            submissionSetMetaData = getFileContent("SubmissionSetMetadata_Template.xml");
+            
+            submissionSetMetaData = submissionSetMetaData.replace("$PATIENT_ID_NUMBER$", request
+                    .getClinicalMetaData().getPatientIdExtension());
+            
+        } catch (URISyntaxException e1) {
+            LOG.error("Excption while extracting metadata",e1);
+        }
+        return submissionSetMetaData;
     }
-
 
     @Override
     public String createDocOID(CaCISRequest request) {
@@ -105,5 +142,4 @@ public class StaticXdsMetadataSupplier implements XdsMetadataSupplier {
     public String createDocSourceOID(CaCISRequest request) {
         return "1.3.6.1.4.1.21367.2010.1.2";
     }
-
 }

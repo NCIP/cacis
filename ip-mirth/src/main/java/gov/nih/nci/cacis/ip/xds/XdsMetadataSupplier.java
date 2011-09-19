@@ -60,7 +60,7 @@
  */
 package gov.nih.nci.cacis.ip.xds;
 
-import org.hl7.v3.POCDMT000040ClinicalDocument;
+import gov.nih.nci.cacis.CaCISRequest;
 
 import java.io.IOException;
 
@@ -75,35 +75,34 @@ public interface XdsMetadataSupplier {
     /**
      *  XDS Metadata DocEntry
      *
-     * @param document POCDMT000040ClinicalDocument docment
+     * @param request CaCISRequest request
      * @return XDS DocEntry
      * @throws IOException Exception
      */
-    String createDocEntry(POCDMT000040ClinicalDocument document) throws IOException;
+    String createDocEntry(CaCISRequest request) throws IOException;
 
     /**
      *  XDS Metadata Submission Set
      *
-     * @param document POCDMT000040ClinicalDocument docment
+     * @param request CaCISRequest request
      * @return XDS SubmissionSet
      * @throws IOException Exception
      */
-    String createSubmissionSet(POCDMT000040ClinicalDocument document) throws IOException;
-
-
+    String createSubmissionSet(CaCISRequest request) throws IOException;
+    
     /**
      *  XDS Metadata Doc OID
      *
-     * @param document POCDMT000040ClinicalDocument docment
+     * @param request CaCISRequest request
      * @return XDS DocEntry
      */
-    String createDocOID(POCDMT000040ClinicalDocument document);
+    String createDocOID(CaCISRequest request);
 
     /**
      *  XDS Metadata Source OID
      *
-     * @param document POCDMT000040ClinicalDocument docment
+     * @param request CaCISRequest request
      * @return XDS DocEntry
      */
-    String createDocSourceOID(POCDMT000040ClinicalDocument document);
+    String createDocSourceOID(CaCISRequest request);
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tns:DocumentEntry 
+ xmlns:hl7v2="urn:org:openhealthtools:ihe:common:hl7v2" 
+ xmlns:p0="htt//www.w3.org/XML/1998/namespace" 
+ xmlns:tns="urn:org:openhealthtools:ihe:xds:metadata" 
+ xmlns:xsi="htt//www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="urn:org:openhealthtools:ihe:xds:metadata metadata.xsd urn:org:openhealthtools:ihe:common:hl7v2 ../../../org.openhealthtools.ihe.common.hl7v2/resources/schema/hl7v2_wrapper.xsd htt//www.w3.org/XML/1998/namespace htt//www.w3.org/2001/xml.xsd ">
+
+  <classCode>
+    <code>Not Available</code>
+    <displayName>
+      <LocalizedString value="Not Available"/>
+    </displayName>
+    <schemeName>Connect-a-thon classCodes</schemeName>
+  </classCode>
+  
+  <confidentialityCode>
+    <code>N</code>
+    <displayName>
+      <LocalizedString value="Normal"/>
+    </displayName>
+    <schemeName>Connect-a-thon confidentialityCodes</schemeName>
+  </confidentialityCode>
+ 
+  <creationTime>$CREATION_TIME$</creationTime>
+ 
+  <formatCode>
+    <code>$FORMAT_CODE_code$</code>
+    <displayName>
+      <LocalizedString value="$FORMAT_CODE_LocalizedString$"/>
+    </displayName>
+    <schemeName>Connect-a-thon formatCodes</schemeName>
+  </formatCode>
+ 
+  <healthCareFacilityTypeCode>
+    <code>Not Available</code>
+    <displayName>
+      <LocalizedString value="Not Available"/>
+    </displayName>
+    <schemeName>Connect-a-thon healthcareFacilityTypeCodes</schemeName>
+  </healthCareFacilityTypeCode>
+
+  <languageCode>en-US</languageCode>
+   
+  <patientId>
+   <idNumber>$PATIENT_ID_NUMBER$</idNumber>  
+   <assigningAuthorityUniversalId>1.3.6.1.4.1.21367.13.20.3000</assigningAuthorityUniversalId>
+   <assigningAuthorityUniversalIdType>ISO</assigningAuthorityUniversalIdType>
+  </patientId>
+   
+  <practiceSettingCode>
+    <code>Not Available</code>
+    <displayName>
+      <LocalizedString value="Not Available"/>
+    </displayName>
+    <schemeName>Connect-a-thon practiceSettingCodes</schemeName>
+  </practiceSettingCode>
+
+</tns:DocumentEntry>

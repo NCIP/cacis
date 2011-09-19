@@ -60,50 +60,52 @@
  */
 package gov.nih.nci.cacis.ip.xds;
 
-
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cacis.CaCISRequest;
+import gov.nih.nci.cacis.ip.mirthconnect.utils.SerializerUtilsTest;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.net.URISyntaxException;
 
-import org.apache.commons.io.IOUtils;
+import javax.xml.bind.JAXBException;
+
+import org.junit.Test;
+
 
 /**
- * Supplies static metadata loaded
- * from files
- *
- * @author kherm manav.kher@semanticbits.com
+ * @author monish.dombla@semanticbits.com
  */
-public class StaticXdsMetadataSupplier implements XdsMetadataSupplier {
-
-    @Override
-    public String createDocEntry(CaCISRequest request) throws IOException {
-        final InputStream staticDocEntry = getClass().getClassLoader().getResourceAsStream("docEntry.xml");
-        final StringWriter writer = new StringWriter();
-        IOUtils.copy(staticDocEntry, writer);
-        return writer.toString();
+public class DefaultXdsMetadataSupplierTest {
+    
+    private final DefaultXdsMetadataSupplier defaultXdsMetadataSupplier =
+        new DefaultXdsMetadataSupplier();
+    
+    
+    /**
+     * 
+     * @throws IOException exception
+     * @throws URISyntaxException exception
+     * @throws JAXBException 
+     */
+    @Test
+    public void createMetadata() throws IOException, JAXBException, URISyntaxException {
+        
+        final CaCISRequest document = SerializerUtilsTest
+                .sampleCaCISRequest("caCISRequest_With_RoutingInstructions.xml");
+        final String docEntryMetadata = defaultXdsMetadataSupplier.createDocEntry(document);
+        
+        
+        assertTrue(docEntryMetadata.contains("HLv2 OBX Message"));
+        assertTrue(docEntryMetadata.contains("DM123456"));
+        
+        assertNotNull(docEntryMetadata);
+        
+        final String submissionSetMetadata = defaultXdsMetadataSupplier.createSubmissionSet(document);
+        assertNotNull(submissionSetMetadata);
+        assertTrue(docEntryMetadata.contains("DM123456"));
+        
+        assertNotNull(defaultXdsMetadataSupplier.createDocOID(document));
+        assertNotNull(defaultXdsMetadataSupplier.createDocSourceOID(document));
     }
-
-
-    @Override
-    public String createSubmissionSet(CaCISRequest request) throws IOException {
-        final InputStream staticSubSet = getClass().getClassLoader().
-                getResourceAsStream("submissionSet.xml");
-        final StringWriter writer = new StringWriter();
-        IOUtils.copy(staticSubSet, writer);
-        return writer.toString();
-    }
-
-
-    @Override
-    public String createDocOID(CaCISRequest request) {
-        return "1.2.3";
-    }
-
-    @Override
-    public String createDocSourceOID(CaCISRequest request) {
-        return "1.3.6.1.4.1.21367.2010.1.2";
-    }
-
 }
