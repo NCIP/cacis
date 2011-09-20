@@ -4,7 +4,7 @@
   <description>Arch name WebServiceListenerChannel, PackageSoapResponseChannel UnpackageRequestChannel
   All 3 Arch channels are combined into one</description>
   <enabled>true</enabled>
-  <version>2.1.1.5488</version>
+  <version>2.1.1.5490</version>
   <lastModified>
     <time>1316125591284</time>
     <timezone>America/New_York</timezone>

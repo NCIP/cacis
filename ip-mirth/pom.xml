@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>pco</artifactId>
         <groupId>gov.nih.nci.cacis</groupId>
@@ -204,11 +204,6 @@
                         </goals>
                         <configuration>
                             <artifactItems>
-                                <artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>ip-mirth</artifactId>
-                                    <version>${project.version}</version>
-                                </artifactItem>
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>sa-mirth</artifactId>
@@ -534,19 +529,19 @@
                                     <artifactId>ftpserver-core</artifactId>
                                     <version>1.0.5</version>
                                 </artifactItem>
-								
+
 								<artifactItem>
                                     <groupId>bouncycastle</groupId>
 									<artifactId>bcmail-jdk16</artifactId>
 									<version>140</version>
                                 </artifactItem>
-                                
+
                                 <artifactItem>
                                     <groupId>bouncycastle</groupId>
 									<artifactId>bcprov-jdk16</artifactId>
 									<version>140</version>
                                 </artifactItem>
-                                
+
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
 
@@ -698,7 +693,23 @@
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
                     </execution>
-
+                    <execution>
+                        <id>copy-ip-mirth-jar</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <!--can only be copied after install has run-->
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>ip-mirth</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 

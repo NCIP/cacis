@@ -24,11 +24,11 @@ Pre-requisites
 To compile and run the unit tests you will need the following
 
 - Oracle Java Runtime Environment version 1.6
-- Apache Maven version 2.x
+- Apache Maven version 2.2.x (DOES NOT work with Maven 3.x)
 
 It is recommended that the following Maven options be set
 
-MAVEN_OPTS=-Xmx512m -XX:MaxPermSize=128m
+MAVEN_OPTS='-Xmx512m -XX:MaxPermSize=128m'
 
 To install and use this software, the following software needs
 to be installed first
@@ -160,6 +160,12 @@ To install the caCIS components, do the following
 - Copy profiles.xml.example to profiles.xml
 - Edit profiles.xml and fill in all the properties for your local environment
 - Start Virtuoso Database server
+
+##Configure caCis authorization database##
+- Create an empty postgres database (configured as property named
+  cacis.xds.authz.db.url in profiles.xml)
+- Run xds-authz/src/main/resources/xds_store_permission.sql on the above database
+
 - Run "mvn deploy"
    or
    "mvn deploy -DskipTests -Dskip.static.analysis=true -Dcobertura.skip=true"

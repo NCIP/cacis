@@ -52,10 +52,9 @@
         <!--NOTE - customize this property to Mirth Connect location-->		
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
         <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
-		<openxds.http.base.url>localhost:21080/openxds-web</openxds.http.base.url>
-        <xds.repository.url>http://localhost:8010/axis2/services/xdsrepositoryb</xds.repository.url>
+        <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
         <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
-        <cacis.xds.proxy.repository.url>${xds.repository.url}</cacis.xds.proxy.repository.url>
+        <cacis.xds.proxy.repository.url>http://localhost:18010/axis2/services/xdsrepositoryb</cacis.xds.proxy.repository.url>
         <!--integration tests-->
         <!--skip starting JBoss by default. Individual sub-projects can override-->
         <skip.cargo.container>true</skip.cargo.container>

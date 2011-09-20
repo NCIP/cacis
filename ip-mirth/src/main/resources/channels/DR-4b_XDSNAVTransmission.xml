@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315938069535</time>
+    <time>1316542984517</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -17,6 +17,51 @@
     </properties>
     <transformer>
       <steps/>
+      <inboundTemplate encoding="base64">PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjx4czpzY2hlbWEgeG1sbnM9
+Imh0dHA6Ly9jYWNpcy5uY2kubmloLmdvdiIgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIw
+MDEvWE1MU2NoZW1hIiB4bWxuczpjZGE9InVybjpobDctb3JnOnYzIiB0YXJnZXROYW1lc3BhY2U9
+Imh0dHA6Ly9jYWNpcy5uY2kubmloLmdvdiIgZWxlbWVudEZvcm1EZWZhdWx0PSJxdWFsaWZpZWQi
+IGF0dHJpYnV0ZUZvcm1EZWZhdWx0PSJ1bnF1YWxpZmllZCI+DQoJPHhzOmltcG9ydCBuYW1lc3Bh
+Y2U9InVybjpobDctb3JnOnYzIiBzY2hlbWFMb2NhdGlvbj0iQ0RBLnhzZCIvPg0KCTx4czppbmNs
+dWRlIHNjaGVtYUxvY2F0aW9uPSJjYUNJU0RhdGFTaGFyaW5nLnhzZCIvPg0KCTx4czphbm5vdGF0
+aW9uPg0KCQk8eHM6ZG9jdW1lbnRhdGlvbj5UaGlzIHNjaGVtYSBkZWZpbmVzIHRoZSBzeW50YXgg
+dXNlZCB0byBjb21tdW5pY2F0ZSBjYW5vbmljYWwgY2xpbmljYWwgZGF0YSBmcm9tIHRoZSBTZW1h
+bnRpYyBBZGFwdGVyIHRvIHRoZSBJbnRlZ2F0aW9uIFBsYXRmb3JtPC94czpkb2N1bWVudGF0aW9u
+Pg0KCTwveHM6YW5ub3RhdGlvbj4NCgk8eHM6ZWxlbWVudCBuYW1lPSJjYUNJU1JlcXVlc3QiPg0K
+CQk8eHM6YW5ub3RhdGlvbj4NCgkJCTx4czpkb2N1bWVudGF0aW9uPlRoZSByb290IGVsZW1lbnQg
+Zm9yIHRoZSBYTUwgc3RydWN0dXJlIHRvIGJlIHBhc3NlZCBmcm9tIHRoZSBTZW1hbnRpYyBBZGFw
+dGVyIHRvIHRoZSBDYW5vbmljYWwgTW9kZWwgUHJvY2Vzc29yICBmb3IgcHJvY2Vzc2luZyBieSB0
+aGUgTkNJIGNhQ0lTIHNvbHV0aW9uPC94czpkb2N1bWVudGF0aW9uPg0KCQk8L3hzOmFubm90YXRp
+b24+DQoJCTx4czpjb21wbGV4VHlwZT4NCgkJCTx4czpzZXF1ZW5jZT4NCgkJCQk8eHM6ZWxlbWVu
+dCBuYW1lPSJyb3V0aW5nSW5zdHJ1Y3Rpb25zIiB0eXBlPSJSb3V0aW5nSW5zdHJ1Y3Rpb25zIiBt
+aW5PY2N1cnM9IjAiPg0KCQkJCQk8eHM6YW5ub3RhdGlvbj4NCgkJCQkJCTx4czpkb2N1bWVudGF0
+aW9uPlRoZXNlIGFyZSByb3V0aW5nIGluc3RydWN0aW9ucyB3aGljaCBwcm92aWRlcyBkZXRhaWxz
+IG9mIHRoZSBkb2N1bWVudCBleGNoYW5nZSB0aGF0IGhhcyB0byBvY2N1ci4gVGhlIHJvdXRpbmcg
+aW5zdHJ1Y3Rpb25zIGNvbnRhaW4gdGhlIHJlY2lwaWVudHMgb2YgdGhlIGRvY3VtZW50IGFuZCB0
+aGVpciBwcmVmZXJyZWQgZXhjaGFuZ2UgZm9ybWF0IGFzIHdlbGwgYXMgdGhlaXIgcHJlZmVycmVk
+IGV4Y2hhbmdlIG1lY2hhbmlzbXMuIFRoZXNlIGFyZSBvbmx5IG5lZWRlZCB3aGVuIGRhdGEgaXMg
+aW50ZW5kZWQgZm9yIGRvY3VtZW50IHRyYW5zbWlzc2lvbiByYXRoZXIgdGhhbiBqdXN0IGZvciBw
+ZXJzaXN0ZW5jZSBpbiB0aGUgZGF0YSB3YXJlaG91c2U8L3hzOmRvY3VtZW50YXRpb24+DQoJCQkJ
+CTwveHM6YW5ub3RhdGlvbj4NCgkJCQk8L3hzOmVsZW1lbnQ+DQoJCQkJPHhzOmVsZW1lbnQgbmFt
+ZT0ic291cmNlRGF0YSIgdHlwZT0iQ2xpbmljYWxEYXRhIj4NCgkJCQkJPHhzOmFubm90YXRpb24+
+DQoJCQkJCQk8eHM6ZG9jdW1lbnRhdGlvbj5UaGlzIGlzIHRoZSBuYXRpdmUgY2xpbmljYWwgZGF0
+YSBiZWluZyB0cmFuc21pdHRlZC4gIFRoZSBmb3JtYXQgd2lsbCB2YXJ5IGJ5IGVhY2ggbmF0aXZl
+IGFwcGxpY2F0aW9uPC94czpkb2N1bWVudGF0aW9uPg0KCQkJCQk8L3hzOmFubm90YXRpb24+DQoJ
+CQkJPC94czplbGVtZW50Pg0KCQkJCTx4czplbGVtZW50IG5hbWU9ImNsaW5pY2FsTWV0YURhdGEi
+IHR5cGU9IkNsaW5pY2FsTWV0YWRhdGEiPg0KCQkJCQk8eHM6YW5ub3RhdGlvbj4NCgkJCQkJCTx4
+czpkb2N1bWVudGF0aW9uPkNvbnRhaW5zIGluZm9ybWF0aW9uIHdoaWNoIGRlc2NyaWJlcyB0aGUg
+c291cmNlIGRhdGEgdGhhdCBpcyBwYXNzZWQgYXMgaW5wdXQgYW5kIGFzc29jaWF0ZXMgaXQgd2l0
+aCB0aGUgc3R1ZHksIHNpdGUgYW5kIHBhdGllbnQvc3ViamVjdDwveHM6ZG9jdW1lbnRhdGlvbj4N
+CgkJCQkJPC94czphbm5vdGF0aW9uPg0KCQkJCTwveHM6ZWxlbWVudD4NCgkJCQk8eHM6ZWxlbWVu
+dCByZWY9ImNkYTpDbGluaWNhbERvY3VtZW50IiBtYXhPY2N1cnM9InVuYm91bmRlZCIvPg0KCQkJ
+PC94czpzZXF1ZW5jZT4NCgkJCTx4czphdHRyaWJ1dGUgbmFtZT0idXNlck5hbWUiIHR5cGU9Ik5v
+bkVtcHR5U3RyaW5nIiB1c2U9Im9wdGlvbmFsIj4NCgkJCQk8eHM6YW5ub3RhdGlvbj4NCgkJCQkJ
+PHhzOmRvY3VtZW50YXRpb24+VGhlIHVzZXIgbmFtZSB0aGF0IGluaXRpYXRlZCB0aGUgZGF0YSBl
+eGNoYW5nZSByZXF1ZXN0LiBUaGlzIHZhbHVlIHdvdWxkIGJlIHVzZWQgdG8NCgkJCQkJCWxvZyB3
+aGljaCB1c2VyIG9yaWdpbmF0ZWQgdGhlIHJlcXVlc3QuDQoJCQkJCTwveHM6ZG9jdW1lbnRhdGlv
+bj4NCgkJCQk8L3hzOmFubm90YXRpb24+DQoJCQk8L3hzOmF0dHJpYnV0ZT4NCgkJPC94czpjb21w
+bGV4VHlwZT4NCgk8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4NCg==</inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
       <inboundProtocol>XML</inboundProtocol>
       <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
@@ -49,13 +94,18 @@
         <property name="password">anonymous</property>
         <property name="scheme">file</property>
         <property name="secure">1</property>
-        <property name="template">${message.encodedData}</property>
+        <property name="template">$(&apos;tempclinicalDocument&apos;)
+
+ msg[&apos;ClinicalDocument&apos;];
+</property>
         <property name="timeout">10000</property>
         <property name="username">anonymous</property>
         <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
@@ -69,6 +119,55 @@
         <rules/>
       </filter>
       <transportName>File Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+    <connector>
+      <name>XDSLoad</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">
+// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+
+var xdsCtx = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-xds.xml&apos;);
+var documentHandler = xdsCtx.getBean(&quot;metadataSuppliedDocumentHandler&quot;);
+//TODO:ESD-3073 will change this from dummy to acutal access manager
+var docAccMngr = xdsCtx.getBean(&quot;dummyDocumentAccessManager&quot;);
+
+
+
+default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
+
+var cdaDoc = new XML(messageObject.getEncodedData())[&apos;ClinicalDocument&apos;][0].toString();
+documentHandler.handleDocument(cdaDoc);
+
+
+
+return;
+
+
+</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>

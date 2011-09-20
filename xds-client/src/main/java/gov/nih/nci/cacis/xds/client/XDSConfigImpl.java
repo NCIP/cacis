@@ -62,6 +62,7 @@ package gov.nih.nci.cacis.xds.client;
 
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
+import gov.nih.nci.cacis.xds.StaticMetadataSupplier;
 import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 
@@ -209,6 +210,12 @@ public class XDSConfigImpl implements XDSConfig  {
                 return true;
             }
         };
+    }
+
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public MetadataSuppliedDocumentHandler metadataSuppliedDocumentHandler() {
+        return new MetadataSuppliedDocumentHandler(new StaticMetadataSupplier(), documentHandler());
     }
     
 }

@@ -6,7 +6,7 @@
     <routingInstructions>
         <exchangeDocument exchangeFormat="CCD">
             <recipient>
-                <secureEmailAddress url="mailto:x@x.x"/>
+                <navEmailAddress url="kherm@semanticbits.com"/>
             </recipient>
         </exchangeDocument>
     </routingInstructions>
