@@ -65,14 +65,13 @@ import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.StaticMetadataSupplier;
 import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
-
-import java.util.HashMap;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import java.util.HashMap;
 
 
 /** 
@@ -212,6 +211,10 @@ public class XDSConfigImpl implements XDSConfig  {
         };
     }
 
+    /**
+     *  MetadataSuppliedDocumentHandler bean
+     * @return MetadataSuppliedDocumentHandler
+     */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public MetadataSuppliedDocumentHandler metadataSuppliedDocumentHandler() {

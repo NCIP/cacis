@@ -2,6 +2,7 @@ package gov.nih.nci.cacis.xds.client;
 
 import gov.nih.nci.cacis.common.test.TestUtils;
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import static junit.framework.Assert.assertNotNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-xds.xml")
+@Ignore //openXDS not available on CI
 public class MetadataSuppliedDocumentHandlerIntegrationTest {
 
     @Autowired

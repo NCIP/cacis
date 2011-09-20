@@ -16,6 +16,5 @@
       <context:annotation-config/>
 	
 	<bean class="gov.nih.nci.cacis.cdw.config.CDWConfigImpl"/>
-      <bean class="gov.nih.nci.cacis.cdw.config.CDWConfigImpl"/>
 
 </beans>
