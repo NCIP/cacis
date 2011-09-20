@@ -6,7 +6,7 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1315949153968</time>
+    <time>1316535572558</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -26,7 +26,7 @@ If routing instructions are not part of the message, then default routing instru
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;/Users/bpickeral/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
+	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);
@@ -45,7 +45,7 @@ logger.info(&apos;Response Message -- &apos;+ responseMap.get(&apos;processRouti
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;/Users/bpickeral/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
+	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);

@@ -3,12 +3,12 @@
   <name>CMP-3_CDWLoader</name>
   <description>Arch name Clinical Data Warehouse Loader</description>
   <enabled>true</enabled>
-  <version>2.1.1.5488</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316187219429</time>
+    <time>1316533601611</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>13</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -55,24 +55,28 @@ logger.info(&apos;Loading data into CDW&apos;);</property>
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>setvars</name>
-            <script>default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
-
-var clinicalMetaData = msg[&apos;clinicalMetaData&apos;];
+            <script>var clinicalMetaData = msg[&apos;clinicalMetaData&apos;];
 
 var siteId = clinicalMetaData[&apos;@siteIdRoot&apos;] + clinicalMetaData[&apos;@siteIdExtension&apos;];
 var studyId = clinicalMetaData[&apos;@studyIdRoot&apos;] + clinicalMetaData[&apos;@studyIdExtension&apos;];
-var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[&apos;@patientIdExtension&apos;];</script>
+var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[&apos;@patientIdExtension&apos;];
+
+channelMap.put(&apos;siteId&apos;, siteId);
+channelMap.put(&apos;studyId&apos;, studyId);
+channelMap.put(&apos;patientId&apos;, patientId);</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
-
-var clinicalMetaData = msg[&apos;clinicalMetaData&apos;];
+                <string>var clinicalMetaData = msg[&apos;clinicalMetaData&apos;];
 
 var siteId = clinicalMetaData[&apos;@siteIdRoot&apos;] + clinicalMetaData[&apos;@siteIdExtension&apos;];
 var studyId = clinicalMetaData[&apos;@studyIdRoot&apos;] + clinicalMetaData[&apos;@studyIdExtension&apos;];
-var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[&apos;@patientIdExtension&apos;];</string>
+var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[&apos;@patientIdExtension&apos;];
+
+channelMap.put(&apos;siteId&apos;, siteId);
+channelMap.put(&apos;studyId&apos;, studyId);
+channelMap.put(&apos;patientId&apos;, patientId);</string>
               </entry>
             </data>
           </step>
@@ -94,7 +98,7 @@ var patientId = clinicalMetaData[&apos;@patientIdRoot&apos;] + clinicalMetaData[
       <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
