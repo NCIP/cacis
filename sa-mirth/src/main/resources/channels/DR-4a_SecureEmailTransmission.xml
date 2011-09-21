@@ -1,0 +1,324 @@
+<channel>
+  <id>e2a35dfa-fc18-4f54-b276-a731f40dcce6</id>
+  <name>DR-4a_SecureEmailTransmission</name>
+  <description></description>
+  <enabled>true</enabled>
+  <version>2.1.1.5490</version>
+  <lastModified>
+    <time>1316648961201</time>
+    <timezone>America/New_York</timezone>
+  </lastModified>
+  <revision>7</revision>
+  <sourceConnector>
+    <name>sourceConnector</name>
+    <properties>
+      <property name="DataType">Channel Reader</property>
+      <property name="responseValue">sendEmail</property>
+    </properties>
+    <transformer>
+      <steps/>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundProtocol>XML</inboundProtocol>
+      <outboundProtocol>XML</outboundProtocol>
+      <inboundProperties>
+        <property name="stripNamespaces">false</property>
+      </inboundProperties>
+      <outboundProperties>
+        <property name="stripNamespaces">false</property>
+      </outboundProperties>
+    </transformer>
+    <filter>
+      <rules/>
+    </filter>
+    <transportName>Channel Reader</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <version>2.1.1.5490</version>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector>
+      <name>sendEmail</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var emailSender = globalChannelMap.get(&apos;emailSender&apos;);
+
+try{
+	var cmDocType = $(&apos;docType&apos;);
+	var subject = $(&apos;docFormat&apos;);
+	var instructions = &apos;Document Type : &apos;+ $(&apos;docFormat&apos;) + &apos;\n&apos; +
+						&apos;SiteId : &apos; + $(&apos;siteId&apos;) + &apos;\n&apos; +
+						&apos;StudyId : &apos; + $(&apos;studyId&apos;) + &apos;\n&apos; +
+						&apos;PatientId : &apos; + $(&apos;patientId&apos;) + &apos;\n&apos;;
+	
+	var mimeMsg = emailSender.createMessage( $(&apos;emailAddress&apos;), cmDocType, subject, instructions, $(&apos;clinicalDoc&apos;));
+	var encMsg = emailSender.encryptMail(mimeMsg, $(&apos;emailAddress&apos;) );
+	if( encMsg == null ) {
+		responseMap.put(&apos;sendEmail&apos;, ResponseFactory.getFailureResponse(&apos;Unable to encrypt mail for email address, &apos; + $(&apos;emailAddress&apos;) ));
+	}
+	emailSender.sendMail(encMsg);
+	responseMap.put(&apos;sendEmail&apos;, ResponseFactory.getSuccessResponse(&apos;secure email sent!&apos;));
+}catch(err) {	
+	responseMap.put(&apos;sendEmail&apos;, ResponseFactory.getFailureResponse(&apos;CaCISError: Error sending secure email!&apos; + err.message));
+}
+
+return;</property>
+      </properties>
+      <transformer>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>setDefNs</name>
+            <script>default xml namespace=&quot;http://cacis.nci.nih.gov&quot;;</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>default xml namespace=&quot;http://cacis.nci.nih.gov&quot;;</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>1</sequenceNumber>
+            <name>docFormat</name>
+            <script>var mapping;try { mapping = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString(); }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;docFormat&apos;, validate( mapping , &apos;&apos;, new Array()));</script>
+            <type>Mapper</type>
+            <data class="map">
+              <entry>
+                <string>Variable</string>
+                <string>docFormat</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>2</sequenceNumber>
+            <name>emailAddress</name>
+            <script>var mapping;try { mapping = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString(); }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;emailAddress&apos;, validate( mapping , &apos;&apos;, new Array(new Array(&apos;mailto:&apos;, &apos;&apos;))));</script>
+            <type>Mapper</type>
+            <data class="map">
+              <entry>
+                <string>Variable</string>
+                <string>emailAddress</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list>
+                  <string-array>
+                    <string>&apos;mailto:&apos;</string>
+                    <string>&apos;&apos;</string>
+                  </string-array>
+                </list>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>3</sequenceNumber>
+            <name>siteId</name>
+            <script>var mapping;try { mapping = msg[&apos;clinicalMetaData&apos;][&apos;@siteIdRoot&apos;].toString()+ &apos;:&apos; + msg[&apos;clinicalMetaData&apos;][&apos;@siteIdExtension&apos;].toString(); }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;siteId&apos;, validate( mapping , &apos;&apos;, new Array()));</script>
+            <type>Mapper</type>
+            <data class="map">
+              <entry>
+                <string>Variable</string>
+                <string>siteId</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@siteIdRoot&apos;].toString()+ &apos;:&apos; + msg[&apos;clinicalMetaData&apos;][&apos;@siteIdExtension&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>4</sequenceNumber>
+            <name>studyId</name>
+            <script>var mapping;try { mapping = msg[&apos;clinicalMetaData&apos;][&apos;@studyIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@studyIdExtension&apos;].toString(); }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;studyId&apos;, validate( mapping , &apos;&apos;, new Array()));</script>
+            <type>Mapper</type>
+            <data class="map">
+              <entry>
+                <string>Variable</string>
+                <string>studyId</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@studyIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@studyIdExtension&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>5</sequenceNumber>
+            <name>patientId</name>
+            <script>var mapping;try { mapping = msg[&apos;clinicalMetaData&apos;][&apos;@patientIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@patientIdExtension&apos;].toString(); }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;patientId&apos;, validate( mapping , &apos;&apos;, new Array()));</script>
+            <type>Mapper</type>
+            <data class="map">
+              <entry>
+                <string>Variable</string>
+                <string>patientId</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@patientIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@patientIdExtension&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>6</sequenceNumber>
+            <name>docType</name>
+            <script>var mapping;try { mapping = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString(); }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;docType&apos;, validate( mapping , &apos;&apos;, new Array()));</script>
+            <type>Mapper</type>
+            <data class="map">
+              <entry>
+                <string>Variable</string>
+                <string>docType</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>7</sequenceNumber>
+            <name>clinicalDocument</name>
+            <script>//once the correct transformers are set, the ns should be changed
+
+//default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+default xml namespace=&apos;urn:hl7-org:v3#&apos;;
+var clinicalDoc = msg[&apos;ClinicalDocument&apos;].toString();
+channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>//once the correct transformers are set, the ns should be changed
+
+//default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+default xml namespace=&apos;urn:hl7-org:v3#&apos;;
+var clinicalDoc = msg[&apos;ClinicalDocument&apos;].toString();
+channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+  </destinationConnectors>
+  <properties>
+    <property name="clearGlobalChannelMap">true</property>
+    <property name="dont_store_filtered">false</property>
+    <property name="encryptData">false</property>
+    <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
+    <property name="max_message_age">-1</property>
+    <property name="store_messages">true</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
+  </properties>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+
+var navContext = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-nav.xml&apos;);
+var emailSender = navContext.getBean(&quot;encryptedMailSender&quot;);
+globalChannelMap.put(&apos;emailSender&apos;,emailSender);
+
+return;</deployScript>
+  <shutdownScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</shutdownScript>
+</channel>

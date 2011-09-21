@@ -144,12 +144,13 @@
                             <outputDirectory>${base.nav.folder}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources</directory>
+                                    <directory>${build.outputDirectory}</directory>
                                     <includes>
                                         <include>keystore.jks</include>
 					        			<include>securemail.p12</include>
 					        			<include>securemail_ts.p12</include>
 					        			<include>securemailpkcs12.cert</include>
+										<include>cacis-nav.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
