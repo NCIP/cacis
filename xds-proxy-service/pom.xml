@@ -137,6 +137,26 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>update-openxds-XdsCodes</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${openxds.web.dir}/WEB-INF/classes/conf/actors</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>XdsCodes.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>                    
+                    
+                    <execution>
                         <id>deploy-openxds-proxy-service</id>
                         <phase>deploy</phase>
                         <goals>
