@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316300185430</time>
+    <time>1316637543702</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -50,14 +50,14 @@
             <name>sendToSFTP</name>
             <script>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
 var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</script>
+ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
                 <string>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
 var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</string>
+ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</string>
               </entry>
             </data>
           </step>

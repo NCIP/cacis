@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316205912312</time>
+    <time>1316637165373</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>5</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4506,11 +4506,11 @@ for each (seg in exchDocs) {
 	for each (rec in seg[&apos;recipient&apos;]) {
 		var url;
 		if (rec[&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
-			processRoute(&apos;DR-4a_SecureEmailTransmission&apos;,  &apos;secureEmailAddress&apos;);
+			processRoute(rec, &apos;DR-4a_SecureEmailTransmission&apos;,  &apos;secureEmailAddress&apos;);
 		} else if (rec[&apos;navEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
-			processRoute(&apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
+			processRoute(rec, &apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
 		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
-			processRoute(&apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
+			processRoute(rec, &apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
 		} else {
 			logger.error(&apos;Recipient type unknown.&apos;);
 		}
@@ -4519,13 +4519,15 @@ for each (seg in exchDocs) {
 
 responseMap.put(&apos;Destination 1&apos;, responseMsg);
 
-function processRoute(chNm, recipientType) {
+
+function processRoute(rec, chNm, recipientType) {
 	var msgToRoute = msg.copy();
-	var url = rec[recipientType][&apos;@url&apos;].toString();
-	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
-		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][recipientType].copy();	
-	var response = router.routeMessage(chNm, msgToRoute, false);
-	handleResponse(response, chNm, url);
+    var url = rec[recipientType][&apos;@url&apos;].toString();
+    msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] = 
+    	rec.copy();
+
+    var response = router.routeMessage(chNm, msgToRoute, false);
+    handleResponse(response, chNm, url);
 }
 
 function handleResponse(response, chNm, url) {
@@ -4547,11 +4549,11 @@ for each (seg in exchDocs) {
 	for each (rec in seg[&apos;recipient&apos;]) {
 		var url;
 		if (rec[&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
-			processRoute(&apos;DR-4a_SecureEmailTransmission&apos;,  &apos;secureEmailAddress&apos;);
+			processRoute(rec, &apos;DR-4a_SecureEmailTransmission&apos;,  &apos;secureEmailAddress&apos;);
 		} else if (rec[&apos;navEmailAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
-			processRoute(&apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
+			processRoute(rec, &apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
 		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
-			processRoute(&apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
+			processRoute(rec, &apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
 		} else {
 			logger.error(&apos;Recipient type unknown.&apos;);
 		}
@@ -4560,13 +4562,15 @@ for each (seg in exchDocs) {
 
 responseMap.put(&apos;Destination 1&apos;, responseMsg);
 
-function processRoute(chNm, recipientType) {
+
+function processRoute(rec, chNm, recipientType) {
 	var msgToRoute = msg.copy();
-	var url = rec[recipientType][&apos;@url&apos;].toString();
-	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
-		msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][recipientType].copy();	
-	var response = router.routeMessage(chNm, msgToRoute, false);
-	handleResponse(response, chNm, url);
+    var url = rec[recipientType][&apos;@url&apos;].toString();
+    msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] = 
+    	rec.copy();
+
+    var response = router.routeMessage(chNm, msgToRoute, false);
+    handleResponse(response, chNm, url);
 }
 
 function handleResponse(response, chNm, url) {
