@@ -19,15 +19,16 @@
                 <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
                 <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
 
+                <!-- cacis proxy for xds -->
+                <cacis.xds.proxy.repository.url>https://localhost:21443/openxds-web/services/cacis-proxy-xdsrepositoryb
+                </cacis.xds.proxy.repository.url>
 
                 <!--OPTIONAL - change these for your local environment. Defaults should work for most cases-->
 
                 <!--openXDS service endpoints-->
                 <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
                 <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
-                <!-- cacis proxy for xds -->
-                <cacis.xds.proxy.repository.url>http://localhost:18010/axis2/services/xdsrepositoryb
-                </cacis.xds.proxy.repository.url>
+
 
                 <!--Virtuoso database properties-->
                 <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>

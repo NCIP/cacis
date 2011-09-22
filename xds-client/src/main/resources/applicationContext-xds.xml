@@ -16,9 +16,13 @@
 
     <!-- enable processing of annotations such as @Autowired and @Configuration -->
     <context:annotation-config/>
-		
+
+    <tx:annotation-driven/>
+
     <bean class="gov.nih.nci.cacis.xds.client.XDSPropsConfig"/>
-	
+
     <bean class="gov.nih.nci.cacis.xds.client.XDSConfigImpl"/>
+
+    <bean class="gov.nih.nci.cacis.xds.authz.config.XdsAuthzConfig"/>
 
 </beans>

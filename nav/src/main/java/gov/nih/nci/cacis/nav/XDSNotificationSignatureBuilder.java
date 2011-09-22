@@ -80,4 +80,10 @@ public interface XDSNotificationSignatureBuilder {
      */
     Node buildSignature(List<String> documentIds) throws SignatureBuildingException;
 
+    /**
+     * XDS Document resolver
+     * @return XDSDocumentResolver
+     */
+    XDSDocumentResolver getDocumentResolver();
+
 }

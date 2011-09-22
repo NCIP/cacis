@@ -2,7 +2,6 @@ channel stop *
 channel undeploy *
 
 channel remove ftpAddressChannel
-channel remove navEmailAddressChannel
 channel remove DocumentRouter
 channel remove AcceptCanonical_Channel
 channel remove DR-4c_SecureFileTransfer
@@ -20,7 +19,6 @@ channel remove CMP-3_CDWLoader
 importcodetemplates "${build.outputDirectory}/templates/mc-code-templates.xml" force
 
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml" force
-import "${build.outputDirectory}/channels/navEmailAddressChannel.xml"  force
 import "${build.outputDirectory}/channels/DocumentRouter.xml"  force
 import "${build.outputDirectory}/channels/AcceptCanonical_Channel.xml" force
 import "${build.outputDirectory}/channels/DR-4c_SecureFileTransfer.xml"  force

@@ -83,7 +83,7 @@ public class XDSPropsConfig  {
     @Bean
     public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
         final PropertyPlaceholderConfigurer configurer = 
-            new CommonsPropertyPlaceholderConfigurer("cacis-xds", "cacis-xds.properties");
+            new CommonsPropertyPlaceholderConfigurer("cacis-xds", "cacis-xds-client.properties");
         configurer.setSystemPropertiesMode(
                 PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
         configurer.setIgnoreUnresolvablePlaceholders(true);

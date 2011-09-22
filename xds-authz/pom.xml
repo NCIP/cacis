@@ -18,7 +18,7 @@
          <test.unit.branchrate>75</test.unit.branchrate>
         <test.unit.linerate>75</test.unit.linerate>
 
-       <cacis.xds.authz.hibernate.hbm2ddl.auto>create</cacis.xds.authz.hibernate.hbm2ddl.auto>
+        <xds.authz.base.location>${outputRootdir}/.cacis/cacis-xds</xds.authz.base.location>
     </properties>
 
 
@@ -37,6 +37,34 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
+        <plugins>
+             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-xds-support-files</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${xds.authz.base.location}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.outputDirectory}</directory>
+                                    <includes>
+                                        <include>cacis-xds-authz.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

@@ -14,11 +14,6 @@
     <description>XDS Authz Beans</description>
 
 
-    <properties>
-        <hibernate.version>3.5.6-Final</hibernate.version>
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>gov.nih.nci.cacis</groupId>
@@ -64,4 +59,15 @@
 
     </dependencies>
 
+     <build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+                    <include>**/*-persistence.xml</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 </project>

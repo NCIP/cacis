@@ -107,11 +107,6 @@ public class JpaConfig {
 
     // Hibernate/JPA properties
 
-    /**
-     * The show sql properties. True value will print sql in console.
-     */
-    @Value("${cacis.xds.authz.db.hibernate.show.sql}")
-    private Boolean showSql;
 
     /**
      * The database platform.
@@ -137,6 +132,7 @@ public class JpaConfig {
         dataSource.setPassword(password);
         dataSource.setUsername(username);
         dataSource.setDriverClassName(driverClassName);
+
         return dataSource;
     }
 
@@ -152,7 +148,6 @@ public class JpaConfig {
         final HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
 
         jpaVendorAdapter.setDatabasePlatform(databasePlatform);
-        jpaVendorAdapter.setShowSql(showSql);
         return jpaVendorAdapter;
     }
 
@@ -167,6 +162,7 @@ public class JpaConfig {
         entityManagerFactoryBean.setPersistenceUnitName(PERSISTENCE_UNIT_NAME);
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
+        entityManagerFactoryBean.setPersistenceXmlLocation("classpath*:META-INF/xds-beans-persistence.xml");
 
         // must set the properties
         entityManagerFactoryBean.afterPropertiesSet();

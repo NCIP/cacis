@@ -64,8 +64,10 @@ import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
 import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManagerImpl;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManagerImpl;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -85,6 +87,7 @@ public class ServiceConfig {
      * @return XdsWriteAuthzManager
      */
     @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public XdsWriteAuthzManager xdsWriteAuthzManager() {
         return new XdsWriteAuthzManagerImpl(em);
     }
@@ -94,6 +97,7 @@ public class ServiceConfig {
      * @return DocumentAccessManager
      */
     @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public DocumentAccessManager documentAccessManager() {
         return new DocumentAccessManagerImpl(em);
     }

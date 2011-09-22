@@ -49,6 +49,13 @@ to compile virtuoso
   This ESD document can help with installing and configuring Mirth
   Connect (https://wiki.nci.nih.gov/display/caEHR/Mirth+Connect+Configuration+Guide)
 
+Note* It is recommended that you configure Mirth Connect with extra memory.
+Edit the mcservice.vmoptions file and add the following parameters at the end
+
+ -Xmx1024m
+ -XX:MaxPermSize=128m
+
+
 - OpenXDS version 1.2
  (https://www.projects.openhealthtools.org/sf/frs/do/listReleases/projects.openxds/frs.openxds_releases)
 
@@ -166,6 +173,7 @@ To install the caCIS components, do the following
   cacis.xds.authz.db.url in profiles.xml)
 - Run xds-authz/src/main/resources/xds_store_permission.sql on the above database
 
+- Start Mirth Connect
 - Run "mvn deploy"
    or
    "mvn deploy -DskipTests -Dskip.static.analysis=true -Dcobertura.skip=true"
@@ -173,6 +181,8 @@ To install the caCIS components, do the following
 This will install all caCIS components in Mirth Connect. Once you start the
    Mirth Connect server, you will see caCIS channels in Mirth Connect
 
+Note*- Make sure the 'mirthservice restart' command works. The build
+scripts will start/stop Mirth Connect several times during the deploy phase.
 
 Restart the tomcat/JBoss service that is hosting the openXDS web application
 

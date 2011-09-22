@@ -1,19 +1,19 @@
 <channel>
   <id>b6bf99a9-6934-4375-942f-9c619c4714f3</id>
   <name>DR-4b_XDSNAVTransmission</name>
-  <description></description>
+  <description>Stores document in openXDS and sends NAV notification</description>
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316542984517</time>
+    <time>1316710034507</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">None</property>
     </properties>
     <transformer>
       <steps/>
@@ -81,49 +81,6 @@ bGV4VHlwZT4NCgk8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4NCg==</inboundTemplate>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Destination 1</name>
-      <properties>
-        <property name="DataType">File Writer</property>
-        <property name="FTPAnonymous">1</property>
-        <property name="binary">0</property>
-        <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="host">${cacis.mc.temp.dir}</property>
-        <property name="outputAppend">0</property>
-        <property name="outputPattern">SecureNAV_Output.xml</property>
-        <property name="passive">1</property>
-        <property name="password">anonymous</property>
-        <property name="scheme">file</property>
-        <property name="secure">1</property>
-        <property name="template">$(&apos;tempclinicalDocument&apos;)
-
- msg[&apos;ClinicalDocument&apos;];
-</property>
-        <property name="timeout">10000</property>
-        <property name="username">anonymous</property>
-        <property name="validateConnections">1</property>
-      </properties>
-      <transformer>
-        <steps/>
-        <inboundTemplate encoding="base64"></inboundTemplate>
-        <outboundTemplate encoding="base64"></outboundTemplate>
-        <inboundProtocol>XML</inboundProtocol>
-        <outboundProtocol>XML</outboundProtocol>
-        <inboundProperties>
-          <property name="stripNamespaces">false</property>
-        </inboundProperties>
-        <outboundProperties>
-          <property name="stripNamespaces">false</property>
-        </outboundProperties>
-      </transformer>
-      <filter>
-        <rules/>
-      </filter>
-      <transportName>File Writer</transportName>
-      <mode>DESTINATION</mode>
-      <enabled>true</enabled>
-      <version>2.1.1.5490</version>
-    </connector>
-    <connector>
       <name>XDSLoad</name>
       <properties>
         <property name="DataType">JavaScript Writer</property>
@@ -133,26 +90,134 @@ bGV4VHlwZT4NCgk8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4NCg==</inboundTemplate>
 // You only have access to the globalMap and globalChannelMap here to persist data
 
 var xdsCtx = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-xds.xml&apos;);
+
 var documentHandler = xdsCtx.getBean(&quot;metadataSuppliedDocumentHandler&quot;);
-//TODO:ESD-3073 will change this from dummy to acutal access manager
-var docAccMngr = xdsCtx.getBean(&quot;dummyDocumentAccessManager&quot;);
+var docAccMngr = xdsCtx.getBean(&quot;documentAccessManager&quot;);
+
+var navContext = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-nav.xml&apos;);
+var navSender = navContext.getBean(&apos;notificationSender&apos;);
 
 
+var docId = documentHandler.handleDocument($(&apos;cdaDoc&apos;));
+logger.info(&quot;Created document in openXDS&quot;);
+ 
+try{
+   //replace with proper DN 
+	var subjectDN = &apos;subjectdn&apos;;
+ 
+    docAccMngr.grantDocumentAccess(docId,subjectDN);
+	logger.info(&quot;Granted access to document to &quot; + subjectDN);
 
-default xml namespace = new Namespace(&apos;cda&apos;, &apos;urn:hl7-org:v3&apos;);
+}catch(accerr) {
+	logger.error(&apos;Error giving access to the XDS document.&apos; + accerr.message);
+	responseMap.put(&apos;xdsNavDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error giving access to the XDS document.&apos; + accerr.message));
+	return;
+}	
 
-var cdaDoc = new XML(messageObject.getEncodedData())[&apos;ClinicalDocument&apos;][0].toString();
-documentHandler.handleDocument(cdaDoc);
+//send nav
+try{
+	var docIds = new Packages.java.util.ArrayList();
+	docIds.add(docId);
 
+	 var cache =  navSender.getSignatureBuilder().getDocumentResolver().getDocCache();
+     cache.putDocument(docId, $(&apos;cdaDoc&apos;));
 
+	logger.info(&apos;Will send NAV email to &apos; + $(&apos;navEmail&apos;));
+	navSender.send($(&apos;navEmail&apos;), docIds);
 
-return;
-
+}catch(navErr) {
+	logger.error(&apos;Error sending NAV &apos; + navErr.message);
+	responseMap.put(&apos;xdsNavDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + navErr.message));
+}
+return docId;
 
 </property>
       </properties>
       <transformer>
-        <steps/>
+        <steps>
+          <step>
+            <sequenceNumber>0</sequenceNumber>
+            <name>navInfo</name>
+            <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
+
+channelMap.put(&apos;navEmail&apos;,navEmail);</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
+
+channelMap.put(&apos;navEmail&apos;,navEmail);</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>1</sequenceNumber>
+            <name>xdsInfo</name>
+            <script>try {
+
+default xml namespace = &apos;urn:hl7-org:v3#&apos;;
+
+var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+
+if(cdaDoc != null) {
+	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3#&apos;);
+logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
+  	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
+}
+
+else {
+	logger.info(&apos;Could not find CDA. Using alternate CDA namespace: urn:hl7-org:v3&apos;);
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+	logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
+	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
+}
+
+}catch(err) {
+	logger.error(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message);
+	responseMap.put(&apos;xdsNavDestination&apos;, 
+		ResponseFactory.getFailureResponse(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message));
+	return;
+}</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>try {
+
+default xml namespace = &apos;urn:hl7-org:v3#&apos;;
+
+var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+
+if(cdaDoc != null) {
+	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3#&apos;);
+logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
+  	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
+}
+
+else {
+	logger.info(&apos;Could not find CDA. Using alternate CDA namespace: urn:hl7-org:v3&apos;);
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+	logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
+	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
+}
+
+}catch(err) {
+	logger.error(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message);
+	responseMap.put(&apos;xdsNavDestination&apos;, 
+		ResponseFactory.getFailureResponse(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message));
+	return;
+}</string>
+              </entry>
+            </data>
+          </step>
+        </steps>
         <inboundTemplate encoding="base64"></inboundTemplate>
         <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
@@ -190,6 +255,9 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+
+
+
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

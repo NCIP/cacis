@@ -230,6 +230,11 @@
                                     <version>${project.version}</version>
                                 </artifactItem>
 
+                                 <artifactItem>
+                                    <groupId>javassist</groupId>
+                                    <artifactId>javassist</artifactId>
+                                    <version>3.12.0.GA</version>
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>net.sourceforge.saxon</groupId>
                                     <artifactId>saxonhe</artifactId>
@@ -530,16 +535,84 @@
                                     <version>1.0.5</version>
                                 </artifactItem>
 
-								<artifactItem>
+                                <artifactItem>
                                     <groupId>bouncycastle</groupId>
-									<artifactId>bcmail-jdk16</artifactId>
-									<version>140</version>
+                                    <artifactId>bcmail-jdk16</artifactId>
+                                    <version>140</version>
                                 </artifactItem>
 
                                 <artifactItem>
                                     <groupId>bouncycastle</groupId>
-									<artifactId>bcprov-jdk16</artifactId>
-									<version>140</version>
+                                    <artifactId>bcprov-jdk16</artifactId>
+                                    <version>140</version>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>xds-authz-beans</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+
+                                <!--xds authz needs ORM related jars-->
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-core</artifactId>
+                                    <version>${hibernate.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-entitymanager</artifactId>
+                                    <version>${hibernate.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate.javax.persistence</groupId>
+                                    <artifactId>hibernate-jpa-2.0-api</artifactId>
+                                    <version>1.0.0.Final</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-annotations</artifactId>
+                                    <version>${hibernate.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hibernate</groupId>
+                                    <artifactId>hibernate-commons-annotations</artifactId>
+                                    <version>3.2.0.Final</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>javax.transaction</groupId>
+                                    <artifactId>jta</artifactId>
+                                    <version>1.1</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>postgresql</groupId>
+                                    <artifactId>postgresql</artifactId>
+                                    <version>8.3-603.jdbc3</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>javax.persistence</groupId>
+                                    <artifactId>persistence-api</artifactId>
+                                    <version>1.0</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.aspectj</groupId>
+                                    <artifactId>aspectjtools</artifactId>
+                                    <version>1.5.4</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.aspectj</groupId>
+                                    <artifactId>aspectjrt</artifactId>
+                                    <version>1.5.4</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>antlr</groupId>
+                                    <artifactId>antlr</artifactId>
+                                    <version>2.7.6</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>aopalliance</groupId>
+                                    <artifactId>aopalliance</artifactId>
+                                    <version>1.0</version>
                                 </artifactItem>
 
                             </artifactItems>
@@ -559,23 +632,22 @@
                         <configuration>
                             <artifactItems>
                                 <!-- cacis special jars for openxds client - start -->
-
-                                <artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>xds-authz-handlers</artifactId>
-                                    <version>${project.version}</version>
-                                </artifactItem>
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>xds-authz-beans</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
-
+                                <artifactItem>
+                                    <groupId>gov.nih.nci.cacis</groupId>
+                                    <artifactId>xds-authz</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>gov.nih.nci.cacis</groupId>
                                     <artifactId>xds-client</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
+
                                 <artifactItem>
                                     <groupId>ihe.profiles.libs</groupId>
                                     <artifactId>ihelibrary</artifactId>
@@ -693,26 +765,30 @@
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>copy-ip-mirth-jar</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <!--can only be copied after install has run-->
-                                <artifactItem>
-                                    <groupId>gov.nih.nci.cacis</groupId>
-                                    <artifactId>ip-mirth</artifactId>
-                                    <version>${project.version}</version>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <filesets>
+                        <!--need to remove to use an updated version-->
+                        <fileset>
+                            <directory>${mirthConnect.server.dir}/lib/mule</directory>
+                            <includes>
+                                <include>antlr-runtime.jar</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <!--start MC and deploy channels during deploy phase -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -726,6 +802,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${mirthConnect.server.dir}/custom-lib</outputDirectory>
+                            <overwrite>true</overwrite>
                             <resources>
                                 <!-- copy ip-mirth jar to the custom-lib -->
                                 <resource>
@@ -748,6 +825,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${mirthConnect.server.dir}/cacis-lib</outputDirectory>
+                            <overwrite>true</overwrite>
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/mc-cacis-lib</directory>

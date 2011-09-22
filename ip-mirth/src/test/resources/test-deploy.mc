@@ -5,7 +5,6 @@ channel remove *
 importcodetemplates "${build.outputDirectory}/templates/mc-code-templates.xml" force
 
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml"
-import "${build.outputDirectory}/channels/navEmailAddressChannel.xml"
 import "${build.outputDirectory}/channels/DocumentRouter.xml"
 import "${build.outputDirectory}/channels/AcceptCanonical_Channel.xml"
 import "${build.outputDirectory}/channels/DR-4c_SecureFileTransfer.xml"  force

@@ -12,7 +12,7 @@
         <validation-mode>NONE</validation-mode>
 
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="${cacis.xds.authz.hibernate.hbm2ddl.auto}" />
+            <property name="hibernate.hbm2ddl.auto" value="${cacis.xds.authz.hibernate.hbm2ddl.auto}"/>
             <property name="hibernate.jdbc.batch_size" value="0"/>
         </properties>
     </persistence-unit>

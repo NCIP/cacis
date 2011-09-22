@@ -61,10 +61,7 @@
 package gov.nih.nci.cacis.xds.client;
 
 import gov.nih.nci.cacis.common.doc.DocumentHandler;
-import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 import gov.nih.nci.cacis.xds.StaticMetadataSupplier;
-import gov.nih.nci.cacis.xds.authz.service.DocumentAccessManager;
-import gov.nih.nci.cacis.xds.authz.service.XdsWriteAuthzManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -157,59 +154,7 @@ public class XDSConfigImpl implements XDSConfig  {
         return docH;
     }
     
-    /**
-     * Dummy XdsWriteAuthzManager until ESD-3073 lands, after that, has to be removed
-     * @return XdsWriteAuthzManager
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public XdsWriteAuthzManager dummyXdsWriteAuthzManager() {
-        return new XdsWriteAuthzManager() {
-            
-            @Override
-            public void revokeStoreWrite(String arg0) throws AuthzProvisioningException {
-                //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public void grantStoreWrite(String arg0) throws AuthzProvisioningException {
-                //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public boolean checkStoreWrite(String arg0) throws AuthzProvisioningException {
-                //always give access - this is dummy impl
-                return true;
-            }
-        };
-    }
-    
-    /**
-     * Dummy DocumentAccessManager until ESD-3073 lands, after that, has to be removed
-     * @return DocumentAccessManager
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public DocumentAccessManager dummyDocumentAccessManager() {
-        return new DocumentAccessManager() {
-            
-            @Override
-            public void revokeDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-              //do nothing - this is dummy impl                
-            }
-            
-            @Override
-            public void grantDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-              //do nothing - this is dummy impl
-            }
-            
-            @Override
-            public boolean checkDocumentAccess(String arg0, String arg1) throws AuthzProvisioningException {
-                // always give access - this is dummy impl
-                return true;
-            }
-        };
-    }
+
 
     /**
      *  MetadataSuppliedDocumentHandler bean

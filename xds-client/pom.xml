@@ -36,6 +36,11 @@
             <artifactId>xds-authz-handlers</artifactId>
             <version>${project.version}</version>
         </dependency>
+         <dependency>
+            <groupId>gov.nih.nci.cacis</groupId>
+            <artifactId>xds-authz</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.axis2</groupId>
             <artifactId>axis2</artifactId>
@@ -220,7 +225,7 @@
                                         <include>OpenXDS_2011_Truststore.jks</include>
                                         <include>OpenXDS_2010_Keystore.jks</include>
                                         <include>OpenXDS_2010_Truststore.jks</include>                                        
-                                        <include>cacis-xds.properties</include>
+                                        <include>cacis-xds-client.properties</include>
                                     </includes>
                                 </resource>
                             </resources>

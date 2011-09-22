@@ -8,9 +8,9 @@
  xsi:schemaLocation="urn:org:openhealthtools:ihe:xds:metadata metadata.xsd urn:org:openhealthtools:ihe:common:hl7v2 ../../../org.openhealthtools.ihe.common.hl7v2/resources/schema/hl7v2_wrapper.xsd htt//www.w3.org/XML/1998/namespace htt//www.w3.org/2001/xml.xsd ">
 
   <classCode>
-    <code>Not Available</code>
+    <code>Consult</code>
     <displayName>
-      <LocalizedString value="Not Available"/>
+      <LocalizedString value="Consult"/>
     </displayName>
     <schemeName>Connect-a-thon classCodes</schemeName>
   </classCode>
@@ -34,9 +34,9 @@
   </formatCode>
  
   <healthCareFacilityTypeCode>
-    <code>Not Available</code>
+    <code>Outpatient</code>
     <displayName>
-      <LocalizedString value="Not Available"/>
+      <LocalizedString value="Outpatient"/>
     </displayName>
     <schemeName>Connect-a-thon healthcareFacilityTypeCodes</schemeName>
   </healthCareFacilityTypeCode>
@@ -50,9 +50,9 @@
   </patientId>
    
   <practiceSettingCode>
-    <code>Not Available</code>
+    <code>General Medicine</code>
     <displayName>
-      <LocalizedString value="Not Available"/>
+      <LocalizedString value="General Medicine"/>
     </displayName>
     <schemeName>Connect-a-thon practiceSettingCodes</schemeName>
   </practiceSettingCode>

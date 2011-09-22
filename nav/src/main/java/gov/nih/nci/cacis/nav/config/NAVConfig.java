@@ -61,11 +61,11 @@
 
 package gov.nih.nci.cacis.nav.config;
 
-import gov.nih.nci.cacis.common.doc.DocumentHandler;
 import gov.nih.nci.cacis.nav.DefaultXDSNotificationSignatureBuilder;
+import gov.nih.nci.cacis.nav.InMemoryCacheDocumentHolder;
+import gov.nih.nci.cacis.nav.InMemoryCacheXDSDocumentResolver;
 import gov.nih.nci.cacis.nav.NotificationSender;
 import gov.nih.nci.cacis.nav.NotificationSenderImpl;
-import gov.nih.nci.cacis.nav.OpenXDSDocumentResolver;
 import gov.nih.nci.cacis.nav.SendEncryptedMail;
 import gov.nih.nci.cacis.nav.SendSignedMail;
 import gov.nih.nci.cacis.nav.XDSDocumentResolver;
@@ -78,8 +78,6 @@ import javax.mail.MessagingException;
 import javax.xml.crypto.dsig.DigestMethod;
 import javax.xml.crypto.dsig.SignatureMethod;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -98,10 +96,6 @@ public class NAVConfig {
 
     @Value("${xds.repo.oid}")
     private String repoOID;
-
-    @Autowired
-    @Qualifier("wrapperDocumentHandler")
-    private DocumentHandler docHndlr;
 
     @Value("${nav.keystore.type}")
     private String keyStoreType;
@@ -221,7 +215,7 @@ public class NAVConfig {
      */
     @Bean
     public XDSDocumentResolver documentResolver() {
-        return new OpenXDSDocumentResolver(repoOID, docHndlr);
+        return new InMemoryCacheXDSDocumentResolver(repoOID, new InMemoryCacheDocumentHolder());
     }
     
     /**
