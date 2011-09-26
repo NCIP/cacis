@@ -62,14 +62,15 @@ package gov.nih.nci.cacis.ip.xds;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.ip.mirthconnect.utils.SerializerUtilsTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 
@@ -91,9 +92,10 @@ public class DefaultXdsMetadataSupplierTest {
     @Test
     public void createMetadata() throws IOException, JAXBException, URISyntaxException {
         
-        final CaCISRequest document = SerializerUtilsTest
-                .sampleCaCISRequest("caCISRequest_With_RoutingInstructions.xml");
-        final String docEntryMetadata = defaultXdsMetadataSupplier.createDocEntry(document);
+        final File file = new File(SerializerUtilsTest.class.
+                getClassLoader().getResource("caCISRequest_With_RoutingInstructions.xml").toURI());
+
+        final String docEntryMetadata = defaultXdsMetadataSupplier.createDocEntry(FileUtils.readFileToString(file));
         
         
         assertTrue(docEntryMetadata.contains("HLv2 OBX Message"));
@@ -101,11 +103,12 @@ public class DefaultXdsMetadataSupplierTest {
         
         assertNotNull(docEntryMetadata);
         
-        final String submissionSetMetadata = defaultXdsMetadataSupplier.createSubmissionSet(document);
+        final String submissionSetMetadata = 
+            defaultXdsMetadataSupplier.createSubmissionSet(FileUtils.readFileToString(file));
         assertNotNull(submissionSetMetadata);
         assertTrue(docEntryMetadata.contains("DM123456"));
         
-        assertNotNull(defaultXdsMetadataSupplier.createDocOID(document));
-        assertNotNull(defaultXdsMetadataSupplier.createDocSourceOID(document));
+        assertNotNull(defaultXdsMetadataSupplier.createDocOID());
+        assertNotNull(defaultXdsMetadataSupplier.createDocSourceOID());
     }
 }

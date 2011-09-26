@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316710034507</time>
+    <time>1317051596328</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>8</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -85,25 +85,34 @@ bGV4VHlwZT4NCgk8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4NCg==</inboundTemplate>
       <properties>
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
-        <property name="script">
-// This script executes once when the channel is deployed
+        <property name="script">// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 
 var xdsCtx = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-xds.xml&apos;);
+var documentHandler = xdsCtx.getBean(&quot;wrapperDocumentHandler&quot;);
 
-var documentHandler = xdsCtx.getBean(&quot;metadataSuppliedDocumentHandler&quot;);
+var ipMirthCtx = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-ip-mirth.xml&apos;);
+var xdsMetadataSupplier = ipMirthCtx.getBean(&quot;xdsMetadataSupplier&quot;);
+
+var hashMap = new Packages.java.util.HashMap();
+hashMap.put(&apos;docentry&apos;,xdsMetadataSupplier.createDocEntry(messageObject.getEncodedData()));
+hashMap.put(&apos;submissionset&apos;,xdsMetadataSupplier.createSubmissionSet(messageObject.getEncodedData()));
+hashMap.put(&apos;docoid&apos;,xdsMetadataSupplier.createDocOID());
+hashMap.put(&apos;docsourceoid&apos;,xdsMetadataSupplier.createDocSourceOID());
+hashMap.put(&apos;content&apos;,$(&apos;cdaDoc&apos;));
+
 var docAccMngr = xdsCtx.getBean(&quot;documentAccessManager&quot;);
 
 var navContext = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-nav.xml&apos;);
 var navSender = navContext.getBean(&apos;notificationSender&apos;);
 
 
-var docId = documentHandler.handleDocument($(&apos;cdaDoc&apos;));
+var docId = documentHandler.handleDocument(hashMap);
 logger.info(&quot;Created document in openXDS&quot;);
  
 try{
    //replace with proper DN 
-	var subjectDN = &apos;subjectdn&apos;;
+	var subjectDN = &apos;subjectdn&apos;
  
     docAccMngr.grantDocumentAccess(docId,subjectDN);
 	logger.info(&quot;Granted access to document to &quot; + subjectDN);
@@ -140,7 +149,9 @@ return docId;
             <name>navInfo</name>
             <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
-var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
+var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString();
+
+navEmail = navEmail.substring(navEmail.indexOf(&apos;:&apos;)+1, navEmail.length);
 
 channelMap.put(&apos;navEmail&apos;,navEmail);</script>
             <type>JavaScript</type>
@@ -149,7 +160,9 @@ channelMap.put(&apos;navEmail&apos;,navEmail);</script>
                 <string>Script</string>
                 <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
-var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString()
+var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;navEmailAddress&apos;][&apos;@url&apos;].toString();
+
+navEmail = navEmail.substring(navEmail.indexOf(&apos;:&apos;)+1, navEmail.length);
 
 channelMap.put(&apos;navEmail&apos;,navEmail);</string>
               </entry>

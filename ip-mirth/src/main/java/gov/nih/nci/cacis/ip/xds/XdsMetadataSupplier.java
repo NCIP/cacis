@@ -60,8 +60,6 @@
  */
 package gov.nih.nci.cacis.ip.xds;
 
-import gov.nih.nci.cacis.CaCISRequest;
-
 import java.io.IOException;
 
 /**
@@ -75,34 +73,32 @@ public interface XdsMetadataSupplier {
     /**
      *  XDS Metadata DocEntry
      *
-     * @param request CaCISRequest request
+     * @param  caCISRequest request 
      * @return XDS DocEntry
      * @throws IOException Exception
      */
-    String createDocEntry(CaCISRequest request) throws IOException;
+    String createDocEntry(String caCISRequest) throws IOException;
 
     /**
      *  XDS Metadata Submission Set
      *
-     * @param request CaCISRequest request
+     * @param  caCISRequest request
      * @return XDS SubmissionSet
      * @throws IOException Exception
      */
-    String createSubmissionSet(CaCISRequest request) throws IOException;
+    String createSubmissionSet(String caCISRequest) throws IOException;
     
     /**
      *  XDS Metadata Doc OID
-     *
-     * @param request CaCISRequest request
+     *  
      * @return XDS DocEntry
      */
-    String createDocOID(CaCISRequest request);
+    String createDocOID();
 
     /**
      *  XDS Metadata Source OID
      *
-     * @param request CaCISRequest request
      * @return XDS DocEntry
      */
-    String createDocSourceOID(CaCISRequest request);
+    String createDocSourceOID();
 }

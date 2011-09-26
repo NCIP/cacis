@@ -60,67 +60,24 @@
  */
 package gov.nih.nci.cacis.ip.xds;
 
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.common.doc.DocumentHandler;
-import gov.nih.nci.cacis.ip.utils.SerializerUtils;
-import gov.nih.nci.cacis.xds.client.XDSDocumentMetadata;
-import gov.nih.nci.cacis.xds.client.XDSHandlerInfo;
-import org.hl7.v3.POCDMT000040ClinicalDocument;
-import org.openhealthtools.ihe.xds.document.DocumentDescriptor;
-
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.util.List;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
- *
- * Utility class for loading CDA
- * from a CaCISRequest into XDS
- *
- * @author kherm manav.kher@semanticbits.com
+ * @author monish.dombla@semanticbits.com
  */
-public class XdsDocumentLoader {
-
-    private final XdsMetadataSupplier docEntryProvider;
-    private final DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docHndler;
-
-
+@Configuration
+public class XdsMetadataConfig {
+ 
     /**
-     * Constructor
-     * @param docEntryProvider XdsMetadataSupplier
-     * @param docHndler XDS DocumentHandler
+     * Return DefaultXdsMetadataSupplier
+     * @return XdsMetadataSupplier
      */
-    public XdsDocumentLoader(XdsMetadataSupplier docEntryProvider,
-                             DocumentHandler<XDSHandlerInfo, XDSDocumentMetadata> docHndler) {
-        this.docEntryProvider = docEntryProvider;
-        this.docHndler = docHndler;
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public XdsMetadataSupplier xdsMetadataSupplier() {
+        return new DefaultXdsMetadataSupplier();
     }
-
-    /**
-     * will store Document in openXDS
-     * Create metadata from the CaCISRequest
-     * @param request CaCISRequest
-     * @throws JAXBException Exception serializing request
-     * @throws IOException Exception
-     */
-    public void store(CaCISRequest request) throws JAXBException, IOException {
-
-        final List<POCDMT000040ClinicalDocument> docs = request.getClinicalDocument();
-
-        for (POCDMT000040ClinicalDocument doc : docs) {
-
-            final XDSDocumentMetadata docMd = new XDSDocumentMetadata();
-            docMd.setDocEntryContent(docEntryProvider.createDocEntry(request));
-            docMd.setSubmissionSetContent(docEntryProvider.createSubmissionSet(request));
-            docMd.setDocumentType(DocumentDescriptor.XML);
-            docMd.setDocOID(docEntryProvider.createDocOID(request));
-            docMd.setDocSourceOID(docEntryProvider.createDocSourceOID(request));
-            docMd.setDocumentContent(SerializerUtils.serialize(doc));
-
-            docHndler.handleDocument(docMd);
-
-        }
-    }
-
-
 }

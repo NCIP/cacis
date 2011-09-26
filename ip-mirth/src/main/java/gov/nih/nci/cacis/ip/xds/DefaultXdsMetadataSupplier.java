@@ -64,17 +64,18 @@ import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.ExchangeFormat;
 import gov.nih.nci.cacis.RoutingInstructions.ExchangeDocument;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Supplies metadata available from the caCISRequest
@@ -83,13 +84,14 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DefaultXdsMetadataSupplier implements XdsMetadataSupplier {
     
-    private static final Log LOG = LogFactory.getLog(DefaultXdsMetadataSupplier.class);
     private final SimpleDateFormat dtFrmt = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
 
     @Override
-    public String createDocEntry(CaCISRequest request) throws IOException {
+    public String createDocEntry(String caCISRequest) throws IOException {
+        
         String docEntryMetaData = null;
         try {
+            final CaCISRequest request = unMarshalcaCisRequest(caCISRequest);
             docEntryMetaData = getFileContent("DocumnetEntryMetadata_Template.xml");
             docEntryMetaData = 
                 docEntryMetaData.replace("$PATIENT_ID_NUMBER$", request.getClinicalMetaData().getPatientIdExtension());
@@ -107,39 +109,47 @@ public class DefaultXdsMetadataSupplier implements XdsMetadataSupplier {
                 docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_code$", "RIM/ITS");
                 docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_LocalizedString$", "RIM/ITS");
             }
-        } catch (URISyntaxException e) {
-            LOG.error("Excption while extracting metadata",e);
+        } catch (JAXBException e) {
+            throw new IOException("Excption while extracting metadata",e);
         }
         return docEntryMetaData;
     }
     
-    private String getFileContent(String fileName) throws URISyntaxException, IOException {
-        final File docEntryFile = new File(getClass().getClassLoader().getResource(fileName).toURI());
-        return FileUtils.readFileToString(docEntryFile);
+    private String getFileContent(String fileName) throws IOException {
+        
+        final InputStream in = DefaultXdsMetadataSupplier.class.getClassLoader().getResourceAsStream(fileName);
+        return IOUtils.toString(in);
+        
     }
     
     @Override
-    public String createSubmissionSet(CaCISRequest request) throws IOException {
+    public String createSubmissionSet(String caCISRequest) throws IOException {
         String submissionSetMetaData = null;
         try {
+            final CaCISRequest request = unMarshalcaCisRequest(caCISRequest);
             submissionSetMetaData = getFileContent("SubmissionSetMetadata_Template.xml");
             
             submissionSetMetaData = submissionSetMetaData.replace("$PATIENT_ID_NUMBER$", request
                     .getClinicalMetaData().getPatientIdExtension());
             
-        } catch (URISyntaxException e1) {
-            LOG.error("Excption while extracting metadata",e1);
+        } catch (JAXBException e) {
+            throw new IOException("Excption while extracting metadata",e);
         }
         return submissionSetMetaData;
     }
 
     @Override
-    public String createDocOID(CaCISRequest request) {
-        return "1.2.3";
+    public String createDocOID() {
+        return "1.2.3.4"; //NOPMD
     }
 
     @Override
-    public String createDocSourceOID(CaCISRequest request) {
-        return "1.3.6.1.4.1.21367.2010.1.2";
+    public String createDocSourceOID() {
+        return "1.3.6.1.4.1.21367.2010.1.2"; //NOPMD
+    }
+    
+    private CaCISRequest unMarshalcaCisRequest(String caCisRequest) throws JAXBException {
+        final JAXBContext ctx = JAXBContext.newInstance(CaCISRequest.class);
+        return (CaCISRequest) ctx.createUnmarshaller().unmarshal(new ByteArrayInputStream( caCisRequest.getBytes()));
     }
 }
