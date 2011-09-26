@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316012266234</time>
+    <time>1316546359444</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>8</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
       <steps/>
@@ -4486,11 +4486,11 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>Destination 1</name>
+      <name>routeToMuxDemux</name>
       <properties>
         <property name="DataType">Channel Writer</property>
         <property name="host">0a6503b9-01f9-4020-a1d3-3ef0196b078b</property>
-        <property name="synchronised">0</property>
+        <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
@@ -4506,7 +4506,9 @@ var documentToTransform = msg[&apos;ClinicalDocument&apos;];
 var transformedDocument = drTransformDocument(documentToTransform, &apos;hL7V2Transformer&apos;);
 
 //Construct message
-msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</script>
+if(transformedDocument != null) {
+	msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);
+}</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
@@ -4519,7 +4521,9 @@ var documentToTransform = msg[&apos;ClinicalDocument&apos;];
 var transformedDocument = drTransformDocument(documentToTransform, &apos;hL7V2Transformer&apos;);
 
 //Construct message
-msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</string>
+if(transformedDocument != null) {
+	msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);
+}</string>
               </entry>
             </data>
           </step>
@@ -4536,16 +4540,60 @@ msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);</string>
         </outboundProperties>
       </transformer>
       <filter>
-        <rules/>
+        <rules>
+          <rule>
+            <sequenceNumber>0</sequenceNumber>
+            <name>filterOnError</name>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>return filterOnError();</string>
+              </entry>
+            </data>
+            <type>JavaScript</type>
+            <script>return filterOnError();</script>
+            <operator>NONE</operator>
+          </rule>
+        </rules>
       </filter>
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
     </connector>
+    <connector>
+      <name>handleResponse</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var destArr = new Array(&quot;routeToMuxDemux&quot;);
+
+handleResponse(&apos;handleResponse&apos;, destArr);
+
+return;</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">true</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

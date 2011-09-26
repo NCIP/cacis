@@ -5,51 +5,37 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316123607717</time>
+    <time>1316807781929</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">validationMsg</property>
+      <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
       <steps>
         <step>
           <sequenceNumber>0</sequenceNumber>
           <name>xsdValidation</name>
-          <script>logger.info(messageObject.getId());
-logger.info(messageObject.getSource());
-
-var valMsgKey = &apos;validationMsg&apos;;
-
-//put the placeholder msg, key has to be string, cannot use variable
-responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
-
-//perform schema validation for canonical
-var cdfXsdValidationMsg = xsdValidateCanonical(message);
-if (cdfXsdValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;Canonical Schema Validation:&apos; + cdfXsdValidationMsg));
+          <script>
+//perform schema validation for CaCISRequest
+var crXsdValidationMsg = xsdValidateCanonical(message);
+if (crXsdValidationMsg != null) { 
+	handleErrorStr(&apos;CaCISRequest Schema Validation:&apos; +crXsdValidationMsg);
 	return;
 }</script>
           <type>JavaScript</type>
           <data class="map">
             <entry>
               <string>Script</string>
-              <string>logger.info(messageObject.getId());
-logger.info(messageObject.getSource());
-
-var valMsgKey = &apos;validationMsg&apos;;
-
-//put the placeholder msg, key has to be string, cannot use variable
-responseMap.put(&apos;validationMsg&apos;,ResponseFactory.getSuccessResponse(&apos;OK&apos;));
-
-//perform schema validation for canonical
-var cdfXsdValidationMsg = xsdValidateCanonical(message);
-if (cdfXsdValidationMsg != null) { 
-	responseMap.put(valMsgKey, ResponseFactory.getFailureResponse(&apos;Canonical Schema Validation:&apos; + cdfXsdValidationMsg));
+              <string>
+//perform schema validation for CaCISRequest
+var crXsdValidationMsg = xsdValidateCanonical(message);
+if (crXsdValidationMsg != null) { 
+	handleErrorStr(&apos;CaCISRequest Schema Validation:&apos; +crXsdValidationMsg);
 	return;
 }</string>
             </entry>
@@ -86,6 +72,51 @@ if (cdfXsdValidationMsg != null) {
       </properties>
       <transformer>
         <steps/>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules>
+          <rule>
+            <sequenceNumber>0</sequenceNumber>
+            <name>filterIfThereIsValidationFailure</name>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>return filterOnError();</string>
+              </entry>
+            </data>
+            <type>JavaScript</type>
+            <script>return filterOnError();</script>
+            <operator>NONE</operator>
+          </rule>
+        </rules>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+    <connector>
+      <name>handleResponse</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var desArr = new Array(&quot;CdwLoadProcessStart&quot;);
+
+handleResponse(&apos;handleResponse&apos;, desArr);
+
+return;</property>
+      </properties>
+      <transformer>
+        <steps/>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
@@ -98,17 +129,17 @@ if (cdfXsdValidationMsg != null) {
       <filter>
         <rules/>
       </filter>
-      <transportName>Channel Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
-    <property name="dont_store_filtered">true</property>
+    <property name="clearGlobalChannelMap">false</property>
+    <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
-    <property name="error_messages_only">true</property>
+    <property name="error_messages_only">false</property>
     <property name="initialState">started</property>
     <property name="max_message_age">-1</property>
     <property name="store_messages">true</property>
@@ -120,9 +151,6 @@ if (cdfXsdValidationMsg != null) {
 // You only have access to the globalMap and globalChannelMap here to persist data
 return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
-
-
-
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data

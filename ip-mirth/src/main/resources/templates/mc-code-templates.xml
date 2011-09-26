@@ -123,7 +123,7 @@ function handleResponse(resConnectorNm, destArr) {
 	var err = responseMap.get(&apos;error&apos;);
 
 	if(err != null ){
-		responseMap.put(resConnectorNm, ResponseFactory.getFailureResponse(err));
+		responseMap.put(resConnectorNm, err);
 	} else {
         var res = &apos;&apos;;
 		if(destArr != null &amp;&amp; destArr.length &gt; 0) {
@@ -168,6 +168,26 @@ function handleResponse(resConnectorNm, destArr) {
 		}
 	}
 	return transformedDocument;
+}</code>
+    <type>FUNCTION</type>
+    <scope>0</scope>
+    <version>2.1.1.5490</version>
+  </codeTemplate>
+  <codeTemplate>
+    <id>e4767ac5-97df-4d33-a90e-fb7c06ebf759</id>
+    <name>filterOnError</name>
+    <tooltip>template function to filter based on availability of error</tooltip>
+    <code>// modify function_name and parameters as you wish.
+// one function per template is recommended. i.e.) create a new code template for each new function.
+function filterOnError() {
+	var err = responseMap.get(&apos;error&apos;);
+	
+	//return true to accept the message and false to filter it
+	if(err == null) {
+		return true;
+	} else {
+		return false;
+	}
 }</code>
     <type>FUNCTION</type>
     <scope>0</scope>

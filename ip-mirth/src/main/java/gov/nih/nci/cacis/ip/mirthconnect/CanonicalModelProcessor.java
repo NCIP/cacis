@@ -127,14 +127,18 @@ public class CanonicalModelProcessor extends AcceptMessage {
         }
 
         try {
-            webServiceMessageReceiver.processData(sw.toString());
+            final String mcResponse = webServiceMessageReceiver.processData(sw.toString());
+
+            if (mcResponse != null && mcResponse.indexOf("Error") > -1) {                
+                throw new AcceptCanonicalFault("Error processing Data from Source System: " + mcResponse);
+            }
+            response.setStatus(ResponseStatusType.SUCCESS);
+            return response;
             // CHECKSTYLE:OFF
         } catch (Exception e) {
             // CHECKSTYLE:ON
-            throw new AcceptCanonicalFault("Error processing message", e);
+            throw new AcceptCanonicalFault("Error processing message!" + e.getMessage(), e);
         }
-
-        return response;
     }
 
 };

@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316181174590</time>
+    <time>1316545521621</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>35</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -228,23 +228,11 @@ ZHlJZEV4dGVuc2lvbj0ic3R1ZHlfaWQiLz4JCjwvY2FDSVNSZXF1ZXN0PgoKCg==</inboundTemplat
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var res = responseMap.get(&apos;error&apos;);
-
-if ( res != null ) {
-	return false;
-} else {
-	return true;	
-}</string>
+                <string>return filterOnError();</string>
               </entry>
             </data>
             <type>JavaScript</type>
-            <script>var res = responseMap.get(&apos;error&apos;);
-
-if ( res != null ) {
-	return false;
-} else {
-	return true;	
-}</script>
+            <script>return filterOnError();</script>
             <operator>NONE</operator>
           </rule>
         </rules>
@@ -286,7 +274,7 @@ return;</property>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

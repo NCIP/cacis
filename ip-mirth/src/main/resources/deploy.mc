@@ -16,6 +16,7 @@ channel remove CMP-1_WebServiceListener
 channel remove CMP-2_CanonicalValidation
 channel remove CMP-3_CDWLoader
 
+importscripts "${build.outputDirectory}/scripts/cacis-global-scripts.xml" force
 importcodetemplates "${build.outputDirectory}/templates/mc-code-templates.xml" force
 
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml" force

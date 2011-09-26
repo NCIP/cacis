@@ -66,11 +66,21 @@ import gov.nih.nci.cacis.AcceptSourcePortType;
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CaCISResponse;
 import gov.nih.nci.cacis.ResponseStatusType;
+import gov.nih.nci.cacis.common.util.CaCISURLClassLoader;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
@@ -94,9 +104,6 @@ public class SemanticAdapterChannelIntegrationTest {
     /**
      * This test calls out acceptSource(..) operation on SematicAdapter WS.
      * The SemanticAdapter WS is the source connector to SemanticAdapterChannel in Mirth.
-     * SemanticAdapterChannel in mirth routes the incoming message to a Mock Trim-2-CCD-xslt channel.
-     * The Mock channel writes a file to the ${xccd.output.dir} folder.This test asserts that the file exits.
-     *
      * @throws Exception exception
      */
     @Test
@@ -110,13 +117,22 @@ public class SemanticAdapterChannelIntegrationTest {
                 .getResource("SARequestSample.xml").toURI()));
 
         final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
-        final CaCISRequest request = (CaCISRequest) jc.createUnmarshaller().unmarshal(sampleMessageIS);
+        final Unmarshaller unm = jc.createUnmarshaller();
 
+        final CaCISRequest request = (CaCISRequest) unm.unmarshal(sampleMessageIS);
+        
+        final Marshaller m = jc.createMarshaller();
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
+        m.marshal(request, pw);
+        final String reqStr = sw.toString();
+        
         final CaCISResponse response = client.acceptSource(request);
         assertTrue(response.getStatus() == ResponseStatusType.SUCCESS);
 
     }
-
+    
+    
     /**
      * This test calls out acceptSource(..) operation on SematicAdapter WS.
      * and expects the service to return an Exception

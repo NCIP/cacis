@@ -377,26 +377,7 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>gov.nih.nci.cacis</groupId>
-                        <artifactId>mirthconnect-maven-plugin</artifactId>
-                        <version>${project.version}</version>
-                        <configuration>
-                            <mirthConnect>${mirthConnect.cli}</mirthConnect>
-                            <script>${build.testOutputDirectory}/test-deploy.mc</script>
-                            <pause>${mirthConnect.server.pause}</pause>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>cli</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
+                    </plugin>                    
                 </plugins>
             </build>
         </profile>

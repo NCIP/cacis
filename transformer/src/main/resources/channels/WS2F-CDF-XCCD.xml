@@ -1,4 +1,4 @@
-<com.mirth.connect.model.Channel>
+<channel>
   <id>82077616-cf59-4e9b-b840-35068338ffc7</id>
   <name>WS2F-CDF-XCCD</name>
   <description>WS2F - MC webservice input listener to file output channel&#xd;
@@ -11,42 +11,47 @@ to : XCCD - Exchange CCD&#xd;
 3) pruning the messages after 3 days&#xd;
 4) Clearing the global channel map on deploy to populate new properties on deploy</description>
   <enabled>true</enabled>
-  <version>2.0.1.5164</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1304701159921</time>
+    <time>1316720773124</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>27</revision>
+  <revision>7</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="port">9082</property>
       <property name="DataType">Web Service Listener</property>
-      <property name="receiverUsernames">&lt;list/&gt;</property>
       <property name="host">0.0.0.0</property>
-      <property name="receiverServiceName">Mirth</property>
+      <property name="port">9082</property>
       <property name="receiverClassName">com.mirth.connect.connectors.ws.DefaultAcceptMessage</property>
-      <property name="receiverResponseValue">Destination 1</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
+      <property name="receiverResponseValue">Destination 1</property>
+      <property name="receiverServiceName">Mirth</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
     <transformer>
       <steps>
         <step>
           <sequenceNumber>0</sequenceNumber>
           <name>process</name>
-          <script>var stStr = &apos;&lt;ClinicalDocument&apos; ;
+          <script>var stStr = &apos;&lt;ClinicalDocument &apos; ;
 var endStr = &apos;&lt;/ClinicalDocument&gt;&apos;;
 
-var msgStr = msg.toString();
+//var msgStr = msg.toString();
+var msgStr = message;
+
+logger.info(msgStr);
 
 var stIndex = msgStr.indexOf(stStr);
 var endIndex = msgStr.indexOf(endStr);
 
 if(stIndex &lt; 0 || endIndex &lt; 0){
 	logger.error(&quot;Not valid canonical data format message&quot;);
+	return;
 }
 
 var arg = msgStr.substring(stIndex, endIndex+endStr.length);
+logger.info(arg);
 
 var defns2 = new Namespace(&quot;urn:hl7-org:v3&quot;);
 default xml namespace = defns2;
@@ -78,19 +83,24 @@ tmp.removeNamespace(cacis);</script>
           <data class="map">
             <entry>
               <string>Script</string>
-              <string>var stStr = &apos;&lt;ClinicalDocument&apos; ;
+              <string>var stStr = &apos;&lt;ClinicalDocument &apos; ;
 var endStr = &apos;&lt;/ClinicalDocument&gt;&apos;;
 
-var msgStr = msg.toString();
+//var msgStr = msg.toString();
+var msgStr = message;
+
+logger.info(msgStr);
 
 var stIndex = msgStr.indexOf(stStr);
 var endIndex = msgStr.indexOf(endStr);
 
 if(stIndex &lt; 0 || endIndex &lt; 0){
 	logger.error(&quot;Not valid canonical data format message&quot;);
+	return;
 }
 
 var arg = msgStr.substring(stIndex, endIndex+endStr.length);
+logger.info(arg);
 
 var defns2 = new Namespace(&quot;urn:hl7-org:v3&quot;);
 default xml namespace = defns2;
@@ -2936,27 +2946,27 @@ dWN0dXJlZEJvZHk+Cgk8L2NvbXBvbmVudD4KPC9DbGluaWNhbERvY3VtZW50Pg==</outboundTempla
     <transportName>Web Service Listener</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.0.1.5164</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
-    <com.mirth.connect.model.Connector>
+    <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="secure">1</property>
-        <property name="scheme">file</property>
-        <property name="binary">0</property>
-        <property name="username">anonymous</property>
-        <property name="outputPattern">XCCD-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
-        <property name="validateConnections">1</property>
         <property name="DataType">File Writer</property>
         <property name="FTPAnonymous">1</property>
-        <property name="timeout">10000</property>
+        <property name="binary">0</property>
         <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="password">anonymous</property>
-        <property name="passive">1</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="outputAppend">0</property>
         <property name="host">${outputDir}</property>
+        <property name="outputAppend">0</property>
+        <property name="outputPattern">XCCD-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
+        <property name="passive">1</property>
+        <property name="password">anonymous</property>
+        <property name="scheme">file</property>
+        <property name="secure">1</property>
+        <property name="template">${message.encodedData}</property>
+        <property name="timeout">10000</property>
+        <property name="username">anonymous</property>
+        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
@@ -2975,19 +2985,19 @@ dWN0dXJlZEJvZHk+Cgk8L2NvbXBvbmVudD4KPC9DbGluaWNhbERvY3VtZW50Pg==</outboundTempla
       <transportName>File Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.0.1.5164</version>
-    </com.mirth.connect.model.Connector>
+      <version>2.1.1.5490</version>
+    </connector>
   </destinationConnectors>
   <properties>
-    <property name="synchronous">true</property>
-    <property name="clearGlobalChannelMap">true</property>
-    <property name="transactional">false</property>
-    <property name="initialState">started</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">true</property>
+    <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
     <property name="max_message_age">3</property>
     <property name="store_messages">true</property>
-    <property name="encryptData">false</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
@@ -3022,4 +3032,4 @@ return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 return;</shutdownScript>
-</com.mirth.connect.model.Channel>
+</channel>

@@ -133,7 +133,7 @@ return;</string>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

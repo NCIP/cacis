@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316637543702</time>
+    <time>1316547945851</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>5</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -49,15 +49,29 @@
             <sequenceNumber>0</sequenceNumber>
             <name>sendToSFTP</name>
             <script>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
-var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</script>
+
+try{
+	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());
+	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
+}catch(err) {
+	responseMap.put(&apos;sendToSFTP&apos;,  formatErrorStr(er.message));
+}
+return;</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
                 <string>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
-var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());</string>
+
+try{
+	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());
+	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
+}catch(err) {
+	responseMap.put(&apos;sendToSFTP&apos;,  formatErrorStr(er.message));
+}
+return;</string>
               </entry>
             </data>
           </step>
@@ -83,7 +97,7 @@ ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeD
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

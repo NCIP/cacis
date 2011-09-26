@@ -2,6 +2,7 @@ channel stop *
 channel undeploy *
 channel remove *
 
+importscripts "${build.outputDirectory}/scripts/cacis-global-scripts.xml" force
 importcodetemplates "${build.outputDirectory}/templates/mc-code-templates.xml" force
 
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml"

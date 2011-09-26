@@ -61,12 +61,23 @@
 package gov.nih.nci.cacis.ip.mirthconnect;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.Validator;
+
 import gov.nih.nci.cacis.CaCISRequest;
 import gov.nih.nci.cacis.CanonicalModelProcessorPortType;
+import gov.nih.nci.cacis.ClinicalData;
 import gov.nih.nci.cacis.ClinicalMetadata;
+import gov.nih.nci.cacis.DocumentType;
+import gov.nih.nci.cacis.RoutingInstructions;
 import gov.nih.nci.cacis.cdw.BaseVirtuosoIntegrationTest;
 import gov.nih.nci.cacis.common.exception.AuthzProvisioningException;
 
@@ -76,6 +87,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapTransportFactory;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -115,20 +127,14 @@ public class CanonicalModelProcessorMCIntegrationTest extends BaseVirtuosoIntegr
         factory.setServiceClass(CanonicalModelProcessorPortType.class);
         // specify the URL. We are using the in memory test container
         factory.setAddress(ADDRESS);
-
-        CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
-        CaCISRequest request = new CaCISRequest();
-        request.getClinicalDocument().add(CanonicalModelProcessorTest.dummyClinicalDocument());
-
-        ClinicalMetadata meta = new ClinicalMetadata();
-        meta.setPatientIdExtension("123");
-        meta.setPatientIdRoot("123.456");
-        meta.setSiteIdExtension(GRPH_GROUP_SITE_ID);
-        meta.setPatientIdExtension(GRPH_GROUP_P1_ID);
-        meta.setStudyIdExtension(GRPH_GROUP_STUDY_ID);
-        request.setClinicalMetaData(meta);
-
-
+        
+        final JAXBContext jc = JAXBContext.newInstance(CaCISRequest.class);
+        final InputStream is = getClass().getClassLoader().getResourceAsStream("CMP_valid_CR.xml");
+        final CaCISRequest request = 
+            (CaCISRequest) jc.createUnmarshaller().unmarshal(is);
+        
+        final CanonicalModelProcessorPortType client = (CanonicalModelProcessorPortType) factory.create();
+       
         client.acceptCanonical(request);
     }
 

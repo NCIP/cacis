@@ -141,7 +141,7 @@ public class SemanticAdapter extends AcceptMessage {
         } catch (Exception ex) {
             // CHECKSTYLE:ON
             LOG.error(ex);
-            throw new AcceptSourceFault("Error accepting Data from Source System", ex);
+            throw new AcceptSourceFault("Error accepting Data from Source System!" + ex.getMessage(), ex);
         }
     }
 

@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316637165373</time>
+    <time>1316546767004</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">routeDocument</property>
     </properties>
     <transformer>
       <steps/>
@@ -4512,25 +4512,31 @@ for each (seg in exchDocs) {
 		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
 			processRoute(rec, &apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
 		} else {
-			logger.error(&apos;Recipient type unknown.&apos;);
+			logger.error(&apos;Recipient type unknown for &apos; + rec.toString());
 		}
 	}
 }
 
-responseMap.put(&apos;Destination 1&apos;, responseMsg);
+responseMap.put(&apos;routeDocument&apos;, responseMsg);
 
 
 function processRoute(rec, chNm, recipientType) {
 	var msgToRoute = msg.copy();
-    var url = rec[recipientType][&apos;@url&apos;].toString();
-    msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] = 
-    	rec.copy();
+	var url = rec[recipientType][&apos;@url&apos;].toString();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
+		rec.copy();
+	
+	var response = null;
+	try{
+		response = router.routeMessage(chNm, msgToRoute, false);
+	}catch(err) {
+		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
+	}
 
-    var response = router.routeMessage(chNm, msgToRoute, false);
-    handleResponse(response, chNm, url);
+	handleRouteResponse(response, chNm, url);
 }
 
-function handleResponse(response, chNm, url) {
+function handleRouteResponse(response, chNm, url) {
 	responseMsg = responseMsg 
 			+ &apos;Processed routing for &apos;
 			+ chNm + &apos;, &apos; + url 
@@ -4555,25 +4561,30 @@ for each (seg in exchDocs) {
 		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
 			processRoute(rec, &apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
 		} else {
-			logger.error(&apos;Recipient type unknown.&apos;);
+			logger.error(&apos;Recipient type unknown for &apos; + rec.toString());
 		}
 	}
 }
 
-responseMap.put(&apos;Destination 1&apos;, responseMsg);
-
+responseMap.put(&apos;routeDocument&apos;, responseMsg);
 
 function processRoute(rec, chNm, recipientType) {
 	var msgToRoute = msg.copy();
-    var url = rec[recipientType][&apos;@url&apos;].toString();
-    msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] = 
-    	rec.copy();
+	var url = rec[recipientType][&apos;@url&apos;].toString();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;] =
+		rec.copy();
+	
+	var response = null;
+	try{
+		response = router.routeMessage(chNm, msgToRoute, false);
+	}catch(err) {
+		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
+	}
 
-    var response = router.routeMessage(chNm, msgToRoute, false);
-    handleResponse(response, chNm, url);
+	handleRouteResponse(response, chNm, url);
 }
 
-function handleResponse(response, chNm, url) {
+function handleRouteResponse(response, chNm, url) {
 	responseMsg = responseMsg 
 			+ &apos;Processed routing for &apos;
 			+ chNm + &apos;, &apos; + url 
@@ -4613,7 +4624,7 @@ U1JlcXVlc3Q+</inboundTemplate>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

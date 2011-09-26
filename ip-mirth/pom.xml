@@ -73,12 +73,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>gov.nih.nci.cacis</groupId>
-            <artifactId>xds-client</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>3.0.1</version>

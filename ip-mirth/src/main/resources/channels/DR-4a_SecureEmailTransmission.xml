@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316648961201</time>
+    <time>1316546878196</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>7</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -58,9 +58,9 @@ try{
 		responseMap.put(&apos;sendEmail&apos;, ResponseFactory.getFailureResponse(&apos;Unable to encrypt mail for email address, &apos; + $(&apos;emailAddress&apos;) ));
 	}
 	emailSender.sendMail(encMsg);
-	responseMap.put(&apos;sendEmail&apos;, ResponseFactory.getSuccessResponse(&apos;secure email sent!&apos;));
+	responseMap.put(&apos;sendEmail&apos;, &apos;Secure email sent!&apos;);
 }catch(err) {	
-	responseMap.put(&apos;sendEmail&apos;, ResponseFactory.getFailureResponse(&apos;CaCISError: Error sending secure email!&apos; + err.message));
+	responseMap.put(&apos;sendEmail&apos;, &apos;CaCISError: Error sending secure email!&apos; + err.message);
 }
 
 return;</property>
@@ -94,12 +94,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>Mapping</string>
-                <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString()</string>
-              </entry>
-              <entry>
                 <string>RegularExpressions</string>
                 <list/>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString()</string>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -122,10 +122,6 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>Mapping</string>
-                <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString()</string>
-              </entry>
-              <entry>
                 <string>RegularExpressions</string>
                 <list>
                   <string-array>
@@ -133,6 +129,10 @@ return;</property>
                     <string>&apos;&apos;</string>
                   </string-array>
                 </list>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;secureEmailAddress&apos;][&apos;@url&apos;].toString()</string>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -155,12 +155,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>Mapping</string>
-                <string>msg[&apos;clinicalMetaData&apos;][&apos;@siteIdRoot&apos;].toString()+ &apos;:&apos; + msg[&apos;clinicalMetaData&apos;][&apos;@siteIdExtension&apos;].toString()</string>
-              </entry>
-              <entry>
                 <string>RegularExpressions</string>
                 <list/>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@siteIdRoot&apos;].toString()+ &apos;:&apos; + msg[&apos;clinicalMetaData&apos;][&apos;@siteIdExtension&apos;].toString()</string>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -183,12 +183,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>Mapping</string>
-                <string>msg[&apos;clinicalMetaData&apos;][&apos;@studyIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@studyIdExtension&apos;].toString()</string>
-              </entry>
-              <entry>
                 <string>RegularExpressions</string>
                 <list/>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@studyIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@studyIdExtension&apos;].toString()</string>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -211,12 +211,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>Mapping</string>
-                <string>msg[&apos;clinicalMetaData&apos;][&apos;@patientIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@patientIdExtension&apos;].toString()</string>
-              </entry>
-              <entry>
                 <string>RegularExpressions</string>
                 <list/>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@patientIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@patientIdExtension&apos;].toString()</string>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -239,12 +239,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>Mapping</string>
-                <string>msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString()</string>
-              </entry>
-              <entry>
                 <string>RegularExpressions</string>
                 <list/>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString()</string>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -276,6 +276,7 @@ channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</string>
           </step>
         </steps>
         <inboundTemplate encoding="base64"></inboundTemplate>
+
         <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
@@ -296,7 +297,7 @@ channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</string>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

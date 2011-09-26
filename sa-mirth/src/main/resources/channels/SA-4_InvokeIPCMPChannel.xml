@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316181619998</time>
+    <time>1316544855588</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>5</revision>
@@ -52,13 +52,11 @@ try{
 	var client = new Packages.gov.nih.nci.cacis.CanonicalModelProcessor(wsdlURL).getCanonicalModelProcessorPortSoap11();
 	var jaxbContext = Packages.javax.xml.bind.JAXBContext.newInstance(&apos;gov.nih.nci.cacis&apos;);
 	var caCisRequest = jaxbContext.createUnmarshaller().unmarshal(new Packages.java.io.ByteArrayInputStream(messageObject.getEncodedData().getBytes()));
-	client.acceptCanonical(caCisRequest); 
-}catch(cmpInvokeErr) {
-	//responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getFailureResponse(&apos;Error invoking IP-Canonical Model Processor.&apos; + cmpInvokeErr.message));
+	var caCisRes = client.acceptCanonical(caCisRequest); 
+	responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessResponse(caCisRes.getStatus().toString()));
+}catch(cmpInvokeErr) {	
 	handleErrorStr(cmpInvokeErr.message);
-	return;
 }
-//responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessResponse(&apos;Sucessfully invoked IP-Canonical Model Processor&apos;));
 return;
 
 
@@ -115,7 +113,7 @@ return;</property>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>

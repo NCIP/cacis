@@ -6,10 +6,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316125591284</time>
+    <time>1317046040705</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -18,7 +18,7 @@
       <property name="port">18081</property>
       <property name="receiverClassName">gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessor</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
-      <property name="receiverResponseValue">SchemaValidation</property>
+      <property name="receiverResponseValue">canonicalValidation</property>
       <property name="receiverServiceName">CanonicalModelProcessor</property>
       <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
@@ -45,11 +45,11 @@
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>SchemaValidation</name>
+      <name>canonicalValidation</name>
       <properties>
         <property name="DataType">Channel Writer</property>
         <property name="host">12fb1591-0cd6-4c99-b452-a86b7df9d59f</property>
-        <property name="synchronised">0</property>
+        <property name="synchronised">1</property>
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
@@ -57,10 +57,10 @@
         <inboundProtocol>XML</inboundProtocol>
         <outboundProtocol>XML</outboundProtocol>
         <inboundProperties>
-          <property name="stripNamespaces">true</property>
+          <property name="stripNamespaces">false</property>
         </inboundProperties>
         <outboundProperties>
-          <property name="stripNamespaces">true</property>
+          <property name="stripNamespaces">false</property>
         </outboundProperties>
       </transformer>
       <filter>
@@ -69,15 +69,20 @@
       <transportName>Channel Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
     <connector>
-      <name>SchematronValidation</name>
+      <name>cdwLoad</name>
       <properties>
-        <property name="DataType">Channel Writer</property>
-        <property name="host">fc379cb6-3ee6-46c3-ad31-063b83591f9e</property>
-        <property name="synchronised">0</property>
-        <property name="template">${message.encodedData}</property>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var valdRes = responseMap.get(&apos;canonicalValidation&apos;);
+
+
+router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
+
+
+return;</property>
       </properties>
       <transformer>
         <steps/>
@@ -93,14 +98,14 @@
       <filter>
         <rules/>
       </filter>
-      <transportName>Channel Writer</transportName>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.1.1.5488</version>
+      <version>2.1.1.5490</version>
     </connector>
   </destinationConnectors>
   <properties>
-    <property name="clearGlobalChannelMap">true</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">false</property>
     <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
@@ -113,10 +118,6 @@
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
   <postprocessingScript>// This script executes once after a message has been processed
-
-logger.info(&apos;Sending message to CDW Loader Channel&apos;);
-router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
-
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data

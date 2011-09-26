@@ -4569,11 +4569,16 @@ for each (seg in exchDocs) {
 responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
 
 function processRoute(channelName, msgToRoute, exFrmt) {
-	var response = router.routeMessage(channelName, msgToRoute, false);
-	handleResponse(response, exFrmt);
+	var response = null;
+	try{
+		response = router.routeMessage(channelName, msgToRoute, false);
+	}catch(err) {
+		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
+	}
+	handleRouteResponse(response, exFrmt);
 }
 
-function handleResponse(response, exFrmt) {
+function handleRouteResponse(response, exFrmt) {
 	responseMsg = responseMsg
 			+ &apos;Processed routing for &apos;
 			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
@@ -4611,11 +4616,16 @@ for each (seg in exchDocs) {
 responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
 
 function processRoute(channelName, msgToRoute, exFrmt) {
-	var response = router.routeMessage(channelName, msgToRoute, false);
-	handleResponse(response, exFrmt);
+	var response = null;
+	try{
+		response = router.routeMessage(channelName, msgToRoute, false);
+	}catch(err) {
+		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
+	}
+	handleRouteResponse(response, exFrmt);
 }
 
-function handleResponse(response, exFrmt) {
+function handleRouteResponse(response, exFrmt) {
 	responseMsg = responseMsg
 			+ &apos;Processed routing for &apos;
 			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;

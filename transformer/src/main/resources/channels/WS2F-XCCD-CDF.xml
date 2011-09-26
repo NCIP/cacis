@@ -1,4 +1,4 @@
-<com.mirth.connect.model.Channel>
+<channel>
   <id>b56fc007-95d3-441d-b1d0-53de989f12cb</id>
   <name>WS2F-XCCD-CDF</name>
   <description>WS2F - MC webservice input listener to file output channel&#xd;
@@ -11,23 +11,23 @@ to: CDF- canonical data format&#xd;
 3) pruning the messages after 3 days&#xd;
 4) Clearing the global channel map on deploy to populate new properties on deploy</description>
   <enabled>true</enabled>
-  <version>2.0.1.5164</version>
+  <version>2.1.1.5490</version>
   <lastModified>
-    <time>1304701085081</time>
+    <time>1316720931463</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>70</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
-      <property name="port">9081</property>
       <property name="DataType">Web Service Listener</property>
-      <property name="receiverUsernames">&lt;list/&gt;</property>
       <property name="host">0.0.0.0</property>
-      <property name="receiverServiceName">Mirth</property>
+      <property name="port">9081</property>
       <property name="receiverClassName">com.mirth.connect.connectors.ws.DefaultAcceptMessage</property>
-      <property name="receiverResponseValue">Destination 1</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
+      <property name="receiverResponseValue">Destination 1</property>
+      <property name="receiverServiceName">Mirth</property>
+      <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
     <transformer>
       <steps>
@@ -37,13 +37,14 @@ to: CDF- canonical data format&#xd;
           <script>var stStr = &apos;&lt;ClinicalDocument&apos; ;
 var endStr = &apos;&lt;/ClinicalDocument&gt;&apos;;
 
-var msgStr = msg.toString();
+var msgStr = message;
 
 var stIndex = msgStr.indexOf(stStr);
 var endIndex = msgStr.indexOf(endStr);
 
 if(stIndex &lt; 0 || endIndex &lt; 0){
 	logger.error(&quot;Not valid canonical data format message&quot;);
+	return;
 }
 
 var arg = msgStr.substring(stIndex, endIndex+endStr.length);
@@ -85,13 +86,14 @@ tmp[&apos;recordTarget&apos;][&apos;patientRole&apos;][&apos;additionalIdentifie
               <string>var stStr = &apos;&lt;ClinicalDocument&apos; ;
 var endStr = &apos;&lt;/ClinicalDocument&gt;&apos;;
 
-var msgStr = msg.toString();
+var msgStr = message;
 
 var stIndex = msgStr.indexOf(stStr);
 var endIndex = msgStr.indexOf(endStr);
 
 if(stIndex &lt; 0 || endIndex &lt; 0){
 	logger.error(&quot;Not valid canonical data format message&quot;);
+	return;
 }
 
 var arg = msgStr.substring(stIndex, endIndex+endStr.length);
@@ -2944,27 +2946,27 @@ bGluaWNhbERvY3VtZW50Pg==</outboundTemplate>
     <transportName>Web Service Listener</transportName>
     <mode>SOURCE</mode>
     <enabled>true</enabled>
-    <version>2.0.1.5164</version>
+    <version>2.1.1.5490</version>
   </sourceConnector>
   <destinationConnectors>
-    <com.mirth.connect.model.Connector>
+    <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="secure">1</property>
-        <property name="scheme">file</property>
-        <property name="binary">0</property>
-        <property name="username">anonymous</property>
-        <property name="outputPattern">CDF-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
-        <property name="validateConnections">1</property>
         <property name="DataType">File Writer</property>
         <property name="FTPAnonymous">1</property>
-        <property name="timeout">10000</property>
+        <property name="binary">0</property>
         <property name="charsetEncoding">DEFAULT_ENCODING</property>
-        <property name="password">anonymous</property>
-        <property name="passive">1</property>
-        <property name="template">${message.encodedData}</property>
-        <property name="outputAppend">0</property>
         <property name="host">${outputDir}</property>
+        <property name="outputAppend">0</property>
+        <property name="outputPattern">CDF-${date.get(&apos;yyyy-M-d-Hms&apos;)}.xml</property>
+        <property name="passive">1</property>
+        <property name="password">anonymous</property>
+        <property name="scheme">file</property>
+        <property name="secure">1</property>
+        <property name="template">${message.encodedData}</property>
+        <property name="timeout">10000</property>
+        <property name="username">anonymous</property>
+        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps/>
@@ -2983,19 +2985,19 @@ bGluaWNhbERvY3VtZW50Pg==</outboundTemplate>
       <transportName>File Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
-      <version>2.0.1.5164</version>
-    </com.mirth.connect.model.Connector>
+      <version>2.1.1.5490</version>
+    </connector>
   </destinationConnectors>
   <properties>
-    <property name="synchronous">true</property>
-    <property name="clearGlobalChannelMap">true</property>
-    <property name="transactional">false</property>
-    <property name="initialState">started</property>
+    <property name="clearGlobalChannelMap">false</property>
     <property name="dont_store_filtered">true</property>
+    <property name="encryptData">false</property>
     <property name="error_messages_only">false</property>
+    <property name="initialState">started</property>
     <property name="max_message_age">3</property>
     <property name="store_messages">true</property>
-    <property name="encryptData">false</property>
+    <property name="synchronous">true</property>
+    <property name="transactional">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
 return message;</preprocessingScript>
@@ -3030,4 +3032,4 @@ return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 return;</shutdownScript>
-</com.mirth.connect.model.Channel>
+</channel>

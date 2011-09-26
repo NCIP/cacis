@@ -52,6 +52,7 @@ import gov.nih.nci.cacis.CanonicalModelProcessorPortTypeImpl;
 
 import org.hl7.v3.II;
 import org.hl7.v3.POCDMT000040ClinicalDocument;
+import org.hl7.v3.POCDMT000040InfrastructureRootTypeId;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -134,8 +135,13 @@ public class CanonicalModelProcessorTest {
      public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
         II dummyIi = new II();
         dummyIi.setExtension("123");
-        dummyIi.setRoot("123");
+        dummyIi.setRoot("1.2.3.456");
         POCDMT000040ClinicalDocument doc = new POCDMT000040ClinicalDocument();
+        POCDMT000040InfrastructureRootTypeId typeId = new POCDMT000040InfrastructureRootTypeId();
+        typeId.setRoot("2.16.840.1.113883.1.3");
+        typeId.setExtension("123");
+        
+        doc.setTypeId(typeId);
         doc.setId(dummyIi);
         return doc;
 
