@@ -28,7 +28,7 @@ caCIS-XDS-Proxy deployment
 	<cacis.xds.proxy.repository.url>https://${openxds.http.base.url}/services/cacis-proxy-xdsrepositoryb</cacis.xds.proxy.repository.url>
 	<xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
     <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
-	<outputRootdir>${user.home}</outputRootdir>
+	<userhome.dir>${user.home}</userhome.dir>
 
 2: Stop Tomcat
 

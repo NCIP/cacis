@@ -46,7 +46,6 @@
         <gmaven.version>1.2</gmaven.version>
         <logger.level>WARN</logger.level>
         <skip.static.analysis>false</skip.static.analysis>
-        <cargo.timeout>300000</cargo.timeout>
         <mirthConnect.server.pause>20000</mirthConnect.server.pause>
         
         <!--NOTE - customize this property to Mirth Connect location-->		
@@ -56,8 +55,6 @@
         <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
         <cacis.xds.proxy.repository.url>http://localhost:18010/axis2/services/xdsrepositoryb</cacis.xds.proxy.repository.url>
         <!--integration tests-->
-        <!--skip starting JBoss by default. Individual sub-projects can override-->
-        <skip.cargo.container>true</skip.cargo.container>
         <!--NOTE - customize this property to OpenXDS location-->
         <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
         <cacis.xds.authz.hibernate.hbm2ddl.auto>update</cacis.xds.authz.hibernate.hbm2ddl.auto>
@@ -78,12 +75,12 @@
         <cacis.virtuoso.db.driver>virtuoso.jdbc3.Driver</cacis.virtuoso.db.driver>
 
 		<!-- If windows, please replace the ${user.home} with absolute path,as the maven way of setting this value is not acceptable by Mirth -->
-		<outputRootdir>${user.home}</outputRootdir>
-		<cdfOutputDir>${outputRootdir}/.cacis/mc/output/cdf/</cdfOutputDir>
-		<xccdOutputDir>${outputRootdir}/.cacis/mc/output/xccd/</xccdOutputDir>
-		<trimInputDir>${outputRootdir}/.cacis/mc/input/</trimInputDir>
-		<cacis.mc.support.files.dir>${outputRootdir}/.cacis/cacis-xds</cacis.mc.support.files.dir>
-        <cacis.mc.temp.dir>${outputRootdir}/.cacis/mc/output/</cacis.mc.temp.dir>
+		<userhome.dir>${user.home}</userhome.dir>
+		<cdfOutputDir>${userhome.dir}/.cacis/mc/output/cdf/</cdfOutputDir>
+		<xccdOutputDir>${userhome.dir}/.cacis/mc/output/xccd/</xccdOutputDir>
+		<trimInputDir>${userhome.dir}/.cacis/mc/input/</trimInputDir>
+		<cacis.mc.support.files.dir>${userhome.dir}/.cacis/cacis-xds</cacis.mc.support.files.dir>
+        <cacis.mc.temp.dir>${userhome.dir}/.cacis/mc/output/</cacis.mc.temp.dir>
 
         <!--  Credentials for the system email that sends tranformation errors -->
         <transformation.sender.host>smtp.gmail.com</transformation.sender.host>

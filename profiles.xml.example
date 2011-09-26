@@ -35,17 +35,17 @@
                 <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
                 <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
 
-                <cdfOutputDir>${outputRootdir}/mc/output/cdf/</cdfOutputDir>
-                <xccdOutputDir>${outputRootdir}/mc/output/xccd/</xccdOutputDir>
-                <trimInputDir>${outputRootdir}/mc/input/</trimInputDir>
+                <cdfOutputDir>${userhome.dir}/mc/output/cdf/</cdfOutputDir>
+                <xccdOutputDir>${userhome.dir}/mc/output/xccd/</xccdOutputDir>
+                <trimInputDir>${userhome.dir}/mc/input/</trimInputDir>
                 <!--  Temporary directory for System test output file -->
-                <cacis.mc.temp.dir>${outputRootdir}/temp/output/</cacis.mc.temp.dir>
+                <cacis.mc.temp.dir>${userhome.dir}/temp/output/</cacis.mc.temp.dir>
 
                 <maven.deploy.skip>true</maven.deploy.skip>
                 <mirthConnect.server.pause>5000</mirthConnect.server.pause>
 
                 <!-- needs to be the user.home. Only needs to change for WINDOWS -->
-                <outputRootdir>${user.home}</outputRootdir>
+                <userhome.dir>${user.home}</userhome.dir>
 
                 <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
                 <nav.sender.pass>c2c1sn2v</nav.sender.pass>

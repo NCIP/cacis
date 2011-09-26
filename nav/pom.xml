@@ -16,7 +16,7 @@
         <test.unit.branchrate>65</test.unit.branchrate>
         <test.unit.linerate>65</test.unit.linerate>
 		
-		<base.nav.folder>${user.home}/.cacis/nav/</base.nav.folder>
+		<base.nav.folder>${userhome.dir}/.cacis/nav/</base.nav.folder>
         <nav.keystore.type>JKS</nav.keystore.type>
         <nav.keystore.folder>${base.nav.folder}</nav.keystore.folder>
         <nav.keystore.location>${nav.keystore.folder}/keystore.jks</nav.keystore.location>
