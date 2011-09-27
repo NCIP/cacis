@@ -273,7 +273,7 @@ public class SendEncryptedMail extends AbstractSendMail {
         encrypter.addKeyTransRecipient((X509Certificate) cert);
 
         /* Encrypt the message */
-        final MimeBodyPart encryptedPart = encrypter.generate(message, SMIMEEnvelopedGenerator.RC2_CBC, PROVIDER_TYPE);
+        final MimeBodyPart encryptedPart = encrypter.generate(message, SMIMEEnvelopedGenerator.AES256_CBC, PROVIDER_TYPE);
 
         /*
          * Create a new MimeMessage that contains the encrypted and signed content

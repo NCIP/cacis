@@ -94,11 +94,10 @@ import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.i18n.ErrorBundle;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.mail.smime.validator.SignedMailValidator;
 import org.bouncycastle.mail.smime.validator.SignedMailValidatorException;
 import org.bouncycastle.x509.PKIXCertPathReviewer;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
-
-import org.bouncycastle.mail.smime.validator.SignedMailValidator;
 
 /**
  * An Example that reads a signed mail and validates its signature. Also validating the certificate path from the
@@ -163,7 +162,7 @@ public class ValidateSignedMail {
     public ValidateSignedMail(boolean useCaCerts) {
         this.useCaCerts = useCaCerts;
     }
-    
+
     /**
      * @param dbgLvl the dbgLvl to set
      */
@@ -204,6 +203,7 @@ public class ValidateSignedMail {
     public void validate(MimeMessage msg, String keystorePath, String storepass, String keyAlias)
             throws MessagingException {
         try {
+
             Security.addProvider(new BouncyCastleProvider());
 
             // send empty CRL for now. Not being used
@@ -424,12 +424,12 @@ public class ValidateSignedMail {
             final InputStream is = new FileInputStream(keystorePath);
             caCerts.load(is, storepass.toCharArray());
         }
-        
+
         Certificate[] chain = new Certificate[1];
         chain[0] = caCerts.getCertificate(keyAlias);
         return chain;
-        
-        //return caCerts.getCertificateChain(keyAlias);
+
+        // return caCerts.getCertificateChain(keyAlias);
     }
 
 }
