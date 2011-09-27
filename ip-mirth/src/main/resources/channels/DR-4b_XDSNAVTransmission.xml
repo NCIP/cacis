@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317051596328</time>
+    <time>1317134465842</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>8</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -111,9 +111,10 @@ var docId = documentHandler.handleDocument(hashMap);
 logger.info(&quot;Created document in openXDS&quot;);
  
 try{
-   //replace with proper DN 
-	var subjectDN = &apos;subjectdn&apos;
- 
+    var subjectToDNPath = &apos;${xds.subjectToDNPath}&apos;;
+	var properties = Packages.gov.nih.nci.cacis.common.util.PropertyUtils.loadProperties(subjectToDNPath, true);
+	var subjectDN = properties.getProperty($(&apos;navEmail&apos;));
+
     docAccMngr.grantDocumentAccess(docId,subjectDN);
 	logger.info(&quot;Granted access to document to &quot; + subjectDN);
 

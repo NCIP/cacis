@@ -23,6 +23,7 @@
         <xds.doc.entry.file>${xds.doc.location}/docEntry.xml</xds.doc.entry.file>
         <xds.doc.submissionset.file>${xds.doc.location}/submissionSet.xml</xds.doc.submissionset.file>
         <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
+        <xds.subjectToDNPath>${cacis.mc.support.files.dir}/emailToDNMapping.properties</xds.subjectToDNPath>
 
         <!-- Document Router FTP Server Config -->
         <ftp.keystore.location>${userhome.dir}/ftpkeystore.jks</ftp.keystore.location>
@@ -160,6 +161,7 @@
                                     <directory>${basedir}/src/main/resources</directory>
                                     <includes>
                                         <include>DefaultRoutingInstructions.xml</include>
+                                        <include>emailToDNMapping.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
