@@ -193,4 +193,24 @@ function filterOnError() {
     <scope>0</scope>
     <version>2.1.1.5490</version>
   </codeTemplate>
+  <codeTemplate>
+    <id>5c43f15d-ea72-4396-a9d9-1aa1692b63d3</id>
+    <name>schematronValidateCanonical template</name>
+    <tooltip>template function for schematron validate canonical Cacis Request</tooltip>
+    <code>// modify function_name and parameters as you wish.
+// one function per template is recommended. i.e.) create a new code template for each new function.
+function schematronValidateCanonicalCR(cacisReq) {
+	var commonsCtx = globalMap.get(&apos;commonsctx&apos;);
+	try{
+		var canonicalCRSchValidator = commonsCtx.getBean(&quot;cacisRequestCanonicalSchematronValidator&quot;);
+		canonicalCRSchValidator.validate(cacisReq);
+	}catch(err) {
+		return err.message;
+	}
+    return null;
+}</code>
+    <type>FUNCTION</type>
+    <scope>0</scope>
+    <version>2.1.1.5490</version>
+  </codeTemplate>
 </list>

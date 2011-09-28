@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316807781929</time>
+    <time>1317162521268</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>3</revision>
@@ -20,8 +20,7 @@
         <step>
           <sequenceNumber>0</sequenceNumber>
           <name>xsdValidation</name>
-          <script>
-//perform schema validation for CaCISRequest
+          <script>//perform schema validation for CaCISRequest
 var crXsdValidationMsg = xsdValidateCanonical(message);
 if (crXsdValidationMsg != null) { 
 	handleErrorStr(&apos;CaCISRequest Schema Validation:&apos; +crXsdValidationMsg);
@@ -31,11 +30,32 @@ if (crXsdValidationMsg != null) {
           <data class="map">
             <entry>
               <string>Script</string>
-              <string>
-//perform schema validation for CaCISRequest
+              <string>//perform schema validation for CaCISRequest
 var crXsdValidationMsg = xsdValidateCanonical(message);
 if (crXsdValidationMsg != null) { 
 	handleErrorStr(&apos;CaCISRequest Schema Validation:&apos; +crXsdValidationMsg);
+	return;
+}</string>
+            </entry>
+          </data>
+        </step>
+        <step>
+          <sequenceNumber>1</sequenceNumber>
+          <name>schValidation</name>
+          <script>//perform schematron validation for CaCISRequest
+var crSchValidationMsg = schematronValidateCanonicalCR(message);
+if (crSchValidationMsg != null) { 
+	handleErrorStr(&apos;CaCISRequest Schematron Validation:&apos; +crSchValidationMsg);
+	return;
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>//perform schematron validation for CaCISRequest
+var crSchValidationMsg = schematronValidateCanonicalCR(message);
+if (crSchValidationMsg != null) { 
+	handleErrorStr(&apos;CaCISRequest Schematron Validation:&apos; +crSchValidationMsg);
 	return;
 }</string>
             </entry>

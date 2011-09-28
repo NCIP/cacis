@@ -22,6 +22,7 @@
         <cacis.validation.canonical.schema.file>caCISIPDataSharing.xsd</cacis.validation.canonical.schema.file>
 		<cacis.validation.schematron.extract.failures.xsl>extract-failures.xsl</cacis.validation.schematron.extract.failures.xsl>
 		<cacis.validation.cacisrequest.sa.sourcedata.schematron.xsl>cacis-request-sa-sourcedata-schematron.xsl</cacis.validation.cacisrequest.sa.sourcedata.schematron.xsl>
+		<cacis.validation.cacisrequest.canonical.schematron.xsl>cacis-request-canonical-schematron.xsl</cacis.validation.cacisrequest.canonical.schematron.xsl>
 		<cacis.validation.cacisrequest.schematron.xsl.baseClassPath>/xsl/</cacis.validation.cacisrequest.schematron.xsl.baseClassPath>
 
     </properties>

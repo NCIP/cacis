@@ -97,6 +97,9 @@ public class ValidationConfig {
     
     @Value("${cacis.validation.cacisrequest.sa.sourcedata.schematron.xsl}")
     private String cacisReqSASrcDataSchematronXsl;
+    
+    @Value("${cacis.validation.cacisrequest.canonical.schematron.xsl}")
+    private String cacisReqCanonicalSchematronXsl;
 
     @Value("${cacis.validation.cacisrequest.schematron.xsl.baseClassPath}")
     private String xslBaseClassPath;
@@ -121,14 +124,26 @@ public class ValidationConfig {
 
 
     /**
-     * Schematron transformer for cacis request
-     * @return Transformer Cacis Request Schematron Transformer
+     * Schematron transformer for SA cacis request
+     * @return Transformer SA Cacis Request Schematron Transformer
      * @throws TransformerException exception
      */
     @Bean
     public Transformer cacisRequestSASourceDataSchematronTransformer() throws TransformerException {
         final Transformer xslTransformer = xslTransformerFactory().
                 newTransformer(xslUriResolver().resolve(cacisReqSASrcDataSchematronXsl, xslBaseClassPath));
+        return xslTransformer;
+    }
+    
+    /**
+     * Schematron transformer for Canonical cacis request
+     * @return Transformer Canonical Cacis Request Schematron Transformer
+     * @throws TransformerException exception
+     */
+    @Bean
+    public Transformer cacisRequestCanonicalSchematronTransformer() throws TransformerException {
+        final Transformer xslTransformer = xslTransformerFactory().
+                newTransformer(xslUriResolver().resolve(cacisReqCanonicalSchematronXsl, xslBaseClassPath));
         return xslTransformer;
     }
     
@@ -145,14 +160,26 @@ public class ValidationConfig {
     }
     
     /**
-     * Cacis request schematron validator
-     * @return SchematronValidator Cacis request schematron validator
+     * Cacis request SA schematron validator
+     * @return SchematronValidator SA Cacis request schematron validator
      * @throws TransformerException exception
      */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public SchematronValidator cacisRequestSASourceDataSchematronValidator() throws TransformerException {
         return new SchematronValidator(cacisRequestSASourceDataSchematronTransformer(), 
+                extractSchematronFailuresTransformer());
+    }
+    
+    /**
+     * Cacis request Canonical schematron validator
+     * @return SchematronValidator Canonical Cacis request schematron validator
+     * @throws TransformerException exception
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public SchematronValidator cacisRequestCanonicalSchematronValidator() throws TransformerException {
+        return new SchematronValidator(cacisRequestCanonicalSchematronTransformer(), 
                 extractSchematronFailuresTransformer());
     }
     
