@@ -89,8 +89,8 @@ public class XSLTv2TransformerTest {
 
     @BeforeClass
     public static void setupEnv() {
-        System.setProperty("cacis-pco.validation.xmltordf.xsl", "sampleXSLv2.xsl");
-        System.setProperty("cacis-pco.validation.xmltordf.xsl.baseClassPath", "/xsl2/");
+        System.setProperty("cacis-pco.transformer.xml2rdf.xsl", "sampleXSLv2.xsl");
+        System.setProperty("cacis-pco.transformer.xsl.baseClassPath", "/xsl2/");
     }
 
     @Before
