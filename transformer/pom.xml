@@ -16,10 +16,12 @@
     <properties>
         <test.unit.branchrate>35</test.unit.branchrate>
         <test.unit.linerate>35</test.unit.linerate>
-        <xslt.template>TRIM_to_CCD.xslt</xslt.template>
+        <cacis-pco.transformer.trim2ccd.xsl>TRIM_to_CCD.xslt</cacis-pco.transformer.trim2ccd.xsl>
 
-        <cacis-pco.validation.xmltordf.xsl.baseClassPath>/xsl/</cacis-pco.validation.xmltordf.xsl.baseClassPath>
-        <cacis-pco.validation.xmltordf.xsl>xml2rdf3.xsl</cacis-pco.validation.xmltordf.xsl>
+        <cacis-pco.transformer.xsl.baseClassPath>/xsl/</cacis-pco.transformer.xsl.baseClassPath>
+        <cacis-pco.transformer.xml2rdf.xsl>xml2rdf3.xsl</cacis-pco.transformer.xml2rdf.xsl>
+        <cacis-pco.transformer.hl7v2.xsl>xml2rdf3.xsl</cacis-pco.transformer.hl7v2.xsl>
+        <cacis-pco.transformer.rimits.xsl>xml2rdf3.xsl</cacis-pco.transformer.rimits.xsl>
     </properties>
 
     <dependencies>
