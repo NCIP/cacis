@@ -58,94 +58,91 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
+package gov.nih.nci.cacis.ip.mirthconnect.ftps;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.FtpServer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.apache.commons.lang.StringUtils;
 
 /**
+ * Maps ftp site URLs to FTPInfo objects containing information about the ftp site.
  * @author bpickeral
- * @since Sep 14, 2011
+ * @since Sep 27, 2011
  */
-@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class FTPSenderTest {
-    @Autowired
-    private FTPSSender sender;
+public final class FTPMapping {
 
-    @Autowired
-    private FtpServer server;
+    private static Map<String, FTPInfo> ftpInfoMap = null;
 
-    @Before
-    public void before() throws Exception {
-        server.start();
+    private  FTPMapping() {
+        // Empty
     }
 
-    @After
-    public void tearDown() {
-        server.stop();
+    /**
+     * Constructor.
+     * @param ftpMappingFile name of mapping file
+     * @throws IOException on I/O error
+     */
+    public FTPMapping(String ftpMappingFile) throws IOException {
+        setupFTPInfoMap(ftpMappingFile);
     }
 
-    @Test
-    public void sendDocument() throws Exception {
-        final FTPSClient ftpsClient = sender.getFtpsClient();
-        int numFiles = getNumFiles();
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Sample_SFTP_File.xml").toURI());
-        final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, "localhost");
-
-        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
-
-        assertEquals(numFiles + 1, getNumFiles());
+    /**
+     * Retrieves the FTPInfo object containing information for a particular site.
+     * @param url of the ftp site
+     * @return FTPInfo object
+     * @throws IOException on I/O error
+     */
+    public FTPInfo getFTPInfo(String url) throws IOException {
+        return ftpInfoMap.get(url);
     }
 
-    @Test
-    public void sendDocument3() throws Exception {
-        final FTPSClient ftpsClient = sender.getFtpsClient();
-        int numFiles = getNumFiles();
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Sample_SFTP_File.xml").toURI());
-        final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, "localhost/");
+    private void setupFTPInfoMap(String ftpMappingFile) throws IOException {
+        final File mappingFile = new File(ftpMappingFile);
+        FileInputStream fis = null;
+        BufferedReader br = null;
+        try {
+            fis = new FileInputStream(mappingFile);
+            br = new BufferedReader(new InputStreamReader(fis));
 
-        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
+            ftpInfoMap = new HashMap<String, FTPInfo>();
+            String currLine = br.readLine();
 
-        assertEquals(numFiles + 1, getNumFiles());
+            while (currLine != null) {
+                addFTPSiteToMap(currLine);
+                currLine = br.readLine();
+            }
+        } finally {
+            if (br != null) {
+                br.close();
+            }
+            if (fis != null) {
+                fis.close();
+            }
+        }
     }
 
-    @Test (expected = ApplicationRuntimeException.class)
-    public void sendException() throws Exception {
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Sample_SFTP_File.xml").toURI());
-        final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, "no-such-address");
+    private void addFTPSiteToMap(String ftpInfoStr) {
+        final String[] ftpParams = StringUtils.split(ftpInfoStr, ',');
+        if (ftpParams.length != 5) {
+            throw new ApplicationRuntimeException(
+                    "FTP site properties must be in the form of '<site>,<port>,<user>,<password>,<directory>'");
+        }
+        final FTPInfo ftpInfo = new FTPInfo();
+        ftpInfo.setSite(ftpParams[0]);
+        ftpInfo.setPort(Integer.valueOf(ftpParams[1]));
+        ftpInfo.setUserName(ftpParams[2]);
+        ftpInfo.setPassword(ftpParams[3]);
+        ftpInfo.setRootDirectory(ftpParams[4]);
+
+        ftpInfoMap.put(ftpInfo.getSite(), ftpInfo);
     }
 
-    private int getNumFiles() throws Exception {
-        sender.connect();
-        final FTPSClient ftpsClient = sender.getFtpsClient();
-        int numFiles = ftpsClient.listFiles().length;
-        sender.disconnect();
-        return numFiles;
-    }
 }

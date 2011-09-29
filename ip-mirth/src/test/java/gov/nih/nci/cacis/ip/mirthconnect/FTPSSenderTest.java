@@ -58,88 +58,108 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect.ftps;
+package gov.nih.nci.cacis.ip.mirthconnect;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPInfo;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPMapping;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.SocketException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.UUID;
 
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.ftpserver.FtpServer;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @author bpickeral
  * @since Sep 14, 2011
  */
-public class FTPSSender {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
+public class FTPSSenderTest {
+    @Autowired
+    private FTPSSender sender;
 
     @Autowired
-    private FTPSClient ftpsClient;
+    private FtpServer server;
 
     @Autowired
     private FTPMapping ftpMapping;
 
-    /**
-     * Sends Document to FTPS Server.
-     * @param file Input Stream.
-     * @param ftpAddress the ftp address in which to store the file.
-     * @throws IOException on I/O error
-     * @throws NoSuchProviderException on Provider error
-     * @throws KeyStoreException on Keystore error
-     * @throws NoSuchAlgorithmException on algorithm error
-     * @throws CertificateException on certificate error
-     * @throws UnrecoverableKeyException if key is not recoverable
-     */
-    public void sendDocument(InputStream file, String ftpAddress) throws IOException, NoSuchProviderException,
-            KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
-        final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
-        if (ftpInfo == null) {
-            throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
-        }
+    private static final String TEST_SERVER = "localhost";
+    private FTPInfo ftpInfo;
 
-        connect(ftpInfo);
+    @Before
+    public void before() throws Exception {
+        server.start();
+        ftpInfo = ftpMapping.getFTPInfo(TEST_SERVER);
+    }
 
-        ftpsClient.setFileTransferMode(FTPSClient.BLOCK_TRANSFER_MODE);
-        ftpsClient.storeFile("IHEXIPFTP-" + UUID.randomUUID() + ".xml", file);
+    @After
+    public void tearDown() {
+        server.stop();
+    }
 
-        disconnect();
+    @Test
+    public void sendDocument() throws Exception {
+        final FTPSClient ftpsClient = sender.getFtpsClient();
+        int numFiles = getNumFiles();
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("Sample_SFTP_File.xml").toURI());
+        final InputStream inputStream = new FileInputStream(inputFile);
+        sender.sendDocument(inputStream, TEST_SERVER);
+
+        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
+
+        assertEquals(numFiles + 1, getNumFiles());
     }
 
     /**
-     * Connects to the FTPS server.
-     * @param ftpInfo FTPInfo Object containing FTP connection information.
-     * @throws SocketException on underlying protocol error
-     * @throws IOException on I/O error
+     * To test, make sure you create the sub directory under /tmp locally, change the sub-directory in
+     *  ftoConfig.properties to /test/test2 and remove the @Ignore on this test.  Please revert prior to commit.
+     * @throws Exception on error
      */
-    public void connect(FTPInfo ftpInfo) throws SocketException, IOException {
-        ftpsClient.connect(ftpInfo.getSite(), ftpInfo.getPort());
-        ftpsClient.login(ftpInfo.getUserName(), ftpInfo.getPassword());
-        ftpsClient.changeWorkingDirectory(ftpInfo.getRootDirectory());
+    @Test
+    @Ignore
+    public void sendDocumentToSubDirectory() throws Exception {
+        final FTPSClient ftpsClient = sender.getFtpsClient();
+        int numFiles = getNumFiles();
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("Sample_SFTP_File.xml").toURI());
+        final InputStream inputStream = new FileInputStream(inputFile);
+        sender.sendDocument(inputStream, TEST_SERVER);
+
+        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
+
+        assertEquals(numFiles + 1, getNumFiles());
     }
 
-    /**
-     * Disconnects from the server.
-     * @throws SocketException on underlying protocol error
-     * @throws IOException on I/O error
-     */
-    public void disconnect() throws SocketException, IOException {
-        ftpsClient.disconnect();
+    @Test (expected = ApplicationRuntimeException.class)
+    public void sendException() throws Exception {
+        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
+                .getResource("Sample_SFTP_File.xml").toURI());
+        final InputStream inputStream = new FileInputStream(inputFile);
+        sender.sendDocument(inputStream, "no-such-address");
     }
 
-
-    /**
-     * @return the ftpsClient
-     */
-    public FTPSClient getFtpsClient() {
-        return ftpsClient;
+    private int getNumFiles() throws Exception {
+        sender.connect(ftpInfo);
+        final FTPSClient ftpsClient = sender.getFtpsClient();
+        int numFiles = ftpsClient.listFiles().length;
+        sender.disconnect();
+        return numFiles;
     }
-
 }

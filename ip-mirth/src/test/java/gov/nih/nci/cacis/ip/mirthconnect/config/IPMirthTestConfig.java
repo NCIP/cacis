@@ -62,90 +62,77 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPMapping;
-import gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessorClient;
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
+import java.io.File;
+import java.net.URISyntaxException;
 
-import java.io.IOException;
+import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
+import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 
-import org.apache.commons.net.ftp.FTPSClient;
+import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.ssl.SslConfigurationFactory;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
 /**
- * Config for IP Mirth.
- *
+ * Config for CDW tests.
  * @author bpickeral
  * @since Aug 2, 2011
  */
 @Configuration
-@ImportResource(value = "classpath*:cmp-client-cxf.xml")
-public class IPMirthConfig {
+@Import( { TestCDWConfig.class } )
+public class IPMirthTestConfig {
 
-    @Value("${ftp.mappingFile}")
-    private String ftpMappingFile;
+    @Value("${ftp.test.server.keystore.location}")
+    private String keystoreLocation;
 
-    @Value("${cmp.client.keystore.location}")
-    private String cmpKeystoreLocation;
+    @Value("${ftp.test.server.keystore.password}")
+    private String keystorePassword;
 
-    @Value("${cmp.client.truststore.password}")
-    private String cmpKeystorePassword;
-
-    @Value("${cmp.client.keystore.location}")
-    private String cmpTruststoreLocation;
-
-    @Value("${cmp.client.truststore.password}")
-    private String cmpTruststorePassword;
+    @Value("${ftp.test.server.port}")
+    private int ftpPort;
 
     /**
-     * Creates FTPSender.
-     *
-     * @return FTPSender
+     * Creates FTP Server.
+     * @return ftp server
+     * @throws URISyntaxException if URI can not be parsed
      */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public FTPSSender sender() {
-        return new FTPSSender();
-    }
+    public FtpServer ftpsServer() throws URISyntaxException {
+        final FtpServerFactory serverFactory = new FtpServerFactory();
 
-    /**
-     * Creates FTPSClient.
-     *
-     * @return FTPSClient
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public FTPSClient ftpsCient() {
-        return new FTPSClient("TLS", true);
-    }
+        final ListenerFactory factory = new ListenerFactory();
 
-    /**
-     * Creates FTPMapp ing.
-     * @return FTPMapping
-     * @throws IOException on I/O error
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public FTPMapping ftpMapping() throws IOException {
-        return new FTPMapping(ftpMappingFile);
-    }
+        // set the port of the listener
+        factory.setPort(ftpPort);
 
-    /**
-     * CMP Client which
-     * can invoke a secure CMP service
-     *
-     * @return CanonicalModelProcessorClient
-     */
-    @Bean
-    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public CanonicalModelProcessorClient canonicalModelProcessorClient() {
-        return new CanonicalModelProcessorClient(cmpKeystoreLocation, cmpKeystorePassword,
-                cmpTruststoreLocation, cmpTruststorePassword);
+        // define SSL configuration
+        final SslConfigurationFactory ssl = new SslConfigurationFactory();
+        ssl.setKeystoreFile(new File(keystoreLocation));
+        ssl.setKeystorePassword(keystorePassword);
 
+        // set the SSL configuration for the listener
+        factory.setSslConfiguration(ssl.createSslConfiguration());
+        factory.setImplicitSsl(true);
+
+        // replace the default listener
+        serverFactory.addListener("default", factory.createListener());
+
+        final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+        userManagerFactory.setFile(new File(Thread.currentThread().getContextClassLoader()
+                .getResource("ftpusers.properties").toURI()));
+
+        serverFactory.setUserManager(userManagerFactory.createUserManager());
+
+        return serverFactory.createServer();
     }
 
 }

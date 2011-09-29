@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316547945851</time>
+    <time>1317315916238</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -48,28 +48,36 @@
           <step>
             <sequenceNumber>0</sequenceNumber>
             <name>sendToSFTP</name>
-            <script>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
+            <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
 
 try{
+	var address = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString();
+	logger.info(&apos;Sending to FTP: &apos; + address);
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-	ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());
+	
+	ftpsSender.sendDocument(is, address);
 	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
 }catch(err) {
-	responseMap.put(&apos;sendToSFTP&apos;,  formatErrorStr(er.message));
+	responseMap.put(&apos;sendToSFTP&apos;,  formatErrorStr(err.message));
 }
 return;</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
                 <string>Script</string>
-                <string>var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
+                <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
 
 try{
+	var address = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString();
+	logger.info(&apos;Sending to FTP: &apos; + address);
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
-	ftpsSender.sendDocument(is, msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString());
+	
+	ftpsSender.sendDocument(is, address);
 	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
 }catch(err) {
-	responseMap.put(&apos;sendToSFTP&apos;,  formatErrorStr(er.message));
+	responseMap.put(&apos;sendToSFTP&apos;,  formatErrorStr(err.message));
 }
 return;</string>
               </entry>

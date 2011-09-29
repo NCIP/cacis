@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caCISRequest xmlns="http://cacis.nci.nih.gov"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:cda="urn:hl7-org:v3"
+        >
+    <routingInstructions>
+        <exchangeDocument exchangeFormat="CCD">
+            <recipient>
+                <ftpAddress url="localhost"/>
+            </recipient>
+        </exchangeDocument>
+    </routingInstructions>
+    <sourceData>
+        <trim xmlns="urn:tolven-org:trim:4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <extends>patientAct</extends>
+            <name>reg/evn/preStudyNote</name>
+            <description>Baseline Evaluation Note</description>
+            <page>baselineNote.xhtml</page>
+            <drilldown>baselineNoteDD.xhtml</drilldown>
+            <menu>global:clinicalStagingMenu</menu>
+            <tolvenEventId timestamp="20110621194905+0000" principal="tolven" application="echr"
+                           path="echr:patient-514368:clinicalNote-1068096" id="1068096" accountId="2033"/>
+            <application signatureRequired="true" name="echr">
+                <instance>echr:patient:clinicalNote</instance>
+                <wip>echr:activity:all</wip>
+            </application>
+            <act moodCode="EVN" classCode="OBS">
+                <bind phase="create" application="echr">
+                    <placeholder bindAction="create">
+                        <path>echr:patient:clinicalNote</path>
+                    </placeholder>
+                </bind>
+                <id>
+                    <II>
+                        <root>1.2.1.2033</root>
+                        <extension>echr:patient-514368:clinicalNote-1068092</extension>
+                    </II>
+                </id>
+                <code>
+                    <CD>
+                        <code>OINT</code>
+                        <codeSystemName>HL7</codeSystemName>
+                        <codeSystemVersion>3.0</codeSystemVersion>
+                    </CD>
+                </code>
+                <statusCode>active</statusCode>
+                <title>
+                    <ST>Baseline Evaluation Note</ST>
+                </title>
+                <effectiveTime>
+                    <label>Date of Exam</label>
+                    <new function="now" datatype="TS"/>
+                    <TS>
+                        <value>20110621154905-0400</value>
+                    </TS>
+                </effectiveTime>
+                <participation typeCode="SBJ" name="subject">
+                    <role classCode="PAT">
+                        <bind application="echr">
+                            <placeholder>
+                                <path>echr:patient</path>
+                            </placeholder>
+                        </bind>
+                        <bind application="ephr">
+                            <placeholder>
+                                <path>ephr:patient</path>
+                            </placeholder>
+                        </bind>
+                        <id>
+                            <II>
+                                <root>1.2.1.2033</root>
+                                <extension>echr:patient-514368</extension>
+                            </II>
+                        </id>
+                        <player determinerCode="INSTANCE" classCode="PSN">
+                            <name>
+                                <label>Patient Name</label>
+                                <EN>
+                                    <label>Legal Name</label>
+                                    <use>L</use>
+                                    <part>
+                                        <label>First Name</label>
+                                        <type>GIV</type>
+                                        <ST>Gwendolyn</ST>
+                                    </part>
+                                    <part>
+                                        <label>Middle Name</label>
+                                        <type>GIV</type>
+                                        <ST>Sabrina</ST>
+                                    </part>
+                                    <part>
+                                        <label>Last Name</label>
+                                        <type>FAM</type>
+                                        <ST>Cruise</ST>
+                                    </part>
+                                </EN>
+                            </name>
+                        </player>
+                    </role>
+                </participation>
+                <participation typeCode="ENT" name="dataEnterer">
+                    <role classCode="ROL">
+                        <id>
+                            <II>
+                                <root>1.2.1.2033</root>
+                                <extension>tolven</extension>
+                            </II>
+                        </id>
+                    </role>
+                </participation>
+                <relationship typeCode="PERT" direction="OUT" name="timePoint">
+                    <act classCode="OBS" moodCode="EVN">
+                        <observation>
+                            <value>
+                                <label>Time point:</label>
+                                <valueSet>timePoint</valueSet>
+                                <CE>
+                                    <displayName>Pre-Study</displayName>
+                                    <code>C0183100</code>
+                                    <codeSystem>2.16.840.1.113883.6.56</codeSystem>
+                                    <codeSystemVersion>2007AA</codeSystemVersion>
+                                </CE>
+                            </value>
+                        </observation>
+                    </act>
+                </relationship>
+                <relationship typeCode="PERT" direction="OUT" name="vitalSigns">
+                    <act moodCode="EVN" classCode="OBS">
+                        <bind phase="create" application="echr">
+                            <placeholder bindAction="create">
+                                <path>echr:patient:clinicalNote:vitalSign</path>
+                            </placeholder>
+                        </bind>
+                        <id>
+                            <II>
+                                <root>1.2.1.2033</root>
+                                <extension>echr:patient-514368:clinicalNote-1068092:vitalSign-1068095</extension>
+                            </II>
+                        </id>
+                        <title>
+                            <ST>Vital Signs</ST>
+                        </title>
+                        <observation>
+                            <value>
+                                <label>T:</label>
+                                <ST>36.5</ST>
+                            </value>
+                            <value>
+                                <valueSet>tUnit</valueSet>
+                                <CE>
+                                    <displayName>C</displayName>
+                                    <code>278292003</code>
+                                    <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+                                </CE>
+                            </value>
+                            <value>
+                                <label>P:</label>
+                                <ST>78</ST>
+                            </value>
+                            <value>
+                                <label>R:</label>
+                                <ST>26</ST>
+                            </value>
+                            <value>
+                                <label>BP:</label>
+                                <ST>80</ST>
+                            </value>
+                            <value>
+                                <ST>120</ST>
+                            </value>
+                            <value>
+                                <label>Wt:</label>
+                                <ST>56</ST>
+                            </value>
+                            <value>
+                                <valueSet>wtUnit</valueSet>
+                                <CE>
+                                    <displayName>kg</displayName>
+                                    <code>278292003</code>
+                                    <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+                                </CE>
+                            </value>
+                            <value>
+                                <label>Ht:</label>
+                                <ST>164</ST>
+                            </value>
+                            <value>
+                                <valueSet>htUnit</valueSet>
+                                <CE>
+                                    <displayName>cm</displayName>
+                                    <code>278292003</code>
+                                    <codeSystem>2.16.840.1.113883.6.96</codeSystem>
+                                </CE>
+                            </value>
+                            <value>
+                                <label>Name:</label>
+                                <ST/>
+                            </value>
+                            <value>
+                                <label>Prior BP:</label>
+                                <ST/>
+                            </value>
+                            <value>
+                                <label>Prior Wt:</label>
+                                <ST/>
+                            </value>
+                            <value>
+                                <label>Is vital sign entered today?</label>
+                                <valueSet>booleanStatus</valueSet>
+                            </value>
+                            <value>
+                                <label>Prior1 Date</label>
+                                <TS/>
+                            </value>
+                            <value>
+                                <label>Prior2 Date</label>
+                                <TS/>
+                            </value>
+                            <value>
+                                <label>Difference between Prior2 Date and Prior1 Date in days</label>
+                                <ST/>
+                            </value>
+                        </observation>
+                    </act>
+                </relationship>
+            </act>
+        </trim>
+    </sourceData>
+    <clinicalMetaData documentType="CLINICAL_NOTE" siteIdRoot="2.3.4.0" patientIdRoot="2.3.4.1"
+                      siteIdExtension="site_id" patientIdExtension="patient_id" studyIdRoot="2.3.4.2"
+                      studyIdExtension="study_id"/>
+    <cda:ClinicalDocument>
+        <cda:realmCode code="US"/>
+        <cda:typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>
+        <cda:templateId root="2.16.840.1.113883.10.20.1"/>
+        <cda:templateId root="2.16.840.1.113883.3.88.11.32.1"/>
+        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.1"/>
+        <cda:templateId root="2.16.840.1.113883.10.20.3"/>
+        <cda:id root="1.2.1.2033" extension="echr:patient-514368:clinicalNote-1068092"/>
+        <cda:code code="OINT" codeSystemName="HL7" codeSystemVersion="3.0"/>
+        <cda:title>Baseline Evaluation Note</cda:title>
+        <cda:effectiveTime value="20110621154905-0400"/>
+        <cda:confidentialityCode code="N"/>
+        <cda:recordTarget>
+            <cda:patientRole>
+                <cda:id root="1.2.1.2033" extension="echr:patient-514368"/>
+                <cda:patient>
+                    <cda:name use="L">
+                        <cda:family>Cruise</cda:family>
+                        <cda:given>Gwendolyn</cda:given>
+                        <cda:given>Sabrina</cda:given>
+                    </cda:name>
+                </cda:patient>
+            </cda:patientRole>
+        </cda:recordTarget>
+        <cda:author>
+            <cda:time nullFlavor="NI"/>
+            <cda:assignedAuthor>
+                <cda:id root="1.2.1.2033" extension="tolven"/>
+            </cda:assignedAuthor>
+        </cda:author>
+        <cda:custodian>
+            <cda:assignedCustodian>
+                <cda:representedCustodianOrganization>
+                    <cda:id root="2.16.840.1.113883.3.26.1.6"/>
+                </cda:representedCustodianOrganization>
+            </cda:assignedCustodian>
+        </cda:custodian>
+        <cda:component>
+            <cda:structuredBody>
+                <cda:component>
+                    <cda:section>
+                        <cda:templateId root="2.16.840.1.113883.10.20.1.16"/>
+                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.119"/>
+                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.25"/>
+                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2"/>
+                        <cda:code code="8716-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+                                  displayName="vital signs"/>
+                        <cda:title>Physical Findings - Vital signs</cda:title>
+                        <cda:entry>
+                            <cda:organizer classCode="CLUSTER" moodCode="EVN">
+                                <cda:templateId root="2.16.840.1.113883.10.20.1.32"/>
+                                <cda:templateId root="2.16.840.1.113883.10.20.1.35"/>
+                                <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"/>
+                                <cda:id root="1.2.1.2033"
+                                        extension="echr:patient-514368:clinicalNote-1068092:vitalSign-1068095"/>
+                                <cda:code code="46680005" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT"
+                                          displayName="Vital signs"/>
+                                <cda:statusCode code="completed"/>
+                                <cda:effectiveTime nullFlavor="NI"/>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code code="8310-5" codeSystem="2.16.840.1.113883.6.1"
+                                                  codeSystemName="LOINC" displayName="Body temperature"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="36.5" unit="Cel"/>
+                                    </cda:observation>
+                                </cda:component>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code code="8867-4" codeSystem="2.16.840.1.113883.6.1"
+                                                  codeSystemName="LOINC" displayName="Heart rate"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="78" unit="min"/>
+                                    </cda:observation>
+                                </cda:component>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code code="9279-1" codeSystem="2.16.840.1.113883.6.1"
+                                                  codeSystemName="LOINC" displayName="Respiration rate"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="26" unit="min"/>
+                                    </cda:observation>
+                                </cda:component>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code code="8462-4" codeSystem="2.16.840.1.113883.6.1"
+                                                  codeSystemName="LOINC" displayName="Diastolic BP"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="80" unit="mm[Hg]"/>
+                                    </cda:observation>
+                                </cda:component>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" code="8474"
+                                                  displayName="Systolic BP"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="120" unit="mm[Hg]"/>
+                                    </cda:observation>
+                                </cda:component>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code code="3141-9" codeSystem="2.16.840.1.113883.6.1"
+                                                  codeSystemName="LOINC" displayName="Body weight"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="56" unit="kg"/>
+                                    </cda:observation>
+                                </cda:component>
+                                <cda:component>
+                                    <cda:observation classCode="OBS" moodCode="EVN">
+                                        <cda:templateId root="2.16.840.1.113883.10.20.1.31"/>
+                                        <cda:templateId root="2.16.840.1.113883.3.88.11.83.14"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13"/>
+                                        <cda:templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"/>
+                                        <cda:code code="8302-2" codeSystem="2.16.840.1.113883.6.1"
+                                                  codeSystemName="LOINC" displayName="Body height"/>
+                                        <cda:statusCode code="completed"/>
+                                        <cda:effectiveTime nullFlavor="NI"/>
+                                        <cda:value xsi:type="cda:PQ" value="164" unit="cm"/>
+                                    </cda:observation>
+                                </cda:component>
+                            </cda:organizer>
+                        </cda:entry>
+                    </cda:section>
+                </cda:component>
+            </cda:structuredBody>
+        </cda:component>
+    </cda:ClinicalDocument>
+</caCISRequest>
+
+

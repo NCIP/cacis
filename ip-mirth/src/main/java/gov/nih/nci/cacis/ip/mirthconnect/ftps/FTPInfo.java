@@ -60,86 +60,89 @@
  */
 package gov.nih.nci.cacis.ip.mirthconnect.ftps;
 
-import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.SocketException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.UUID;
-
-import org.apache.commons.net.ftp.FTPSClient;
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
+ * Holds information for an FTP site.
  * @author bpickeral
- * @since Sep 14, 2011
+ * @since Sep 27, 2011
  */
-public class FTPSSender {
+public class FTPInfo {
 
-    @Autowired
-    private FTPSClient ftpsClient;
-
-    @Autowired
-    private FTPMapping ftpMapping;
+    private String site;
+    private int port;
+    private String userName;
+    private String password;
+    private String rootDirectory;
 
     /**
-     * Sends Document to FTPS Server.
-     * @param file Input Stream.
-     * @param ftpAddress the ftp address in which to store the file.
-     * @throws IOException on I/O error
-     * @throws NoSuchProviderException on Provider error
-     * @throws KeyStoreException on Keystore error
-     * @throws NoSuchAlgorithmException on algorithm error
-     * @throws CertificateException on certificate error
-     * @throws UnrecoverableKeyException if key is not recoverable
+     * @return the site
      */
-    public void sendDocument(InputStream file, String ftpAddress) throws IOException, NoSuchProviderException,
-            KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
-        final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
-        if (ftpInfo == null) {
-            throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
-        }
-
-        connect(ftpInfo);
-
-        ftpsClient.setFileTransferMode(FTPSClient.BLOCK_TRANSFER_MODE);
-        ftpsClient.storeFile("IHEXIPFTP-" + UUID.randomUUID() + ".xml", file);
-
-        disconnect();
+    public String getSite() {
+        return site;
     }
 
     /**
-     * Connects to the FTPS server.
-     * @param ftpInfo FTPInfo Object containing FTP connection information.
-     * @throws SocketException on underlying protocol error
-     * @throws IOException on I/O error
+     * @param site the site to set
      */
-    public void connect(FTPInfo ftpInfo) throws SocketException, IOException {
-        ftpsClient.connect(ftpInfo.getSite(), ftpInfo.getPort());
-        ftpsClient.login(ftpInfo.getUserName(), ftpInfo.getPassword());
-        ftpsClient.changeWorkingDirectory(ftpInfo.getRootDirectory());
+    public void setSite(String site) {
+        this.site = site;
     }
 
     /**
-     * Disconnects from the server.
-     * @throws SocketException on underlying protocol error
-     * @throws IOException on I/O error
+     * @return the port
      */
-    public void disconnect() throws SocketException, IOException {
-        ftpsClient.disconnect();
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     * @param port the port to set
+     */
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 
     /**
-     * @return the ftpsClient
+     * @return the rootDirectory
      */
-    public FTPSClient getFtpsClient() {
-        return ftpsClient;
+    public String getRootDirectory() {
+        return rootDirectory;
+    }
+
+
+    /**
+     * @param rootDirectory the rootDirectory to set
+     */
+    public void setRootDirectory(String rootDirectory) {
+        this.rootDirectory = rootDirectory;
     }
 
 }

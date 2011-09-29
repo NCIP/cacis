@@ -24,17 +24,18 @@
         <xds.doc.submissionset.file>${xds.doc.location}/submissionSet.xml</xds.doc.submissionset.file>
         <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
         <xds.subjectToDNPath>${cacis.mc.support.files.dir}/emailToDNMapping.properties</xds.subjectToDNPath>
+        <ftp.mappingFile>${cacis.mc.support.files.dir}/ftpConfig.properties</ftp.mappingFile>
+
+        <!-- Document Router Test FTP Server Config -->
+        <ftp.test.server.keystore.location>${userhome.dir}/ftpkeystore.jks</ftp.test.server.keystore.location>
+        <ftp.test.server.port>2221</ftp.test.server.port>
+        <ftp.test.server.keystore.password>changeit</ftp.test.server.keystore.password>
 
         <cmp.client.keystore.location>${cacis.keystore.path}</cmp.client.keystore.location>
         <cmp.client.keystore.password>${cacis.keystore.password}</cmp.client.keystore.password>
         <cmp.client.truststore.location>${cacis.truststore.path}</cmp.client.truststore.location>
         <cmp.client.truststore.password>${cacis.truststore.password}</cmp.client.truststore.password>
 
-        <!-- Document Router FTP Server Config -->
-        <ftp.keystore.location>${userhome.dir}/ftpkeystore.jks</ftp.keystore.location>
-        <ftp.port>2221</ftp.port>
-        <ftp.site>localhost</ftp.site>
-        <ftp.keystore.password>changeit</ftp.keystore.password>
     </properties>
 
     <dependencies>
@@ -167,6 +168,7 @@
                                     <includes>
                                         <include>DefaultRoutingInstructions.xml</include>
                                         <include>emailToDNMapping.properties</include>
+                                        <include>ftpConfig.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
