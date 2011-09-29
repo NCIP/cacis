@@ -10,9 +10,9 @@ Pre-requisites
 	    <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
                maxThreads="150" scheme="https" secure="true"
                clientAuth="true" sslProtocol="TLS" 
-			   keystoreFile="${user.home}/.cacis/cacis-xds/OpenXDS_2011_Keystore.jks" 
+			   keystoreFile="${user.home}/.cacis/certs/cacis-keystore.jks"
                keystorePass="password"
-               truststoreFile="${user.home}/.cacis/cacis-xds/OpenXDS_2011_Truststore.jks"
+               truststoreFile="${user.home}/.cacis/certs/cacis-truststore.jks"
                truststorePass="password"/>  
 
 3: Follow OpenXDS Installation guide below to install openxds on Tomcat

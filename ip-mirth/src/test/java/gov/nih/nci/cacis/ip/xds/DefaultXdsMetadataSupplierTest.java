@@ -62,7 +62,6 @@ package gov.nih.nci.cacis.ip.xds;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.nih.nci.cacis.ip.mirthconnect.utils.SerializerUtilsTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,7 +91,7 @@ public class DefaultXdsMetadataSupplierTest {
     @Test
     public void createMetadata() throws IOException, JAXBException, URISyntaxException {
         
-        final File file = new File(SerializerUtilsTest.class.
+        final File file = new File(getClass().
                 getClassLoader().getResource("caCISRequest_With_RoutingInstructions.xml").toURI());
 
         final String docEntryMetadata = defaultXdsMetadataSupplier.createDocEntry(FileUtils.readFileToString(file));

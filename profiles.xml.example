@@ -8,8 +8,12 @@
             </activation>
 
             <properties>
+
+                <!-- ############################################################################ -->
                 <!--CUSTOMIZE these for your local environment-->
-                <openxds.web.dir>$CATALINA_HOME/webapps/openxds-1</openxds.web.dir>
+                <!-- ############################################################################ -->
+
+                <openxds.web.dir>$CATALINA_HOME/webapps/openxds-web</openxds.web.dir>
 
                 <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
                 <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
@@ -19,16 +23,44 @@
                 <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
                 <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
 
+                <mirth.base.url>http://localhost</mirth.base.url>
+                <!--Integration Platform Service. Could be http or https-->
+                <cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url>
+
                 <!-- cacis proxy for xds -->
                 <cacis.xds.proxy.repository.url>https://localhost:21443/openxds-web/services/cacis-proxy-xdsrepositoryb
                 </cacis.xds.proxy.repository.url>
 
-                <!--OPTIONAL - change these for your local environment. Defaults should work for most cases-->
+                <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
+                <nav.sender.pass>c2c1sn2v</nav.sender.pass>
+
+                <!--  Credentials for the system email that sends tranformation errors -->
+                <transformation.sender.host>smtp.gmail.com</transformation.sender.host>
+                <transformation.sender.port>587</transformation.sender.port>
+                <transformation.sender.user>cacisnavtestuser</transformation.sender.user>
+                <transformation.sender.pw>c2c1sn2v</transformation.sender.pw>
+                <transformation.sender.address>cacisnavtestuser@gmail.com</transformation.sender.address>
+
+                <!-- Sys Admin to receive errors -->
+                <transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
+
+
+                <!-- ############################################################################ -->
+                <!-- OPTIONAL - change these for your local environment. Defaults should work for most cases-->
+                <!-- ############################################################################ -->
+
+                 <!-- needs to be the user.home. Only needs to change for WINDOWS -->
+                 <userhome.dir>${user.home}</userhome.dir>
+
+                <!-- these are the default keystore files caCIS uses -->
+                <cacis.keystore.path>${userhome.dir}/.cacis/certs/cacis-truststore.jks</cacis.keystore.path>
+                <cacis.keystore.password>password</cacis.keystore.password>
+                <cacis.truststore.path>$JAVA_HOME/lib/security/cacerts</cacis.truststore.path>
+                 <cacis.truststore.password>changeit</cacis.truststore.password>
 
                 <!--openXDS service endpoints-->
                 <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
                 <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
-
 
                 <!--Virtuoso database properties-->
                 <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
@@ -43,22 +75,6 @@
 
                 <maven.deploy.skip>true</maven.deploy.skip>
                 <mirthConnect.server.pause>5000</mirthConnect.server.pause>
-
-                <!-- needs to be the user.home. Only needs to change for WINDOWS -->
-                <userhome.dir>${user.home}</userhome.dir>
-
-                <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
-                <nav.sender.pass>c2c1sn2v</nav.sender.pass>
-
-                <!--  Credentials for the system email that sends tranformation errors -->
-                <transformation.sender.host>smtp.gmail.com</transformation.sender.host>
-                <transformation.sender.port>587</transformation.sender.port>
-                <transformation.sender.user>cacisnavtestuser</transformation.sender.user>
-                <transformation.sender.pw>c2c1sn2v</transformation.sender.pw>
-                <transformation.sender.address>cacisnavtestuser@gmail.com</transformation.sender.address>
-
-                <!-- Sys Admin to receive errors -->
-                <transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
 
             </properties>
         </profile>

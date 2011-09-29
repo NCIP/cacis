@@ -25,6 +25,11 @@
         <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
         <xds.subjectToDNPath>${cacis.mc.support.files.dir}/emailToDNMapping.properties</xds.subjectToDNPath>
 
+        <cmp.client.keystore.location>${cacis.keystore.path}</cmp.client.keystore.location>
+        <cmp.client.keystore.password>${cacis.keystore.password}</cmp.client.keystore.password>
+        <cmp.client.truststore.location>${cacis.truststore.path}</cmp.client.truststore.location>
+        <cmp.client.truststore.password>${cacis.truststore.password}</cmp.client.truststore.password>
+
         <!-- Document Router FTP Server Config -->
         <ftp.keystore.location>${userhome.dir}/ftpkeystore.jks</ftp.keystore.location>
         <ftp.port>2221</ftp.port>

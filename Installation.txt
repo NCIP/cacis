@@ -170,12 +170,6 @@ Manually deploying Mirth Channels (Optional)
 If the automated deployment of Mirth Connect channel (see previous step) fails for
 some reason. You can manually import channels into Mirth Connect.
 
-Import all of the channels (in the order the channels are listed) from the following
-scripts:
-
-pco/transformer/target/classes/deploy.mc
-pco/sa-mirth/target/classes/deploy.mc
-pco/ip-mirth/target/classes/deploy.mc
 
 You will need to run these deploy scripts as follows
 

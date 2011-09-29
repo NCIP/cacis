@@ -62,6 +62,7 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
+import gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessorClient;
 import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
 import java.io.File;
@@ -77,27 +78,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 
 /**
  * Config for IP Mirth.
+ *
  * @author bpickeral
  * @since Aug 2, 2011
  */
 @Configuration
+@ImportResource(value = "classpath*:cmp-client-cxf.xml")
 public class IPMirthConfig {
 
     @Value("${ftp.keystore.location}")
-    private String keystoreLocation;
+    private String ftpKeystoreLocation;
 
     @Value("${ftp.keystore.password}")
-    private String keystorePassword;
+    private String ftpKeystorePassword;
+
+    @Value("${cmp.client.keystore.location}")
+    private String cmpKeystoreLocation;
+
+    @Value("${cmp.client.truststore.password}")
+    private String cmpKeystorePassword;
+
+    @Value("${cmp.client.keystore.location}")
+    private String cmpTruststoreLocation;
+
+    @Value("${cmp.client.truststore.password}")
+    private String cmpTruststorePassword;
 
     @Value("${ftp.port}")
     private int ftpPort;
 
     /**
      * Creates FTP Server.
+     *
      * @return ftp server
      * @throws URISyntaxException if URI can not be parsed
      */
@@ -113,8 +130,8 @@ public class IPMirthConfig {
 
         // define SSL configuration
         final SslConfigurationFactory ssl = new SslConfigurationFactory();
-        ssl.setKeystoreFile(new File(keystoreLocation));
-        ssl.setKeystorePassword(keystorePassword);
+        ssl.setKeystoreFile(new File(ftpKeystoreLocation));
+        ssl.setKeystorePassword(ftpKeystorePassword);
 
         // set the SSL configuration for the listener
         factory.setSslConfiguration(ssl.createSslConfiguration());
@@ -134,6 +151,7 @@ public class IPMirthConfig {
 
     /**
      * Creates FTPSender.
+     *
      * @return FTPSender
      */
     @Bean
@@ -144,12 +162,27 @@ public class IPMirthConfig {
 
     /**
      * Creates FTPSClient.
+     *
      * @return FTPSClient
      */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public FTPSClient ftpsCient() {
         return new FTPSClient("TLS", true);
+    }
+
+    /**
+     * CMP Client which
+     * can invoke a secure CMP service
+     *
+     * @return CanonicalModelProcessorClient
+     */
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public CanonicalModelProcessorClient canonicalModelProcessorClient() {
+        return new CanonicalModelProcessorClient(cmpKeystoreLocation, cmpKeystorePassword,
+                cmpTruststoreLocation, cmpTruststorePassword);
+
     }
 
 }

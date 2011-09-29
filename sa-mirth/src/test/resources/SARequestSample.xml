@@ -3,14 +3,10 @@
 	<routingInstructions>
 		<exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">
 			<recipient>
-				<secureEmailAddress url="mailto:x@x.x"/>
+				<secureEmailAddress url="mailto:cacisnavtestuser@gmail.com"/>
 			</recipient>
 		</exchangeDocument>
-		<exchangeDocument exchangeFormat="XMLITS">
-			<recipient>
-				<secureEmailAddress url="mailto:x@x.x"/>
-			</recipient>
-		</exchangeDocument>		
+
 	</routingInstructions>
 	<sourceData>
 		<trim xmlns="urn:tolven-org:trim:4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

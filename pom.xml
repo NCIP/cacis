@@ -47,40 +47,46 @@
         <logger.level>WARN</logger.level>
         <skip.static.analysis>false</skip.static.analysis>
         <mirthConnect.server.pause>20000</mirthConnect.server.pause>
-        
-        <!--NOTE - customize this property to Mirth Connect location-->		
+
+        <!--NOTE - customize this property to Mirth Connect location-->
         <mirthConnect.cli>${user.home}/Applications/Mirth Connect/Mirth Connect CLI/mccommand</mirthConnect.cli>
         <mirthConnect.server.dir>/Applications/Mirth Connect</mirthConnect.server.dir>
         <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
         <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
-        <cacis.xds.proxy.repository.url>http://localhost:18010/axis2/services/xdsrepositoryb</cacis.xds.proxy.repository.url>
+        <cacis.xds.proxy.repository.url>http://localhost:18010/axis2/services/xdsrepositoryb
+        </cacis.xds.proxy.repository.url>
         <!--integration tests-->
         <!--NOTE - customize this property to OpenXDS location-->
         <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
         <cacis.xds.authz.hibernate.hbm2ddl.auto>update</cacis.xds.authz.hibernate.hbm2ddl.auto>
 
         <!--runtime properties-->
-         <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
-         <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
-         <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
-         <cacis.xds.authz.db.driver>org.postgresql.Driver</cacis.xds.authz.db.driver>
-         <cacis.xds.authz.db.hibernate.show.sql>true</cacis.xds.authz.db.hibernate.show.sql>
-         <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect
-         </cacis.xds.authz.db.hibernate.dialect>
-         <hibernate.version>3.5.6-Final</hibernate.version>
+        <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
+        <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
+        <cacis.xds.authz.db.password>postgres</cacis.xds.authz.db.password>
+        <cacis.xds.authz.db.driver>org.postgresql.Driver</cacis.xds.authz.db.driver>
+        <cacis.xds.authz.db.hibernate.show.sql>true</cacis.xds.authz.db.hibernate.show.sql>
+        <cacis.xds.authz.db.hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect
+        </cacis.xds.authz.db.hibernate.dialect>
+        <hibernate.version>3.5.6-Final</hibernate.version>
 
         <cacis.virtuoso.db.url>jdbc:virtuoso://localhost:1111/charset=UTF-8/log_enable=2</cacis.virtuoso.db.url>
         <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
         <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
         <cacis.virtuoso.db.driver>virtuoso.jdbc3.Driver</cacis.virtuoso.db.driver>
 
-		<!-- If windows, please replace the ${user.home} with absolute path,as the maven way of setting this value is not acceptable by Mirth -->
-		<userhome.dir>${user.home}</userhome.dir>
-		<cdfOutputDir>${userhome.dir}/.cacis/mc/output/cdf/</cdfOutputDir>
-		<xccdOutputDir>${userhome.dir}/.cacis/mc/output/xccd/</xccdOutputDir>
-		<trimInputDir>${userhome.dir}/.cacis/mc/input/</trimInputDir>
-		<cacis.mc.support.files.dir>${userhome.dir}/.cacis/cacis-xds</cacis.mc.support.files.dir>
+        <!-- If windows, please replace the ${user.home} with absolute path,as the maven way of setting this value is not acceptable by Mirth -->
+        <userhome.dir>${user.home}</userhome.dir>
+        <cdfOutputDir>${userhome.dir}/.cacis/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${userhome.dir}/.cacis/mc/output/xccd/</xccdOutputDir>
+        <trimInputDir>${userhome.dir}/.cacis/mc/input/</trimInputDir>
+        <cacis.mc.support.files.dir>${userhome.dir}/.cacis/cacis-xds</cacis.mc.support.files.dir>
         <cacis.mc.temp.dir>${userhome.dir}/.cacis/mc/output/</cacis.mc.temp.dir>
+
+        <cacis.keystore.path>${userhome.dir}/.cacis/certs/cacis-truststore.jks</cacis.keystore.path>
+        <cacis.keystore.password>password</cacis.keystore.password>
+        <cacis.truststore.path>${userhome.dir}/.cacis/certs/cacis-truststore.jks</cacis.truststore.path>
+        <cacis.truststore.password>password</cacis.truststore.password>
 
         <!--  Credentials for the system email that sends tranformation errors -->
         <transformation.sender.host>smtp.gmail.com</transformation.sender.host>
@@ -91,10 +97,10 @@
 
         <!-- Sys Admin to receive errors -->
         <transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
-        
+
         <!-- WSDL location of IP-Canonical Model Processor -->
-        <mirth.base.url>http://localhost</mirth.base.url> 
-        
+        <mirth.base.url>http://localhost</mirth.base.url>
+
     </properties>
 
     <organization>
@@ -246,7 +252,6 @@
     </reporting>
 
 
-
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
@@ -278,7 +283,7 @@
             <version>1.2.2</version>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.5.8</version>
@@ -358,15 +363,15 @@
     </dependencies>
 
     <build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-				</plugin>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
             </plugins>
-		</pluginManagement>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -521,7 +526,7 @@
             <!--CI Profile. Will run the integration tests (needs external
              services and applications)-->
             <id>cacis-ci</id>
-            
+
             <build>
                 <plugins>
                     <plugin>
@@ -552,7 +557,7 @@
     </profiles>
 
     <repositories>
-		<repository>
+        <repository>
             <id>CBIIT 3rd Party</id>
             <url>https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty</url>
             <snapshots>
@@ -580,7 +585,7 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>        
+        </repository>
         <repository>
             <id>jboss</id>
             <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>

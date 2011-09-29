@@ -138,6 +138,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>certs/*.*</exclude>
+                </excludes>
             </resource>
         </resources>
         <testResources>
@@ -153,5 +156,34 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+
+           <plugins>
+             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-certs</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${userhome.dir}/.cacis/certs</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/certs</directory>
+                                    <includes>
+                                        <include>*.*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
     </build>
 </project>

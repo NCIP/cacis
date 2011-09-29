@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316544855588</time>
+    <time>1317228472677</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -45,16 +45,20 @@
         <property name="script">//Invoke the java client, which in turn, will invoke the IP Canonical Model Processor Service. &#xd;//The Mirth Connect channel for this component should monitor errors and Mirth Connect Alerts should be sent, 
 //in case of errors, to the system administrator.
 
-var cmpWsdlUrl = &apos;${cacis-ip.cmp.service.url}&apos;;
-var wsdlURL = new Packages.java.net.URL(cmpWsdlUrl);
+var cmpWsdlUrl = &apos;http://localhost:18081/services/CanonicalModelProcessor?wsdl&apos;;
 
 try{
-	var client = new Packages.gov.nih.nci.cacis.CanonicalModelProcessor(wsdlURL).getCanonicalModelProcessorPortSoap11();
-	var jaxbContext = Packages.javax.xml.bind.JAXBContext.newInstance(&apos;gov.nih.nci.cacis&apos;);
-	var caCisRequest = jaxbContext.createUnmarshaller().unmarshal(new Packages.java.io.ByteArrayInputStream(messageObject.getEncodedData().getBytes()));
-	var caCisRes = client.acceptCanonical(caCisRequest); 
+
+	var ctx  = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-ip-mirth.xml&quot;);
+	var client = ctx.getBean(&quot;canonicalModelProcessorClient&quot;);
+
+	logger.info(&quot;Will send message to CMP service at &quot; + cmpWsdlUrl);
+	var caCisRes = client.acceptCanonical(cmpWsdlUrl,messageObject.getEncodedData());
 	responseMap.put(&apos;IP-CMP-Destination&apos;, ResponseFactory.getSuccessResponse(caCisRes.getStatus().toString()));
+	logger.info(&quot;Response from CMP service with status &quot; + caCisRes.getStatus().toString());
+
 }catch(cmpInvokeErr) {	
+	logger.error(&quot;Error invoking CMP service &quot; + cmpInvokeErr.message);
 	handleErrorStr(cmpInvokeErr.message);
 }
 return;
