@@ -62,11 +62,10 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
+import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
+
 import java.io.File;
 import java.net.URISyntaxException;
-
-import gov.nih.nci.cacis.cdw.config.TestCDWConfig;
-import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
@@ -75,7 +74,6 @@ import org.apache.ftpserver.ssl.SslConfigurationFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

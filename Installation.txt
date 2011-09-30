@@ -132,7 +132,6 @@ To install the caCIS components, do the following
   cacis.xds.authz.db.url in profiles.xml)
 - Run xds-authz/src/main/resources/xds_store_permission.sql on the above database
 
-- Stop Mirth Connect
 Note*- Make sure the '$MC_HOME/mcservice restart' command works. The build
 scripts will start/stop Mirth Connect several times during the deploy phase.
 
@@ -143,6 +142,8 @@ scripts will start/stop Mirth Connect several times during the deploy phase.
 This will install all caCIS components in Mirth Connect. Once you start the
    Mirth Connect server, you will see caCIS channels in Mirth Connect
 
+Note*-To skip artifact deployment, but run the deploy scripts, add the following to profiles.xml:
+<maven.deploy.skip>true</maven.deploy.skip>
 
 Restart the tomcat/JBoss service that is hosting the openXDS web application
 
