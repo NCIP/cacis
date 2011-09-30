@@ -19,7 +19,6 @@
 
         <xds.doc.source.oid>1.3.6.1.4.1.21367.2010.1.2</xds.doc.source.oid>
         <xds.doc.oid>1.2.3.4</xds.doc.oid>
-        <xds.doc.location>${userhome.dir}/.cacis/cacis-xds</xds.doc.location>
         <xds.doc.entry.file>${xds.doc.location}/docEntry.xml</xds.doc.entry.file>
         <xds.doc.submissionset.file>${xds.doc.location}/submissionSet.xml</xds.doc.submissionset.file>
         <routing.configfile>${cacis.mc.support.files.dir}/DefaultRoutingInstructions.xml</routing.configfile>
@@ -27,7 +26,7 @@
         <ftp.mappingFile>${cacis.mc.support.files.dir}/ftpConfig.properties</ftp.mappingFile>
 
         <!-- Document Router Test FTP Server Config -->
-        <ftp.test.server.keystore.location>${userhome.dir}/ftpkeystore.jks</ftp.test.server.keystore.location>
+        <ftp.test.server.keystore.location>${cacis.config.home}/certs/ftpkeystore.jks</ftp.test.server.keystore.location>
         <ftp.test.server.port>2221</ftp.test.server.port>
         <ftp.test.server.keystore.password>changeit</ftp.test.server.keystore.password>
 
@@ -181,12 +180,30 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${userhome.dir}</outputDirectory>
+                            <outputDirectory>${cacis.config.home}/certs</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/test/resources</directory>
                                     <includes>
                                         <include>ftpkeystore.jks</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                     <execution>
+                        <id>copy-properties</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${cacis.config.home}/ip-mirth</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.outputDirectory}</directory>
+                                    <includes>
+                                        <include>cacis-ip-mirth.properties</include>
                                     </includes>
                                 </resource>
                             </resources>

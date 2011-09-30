@@ -78,15 +78,17 @@
 
         <!-- If windows, please replace the ${user.home} with absolute path,as the maven way of setting this value is not acceptable by Mirth -->
         <userhome.dir>${user.home}</userhome.dir>
-        <cdfOutputDir>${userhome.dir}/.cacis/mc/output/cdf/</cdfOutputDir>
-        <xccdOutputDir>${userhome.dir}/.cacis/mc/output/xccd/</xccdOutputDir>
-        <trimInputDir>${userhome.dir}/.cacis/mc/input/</trimInputDir>
-        <cacis.mc.support.files.dir>${userhome.dir}/.cacis/cacis-xds</cacis.mc.support.files.dir>
-        <cacis.mc.temp.dir>${userhome.dir}/.cacis/mc/output/</cacis.mc.temp.dir>
+        <cacis.config.home>${userhome.dir}/.cacis</cacis.config.home>
+        <xds.doc.location>${cacis.config.home}/cacis-xds</xds.doc.location>
+        <cdfOutputDir>${cacis.config.home}/mc/output/cdf/</cdfOutputDir>
+        <xccdOutputDir>${cacis.config.home}/mc/output/xccd/</xccdOutputDir>
+        <trimInputDir>${cacis.config.home}/mc/input/</trimInputDir>
+        <cacis.mc.support.files.dir>${cacis.config.home}/cacis-xds</cacis.mc.support.files.dir>
+        <cacis.mc.temp.dir>${cacis.config.home}/mc/output/</cacis.mc.temp.dir>
 
-        <cacis.keystore.path>${userhome.dir}/.cacis/certs/cacis-truststore.jks</cacis.keystore.path>
+        <cacis.keystore.path>${cacis.config.home}/certs/cacis-keystore.jks</cacis.keystore.path>
         <cacis.keystore.password>password</cacis.keystore.password>
-        <cacis.truststore.path>${userhome.dir}/.cacis/certs/cacis-truststore.jks</cacis.truststore.path>
+        <cacis.truststore.path>${cacis.config.home}/certs/cacis-truststore.jks</cacis.truststore.path>
         <cacis.truststore.password>password</cacis.truststore.password>
 
         <!--  Credentials for the system email that sends tranformation errors -->

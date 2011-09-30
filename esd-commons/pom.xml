@@ -169,7 +169,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${userhome.dir}/.cacis/certs</outputDirectory>
+                            <outputDirectory>${cacis.config.home}/certs</outputDirectory>
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>

@@ -51,9 +51,10 @@
 
                  <!-- needs to be the user.home. Only needs to change for WINDOWS -->
                  <userhome.dir>${user.home}</userhome.dir>
+                 <cacis.config.home>${userhome.dir}/.cacis</cacis.config.home>
 
                 <!-- these are the default keystore files caCIS uses -->
-                <cacis.keystore.path>${userhome.dir}/.cacis/certs/cacis-truststore.jks</cacis.keystore.path>
+                <cacis.keystore.path>${cacis.config.home}/certs/cacis-truststore.jks</cacis.keystore.path>
                 <cacis.keystore.password>password</cacis.keystore.password>
                 <cacis.truststore.path>$JAVA_HOME/lib/security/cacerts</cacis.truststore.path>
                  <cacis.truststore.password>changeit</cacis.truststore.password>
@@ -67,11 +68,11 @@
                 <cacis.virtuoso.db.username>dba</cacis.virtuoso.db.username>
                 <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
 
-                <cdfOutputDir>${userhome.dir}/mc/output/cdf/</cdfOutputDir>
-                <xccdOutputDir>${userhome.dir}/mc/output/xccd/</xccdOutputDir>
-                <trimInputDir>${userhome.dir}/mc/input/</trimInputDir>
+                <cdfOutputDir>${cacis.config.home}/mc/output/cdf/</cdfOutputDir>
+                <xccdOutputDir>${cacis.config.home}}/mc/output/xccd/</xccdOutputDir>
+                <trimInputDir>${cacis.config.home}}/mc/input/</trimInputDir>
                 <!--  Temporary directory for System test output file -->
-                <cacis.mc.temp.dir>${userhome.dir}/temp/output/</cacis.mc.temp.dir>
+                <cacis.mc.temp.dir>${cacis.config.home}/mc/temp/output/</cacis.mc.temp.dir>
 
                 <maven.deploy.skip>true</maven.deploy.skip>
                 <mirthConnect.server.pause>5000</mirthConnect.server.pause>

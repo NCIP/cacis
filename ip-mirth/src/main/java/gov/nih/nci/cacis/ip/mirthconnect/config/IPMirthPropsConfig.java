@@ -82,7 +82,7 @@ public class IPMirthPropsConfig {
      */
     @Bean
     public PropertyPlaceholderConfigurer navPropertyPlaceholderConfigurer() {
-        final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("ip-mirth-props",
+        final PropertyPlaceholderConfigurer configurer = new CommonsPropertyPlaceholderConfigurer("ip-mirth",
                 "cacis-ip-mirth.properties");
         configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
         configurer.setIgnoreUnresolvablePlaceholders(true);
