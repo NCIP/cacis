@@ -18,7 +18,7 @@
         <test.unit.linerate>35</test.unit.linerate>
         <cacis-pco.transformer.trim2ccd.xsl>TRIM_to_CCD.xslt</cacis-pco.transformer.trim2ccd.xsl>
 
-        <cacis-pco.transformer.xsl.baseClassPath>/xsl/</cacis-pco.transformer.xsl.baseClassPath>
+        <cacis-pco.transformer.xsl.baseClassPath>${userhome.dir}/.cacis/transformer/xsl/</cacis-pco.transformer.xsl.baseClassPath>
         <cacis-pco.transformer.xml2rdf.xsl>xml2rdf3.xsl</cacis-pco.transformer.xml2rdf.xsl>
         <cacis-pco.transformer.hl7v2.xsl>xml2rdf3.xsl</cacis-pco.transformer.hl7v2.xsl>
         <cacis-pco.transformer.rimits.xsl>xml2rdf3.xsl</cacis-pco.transformer.rimits.xsl>
@@ -139,6 +139,50 @@
                         <goals>
                             <goal>cli</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                	<execution>
+                        <id>copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${userhome.dir}/.cacis/transformer</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${build.outputDirectory}/</directory>
+                                    <includes>
+                                        <include>cacis-pco-transformers.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-transformer-xsls</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${cacis-pco.transformer.xsl.baseClassPath}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${build.outputDirectory}/xsl/</directory>
+                                    <includes>
+                                        <include>*.*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

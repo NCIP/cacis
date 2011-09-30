@@ -55,6 +55,7 @@
         <xds.registry.url>http://localhost:8010/axis2/services/xdsregistryb</xds.registry.url>
         <cacis.xds.proxy.repository.url>http://localhost:18010/axis2/services/xdsrepositoryb
         </cacis.xds.proxy.repository.url>
+
         <!--integration tests-->
         <!--NOTE - customize this property to OpenXDS location-->
         <openxds.web.dir>${JBOSS_HOME}/server/default/deploy/openxds-web.war</openxds.web.dir>
@@ -100,6 +101,8 @@
 
         <!-- WSDL location of IP-Canonical Model Processor -->
         <mirth.base.url>http://localhost</mirth.base.url>
+		
+		<cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url>
 
     </properties>
 

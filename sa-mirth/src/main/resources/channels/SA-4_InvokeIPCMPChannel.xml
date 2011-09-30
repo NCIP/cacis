@@ -45,7 +45,7 @@
         <property name="script">//Invoke the java client, which in turn, will invoke the IP Canonical Model Processor Service. &#xd;//The Mirth Connect channel for this component should monitor errors and Mirth Connect Alerts should be sent, 
 //in case of errors, to the system administrator.
 
-var cmpWsdlUrl = &apos;http://localhost:18081/services/CanonicalModelProcessor?wsdl&apos;;
+var cmpWsdlUrl = &apos;${cacis-ip.cmp.service.url}&apos;;
 
 try{
 

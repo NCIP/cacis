@@ -77,6 +77,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+/**
+ * XSLT transformer test for xslv2
+ * @author vinodh.rc
+ *
+ */
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationContext-transformer.xml")
@@ -88,9 +93,11 @@ public class XSLTv2TransformerTest {
     private InputStream sampleMessageIS;
 
     @BeforeClass
-    public static void setupEnv() {
+    public static void setupEnv() throws URISyntaxException {
         System.setProperty("cacis-pco.transformer.xml2rdf.xsl", "sampleXSLv2.xsl");
-        System.setProperty("cacis-pco.transformer.xsl.baseClassPath", "/xsl2/");
+        final File smplxsl = 
+            new File(XSLTv2TransformerTest.class.getClassLoader().getResource("xsl2/sampleXSLv2.xsl").toURI());
+        System.setProperty("cacis-pco.transformer.xsl.baseClassPath", smplxsl.getParent()+"/");
     }
 
     @Before

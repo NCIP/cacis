@@ -60,6 +60,8 @@
  */
 package gov.nih.nci.cacis.common.util;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.xml.transform.Source;
@@ -71,57 +73,58 @@ import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
 /**
- * Resolves a URI against a base classpath. The default base classpath is "/".
+ * Resolves a URI against any absolute base path.
  *
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @since Sep 13, 2010
  */
-public class ClassPathURIResolver implements URIResolver, LSResourceResolver {
-
-    private Class clazz = ClassPathURIResolver.class;
+public class AnyBasePathURIResolver implements URIResolver, LSResourceResolver {
     
-    private String base = "";
+    private String base = "/";
     
     /**
      * Assumes the default base classpath.
-     * @param clazz The base class to use
      */
-    public ClassPathURIResolver(Class clazz) {
-        this.clazz = clazz;
+    public AnyBasePathURIResolver() {
+        //do nothing
     }
     
     /**
      * Sets the default base classpath.
      * @param base - base classpath to use for all files to be resolved
      */
-    public ClassPathURIResolver(String base) {
+    public AnyBasePathURIResolver(String base) {
         this.base = base;
     }
 
-    /**
-     * @param base - base classpath to use for all files to be resolved
-     * @param clazz The base class to use.
-     */
-    public ClassPathURIResolver(String base, Class clazz) {
-        this.base = base;
-        this.clazz = clazz;
-    }
-
+    
     /**
      * {@inheritDoc}
      */
     public Source resolve(String href, String base) throws TransformerException {
         final String currBase = (base.length() == 0) ? this.base : base;
-        final InputStream is = clazz.getResourceAsStream(currBase + href);
-        return new StreamSource(is);
+        try {
+            final InputStream is = 
+                new FileInputStream(currBase + href);
+            return new StreamSource(is);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+        
     }
 
     @Override
     public LSInput resolveResource(String type, String namespaceURI,
                                    String publicId, String systemId, String baseURI) {
-        final InputStream resourceAsStream = clazz.getClassLoader()
-                .getResourceAsStream(systemId);
-        return new Input(publicId, systemId, resourceAsStream);
+        final String currBase = (baseURI.length() == 0) ? this.base : baseURI;
+        try {
+            final InputStream resourceAsStream = 
+                new FileInputStream(currBase + systemId);
+            return new Input(publicId, systemId, resourceAsStream);
+        } catch (FileNotFoundException e) {
+            return new Input(publicId, systemId, null);
+        }
 
     }
+
 }

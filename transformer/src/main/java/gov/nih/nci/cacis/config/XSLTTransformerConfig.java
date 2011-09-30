@@ -60,7 +60,7 @@
  */
 package gov.nih.nci.cacis.config;
 
-import gov.nih.nci.cacis.common.util.ClassPathURIResolver;
+import gov.nih.nci.cacis.common.util.AnyBasePathURIResolver;
 import gov.nih.nci.cacis.transform.HL7V2Transformer;
 import gov.nih.nci.cacis.transform.RIMITSTransformer;
 import gov.nih.nci.cacis.transform.Trim2CCDTransformer;
@@ -103,7 +103,7 @@ public class XSLTTransformerConfig {
      * {@inheritDoc}
      */
     public URIResolver xslUriResolver() {
-        return new ClassPathURIResolver(XSLTTransformerConfig.class);
+        return new AnyBasePathURIResolver(xslBaseClassPath);
     }
 
     /**
