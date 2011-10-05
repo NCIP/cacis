@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316546499612</time>
+    <time>1317819630668</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4507,7 +4507,7 @@ var transformedDocument = drTransformDocument(documentToTransform, &apos;rIMITST
 
 //Construct message
 if(transformedDocument != null) {
-	msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);
+	msg[&apos;ClinicalDocument&apos;] = transformedDocument;
 }</script>
             <type>JavaScript</type>
             <data class="map">
@@ -4522,7 +4522,7 @@ var transformedDocument = drTransformDocument(documentToTransform, &apos;rIMITST
 
 //Construct message
 if(transformedDocument != null) {
-	msg[&apos;ClinicalDocument&apos;] = new XML(transformedDocument);
+	msg[&apos;ClinicalDocument&apos;] = transformedDocument;
 }</string>
               </entry>
             </data>

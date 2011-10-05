@@ -93,6 +93,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -157,6 +158,12 @@ public class SendSignedMailTest {
 
     @Value("${sec.email.sender.pass}")
     private String secEmailPass;
+    
+    @Autowired
+    private SendSignedMail sender;
+    
+    @Autowired
+    private SendEncryptedMail encSender;
 
     /**
      * starts GreenMain server for testing
@@ -200,6 +207,18 @@ public class SendSignedMailTest {
                 secEmailKeyStorePassword, secEmailKeyStoreKey);
         // shouldnt reach this line
         ssem.signMail(null);
+    }
+    
+    /**
+     * send to gmail
+     * @throws MessagingException exception thrown
+     */
+    @Test
+    public void sendSignedAndEncryptedMailToGmail() throws MessagingException {        
+        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content");
+        final MimeMessage signedMsg = sender.signMail(msg);
+        final MimeMessage encMsg = encSender.encryptMail(signedMsg, secEmailTo);
+        sender.sendMail(encMsg);
     }
 
     /**

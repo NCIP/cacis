@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317134465842</time>
+    <time>1317821667255</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -174,22 +174,13 @@ channelMap.put(&apos;navEmail&apos;,navEmail);</string>
             <name>xdsInfo</name>
             <script>try {
 
-default xml namespace = &apos;urn:hl7-org:v3#&apos;;
+default xml namespace = &apos;urn:hl7-org:v3&apos;;
 
 var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
 
 if(cdaDoc != null) {
-	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3#&apos;);
-logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
+	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3&apos;);
   	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
-}
-
-else {
-	logger.info(&apos;Could not find CDA. Using alternate CDA namespace: urn:hl7-org:v3&apos;);
-	default xml namespace = &apos;urn:hl7-org:v3&apos;;
-	cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
-	logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
-	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
 }
 
 }catch(err) {
@@ -204,22 +195,13 @@ else {
                 <string>Script</string>
                 <string>try {
 
-default xml namespace = &apos;urn:hl7-org:v3#&apos;;
+default xml namespace = &apos;urn:hl7-org:v3&apos;;
 
 var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
 
 if(cdaDoc != null) {
-	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3#&apos;);
-logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
+	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3&apos;);
   	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
-}
-
-else {
-	logger.info(&apos;Could not find CDA. Using alternate CDA namespace: urn:hl7-org:v3&apos;);
-	default xml namespace = &apos;urn:hl7-org:v3&apos;;
-	cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
-	logger.info(&apos;CDA document is: &apos; + cdaDoc.toString());
-	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
 }
 
 }catch(err) {

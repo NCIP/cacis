@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317133595338</time>
+    <time>1317763568424</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -266,8 +266,7 @@ return;</property>
             <name>clinicalDocument</name>
             <script>//once the correct transformers are set, the ns should be changed
 
-//default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-default xml namespace=&apos;urn:hl7-org:v3#&apos;;
+default xml namespace=&apos;urn:hl7-org:v3&apos;;
 var clinicalDoc = msg[&apos;ClinicalDocument&apos;].toString();
 channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</script>
             <type>JavaScript</type>
@@ -276,8 +275,7 @@ channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</script>
                 <string>Script</string>
                 <string>//once the correct transformers are set, the ns should be changed
 
-//default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-default xml namespace=&apos;urn:hl7-org:v3#&apos;;
+default xml namespace=&apos;urn:hl7-org:v3&apos;;
 var clinicalDoc = msg[&apos;ClinicalDocument&apos;].toString();
 channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</string>
               </entry>
