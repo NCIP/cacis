@@ -1,6 +1,6 @@
 <channel>
   <id>b72f1a06-1ecc-4836-bb01-616235a27d94</id>
-  <name>SA-1a_validationchannel</name>
+  <name>SA-1a_ValidationChannel</name>
   <description>This channel is the validation channel for Semantic Adapater.&#xd;
 &#xd;
 It performs the following validations with the CaCISRequest message from the Semantic Adapter service,&#xd;
@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316545521621</time>
+    <time>1317834167245</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>

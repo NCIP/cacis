@@ -109,7 +109,7 @@ public class ValidationConfig {
      * {@inheritDoc}
      */
     public URIResolver xslUriResolver() {
-        return new ClassPathURIResolver(ValidationConfig.class);
+        return new ClassPathURIResolver(xslBaseClassPath,ValidationConfig.class);
     }
 
     /**
