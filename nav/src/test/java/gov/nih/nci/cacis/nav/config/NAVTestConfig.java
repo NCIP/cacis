@@ -226,7 +226,10 @@ public class NAVTestConfig {
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public SendSignedMail signedMailSender() throws MessagingException {
-        final SendSignedMail sender = new SendSignedMail(new Properties(), secEmailFrom, 
+        final Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        final SendSignedMail sender = new SendSignedMail(props, secEmailFrom, 
                 secEmailHost, secEmailPort, secEmailProtocol, secEmailKeyStoreLocation,
                 secEmailKeyStorePassword, secEmailKeyStoreKey);
         sender.setLoginDetails(secEmailUser, secEmailPass);
