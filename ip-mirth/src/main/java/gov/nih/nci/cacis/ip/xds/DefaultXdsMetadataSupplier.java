@@ -105,7 +105,7 @@ public class DefaultXdsMetadataSupplier implements XdsMetadataSupplier {
             } else if (ExchangeFormat.CCD.value().equals(formatCode)) {
                 docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_code$", "CDA/CCD");
                 docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_LocalizedString$", "CDA/CCD");
-            } else if (ExchangeFormat.XMLITS.value().equals(formatCode)) {
+            } else if (ExchangeFormat.RIMITS.value().equals(formatCode)) {
                 docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_code$", "RIM/ITS");
                 docEntryMetaData = docEntryMetaData.replace("$FORMAT_CODE_LocalizedString$", "RIM/ITS");
             }

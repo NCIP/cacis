@@ -6,7 +6,7 @@
 				<secureEmailAddress url="mailto:x@x.x"/>
 			</recipient>
 		</exchangeDocument>
-		<exchangeDocument exchangeFormat="XMLITS">
+		<exchangeDocument exchangeFormat="RIMITS">
 			<recipient>
 				<secureEmailAddress url="mailto:x@x.x"/>
 			</recipient>

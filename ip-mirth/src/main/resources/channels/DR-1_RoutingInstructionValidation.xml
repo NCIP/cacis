@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316535572558</time>
+    <time>1317843161461</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4556,7 +4556,7 @@ for each (seg in exchDocs) {
 	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
 		chNm = &apos;DR-2b_HL7v2Transformation&apos;;
 	}
-	if (exFrmt == &apos;XMLITS&apos;) {
+	if (exFrmt == &apos;RIMITS&apos;) {
 		//TODO: Change channel names  of XSLT_Channel
 		chNm = &apos;DR-2c_RIMITSTransformation&apos;;
 	}
@@ -4603,7 +4603,7 @@ for each (seg in exchDocs) {
 	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
 		chNm = &apos;DR-2b_HL7v2Transformation&apos;;
 	}
-	if (exFrmt == &apos;XMLITS&apos;) {
+	if (exFrmt == &apos;RIMITS&apos;) {
 		//TODO: Change channel names  of XSLT_Channel
 		chNm = &apos;DR-2c_RIMITSTransformation&apos;;
 	}

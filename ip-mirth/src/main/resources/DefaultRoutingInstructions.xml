@@ -1,12 +1,12 @@
 <p:routingInstructions xmlns:p="http://cacis.nci.nih.gov">
-	<p:exchangeDocument exchangeFormat="XMLITS">
+	<p:exchangeDocument exchangeFormat="RIMITS">
 		<p:recipient>
-			<p:secureEmailAddress url="http://tempuri.org" />
+			<p:secureEmailAddress url="mailto:x@x.com" />
 		</p:recipient>
 	</p:exchangeDocument>
 	<p:exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">
 		<p:recipient>
-			<p:navEmailAddress url="monish.dombla@semanticbits.com" />
+			<p:navEmailAddress url="mailto:x@x.com" />
 		</p:recipient>
 	</p:exchangeDocument>
 	<p:exchangeDocument exchangeFormat="CCD">

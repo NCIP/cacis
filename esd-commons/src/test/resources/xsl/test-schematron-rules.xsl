@@ -202,16 +202,16 @@
 
 		    <!--ASSERT -->
 <xsl:choose>
-         <xsl:when test="@exchangeFormat='HL7_V2_CLINICAL_NOTE' or @exchangeFormat='CCD' or @exchangeFormat='XMLITS'"/>
+         <xsl:when test="@exchangeFormat='HL7_V2_CLINICAL_NOTE' or @exchangeFormat='CCD' or @exchangeFormat='RIMITS'"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="@exchangeFormat='HL7_V2_CLINICAL_NOTE' or @exchangeFormat='CCD' or @exchangeFormat='XMLITS'">
+                                test="@exchangeFormat='HL7_V2_CLINICAL_NOTE' or @exchangeFormat='CCD' or @exchangeFormat='RIMITS'">
                <xsl:attribute name="flag">error</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-				Exchange document format must be HL7_V2_CLINICAL_NOTE or CCD or XMLITS
+				Exchange document format must be HL7_V2_CLINICAL_NOTE or CCD or RIMITS
 			</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>

@@ -2,7 +2,7 @@
 			Failed Schematron Validation.
 			
 		  Failed rule 
-				Exchange document format must be HL7_V2_CLINICAL_NOTE or CCD or XMLITS
+				Exchange document format must be HL7_V2_CLINICAL_NOTE or CCD or RIMITS
 			
-		  Expression: @exchangeFormat='HL7_V2_CLINICAL_NOTE' or @exchangeFormat='CCD' or @exchangeFormat='XMLITS'
+		  Expression: @exchangeFormat='HL7_V2_CLINICAL_NOTE' or @exchangeFormat='CCD' or @exchangeFormat='RIMITS'
 		  Location of failure: /*:caCISRequest[namespace-uri()='http://cacis.nci.nih.gov'][1]/*:routingInstructions[namespace-uri()='http://cacis.nci.nih.gov'][1]/*:exchangeDocument[namespace-uri()='http://cacis.nci.nih.gov'][4]
