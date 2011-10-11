@@ -6,7 +6,7 @@
     <routingInstructions>
         <exchangeDocument exchangeFormat="CCD">
             <recipient>
-                <ftpAddress url="localhost"/>
+                <ftpAddress url="ftp://my.local.ftpserver"/>
             </recipient>
         </exchangeDocument>
     </routingInstructions>
