@@ -49,15 +49,15 @@
                 <!-- OPTIONAL - change these for your local environment. Defaults should work for most cases-->
                 <!-- ############################################################################ -->
 
-                 <!-- needs to be the user.home. Only needs to change for WINDOWS -->
+                 <!-- needs to be the user.home-->
                  <userhome.dir>${user.home}</userhome.dir>
                  <cacis.config.home>${userhome.dir}/.cacis</cacis.config.home>
 
                 <!-- these are the default keystore files caCIS uses -->
-                <cacis.keystore.path>${cacis.config.home}/certs/cacis-truststore.jks</cacis.keystore.path>
+                <cacis.keystore.path>${cacis.config.home}/certs/cacis-keystore.jks</cacis.keystore.path>
                 <cacis.keystore.password>password</cacis.keystore.password>
-                <cacis.truststore.path>$JAVA_HOME/lib/security/cacerts</cacis.truststore.path>
-                 <cacis.truststore.password>changeit</cacis.truststore.password>
+                <cacis.truststore.path>$JAVA_HOME/jre/lib/security/cacerts</cacis.truststore.path>
+                <cacis.truststore.password>changeit</cacis.truststore.password>
 
                 <!--openXDS service endpoints-->
                 <xds.repository.url>http://localhost:8020/axis2/services/xdsrepositoryb</xds.repository.url>
@@ -69,13 +69,22 @@
                 <cacis.virtuoso.db.password>dba</cacis.virtuoso.db.password>
 
                 <cdfOutputDir>${cacis.config.home}/mc/output/cdf/</cdfOutputDir>
-                <xccdOutputDir>${cacis.config.home}}/mc/output/xccd/</xccdOutputDir>
-                <trimInputDir>${cacis.config.home}}/mc/input/</trimInputDir>
+                <xccdOutputDir>${cacis.config.home}/mc/output/xccd/</xccdOutputDir>
+                <trimInputDir>${cacis.config.home}/mc/input/</trimInputDir>
                 <!--  Temporary directory for System test output file -->
                 <cacis.mc.temp.dir>${cacis.config.home}/mc/temp/output/</cacis.mc.temp.dir>
 
-                <maven.deploy.skip>true</maven.deploy.skip>
-                <mirthConnect.server.pause>5000</mirthConnect.server.pause>
+				<!-- How long to wait for mirth to restart? Configurable value. Can be different based on the time mirth takes to restart -->	
+                <mirthConnect.server.pause>20000</mirthConnect.server.pause>
+                
+				<!-- This switch is set to true because there is a Failure to transfer artifact to https://ncimvn.nci.nih.gov/nexus/content/repositories/ -->
+				<maven.deploy.skip>true</maven.deploy.skip>
+				<!-- This switch is set to true to skip static analysis -->
+				<skip.static.analysis>true</skip.static.analysis>
+				<!-- This switch is set to true to skip cobertura reporting -->
+				<cobertura.skip>true</cobertura.skip>
+				<!-- This switch is set to true to skip test executions -->
+				<maven.test.skip>true</maven.test.skip>
 
             </properties>
         </profile>
