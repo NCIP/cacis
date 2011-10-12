@@ -22,7 +22,8 @@ Directory Structure:
 Build and Installation instructions
 ===================================================================================
 
-See Installation.txt file for instructions on building and installing caCIS PCO
+See https://wiki.nci.nih.gov/display/caEHR/caCIS+Deployment+Guide
+for instructions on building and installing caCIS PCO
 
 
 
