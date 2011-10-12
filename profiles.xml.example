@@ -49,7 +49,7 @@
                 <!-- OPTIONAL - change these for your local environment. Defaults should work for most cases-->
                 <!-- ############################################################################ -->
 
-                 <!-- needs to be the user.home-->
+                 <!-- needs to be the user.home. Only needs to change for WINDOWS -->
                  <userhome.dir>${user.home}</userhome.dir>
                  <cacis.config.home>${userhome.dir}/.cacis</cacis.config.home>
 
@@ -79,12 +79,7 @@
                 
 				<!-- This switch is set to true because there is a Failure to transfer artifact to https://ncimvn.nci.nih.gov/nexus/content/repositories/ -->
 				<maven.deploy.skip>true</maven.deploy.skip>
-				<!-- This switch is set to true to skip static analysis -->
-				<skip.static.analysis>true</skip.static.analysis>
-				<!-- This switch is set to true to skip cobertura reporting -->
-				<cobertura.skip>true</cobertura.skip>
-				<!-- This switch is set to true to skip test executions -->
-				<maven.test.skip>true</maven.test.skip>
+
 
             </properties>
         </profile>
