@@ -92,10 +92,10 @@ public class IPMirthConfig {
     @Value("${cmp.client.keystore.location}")
     private String cmpKeystoreLocation;
 
-    @Value("${cmp.client.truststore.password}")
+    @Value("${cmp.client.keystore.password}")
     private String cmpKeystorePassword;
 
-    @Value("${cmp.client.keystore.location}")
+    @Value("${cmp.client.truststore.location}")
     private String cmpTruststoreLocation;
 
     @Value("${cmp.client.truststore.password}")
