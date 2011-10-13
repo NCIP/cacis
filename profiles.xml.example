@@ -80,7 +80,6 @@
 				<!-- This switch is set to true because there is a Failure to transfer artifact to https://ncimvn.nci.nih.gov/nexus/content/repositories/ -->
 				<maven.deploy.skip>true</maven.deploy.skip>
 
-
             </properties>
         </profile>
 
