@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317834167245</time>
+    <time>1318620992001</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>4</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -124,9 +124,15 @@ if (srcData.length()==0) {
           <sequenceNumber>3</sequenceNumber>
           <name>xsdValidate_SourceData</name>
           <script>//perform schema validation for SourceData
-var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
-if (sdXsdValidationMsg != null) { 
-	handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
+if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
+	logger.info(&apos;Performing xsd validation of trim (sourcedata) against trim4.xsd&apos;);
+	var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
+	if (sdXsdValidationMsg != null) { 
+		handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
+		return;
+ 	}
+}else{
+	logger.info(&apos;Skipping xsd validation of trim (sourcedata) against trim4.xsd&apos;);
 	return;
 }</script>
           <type>JavaScript</type>
@@ -134,9 +140,15 @@ if (sdXsdValidationMsg != null) {
             <entry>
               <string>Script</string>
               <string>//perform schema validation for SourceData
-var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
-if (sdXsdValidationMsg != null) { 
-	handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
+if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
+	logger.info(&apos;Performing xsd validation of trim (sourcedata) against trim4.xsd&apos;);
+	var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
+	if (sdXsdValidationMsg != null) { 
+		handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
+		return;
+ 	}
+}else{
+	logger.info(&apos;Skipping xsd validation of trim (sourcedata) against trim4.xsd&apos;);
 	return;
 }</string>
             </entry>
@@ -290,6 +302,13 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+
+
+// Validation of Trim (sourcedata section of CaCISRequest) coming in is controlled by the property set here.
+// sa.trim.xsd.validation if set to true, Incoming trim will be validated against trim4.xsd
+// sa.trim.xsd.validation is set to false, Incoming trim will NOT be validated against trim4.xsd  
+globalChannelMap.put(&apos;sa.trim.xsd.validation&apos;,&apos;${sa.trim.xsd.validation}&apos;);
+
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

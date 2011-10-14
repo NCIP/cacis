@@ -79,6 +79,12 @@
                 
 				<!-- This switch is set to true because there is a Failure to transfer artifact to https://ncimvn.nci.nih.gov/nexus/content/repositories/ -->
 				<maven.deploy.skip>true</maven.deploy.skip>
+								
+				<!--  Validation of Trim (sourcedata section of CaCISRequest) coming in is controlled by the property set here.
+						sa.trim.xsd.validation if set to true, Incoming trim will be validated against trim4.xsd
+						sa.trim.xsd.validation is set to false, Incoming trim will NOT be validated against trim4.xsd --> 
+		
+				<sa.trim.xsd.validation>false</sa.trim.xsd.validation>							
 
             </properties>
         </profile>

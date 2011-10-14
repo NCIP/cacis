@@ -105,7 +105,13 @@
         <mirth.base.url>http://localhost</mirth.base.url>
 		
 		<cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url>
-
+		
+		<!--  Trim validation is controlled by the property set here.(sourcedata section of CaCISRequest)
+		sa.trim.xsd.validation if set to true, Incoming trim WILL BE validated against trim4.xsd
+		sa.trim.xsd.validation is set to false, Incoming trim WILL NOT be validated against trim4.xsd --> 
+		
+		<sa.trim.xsd.validation>false</sa.trim.xsd.validation>
+		
     </properties>
 
     <organization>
