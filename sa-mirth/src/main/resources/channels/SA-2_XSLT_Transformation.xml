@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1318858421883</time>
+    <time>1318864258013</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>8</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -81,7 +81,7 @@ try {
 		os.close();
 	}
 }
-retrun;</script>
+return;</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
@@ -119,7 +119,7 @@ try {
 		os.close();
 	}
 }
-retrun;</string>
+return;</string>
               </entry>
             </data>
           </step>
