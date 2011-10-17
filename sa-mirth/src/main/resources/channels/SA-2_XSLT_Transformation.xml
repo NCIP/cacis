@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316179922258</time>
+    <time>1318858421883</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>8</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">IdentifierResolver</property>
+      <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
       <steps/>
@@ -54,8 +54,8 @@ default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 var trim = srcDataEle[&apos;trim&apos;];
 
 var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
-var os;
-var is;
+var os=null;
+var is=null;
 
 try {
 	//transform source data (transcen trim) to CanonicalDataFormat(ClinicalDocument)
@@ -71,11 +71,17 @@ try {
 	createSegment(&apos;ClinicalDocument&apos;, msg);
 	msg[&apos;ClinicalDocument&apos;] = new XML(temp);
 
-}finally {
-	is.close();
-	os.close();
+} catch(err) {
+	handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
+} finally {
+	if(is != null) {
+		is.close();
+	}
+	if(os != null) {
+		os.close();
+	}
 }
-return;</script>
+retrun;</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
@@ -86,8 +92,8 @@ default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 var trim = srcDataEle[&apos;trim&apos;];
 
 var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
-var os;
-var is;
+var os=null;
+var is=null;
 
 try {
 	//transform source data (transcen trim) to CanonicalDataFormat(ClinicalDocument)
@@ -103,11 +109,17 @@ try {
 	createSegment(&apos;ClinicalDocument&apos;, msg);
 	msg[&apos;ClinicalDocument&apos;] = new XML(temp);
 
-}finally {
-	is.close();
-	os.close();
+} catch(err) {
+	handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
+} finally {
+	if(is != null) {
+		is.close();
+	}
+	if(os != null) {
+		os.close();
+	}
 }
-return;</string>
+retrun;</string>
               </entry>
             </data>
           </step>
@@ -124,9 +136,51 @@ return;</string>
         </outboundProperties>
       </transformer>
       <filter>
-        <rules/>
+        <rules>
+          <rule>
+            <sequenceNumber>0</sequenceNumber>
+            <name>filterOnError</name>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>return filterOnError();</string>
+              </entry>
+            </data>
+            <type>JavaScript</type>
+            <script>return filterOnError();</script>
+            <operator>NONE</operator>
+          </rule>
+        </rules>
       </filter>
       <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+    <connector>
+      <name>handleResponse</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var desArr = new Array(&apos;IdentifierResolver&apos;);
+handleResponse(&apos;handleResponse&apos;, desArr);
+retrun;</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">false</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>

@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317821667255</time>
+    <time>1318858074478</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>8</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">None</property>
+      <property name="responseValue">xdsNavDestination</property>
     </properties>
     <transformer>
       <steps/>
@@ -88,6 +88,12 @@ bGV4VHlwZT4NCgk8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4NCg==</inboundTemplate>
         <property name="script">// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 
+var err = responseMap.get(&apos;error&apos;);
+if(err != null) {
+	responseMap.put(&apos;xdsNavDestination&apos;, err);
+	return;
+}
+
 var xdsCtx = new Packages.gov.nih.nci.cacis.common.util.CaCISClasspathXmlApplicationContext(&apos;./cacis-lib&apos;,&apos;classpath*:applicationContext-xds.xml&apos;);
 var documentHandler = xdsCtx.getBean(&quot;wrapperDocumentHandler&quot;);
 
@@ -120,7 +126,7 @@ try{
 
 }catch(accerr) {
 	logger.error(&apos;Error giving access to the XDS document.&apos; + accerr.message);
-	responseMap.put(&apos;xdsNavDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error giving access to the XDS document.&apos; + accerr.message));
+	responseMap.put(&apos;xdsNavDestination&apos;, &apos;CaCISError: Giving access to the XDS document. &apos; + accerr.message);
 	return;
 }	
 
@@ -135,11 +141,12 @@ try{
 	logger.info(&apos;Will send NAV email to &apos; + $(&apos;navEmail&apos;));
 	navSender.send($(&apos;navEmail&apos;), docIds);
 
+	cache.removeDocument(docId);
 }catch(navErr) {
 	logger.error(&apos;Error sending NAV &apos; + navErr.message);
-	responseMap.put(&apos;xdsNavDestination&apos;, ResponseFactory.getFailureResponse(&apos;Error sending NAV.&apos; + navErr.message));
+	responseMap.put(&apos;xdsNavDestination&apos;, &apos;CaCISError: Error sending NAV. &apos; + navErr.message);
 }
-return docId;
+return;
 
 </property>
       </properties>
@@ -185,8 +192,7 @@ if(cdaDoc != null) {
 
 }catch(err) {
 	logger.error(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message);
-	responseMap.put(&apos;xdsNavDestination&apos;, 
-		ResponseFactory.getFailureResponse(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message));
+	handleErrorStr(&apos;XDS Load Failed. Could not extract CDA from message. &apos; + err.message);
 	return;
 }</script>
             <type>JavaScript</type>
@@ -206,8 +212,7 @@ if(cdaDoc != null) {
 
 }catch(err) {
 	logger.error(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message);
-	responseMap.put(&apos;xdsNavDestination&apos;, 
-		ResponseFactory.getFailureResponse(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message));
+	handleErrorStr(&apos;XDS Load Failed. Could not extract CDA from message. &apos; + err.message);
 	return;
 }</string>
               </entry>

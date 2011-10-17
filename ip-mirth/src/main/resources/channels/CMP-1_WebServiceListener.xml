@@ -6,10 +6,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317046040705</time>
+    <time>1318641721126</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -78,11 +78,11 @@
         <property name="host">sink</property>
         <property name="script">var valdRes = responseMap.get(&apos;canonicalValidation&apos;);
 
+if(valdRes.toString().indexOf(&apos;Error&apos;) &lt; 0 ) { &#xd;	router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);&#xd;} else {&#xd; 	handleErrorStr(&apos;Not sending data to CDW,&apos;+ valdRes);&#xd;}
 
-router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
+return;
 
-
-return;</property>
+</property>
       </properties>
       <transformer>
         <steps/>

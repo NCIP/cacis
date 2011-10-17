@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317162521268</time>
+    <time>1318643617229</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -83,7 +83,7 @@ if (crSchValidationMsg != null) {
   </sourceConnector>
   <destinationConnectors>
     <connector>
-      <name>CdwLoadProcessStart</name>
+      <name>procesRoutingInstructions</name>
       <properties>
         <property name="DataType">Channel Writer</property>
         <property name="host">e91b5581-5aa1-48b5-90e4-8b8214a85d95</property>
@@ -129,7 +129,7 @@ if (crSchValidationMsg != null) {
       <properties>
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
-        <property name="script">var desArr = new Array(&quot;CdwLoadProcessStart&quot;);
+        <property name="script">var desArr = new Array(&quot;procesRoutingInstructions&quot;);
 
 handleResponse(&apos;handleResponse&apos;, desArr);
 
