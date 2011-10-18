@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317405373473</time>
+    <time>1318967242272</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -55,7 +55,9 @@ try{
 	var address = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString();
 	address = Packages.org.apache.commons.lang.StringUtils.replace(address, &apos;ftp://&apos;, &apos;&apos;);
 	logger.info(&apos;Sending to FTP: &apos; + address);
-	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	ftpsSender.sendDocument(is, address);
 	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
 }catch(err) {
@@ -73,7 +75,9 @@ try{
 	var address = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;recipient&apos;][&apos;ftpAddress&apos;][&apos;@url&apos;].toString();
 	address = Packages.org.apache.commons.lang.StringUtils.replace(address, &apos;ftp://&apos;, &apos;&apos;);
 	logger.info(&apos;Sending to FTP: &apos; + address);
-	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(msg).getBytes());
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	ftpsSender.sendDocument(is, address);
 	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
 }catch(err) {
