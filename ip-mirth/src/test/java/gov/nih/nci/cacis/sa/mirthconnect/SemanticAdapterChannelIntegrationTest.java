@@ -61,26 +61,20 @@
 package gov.nih.nci.cacis.sa.mirthconnect;
 
 import static org.junit.Assert.assertTrue;
-import gov.nih.nci.cacis.AcceptSourceFault;
-import gov.nih.nci.cacis.AcceptSourcePortType;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CaCISResponse;
-import gov.nih.nci.cacis.ResponseStatusType;
-import gov.nih.nci.cacis.common.util.CaCISURLClassLoader;
+import gov.nih.nci.cacis.sa.CaCISRequest;
+import gov.nih.nci.cacis.sa.CaCISResponse;
+import gov.nih.nci.cacis.sa.ResponseStatusType;
+import gov.nih.nci.cacis.sa.AcceptSourceFault;
+import gov.nih.nci.cacis.sa.AcceptSourcePortType;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;

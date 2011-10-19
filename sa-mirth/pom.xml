@@ -96,6 +96,8 @@
                                     <extraargs>
                                         <extraarg>-impl</extraarg>
                                         <extraarg>-verbose</extraarg>
+										<extraarg>-p</extraarg>
+                                       <extraarg>gov.nih.nci.cacis.sa</extraarg>
                                     </extraargs>
                                 </wsdlOption>
                             </wsdlOptions>

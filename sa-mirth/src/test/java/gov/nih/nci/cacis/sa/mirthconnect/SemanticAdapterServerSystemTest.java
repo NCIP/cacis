@@ -60,18 +60,20 @@
  */
 package gov.nih.nci.cacis.sa.mirthconnect;
 
-import gov.nih.nci.cacis.AcceptSourcePortType;
-import gov.nih.nci.cacis.CaCISRequest;
+import gov.nih.nci.cacis.sa.AcceptSourcePortType;
+import gov.nih.nci.cacis.sa.CaCISRequest;
+
+import java.io.File;
+import java.io.InputStream;
+
+import javax.xml.bind.JAXBContext;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.xml.bind.JAXBContext;
-import java.io.File;
-import java.io.InputStream;
 
 /**
  * @author kherm manav.kher@semanticbits.com

@@ -60,11 +60,11 @@
  */
 package gov.nih.nci.cacis.sa.mirthconnect;
 
-import gov.nih.nci.cacis.AcceptSourceFault;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CaCISResponse;
-import gov.nih.nci.cacis.ResponseStatusType;
 import gov.nih.nci.cacis.common.util.CaCISURLClassLoader;
+import gov.nih.nci.cacis.sa.AcceptSourceFault;
+import gov.nih.nci.cacis.sa.CaCISRequest;
+import gov.nih.nci.cacis.sa.CaCISResponse;
+import gov.nih.nci.cacis.sa.ResponseStatusType;
 
 import java.lang.reflect.Method;
 import java.security.AccessController;
@@ -87,7 +87,7 @@ import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 @WebService(serviceName = "SemanticAdapter", 
         portName = "AcceptSource_Port_Soap11", 
         targetNamespace = "http://cacis.nci.nih.gov", 
-        endpointInterface = "gov.nih.nci.cacis.AcceptSourcePortType")
+        endpointInterface = "gov.nih.nci.cacis.sa.AcceptSourcePortType")
 public class SemanticAdapter extends AcceptMessage {
     
     private String customLibDir = "./custom-lib";

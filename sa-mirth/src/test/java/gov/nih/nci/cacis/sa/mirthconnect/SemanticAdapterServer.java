@@ -60,16 +60,17 @@
  */
 package gov.nih.nci.cacis.sa.mirthconnect;
 
-import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
-import gov.nih.nci.cacis.AcceptSourcePortType;
-import gov.nih.nci.cacis.AcceptSourcePortTypeImpl;
-import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gov.nih.nci.cacis.common.systest.AbstractBusTestServer;
+import gov.nih.nci.cacis.sa.AcceptSourcePortType;
+import gov.nih.nci.cacis.sa.AcceptSourcePortTypeImpl;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 
 /**
  * @author kherm manav.kher@semanticbits.com

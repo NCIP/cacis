@@ -60,14 +60,16 @@
  */
 package gov.nih.nci.cacis.sa.client;
 
-import gov.nih.nci.cacis.AcceptSourceFault;
+import gov.nih.nci.cacis.sa.AcceptSourceFault;
 import gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapterServer;
+
+import java.net.URL;
+
+import javax.xml.bind.JAXBException;
+
 import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.xml.bind.JAXBException;
-import java.net.URL;
 
 /**
  * @author kherm manav.kher@semanticbits.com

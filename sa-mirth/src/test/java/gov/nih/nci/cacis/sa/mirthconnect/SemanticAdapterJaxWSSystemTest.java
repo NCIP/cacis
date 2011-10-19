@@ -60,13 +60,18 @@
  */
 package gov.nih.nci.cacis.sa.mirthconnect;
 
-import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
-import gov.nih.nci.cacis.AcceptSourceFault;
-import gov.nih.nci.cacis.AcceptSourcePortType;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CaCISResponse;
-import gov.nih.nci.cacis.ResponseStatusType;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import gov.nih.nci.cacis.common.systest.AbstractJaxWsTest;
+import gov.nih.nci.cacis.sa.AcceptSourceFault;
+import gov.nih.nci.cacis.sa.AcceptSourcePortType;
+import gov.nih.nci.cacis.sa.CaCISRequest;
+import gov.nih.nci.cacis.sa.CaCISResponse;
+import gov.nih.nci.cacis.sa.ResponseStatusType;
+
+import javax.xml.ws.soap.SOAPFaultException;
+
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
@@ -74,11 +79,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.xml.ws.soap.SOAPFaultException;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.mirth.connect.connectors.ws.WebServiceMessageReceiver;
 
 /**
  * @author kherm manav.kher@semanticbits.com

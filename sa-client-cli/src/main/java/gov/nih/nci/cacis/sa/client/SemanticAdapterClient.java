@@ -60,20 +60,22 @@
  */
 package gov.nih.nci.cacis.sa.client;
 
-import gov.nih.nci.cacis.AcceptSourceFault;
-import gov.nih.nci.cacis.AcceptSourcePortType;
-import gov.nih.nci.cacis.CaCISRequest;
-import gov.nih.nci.cacis.CaCISResponse;
+import gov.nih.nci.cacis.sa.AcceptSourceFault;
+import gov.nih.nci.cacis.sa.AcceptSourcePortType;
+import gov.nih.nci.cacis.sa.CaCISRequest;
+import gov.nih.nci.cacis.sa.CaCISResponse;
 import gov.nih.nci.cacis.sa.config.SemanticAdapterClientConfig;
-import org.apache.log4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URL;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
+import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * @author kherm manav.kher@semanticbits.com

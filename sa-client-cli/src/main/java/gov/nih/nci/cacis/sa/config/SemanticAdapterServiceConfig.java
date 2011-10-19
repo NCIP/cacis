@@ -60,7 +60,8 @@
  */
 package gov.nih.nci.cacis.sa.config;
 
-import gov.nih.nci.cacis.AcceptSourcePortType;
+import gov.nih.nci.cacis.sa.AcceptSourcePortType;
+
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
