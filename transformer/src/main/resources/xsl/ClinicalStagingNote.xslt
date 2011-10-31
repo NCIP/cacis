@@ -22,7 +22,7 @@
 	
 	<!-- Main with template name-->
 	<xsl:template name="ClinicalStagingNote" >
-		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">			
+		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">			
 			<xsl:for-each select="trim:trim/trim:act">
 				<xsl:call-template name="baseline_cdaHeader">
 					<xsl:with-param name="trimAct" select="current()"/>

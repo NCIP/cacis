@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.1" xmlns="urn:hl7-org:v3" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cda="urn:hl7-org:v3" xmlns:trim="urn:tolven-org:trim:4.0" exclude-result-prefixes="xs cda trim" >	
-	<xsl:import href="shared_functions.xslt" />
+<xsl:stylesheet version="1.1" xmlns="urn:hl7-org:v3" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cda="urn:hl7-org:v3" xmlns:trim="urn:tolven-org:trim:4.0" exclude-result-prefixes="xs cda trim">
+	<xsl:import href="shared_functions.xslt"/>
 	<xsl:import href="shared_diagnosticResult.xslt"/>
 	<xsl:import href="shared_procedures.xslt"/>
 	<xsl:import href="shared_vitalSign.xslt"/>
@@ -16,7 +16,7 @@
 	<xsl:param name="siteId"/>
 	<xsl:param name="studyId"/>
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-	
+
 	<!-- Main -->
 	<xsl:template match="/">
 			<xsl:call-template name="BaselineNote">
@@ -27,7 +27,7 @@
 	
 	<!-- Main with template name-->
 	<xsl:template name="BaselineNote" >
-		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
+		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">
 			<xsl:for-each select="trim:trim/trim:act">
 				<xsl:call-template name="baseline_cdaHeader">
 					<xsl:with-param name="trimAct" select="current()"/>

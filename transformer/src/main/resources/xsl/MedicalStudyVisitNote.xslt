@@ -16,7 +16,7 @@
 	<xsl:param name="studyId"/>
 
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-	
+
 	<!-- Main -->
 	<xsl:template match="/">
 			<xsl:call-template name="MedicalStudyVisitNote">
@@ -27,7 +27,7 @@
 	
 	<!-- Main with template name-->
 	<xsl:template name="MedicalStudyVisitNote" >
-		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">			
+		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">			
 			<xsl:for-each select="trim:trim/trim:act">
 				<xsl:call-template name="baseline_cdaHeader">
 					<xsl:with-param name="trimAct" select="current()"/>

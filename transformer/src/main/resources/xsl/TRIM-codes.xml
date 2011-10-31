@@ -1907,6 +1907,21 @@
                     codeSystemName="SNOMED-CT"/>
       </code>
    </valueset>
+   <valueset name="causeOfDeath">
+      <code displayName="due to this disease">
+         <translate code="363346000" displayName="malignant neoplastic disease"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="due to protocol treatment">
+         <translate code="276239002" displayName="therapy" codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="due to other cause">
+         <translate code="OTH" displayName="Other" codeSystem="2.16.840.1.113883.5.1008"
+                    codeSystemName="HL7 nullFlavor"/>
+      </code>
+   </valueset>
    <valueset name="coreBiopsyMethod">
       <code displayName="ultrasound">
          <translate code="16310003" displayName="ultrasonography"
@@ -2054,11 +2069,16 @@
                     codeSystemName="SNOMED-CT"/>
       </code>
    </valueset>
-   <valueset name="episodes">
-      <code displayName="1">
-         <translate code="255217005" displayName="first episode"
-                    codeSystem="2.16.840.1.113883.6.96"
-                    codeSystemName="SNOMED-CT"/>
+   <valueset name="ethnicity">
+      <code displayName="not hispanic or latino">
+         <translate code="2186-5" displayName="Not Hispanic or Latino"
+                    codeSystem="2.16.840.1.113883.6.238"
+                    codeSystemName="Race &amp; Ethnicity - CDC"/>
+      </code>
+      <code displayName="hispanic or latino">
+         <translate code="2135-2" displayName="Hispanic or Latino"
+                    codeSystem="2.16.840.1.113883.6.238"
+                    codeSystemName="Race &amp; Ethnicity - CDC"/>
       </code>
    </valueset>
    <valueset name="geneticTesting">
@@ -3117,7 +3137,16 @@
          <translate code="2106-3" displayName="White" codeSystem="2.16.840.1.113883.6.238"
                     codeSystemName="Race &amp; Ethnicity - CDC"/>
       </code>
+      <code displayName="white">
+         <translate code="2106-3" displayName="White" codeSystem="2.16.840.1.113883.6.238"
+                    codeSystemName="Race &amp; Ethnicity - CDC"/>
+      </code>
       <code displayName="black or african american alone">
+         <translate code="2054-5" displayName="Black or African American"
+                    codeSystem="2.16.840.1.113883.6.238"
+                    codeSystemName="Race &amp; Ethnicity - CDC"/>
+      </code>
+      <code displayName="black or african american">
          <translate code="2054-5" displayName="Black or African American"
                     codeSystem="2.16.840.1.113883.6.238"
                     codeSystemName="Race &amp; Ethnicity - CDC"/>
@@ -3127,7 +3156,16 @@
                     codeSystem="2.16.840.1.113883.6.238"
                     codeSystemName="Race &amp; Ethnicity - CDC"/>
       </code>
+      <code displayName="american indian or alaska native">
+         <translate code="1002-5" displayName="American Indian or Alaska Native"
+                    codeSystem="2.16.840.1.113883.6.238"
+                    codeSystemName="Race &amp; Ethnicity - CDC"/>
+      </code>
       <code displayName="asian alone">
+         <translate code="2028-9" displayName="Asian" codeSystem="2.16.840.1.113883.6.238"
+                    codeSystemName="Race &amp; Ethnicity - CDC"/>
+      </code>
+      <code displayName="asian">
          <translate code="2028-9" displayName="Asian" codeSystem="2.16.840.1.113883.6.238"
                     codeSystemName="Race &amp; Ethnicity - CDC"/>
       </code>
@@ -3137,8 +3175,7 @@
                     codeSystemName="Race &amp; Ethnicity - CDC"/>
       </code>
       <code displayName="some other race alone">
-         <translate code="2131-1" displayName="Other Race"
-                    codeSystem="2.16.840.1.113883.6.238"
+         <translate code="2131-1" displayName="Other Race" codeSystem="2.16.840.1.113883.6.238"
                     codeSystemName="Race &amp; Ethnicity - CDC"/>
       </code>
    </valueset>
@@ -3356,6 +3393,18 @@
                     codeSystemName="SNOMED-CT"/>
       </code>
    </valueset>
+   <valueset name="stagingModifiers">
+      <code displayName="pathologic staging">
+         <translate code="261023001" displayName="pathological staging"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="clinical staging">
+         <translate code="260998006" displayName="clinical staging"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+   </valueset>
    <valueset name="stagingStatus">
       <code displayName="done">
          <translate code="385658003" displayName="done" codeSystem="2.16.840.1.113883.6.96"
@@ -3453,6 +3502,26 @@
                     codeSystemName="HL7 nullFlavor"/>
       </code>
    </valueset>
+   <valueset name="survivalStatus">
+      <code displayName="alive">
+         <translate code="438949009" displayName="alive" codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="dead">
+         <translate code="419099009" displayName="dead" codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="lost to follow-up">
+         <translate code="444590007" displayName="subject in clinical trial unable to be contacted"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="consent for follow-up withdrawn">
+         <translate code="399250008" displayName="patient declined clinical trial"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+   </valueset>
    <valueset name="suspicion">
       <code displayName="benign">
          <translate code="30807003" displayName="benign" codeSystem="2.16.840.1.113883.6.96"
@@ -3492,6 +3561,60 @@
          <translate code="428024001" displayName="clinical trial participant"
                     codeSystem="2.16.840.1.113883.6.96"
                     codeSystemName="SNOMED-CT"/>
+      </code>
+   </valueset>
+   <valueset name="treatmentEndReasonValues">
+      <code displayName="treatment completed per protocol criteria">
+         <translate code="182834008" displayName="drug course completed"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="disease progression, relapse during active treatment">
+         <translate code="373833004"
+                    displayName="chemotherapy changed - progressive disease during chemotherapy"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="toxicity/side effects/complications">
+         <translate code="373834005"
+                    displayName="chemotherapy changed - acute chemotherapy toxicity"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="patient withdrawal or refusal after beginning protocol therapy">
+         <translate code="373836007" displayName="chemotherapy changed - patient choice"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="patient withdrawal or refusal prior to beginning protocol therapy">
+         <translate code="373836007" displayName="chemotherapy changed - patient choice"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="other complicating disease">
+         <translate code="398192003" displayName="co-morbid conditions"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="death during treatment">
+         <translate code="419620001" displayName="death" codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="alternative therapy">
+         <translate code="182868002"
+                    displayName="treatment stopped - alternative therapy undertaken"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="patient declared ineligible">
+         <translate code="444734003"
+                    displayName="does not meet eligibility criteria for clinical trial"
+                    codeSystem="2.16.840.1.113883.6.96"
+                    codeSystemName="SNOMED-CT"/>
+      </code>
+      <code displayName="other">
+         <translate code="OTH" displayName="Other" codeSystem="2.16.840.1.113883.5.1008"
+                    codeSystemName="HL7 nullFlavor"/>
       </code>
    </valueset>
    <valueset name="tumorStage">
@@ -4358,10 +4481,7 @@
                  codeSystemName="SNOMED-CT"/>
    </code>
    <code displayName="new distant progression">
-      <translate code="419835002" displayName="tumor progression"
-            codeSystem="2.16.840.1.113883.6.96"
-            codeSystemName="SNOMED-CT"/>
-
+      <translate code="419835002" displayName="tumor progression"/>
    </code>
    <code displayName="local - regional">
       <translate code="371494008" displayName="regional lymph node involvement"
@@ -4383,5 +4503,68 @@
                  displayName="reconstruction of breast with expander or prosthesis"
                  codeSystem="2.16.840.1.113883.6.96"
                  codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="cause of death:">
+      <translate code="184305005" displayName="cause of death"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="describe cause of death:">
+      <translate code="406194006" displayName="death characteristics"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="taxaneregimens">
+      <translate code="69960004" displayName="cancer chemotherapy regimen"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="anthracyclineregimens">
+      <translate code="69960004" displayName="cancer chemotherapy regimen"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="investigationalregimens">
+      <translate code="69960004" displayName="cancer chemotherapy regimen"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="treatment end reason">
+      <translate code="419617009" displayName="reason for procedure cancelation"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="dose modification">
+      <translate code="371133007" displayName="treatment modification"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="staging modifiers">
+      <translate code="385356007" displayName="tumor stage finding"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="longest diameter (ld)">
+      <translate code="396361002" displayName="lesion size, largest dimension"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="survival status">
+      <translate code="309032007" displayName="research administrative status"
+                 codeSystem="2.16.840.1.113883.6.96"
+                 codeSystemName="SNOMED-CT"/>
+   </code>
+   <code displayName="reporting period">
+      <translate code="55187-9" displayName="Reporting Parameters"
+                 codeSystem="2.16.840.1.113883.6.1"
+                 codeSystemName="LOINC"/>
+   </code>
+   <code displayName="male">
+      <translate code="M" displayName="Male" codeSystem="2.16.840.1.113883.5.1"
+                 codeSystemName="HL7"/>
+   </code>
+   <code displayName="female">
+      <translate code="F" displayName="Female" codeSystem="2.16.840.1.113883.5.1"
+                 codeSystemName="HL7"/>
    </code>
 </translation>

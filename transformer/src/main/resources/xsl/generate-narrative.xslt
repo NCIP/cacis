@@ -3,7 +3,7 @@
 <!-- Created by Lantana Consulting Group, 2011 -->
 <!-- ============================================================== -->
 <xsl:transform version="1.1" xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="cda">
-	<xsl:output method="xml" indent="yes" encoding="UTF-8" />
+	<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 	<!-- Note: Does not strip space in ClinicalDocument, structuredBody, component,
      or section because in the sample document there are linespaces to help
      readability. -->
@@ -29,7 +29,7 @@
 	<xsl:template match="*|@*|comment()|processing-instruction()|text()">
 		<xsl:if test="local-name()='ClinicalDocument'">
 			<xsl:processing-instruction name="xml-stylesheet">
-				<xsl:text>type="text/xsl" href="..\XSLT\CDA.xsl"</xsl:text>
+				<xsl:text>type="text/xsl" href="http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/xslt/CDA.xsl"</xsl:text>
 			</xsl:processing-instruction>
 			<xsl:text>&#10;</xsl:text>
 		</xsl:if>
@@ -201,7 +201,7 @@
 		<xsl:param name="section" select="current()"/>
 		<xsl:if test="count($section/cda:entry)>0">
 			<table border="1" width="100%">
-			  <tbody>
+				<tbody>
 					<xsl:for-each select="$section/cda:entry[not(cda:act/cda:code/cda:originalText='Breast cancer history')]">
 						<xsl:call-template name="make-problemEntry">
 							<xsl:with-param name="problemEntry" select="current()"/>
@@ -319,7 +319,15 @@
 								</xsl:choose>
 								<xsl:if test="$problemObs/cda:performer">
 									<xsl:text> by </xsl:text>
-									<xsl:value-of select="$problemObs/cda:performer/cda:assignedEntity/cda:name"/>
+									<xsl:choose>
+										<xsl:when test="string-length($problemObs/cda:performer/cda:assignedEntity/cda:name)>0">
+											<xsl:value-of select="$problemObs/cda:performer/cda:assignedEntity/cda:name"/>
+										</xsl:when>
+										<xsl:when test="string-length($problemObs/cda:performer/cda:assignedEntity/cda:id/@root)>0">
+											<xsl:text> id: </xsl:text>
+											<xsl:value-of select="$problemObs/cda:performer/cda:assignedEntity/cda:id/@root"/>
+										</xsl:when>
+									</xsl:choose>
 								</xsl:if>
 							</td>
 						</xsl:when>
@@ -331,11 +339,11 @@
 								<xsl:call-template name="get-displayName">
 									<xsl:with-param name="code" select="$problemObs/cda:code"/>
 								</xsl:call-template>
-							  <br/>
-							  <xsl:call-template name="make-entryRelationshipOBS">
-							    <xsl:with-param name="obs" select="$problemObs"/>
-							    <xsl:with-param name="spNum" select="0"/>
-							  </xsl:call-template>
+								<br/>
+								<xsl:call-template name="make-entryRelationshipOBS">
+									<xsl:with-param name="obs" select="$problemObs"/>
+									<xsl:with-param name="spNum" select="0"/>
+								</xsl:call-template>
 							</td>
 							<td>
 								<xsl:if test="$problemObs/cda:value">
@@ -350,18 +358,18 @@
 							</td>
 						</xsl:when>
 					</xsl:choose>
-				  <td>
-				    <xsl:choose>
-				      <xsl:when test="cda:effectiveTime">
-				        <xsl:call-template name="get-effectiveTime">
-				          <xsl:with-param name="effectiveTime" select="cda:effectiveTime"/>
-				        </xsl:call-template>
-				      </xsl:when>
-				      <xsl:otherwise>
-				        <xsl:text>No date information</xsl:text>
-				      </xsl:otherwise>
-				    </xsl:choose>
-				  </td>
+					<td>
+						<xsl:choose>
+							<xsl:when test="cda:effectiveTime">
+								<xsl:call-template name="get-effectiveTime">
+									<xsl:with-param name="effectiveTime" select="cda:effectiveTime"/>
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>No date information</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</td>
 				</tr>
 			</xsl:when>
 			<xsl:when test="$problemAct">
@@ -421,7 +429,7 @@
 									</xsl:if>
 								</td>
 							</xsl:when>
-						  <xsl:when test="cda:code[@code!='ASSERTION'] or cda:code/cda:originalText">
+							<xsl:when test="cda:code[@code!='ASSERTION'] or cda:code/cda:originalText">
 								<td>
 									<xsl:if test="cda:text/cda:reference/@value">
 										<xsl:attribute name="ID"><xsl:value-of select="cda:text/cda:reference/@value"/></xsl:attribute>
@@ -439,36 +447,45 @@
 									</xsl:for-each>
 									<xsl:if test="cda:performer">
 										<xsl:text> by </xsl:text>
-										<xsl:value-of select="cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name"/>
+										<xsl:choose>
+											<xsl:when test="string-length(cda:performer/cda:assignedEntity/cda:name)>0">
+												<xsl:value-of select="cda:performer/cda:assignedEntity/cda:name"/>
+											</xsl:when>
+											<xsl:when test="string-length(cda:performer/cda:assignedEntity/cda:id/@root)>0">
+												<xsl:text> physician(id: </xsl:text>
+												<xsl:value-of select="cda:performer/cda:assignedEntity/cda:id/@root"/>
+												<xsl:text>)</xsl:text>
+											</xsl:when>
+										</xsl:choose>
 									</xsl:if>
-								  <xsl:choose>
-								    <xsl:when test="cda:code[@displayName='therapeutic response']">
-								      <xsl:call-template name="make-entryRelationshipOBS">
-								        <xsl:with-param name="obs" select="current()"/>
-								        <xsl:with-param name="spNum" select="2"/>
-								      </xsl:call-template>
-								    </xsl:when>
-								    <xsl:otherwise>
-								      <xsl:call-template name="make-entryRelationshipOBS">
-								        <xsl:with-param name="obs" select="current()"/>
-								        <xsl:with-param name="spNum" select="0"/>
-								      </xsl:call-template>
-								    </xsl:otherwise>
-								  </xsl:choose>
+									<xsl:choose>
+										<xsl:when test="cda:code[@displayName='therapeutic response']">
+											<xsl:call-template name="make-entryRelationshipOBS">
+												<xsl:with-param name="obs" select="current()"/>
+												<xsl:with-param name="spNum" select="2"/>
+											</xsl:call-template>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:call-template name="make-entryRelationshipOBS">
+												<xsl:with-param name="obs" select="current()"/>
+												<xsl:with-param name="spNum" select="0"/>
+											</xsl:call-template>
+										</xsl:otherwise>
+									</xsl:choose>
 								</td>
 							</xsl:when>
 						</xsl:choose>
 						<td>
-						  <xsl:choose>
-						    <xsl:when test="cda:effectiveTime">
-						      <xsl:call-template name="get-effectiveTime">
-						        <xsl:with-param name="effectiveTime" select="cda:effectiveTime"/>
-						      </xsl:call-template>
-						    </xsl:when>
-						    <xsl:otherwise>
-						      <xsl:text>No date information</xsl:text>
-						    </xsl:otherwise>
-						  </xsl:choose>
+							<xsl:choose>
+								<xsl:when test="cda:effectiveTime">
+									<xsl:call-template name="get-effectiveTime">
+										<xsl:with-param name="effectiveTime" select="cda:effectiveTime"/>
+									</xsl:call-template>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>No date information</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
 						</td>
 					</tr>
 				</xsl:for-each>
@@ -550,97 +567,201 @@
 	</xsl:template>
 	<xsl:template match="cda:section[cda:templateId/@root='2.16.840.1.113883.3.88.11.83.112']" name="medications" mode="section-narrative">
 		<xsl:param name="section" select="current()"/>
-		<table border="1" width="100%">
-			<thead>
-				<tr>
-					<th>Medication</th>
-					<th>Date</th>
-					<th>Dose</th>
-					<th>Frequency</th>
-					<th>Route</th>
-					<th>Note</th>
-				</tr>
-			</thead>
-			<tbody>
-				<xsl:for-each select="$section/cda:entry/cda:substanceAdministration">
-					<tr>
-						<td>
-							<xsl:choose>
-								<xsl:when test="current()/cda:consumable/cda:manufacturedProduct/cda:manufacturedMaterial">
-									<xsl:call-template name="get-displayName">
-										<xsl:with-param name="code" select="current()/cda:consumable/cda:manufacturedProduct/cda:manufacturedMaterial/cda:code"/>
-									</xsl:call-template>
-								</xsl:when>
-								<xsl:otherwise>No Information</xsl:otherwise>
-							</xsl:choose>
-						</td>
-						<td>
-							<xsl:choose>
-								<xsl:when test="current()/cda:effectiveTime[@xsi:type='IVL_TS']">
-									<xsl:call-template name="get-effectiveTime">
-										<xsl:with-param name="effectiveTime" select="current()/cda:effectiveTime[@xsi:type='IVL_TS']"/>
-									</xsl:call-template>
-								</xsl:when>
-							</xsl:choose>
-						</td>
-						<td>
-							<xsl:choose>
-								<xsl:when test="current()/cda:doseQuantity">
-									<xsl:call-template name="get-displayName">
-										<xsl:with-param name="code" select="current()/cda:doseQuantity"/>
-									</xsl:call-template>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>no information</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</td>
-						<td>
-							<xsl:choose>
-								<xsl:when test="current()/cda:effectiveTime[@xsi:type='PIVL_TS']/cda:period/cda:translation/cda:originalText">
-									<xsl:value-of select="current()/cda:effectiveTime[@xsi:type='PIVL_TS']/cda:period/cda:translation/cda:originalText"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>no information</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</td>
-						<td>
-							<xsl:choose>
-								<xsl:when test="current()/cda:routeCode">
-									<xsl:call-template name="get-displayName">
-										<xsl:with-param name="code" select="current()/cda:routeCode"/>
-									</xsl:call-template>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>no information</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</td>
-						<td>
-							<xsl:for-each select="cda:entryRelationship">
+		<xsl:choose>
+			<xsl:when test="count($section/cda:entry/cda:substanceAdministration)>0">
+				<table border="1" width="100%">
+					<thead>
+						<tr>
+							<th>Medication</th>
+							<th>Date</th>
+							<th>Dose</th>
+							<th>Frequency</th>
+							<th>Route</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						<xsl:for-each select="$section/cda:entry/cda:substanceAdministration">
+							<tr>
+								<td>
+									<xsl:choose>
+										<xsl:when test="current()/cda:consumable/cda:manufacturedProduct/cda:manufacturedMaterial">
+											<xsl:call-template name="get-displayName">
+												<xsl:with-param name="code" select="current()/cda:consumable/cda:manufacturedProduct/cda:manufacturedMaterial/cda:code"/>
+											</xsl:call-template>
+										</xsl:when>
+										<xsl:otherwise>No Information</xsl:otherwise>
+									</xsl:choose>
+								</td>
 								<xsl:choose>
-									<xsl:when test="@typeCode='RSON'">
-										<xsl:text>Reason:</xsl:text>
-										<xsl:text> </xsl:text>
-										<xsl:value-of select="cda:observation/cda:value/cda:originalText"/>
-										<br/>
+									<xsl:when test="not(./cda:effectiveTime) and not(./cda:doseQuantity) and not(cda:routeCode) and not(cda:entryRelationship)">
+										<td colspan="5">
+											<xsl:value-of select="./cda:text"/>
+										</td>
 									</xsl:when>
-									<xsl:when test="@typeCode='REFR'">
-										<xsl:if test="cda:observation/cda:code/@code!='Assertion'">
-											<xsl:value-of select="cda:observation/cda:code/cda:originalText"/>
-											<xsl:text>  </xsl:text>
-										</xsl:if>
-										<xsl:value-of select="cda:observation/cda:value/cda:originalText"/>
-										<br/>
-									</xsl:when>
+									<xsl:otherwise>
+										<td>
+											<xsl:choose>
+												<xsl:when test="current()/cda:effectiveTime[@xsi:type='IVL_TS']">
+													<xsl:call-template name="get-effectiveTime">
+														<xsl:with-param name="effectiveTime" select="current()/cda:effectiveTime[@xsi:type='IVL_TS']"/>
+													</xsl:call-template>
+												</xsl:when>
+											</xsl:choose>
+										</td>
+										<td>
+											<xsl:choose>
+												<xsl:when test="current()/cda:doseQuantity">
+													<xsl:call-template name="get-displayName">
+														<xsl:with-param name="code" select="current()/cda:doseQuantity"/>
+													</xsl:call-template>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:text>no information</xsl:text>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+										<td>
+											<xsl:choose>
+												<xsl:when test="current()/cda:effectiveTime[@xsi:type='PIVL_TS']/cda:period/cda:translation/cda:originalText">
+													<xsl:value-of select="current()/cda:effectiveTime[@xsi:type='PIVL_TS']/cda:period/cda:translation/cda:originalText"/>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:text>no information</xsl:text>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+										<td>
+											<xsl:choose>
+												<xsl:when test="current()/cda:routeCode">
+													<xsl:call-template name="get-displayName">
+														<xsl:with-param name="code" select="current()/cda:routeCode"/>
+													</xsl:call-template>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:text>no information</xsl:text>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+										<td>
+											<xsl:for-each select="cda:entryRelationship">
+												<xsl:choose>
+													<xsl:when test="@typeCode='RSON'">
+														<xsl:text>Reason:</xsl:text>
+														<xsl:text> </xsl:text>
+														<xsl:value-of select="cda:observation/cda:value/cda:originalText"/>
+														<br/>
+													</xsl:when>
+													<xsl:when test="@typeCode='REFR'">
+														<xsl:if test="cda:observation/cda:code/@code!='Assertion'">
+															<xsl:value-of select="cda:observation/cda:code/cda:originalText"/>
+															<xsl:text>  </xsl:text>
+														</xsl:if>
+														<xsl:value-of select="cda:observation/cda:value/cda:originalText"/>
+														<br/>
+													</xsl:when>
+												</xsl:choose>
+											</xsl:for-each>
+										</td>
+									</xsl:otherwise>
 								</xsl:choose>
-							</xsl:for-each>
-						</td>
-					</tr>
-				</xsl:for-each>
-			</tbody>
-		</table>
+							</tr>
+						</xsl:for-each>
+					</tbody>
+				</table>
+			</xsl:when>
+			<xsl:when test="count($section/cda:entry/cda:procedure)>0">
+				<table border="1" width="100%">
+					<thead>
+						<tr>
+							<th>Chemo Treatment</th>
+							<th>Date</th>
+							<th>Treatment End Reason</th>
+							<th>Detail</th>
+						</tr>
+					</thead>
+					<tbody>
+						<xsl:for-each select="$section/cda:entry/cda:procedure">
+							<tr>
+								<td>
+									<xsl:choose>
+										<xsl:when test="current()/cda:code">
+											<xsl:call-template name="get-displayName">
+												<xsl:with-param name="code" select="current()/cda:code"/>
+											</xsl:call-template>
+										</xsl:when>
+										<xsl:otherwise>No Information</xsl:otherwise>
+									</xsl:choose>
+								</td>
+								<td>
+									<xsl:if test="current()/cda:effectiveTime[@xsi:type='IVL_TS']">
+										<xsl:call-template name="get-effectiveTime">
+											<xsl:with-param name="effectiveTime" select="current()/cda:effectiveTime[@xsi:type='IVL_TS']"/>
+										</xsl:call-template>
+									</xsl:if>
+								</td>
+						        <xsl:choose>
+									<xsl:when test="cda:entryRelationship/cda:observation">
+																		<td>
+										<xsl:if test="cda:entryRelationship/cda:observation/cda:code">
+											<xsl:call-template name="get-displayName">
+												<xsl:with-param name="code" select="cda:entryRelationship/cda:observation/cda:code"/>
+											</xsl:call-template>
+										</xsl:if>
+										<xsl:text>:  </xsl:text>
+										<xsl:if test="cda:entryRelationship/cda:observation/cda:value">
+											<xsl:call-template name="get-displayName">
+												<xsl:with-param name="code" select="cda:entryRelationship/cda:observation/cda:value"/>
+											</xsl:call-template>
+										</xsl:if>
+									</td>
+									</xsl:when>
+									<xsl:otherwise>
+										<td> </td>
+									</xsl:otherwise>
+								</xsl:choose>
+								<xsl:choose>
+									<xsl:when test="cda:entryRelationship/cda:substanceAdministration">
+									<td>   
+										<xsl:choose>
+											<xsl:when test="cda:entryRelationship/cda:substanceAdministration/cda:consumable/cda:manufacturedProduct/cda:manufacturedMaterial">
+												<xsl:call-template name="get-displayName">
+													<xsl:with-param name="code" select="cda:entryRelationship/cda:substanceAdministration/cda:consumable/cda:manufacturedProduct/cda:manufacturedMaterial/cda:code"/>
+												</xsl:call-template>
+											</xsl:when>
+											<xsl:otherwise>No Medication Information</xsl:otherwise>
+										</xsl:choose>
+										<xsl:choose>
+											<xsl:when test="cda:entryRelationship/cda:substanceAdministration/cda:repeatNumber">
+												<xsl:text> Completed Circles:</xsl:text>
+												<xsl:value-of select="cda:entryRelationship/cda:substanceAdministration/cda:repeatNumber/@value"/>
+											</xsl:when>
+										</xsl:choose>
+										<xsl:for-each select="cda:entryRelationship/cda:substanceAdministration/cda:entryRelationship/cda:observation">
+											<xsl:text> | </xsl:text>
+											<xsl:choose>
+												<xsl:when test="current()/cda:code">
+													<xsl:call-template name="get-displayName">
+														<xsl:with-param name="code" select="current()/cda:code"/>
+													</xsl:call-template>
+												</xsl:when>
+												<xsl:otherwise>No Information</xsl:otherwise>
+											</xsl:choose>
+											<xsl:text>:</xsl:text>
+											<xsl:value-of select="current()/cda:value"/>
+										</xsl:for-each>
+									</td>
+									</xsl:when>
+									<xsl:otherwise>
+										<td> </td>
+									</xsl:otherwise>
+								</xsl:choose>
+							</tr>
+						</xsl:for-each>
+					</tbody>
+				</table>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 	<xsl:template match="cda:section[cda:templateId/@root='2.16.840.1.113883.3.88.11.83.120']" name="systems" mode="section-narrative">
 		<xsl:param name="section" select="current()"/>
@@ -1082,14 +1203,14 @@
 															<xsl:call-template name="get-displayName">
 																<xsl:with-param name="code" select="cda:value"/>
 															</xsl:call-template>
-														  <xsl:choose>
-														    <xsl:when test="@negationInd='true'">
-														      <xsl:text>: no</xsl:text>
-														    </xsl:when>
-														    <xsl:when test="@negationInd='false' or not(@negationInd)">
-														      <xsl:text>: yes</xsl:text>
-														    </xsl:when>
-														  </xsl:choose>
+															<xsl:choose>
+																<xsl:when test="@negationInd='true'">
+																	<xsl:text>: no</xsl:text>
+																</xsl:when>
+																<xsl:when test="@negationInd='false' or not(@negationInd)">
+																	<xsl:text>: yes</xsl:text>
+																</xsl:when>
+															</xsl:choose>
 														</xsl:when>
 														<xsl:otherwise>
 															<xsl:call-template name="get-displayName">
@@ -1209,124 +1330,123 @@
 	<xsl:template name="make-entryRelationshipOBS">
 		<xsl:param name="obs"/>
 		<xsl:param name="spNum"/>
-	  <xsl:for-each select="$obs/cda:entryRelationship/cda:*">
-	    <xsl:choose>
-	      <xsl:when test="self::cda:observation">
-	        <xsl:choose>
-	          <xsl:when test="cda:code[@code='ASSERTION']">
-	            <br/>
-	            <xsl:call-template name="spaceLoop">
-	              <xsl:with-param name="i" select="0"/>
-	              <xsl:with-param name="count" select="$spNum"/>
-	            </xsl:call-template>
-	            <xsl:call-template name="get-displayName">
-	              <xsl:with-param name="code" select="cda:value"/>
-	            </xsl:call-template>
-	            <xsl:choose>
-	              <xsl:when test="@negationInd='true'">
-	                <xsl:text>: no</xsl:text>
-	              </xsl:when>
-	              <xsl:when test="@nullFlavor='NASK'">
-	                <xsl:text>: not assessed</xsl:text>
-	              </xsl:when>
-	              <xsl:otherwise>
-	                <xsl:text>: yes</xsl:text>
-	              </xsl:otherwise>
-	            </xsl:choose>
-	          </xsl:when>
-	          <xsl:when test="cda:code[@code!='ASSERTION' or @nullFlavor]">
-	            <br/>
-	            <xsl:call-template name="spaceLoop">
-	              <xsl:with-param name="i" select="0"/>
-	              <xsl:with-param name="count" select="$spNum"/>
-	            </xsl:call-template>
-	            <xsl:call-template name="get-displayName">
-	              <xsl:with-param name="code" select="cda:code"/>
-	            </xsl:call-template>
-	            <xsl:text>: </xsl:text>
-	            <xsl:call-template name="get-displayName">
-	              <xsl:with-param name="code" select="cda:value"/>
-	            </xsl:call-template>
-	          </xsl:when>
-	        </xsl:choose>
-	        <xsl:if test="cda:effectiveTime/@value">
-	          <xsl:text> at </xsl:text>
-	          <xsl:call-template name="get-effectiveTime">
-	            <xsl:with-param name="effectiveTime" select="cda:effectiveTime"/>
-	          </xsl:call-template>
-	        </xsl:if>
-	        <xsl:variable name="newSp">
-	          <xsl:choose>
-	            <xsl:when test="number($spNum)&lt;1">
-	              <xsl:value-of select="2"/>
-	            </xsl:when>
-	            <xsl:otherwise>
-	              <xsl:value-of select="number($spNum) + 4"/>
-	            </xsl:otherwise>
-	          </xsl:choose>
-	        </xsl:variable>
-	        <xsl:if test="count(current()/cda:entryRelationship)>0">
-	          <xsl:call-template name="make-entryRelationshipOBS">
-	            <xsl:with-param name="obs" select="current()"/>
-	            <xsl:with-param name="spNum" select="$newSp"/>
-	          </xsl:call-template>
-	        </xsl:if>
-	        
-	      </xsl:when>
-	      <xsl:when test="self::cda:act">
-	        <xsl:if test="string-length(cda:code/cda:originalText)>0 or not(cda:code/@nullFlavor)">
-	          <xsl:variable name="actTitle">
-	            <xsl:call-template name="get-displayName">
-	              <xsl:with-param name="code" select="cda:code"/>
-	            </xsl:call-template>
-	          </xsl:variable>
-	          <br/><xsl:text>--</xsl:text>
-	          <xsl:value-of select="$actTitle"/>
-	        </xsl:if>
-
-	        <xsl:for-each select="cda:entryRelationship/cda:observation">
-	          <br/>
-	          <xsl:choose>
-	            <xsl:when test="cda:code[@code='ASSERTION']">
-	              <xsl:if test="cda:text/cda:reference/@value">
-	                <xsl:attribute name="ID"><xsl:value-of select="cda:text/cda:reference/@value"/></xsl:attribute>
-	              </xsl:if>
-				      <xsl:text>------</xsl:text>
-	              <xsl:call-template name="get-displayName">
-	                <xsl:with-param name="code" select="cda:value"/>
-	              </xsl:call-template>
-	              <xsl:text> </xsl:text>
-	              <xsl:choose>
-	                <xsl:when test="@negationInd='true'">
-	                  <xsl:text>No</xsl:text>
-	                </xsl:when>
-	                <xsl:when test="@nullFlavor='NASK'">
-	                  <xsl:text>not assessed</xsl:text>
-	                </xsl:when>
-	                <xsl:otherwise>
-	                  <xsl:text>Yes</xsl:text>
-	                </xsl:otherwise>
-	              </xsl:choose>
-	            </xsl:when>
-	          </xsl:choose>
-	        </xsl:for-each>
-	      </xsl:when>
-	      <xsl:when test="self::cda:procedure">
-			<br/>
-			<xsl:call-template name="spaceLoop">
-			  <xsl:with-param name="i" select="0"/>
-			  <xsl:with-param name="count" select="$spNum"/>
-			</xsl:call-template>
-			<xsl:call-template name="get-displayName">
-			  <xsl:with-param name="code" select="cda:code"/>
-			</xsl:call-template>
-			<xsl:text>: </xsl:text>
-			<xsl:call-template name="get-displayName">
-			  <xsl:with-param name="code" select="cda:value"/>
-			</xsl:call-template>
-	      </xsl:when>
-	    </xsl:choose>
-	  </xsl:for-each>
+		<xsl:for-each select="$obs/cda:entryRelationship/cda:*">
+			<xsl:choose>
+				<xsl:when test="self::cda:observation">
+					<xsl:choose>
+						<xsl:when test="cda:code[@code='ASSERTION']">
+							<br/>
+							<xsl:call-template name="spaceLoop">
+								<xsl:with-param name="i" select="0"/>
+								<xsl:with-param name="count" select="$spNum"/>
+							</xsl:call-template>
+							<xsl:call-template name="get-displayName">
+								<xsl:with-param name="code" select="cda:value"/>
+							</xsl:call-template>
+							<xsl:choose>
+								<xsl:when test="@negationInd='true'">
+									<xsl:text>: no</xsl:text>
+								</xsl:when>
+								<xsl:when test="@nullFlavor='NASK'">
+									<xsl:text>: not assessed</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>: yes</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="cda:code[@code!='ASSERTION' or @nullFlavor]">
+							<br/>
+							<xsl:call-template name="spaceLoop">
+								<xsl:with-param name="i" select="0"/>
+								<xsl:with-param name="count" select="$spNum"/>
+							</xsl:call-template>
+							<xsl:call-template name="get-displayName">
+								<xsl:with-param name="code" select="cda:code"/>
+							</xsl:call-template>
+							<xsl:text>: </xsl:text>
+							<xsl:call-template name="get-displayName">
+								<xsl:with-param name="code" select="cda:value"/>
+							</xsl:call-template>
+						</xsl:when>
+					</xsl:choose>
+					<xsl:if test="cda:effectiveTime/@value">
+						<xsl:text> at </xsl:text>
+						<xsl:call-template name="get-effectiveTime">
+							<xsl:with-param name="effectiveTime" select="cda:effectiveTime"/>
+						</xsl:call-template>
+					</xsl:if>
+					<xsl:variable name="newSp">
+						<xsl:choose>
+							<xsl:when test="number($spNum)&lt;1">
+								<xsl:value-of select="2"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="number($spNum) + 4"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:if test="count(current()/cda:entryRelationship)>0">
+						<xsl:call-template name="make-entryRelationshipOBS">
+							<xsl:with-param name="obs" select="current()"/>
+							<xsl:with-param name="spNum" select="$newSp"/>
+						</xsl:call-template>
+					</xsl:if>
+				</xsl:when>
+				<xsl:when test="self::cda:act">
+					<xsl:if test="string-length(cda:code/cda:originalText)>0 or not(cda:code/@nullFlavor)">
+						<xsl:variable name="actTitle">
+							<xsl:call-template name="get-displayName">
+								<xsl:with-param name="code" select="cda:code"/>
+							</xsl:call-template>
+						</xsl:variable>
+						<br/>
+						<xsl:text>--</xsl:text>
+						<xsl:value-of select="$actTitle"/>
+					</xsl:if>
+					<xsl:for-each select="cda:entryRelationship/cda:observation">
+						<br/>
+						<xsl:choose>
+							<xsl:when test="cda:code[@code='ASSERTION']">
+								<xsl:if test="cda:text/cda:reference/@value">
+									<xsl:attribute name="ID"><xsl:value-of select="cda:text/cda:reference/@value"/></xsl:attribute>
+								</xsl:if>
+								<xsl:text>------</xsl:text>
+								<xsl:call-template name="get-displayName">
+									<xsl:with-param name="code" select="cda:value"/>
+								</xsl:call-template>
+								<xsl:text> </xsl:text>
+								<xsl:choose>
+									<xsl:when test="@negationInd='true'">
+										<xsl:text>No</xsl:text>
+									</xsl:when>
+									<xsl:when test="@nullFlavor='NASK'">
+										<xsl:text>not assessed</xsl:text>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:text>Yes</xsl:text>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+						</xsl:choose>
+					</xsl:for-each>
+				</xsl:when>
+				<xsl:when test="self::cda:procedure">
+					<br/>
+					<xsl:call-template name="spaceLoop">
+						<xsl:with-param name="i" select="0"/>
+						<xsl:with-param name="count" select="$spNum"/>
+					</xsl:call-template>
+					<xsl:call-template name="get-displayName">
+						<xsl:with-param name="code" select="cda:code"/>
+					</xsl:call-template>
+					<xsl:text>: </xsl:text>
+					<xsl:call-template name="get-displayName">
+						<xsl:with-param name="code" select="cda:value"/>
+					</xsl:call-template>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:for-each>
 	</xsl:template>
 	<!-- ============================================================== -->
 	<!-- ============================================================== -->
@@ -1597,10 +1717,10 @@
 	</xsl:template>
 	<xsl:template name="get-displayName">
 		<xsl:param name="code"/>
-	  <xsl:param name="codeStr">
+		<xsl:param name="codeStr">
 			<xsl:choose>
-				<xsl:when test="$code/cda:originalText">
-					<xsl:value-of select="$code/cda:originalText"/>
+				<xsl:when test="$code//cda:originalText">
+					<xsl:value-of select="$code//cda:originalText"/>
 				</xsl:when>
 				<xsl:when test="$code/@displayName">
 					<xsl:value-of select="$code/@displayName"/>
@@ -1622,8 +1742,8 @@
 					<xsl:value-of select="$code/@value"/>
 				</xsl:when>
 				<xsl:otherwise>
-			       <xsl:value-of select="string($code)"/>
-				 </xsl:otherwise>
+					<xsl:value-of select="string($code)"/>
+				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:param>
 		<xsl:param name="qualiStr">
@@ -1801,19 +1921,19 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="$effectiveTime/@nullFlavor">
-			  <xsl:value-of select="'Date: '"/> 
+				<xsl:value-of select="'Date: '"/>
 				<xsl:call-template name="get-nullFlavor">
 					<xsl:with-param name="nullFlavor" select="$effectiveTime/@nullFlavor"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="$effectiveTime/cda:low/@nullFlavor">
-			  <xsl:value-of select="'Date: '"/> 
+				<xsl:value-of select="'Date: '"/>
 				<xsl:call-template name="get-nullFlavor">
 					<xsl:with-param name="nullFlavor" select="$effectiveTime/cda:low/@nullFlavor"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="$effectiveTime/cda:high/@nullFlavor">
-			  <xsl:value-of select="'End date: '"/>
+				<xsl:value-of select="'End date: '"/>
 				<xsl:call-template name="get-nullFlavor">
 					<xsl:with-param name="nullFlavor" select="$effectiveTime/cda:high/@nullFlavor"/>
 				</xsl:call-template>
