@@ -12,8 +12,9 @@
                 <!-- ############################################################################ -->
                 <!--CUSTOMIZE these for your local environment-->
                 <!-- ############################################################################ -->
-
-                <openxds.web.dir>$CATALINA_HOME/webapps/openxds-web</openxds.web.dir>
+				
+				<!-- Replace <<CATALINA_HOME>> with absolute path to tomcat home location -->
+                <openxds.web.dir><<CATALINA_HOME>>/webapps/openxds-web</openxds.web.dir>
 
                 <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
                 <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
@@ -56,7 +57,9 @@
                 <!-- these are the default keystore files caCIS uses -->
                 <cacis.keystore.path>${cacis.config.home}/certs/cacis-keystore.jks</cacis.keystore.path>
                 <cacis.keystore.password>password</cacis.keystore.password>
-                <cacis.truststore.path>$JAVA_HOME/jre/lib/security/cacerts</cacis.truststore.path>
+                
+                <!-- Replace <<JAVA_HOME>> with absolute path to java home location -->
+                <cacis.truststore.path><<JAVA_HOME>>/jre/lib/security/cacerts</cacis.truststore.path>
                 <cacis.truststore.password>changeit</cacis.truststore.password>
 
                 <!--openXDS service endpoints-->
