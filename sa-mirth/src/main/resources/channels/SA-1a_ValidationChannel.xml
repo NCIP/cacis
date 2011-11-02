@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1318620992001</time>
+    <time>1320255307490</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -123,7 +123,20 @@ if (srcData.length()==0) {
         <step>
           <sequenceNumber>3</sequenceNumber>
           <name>xsdValidate_SourceData</name>
-          <script>//perform schema validation for SourceData
+          <script>//Perform check to make sure description of the trim is available
+var desc = srcData[&apos;description&apos;];
+
+if (desc.length() == 0) {
+	handleErrorStr(&apos;description is not available !&apos;);
+	return;
+}
+if (desc.toString().trim()==&apos;&apos;) {
+	handleErrorStr(&apos;description is empty !&apos;);
+	return;
+}
+
+
+//perform schema validation for SourceData
 if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
 	logger.info(&apos;Performing xsd validation of trim (sourcedata) against trim4.xsd&apos;);
 	var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
@@ -139,7 +152,20 @@ if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;)
           <data class="map">
             <entry>
               <string>Script</string>
-              <string>//perform schema validation for SourceData
+              <string>//Perform check to make sure description of the trim is available
+var desc = srcData[&apos;description&apos;];
+
+if (desc.length() == 0) {
+	handleErrorStr(&apos;description is not available !&apos;);
+	return;
+}
+if (desc.toString().trim()==&apos;&apos;) {
+	handleErrorStr(&apos;description is empty !&apos;);
+	return;
+}
+
+
+//perform schema validation for SourceData
 if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
 	logger.info(&apos;Performing xsd validation of trim (sourcedata) against trim4.xsd&apos;);
 	var sdXsdValidationMsg = xsdValidateSASourceData(srcData.toString());
