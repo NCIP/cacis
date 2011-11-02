@@ -16,9 +16,13 @@
 				<!-- Replace <<CATALINA_HOME>> with absolute path to tomcat home location -->
                 <openxds.web.dir><<CATALINA_HOME>>/webapps/openxds-web</openxds.web.dir>
 
-                <mirthConnect.cli>/Users/kherm/dev/utils/Mirth_Connect_CLI/mccommand</mirthConnect.cli>
-                <mirthConnect.server.dir>/Users/kherm/dev/utils/Mirth_Connect</mirthConnect.server.dir>
+                <!-- Replace <<MIRTH CONNECT HOME>> with absolute path to Mirth Connect install location-->
+                <mirthConnect.server.dir><<MIRTH CONNECT HOME>></mirthConnect.server.dir>
 
+				<!-- Replace <<MIRTH CONNECT HOME>> with absolute path to mccommand of Mirth Connect. 
+						Normally is inside the Mirth Connect install directory-->
+                <mirthConnect.cli><<MIRTH CONNECT HOME>>/mccommand</mirthConnect.cli>
+                
                 <!--XDS database properties-->
                 <cacis.xds.authz.db.url>jdbc:postgresql://localhost:5432/cacis-xds-authz</cacis.xds.authz.db.url>
                 <cacis.xds.authz.db.username>postgres</cacis.xds.authz.db.username>
@@ -29,7 +33,7 @@
                 <cacis-ip.cmp.service.url>${mirth.base.url}:18081/services/CanonicalModelProcessor?wsdl</cacis-ip.cmp.service.url>
 
                 <!-- cacis proxy for xds -->
-                <cacis.xds.proxy.repository.url>https://localhost:21443/openxds-web/services/cacis-proxy-xdsrepositoryb
+                <cacis.xds.proxy.repository.url>https://localhost:8443/openxds-web/services/cacis-proxy-xdsrepositoryb
                 </cacis.xds.proxy.repository.url>
 
                 <!-- Password of the email address we use to send emails with in nav (example in pom is a gmail account) -->
@@ -46,11 +50,7 @@
                 <transformation.sysadmin.address>cacisnavtestsys@gmail.com</transformation.sysadmin.address>
 
 
-                <!-- ############################################################################ -->
-                <!-- OPTIONAL - change these for your local environment. Defaults should work for most cases-->
-                <!-- ############################################################################ -->
-
-                 <!-- needs to be the user.home. Only needs to change for WINDOWS -->
+                 <!-- Should be the user home directory-->
                  <userhome.dir>${user.home}</userhome.dir>
                  <cacis.config.home>${userhome.dir}/.cacis</cacis.config.home>
 
@@ -74,6 +74,7 @@
                 <cdfOutputDir>${cacis.config.home}/mc/output/cdf/</cdfOutputDir>
                 <xccdOutputDir>${cacis.config.home}/mc/output/xccd/</xccdOutputDir>
                 <trimInputDir>${cacis.config.home}/mc/input/</trimInputDir>
+                
                 <!--  Temporary directory for System test output file -->
                 <cacis.mc.temp.dir>${cacis.config.home}/mc/temp/output/</cacis.mc.temp.dir>
 
