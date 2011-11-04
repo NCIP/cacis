@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317843161461</time>
+    <time>1320265576962</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -22,6 +22,13 @@ If routing instructions are not part of the message, then default routing instru
           <sequenceNumber>0</sequenceNumber>
           <name>Log routing instructions</name>
           <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
+//no need to add the default routingInstructions just return.
+var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	return;
+}
 
 logger.info(msg.routingInstructions.length());
 
@@ -41,6 +48,13 @@ logger.info(&apos;Response Message -- &apos;+ responseMap.get(&apos;processRouti
             <entry>
               <string>Script</string>
               <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
+//no need to add the default routingInstructions just return.
+var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	return;
+}
 
 logger.info(msg.routingInstructions.length());
 
@@ -4566,6 +4580,10 @@ for each (seg in exchDocs) {
 	processRoute(chNm, msgToRoute, exFrmt);
 }
 
+if (responseMsg == &apos;&apos;) {
+	responseMsg = &apos;Routing not required !&apos;;
+}
+
 responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
 
 function processRoute(channelName, msgToRoute, exFrmt) {
@@ -4611,6 +4629,10 @@ for each (seg in exchDocs) {
 	var msgToRoute = msg.copy();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
 	processRoute(chNm, msgToRoute, exFrmt);
+}
+
+if (responseMsg == &apos;&apos;) {
+	responseMsg = &apos;Routing not required !&apos;;
 }
 
 responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
