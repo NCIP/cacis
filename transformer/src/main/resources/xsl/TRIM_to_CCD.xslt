@@ -41,7 +41,7 @@
 					</xsl:call-template>
 				</xsl:when>
 				
-				<xsl:when test="$trimdesc='Study Visit (Surgical)'">
+				<xsl:when test="$trimdesc='Surgical Study Visit Note'">
 					<xsl:call-template name="SurgicalStudyVisitNote">
 						<xsl:with-param name="siteId" select="$siteId"/>
 						<xsl:with-param name="studyId" select="$studyId"/>
