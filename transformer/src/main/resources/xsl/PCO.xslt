@@ -15,11 +15,19 @@
 
   <xsl:param name="siteId"/>
   <xsl:param name="studyId"/>
-  <!-- 
-  <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-  -->
-  <!-- Main -->
-  <xsl:template match="/">
+  
+  <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
+  
+	<!-- Main -->
+	<xsl:template match="/">
+			<xsl:call-template name="PCONote">
+				<xsl:with-param name="siteId" select="$siteId"/>
+				<xsl:with-param name="studyId" select="$studyId"/>
+			</xsl:call-template>
+	</xsl:template>
+	
+	<!-- Main with template name-->
+	<xsl:template name="PCONote" >
     <!-- CDA body must have content, otherwise, don't do CDA transform -->
     <xsl:if
       test="trim:trim//trim:act/trim:relationship[@name='chemoTreatment' or @name='Chemo' or @name='ECOGScore' or @name='ecog'
@@ -30,7 +38,7 @@
 	    or @name='tumorLaterality' or @name='vitalSigns'] [@enabled='true' or not(@enabled)]">
       <ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">
         <xsl:for-each select="trim:trim/trim:act">
-          <xsl:call-template name="baseline_cdaHeader">
+          <xsl:call-template name="pco_cdaHeader">
             <xsl:with-param name="trimAct" select="current()"/>
           </xsl:call-template>
         </xsl:for-each>
@@ -179,7 +187,7 @@
   <!-- ======================================== -->
   <!-- cda header template                      -->
   <!-- ======================================== -->
-  <xsl:template name="baseline_cdaHeader">
+  <xsl:template name="pco_cdaHeader">
     <xsl:param name="trimAct"/>
     <realmCode code="US"/>
     <typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>

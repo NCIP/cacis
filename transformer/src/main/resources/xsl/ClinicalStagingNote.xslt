@@ -24,7 +24,7 @@
 	<xsl:template name="ClinicalStagingNote" >
 		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">			
 			<xsl:for-each select="trim:trim/trim:act">
-				<xsl:call-template name="baseline_cdaHeader">
+				<xsl:call-template name="clinicalStaging_cdaHeader">
 					<xsl:with-param name="trimAct" select="current()"/>
 				</xsl:call-template>
 			</xsl:for-each>
@@ -77,7 +77,7 @@
 	<!-- ======================================== -->
 	<!-- cda header template                                                     -->
 	<!-- ======================================== -->
-	<xsl:template name="baseline_cdaHeader">
+	<xsl:template name="clinicalStaging_cdaHeader">
 		<xsl:param name="trimAct"/>
 		<realmCode code="US"/>
 		<typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>

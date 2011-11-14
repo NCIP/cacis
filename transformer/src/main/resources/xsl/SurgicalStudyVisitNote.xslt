@@ -16,7 +16,7 @@
 	<xsl:param name="studyId"/>
 
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-
+	
 	<!-- Main -->
 	<xsl:template match="/">
 			<xsl:call-template name="SurgicalStudyVisitNote">
@@ -29,7 +29,7 @@
 	<xsl:template name="SurgicalStudyVisitNote" >
 		<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">			
 			<xsl:for-each select="trim:trim/trim:act">
-				<xsl:call-template name="baseline_cdaHeader">
+				<xsl:call-template name="surgicalStudy_cdaHeader">
 					<xsl:with-param name="trimAct" select="current()"/>
 				</xsl:call-template>
 			</xsl:for-each>
@@ -146,7 +146,7 @@
 	<!-- ======================================== -->
 	<!-- cda header template                                                     -->
 	<!-- ======================================== -->
-	<xsl:template name="baseline_cdaHeader">
+	<xsl:template name="surgicalStudy_cdaHeader">
 		<xsl:param name="trimAct"/>
 		<realmCode code="US"/>
 		<typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>

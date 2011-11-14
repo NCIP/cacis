@@ -16,7 +16,7 @@
 	<xsl:param name="siteId"/>
 	<xsl:param name="studyId"/>
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-
+	
 	<!-- Main -->
 	<xsl:template match="/">
 			<xsl:call-template name="BaselineNote">
