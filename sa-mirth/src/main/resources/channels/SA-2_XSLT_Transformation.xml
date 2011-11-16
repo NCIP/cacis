@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1318864879540</time>
+    <time>1321480559980</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -53,34 +53,19 @@ default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 
 var trim = srcDataEle[&apos;trim&apos;];
 
-var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
-var os=null;
-var is=null;
-
 try {
-	//transform source data (transcen trim) to CanonicalDataFormat(ClinicalDocument)
-	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(trim).getBytes());
 
-	trim2CCDTransformer.transform(null, is, os);
+	var ccdWithoutNarrative = drTransformDocument(trim, &apos;trim2CCDTransformer&apos;);
+	var ccdWithNarrative = drTransformDocument(ccdWithoutNarrative, &apos;generateNarrativeTransformer&apos;);
 
-	var temp = new Packages.java.lang.String(os.toByteArray());
-	
 	//add the clinical document to the cacisrequest
 	default xml namespace = &apos;http://cacis.nci.nih.gov&apos;;
 	createSegment(&apos;ClinicalDocument&apos;, msg);
-	msg[&apos;ClinicalDocument&apos;] = new XML(temp);
+	msg[&apos;ClinicalDocument&apos;] = new XML(ccdWithNarrative);
 
 } catch(err) {
 	handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
-} finally {
-	if(is != null) {
-		is.close();
-	}
-	if(os != null) {
-		os.close();
-	}
-}
+} 
 return;</script>
             <type>JavaScript</type>
             <data class="map">
@@ -91,34 +76,19 @@ default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 
 var trim = srcDataEle[&apos;trim&apos;];
 
-var trim2CCDTransformer = globalChannelMap.get(&apos;trim2CCDTransformer&apos;);
-var os=null;
-var is=null;
-
 try {
-	//transform source data (transcen trim) to CanonicalDataFormat(ClinicalDocument)
-	os = new Packages.java.io.ByteArrayOutputStream();
-	is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(trim).getBytes());
 
-	trim2CCDTransformer.transform(null, is, os);
+	var ccdWithoutNarrative = drTransformDocument(trim, &apos;trim2CCDTransformer&apos;);
+	var ccdWithNarrative = drTransformDocument(ccdWithoutNarrative, &apos;generateNarrativeTransformer&apos;);
 
-	var temp = new Packages.java.lang.String(os.toByteArray());
-	
 	//add the clinical document to the cacisrequest
 	default xml namespace = &apos;http://cacis.nci.nih.gov&apos;;
 	createSegment(&apos;ClinicalDocument&apos;, msg);
-	msg[&apos;ClinicalDocument&apos;] = new XML(temp);
+	msg[&apos;ClinicalDocument&apos;] = new XML(ccdWithNarrative);
 
 } catch(err) {
 	handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
-} finally {
-	if(is != null) {
-		is.close();
-	}
-	if(os != null) {
-		os.close();
-	}
-}
+} 
 return;</string>
               </entry>
             </data>
@@ -204,9 +174,13 @@ return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
 var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
+
 var trim2CCDTransformer = transformerContext.getBean(&quot;trim2CCDTransformer&quot;);
+var generateNarrativeTransformer = transformerContext.getBean(&quot;generateNarrativeTransformer&quot;);
 
 globalChannelMap.put(&apos;trim2CCDTransformer&apos;, trim2CCDTransformer);
+globalChannelMap.put(&apos;generateNarrativeTransformer&apos;, generateNarrativeTransformer);
+
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
