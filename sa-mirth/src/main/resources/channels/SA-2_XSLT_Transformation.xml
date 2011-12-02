@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1321480559980</time>
+    <time>1322789427542</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>32</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -16,7 +16,132 @@
       <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
-      <steps/>
+      <steps>
+        <step>
+          <sequenceNumber>0</sequenceNumber>
+          <name>transform</name>
+          <script>var srcDataEle = msg[&apos;sourceData&apos;];
+var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+
+var xmlStr = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&apos;;
+
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ) {
+	var trimsEle = srcDataEle[&apos;trims&apos;];		
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+	var trimsArr = trimsEle[&apos;trim&apos;];	
+	var index = 0;
+
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	for each (trim in trimsArr) {
+		var trnsfrmStr = transformEachTrim(trim);
+		if( trnsfrmStr == &apos;error&apos;){
+			break;
+		} else if( trnsfrmStr == &apos;&apos;){
+			continue;
+		} else {
+			msg[&apos;ClinicalDocument&apos;][index] = new XML(trnsfrmStr);
+			index++;
+		}//end of else
+	}//end of for
+} else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+	var trim = srcDataEle[&apos;trim&apos;];
+	var trnsfrmStr = transformEachTrim(trim);
+	if( trnsfrmStr == &apos;error&apos; || trnsfrmStr == &apos;&apos;){
+			return;
+		}
+	//add the clinical document to the cacisrequest
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	msg[&apos;ClinicalDocument&apos;] = new XML(trnsfrmStr);
+}
+
+return;
+
+function transformEachTrim(trim) {
+	try {
+
+		var ccdWithoutNarrative = drTransformDocument(trim, &apos;trim2CCDTransformer&apos;);
+
+		if(ccdWithoutNarrative.trim() == xmlStr 
+				|| ccdWithoutNarrative.trim() == &apos;&apos;){
+			return &apos;&apos;;
+		}
+		
+		var ccdWithNarrative = drTransformDocument(ccdWithoutNarrative, &apos;generateNarrativeTransformer&apos;);
+
+		return ccdWithNarrative;
+		
+	} catch(err) {
+		handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
+		return &apos;error&apos;;
+	} 
+}</script>
+          <type>JavaScript</type>
+          <data class="map">
+            <entry>
+              <string>Script</string>
+              <string>var srcDataEle = msg[&apos;sourceData&apos;];
+var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+
+var xmlStr = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&apos;;
+
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ) {
+	var trimsEle = srcDataEle[&apos;trims&apos;];		
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+	var trimsArr = trimsEle[&apos;trim&apos;];	
+	var index = 0;
+
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	for each (trim in trimsArr) {
+		var trnsfrmStr = transformEachTrim(trim);
+		if( trnsfrmStr == &apos;error&apos;){
+			break;
+		} else if( trnsfrmStr == &apos;&apos;){
+			continue;
+		} else {
+			msg[&apos;ClinicalDocument&apos;][index] = new XML(trnsfrmStr);
+			index++;
+		}//end of else
+	}//end of for
+} else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+	var trim = srcDataEle[&apos;trim&apos;];
+	var trnsfrmStr = transformEachTrim(trim);
+	if( trnsfrmStr == &apos;error&apos; || trnsfrmStr == &apos;&apos;){
+			return;
+		}
+	//add the clinical document to the cacisrequest
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	msg[&apos;ClinicalDocument&apos;] = new XML(trnsfrmStr);
+}
+
+return;
+
+function transformEachTrim(trim) {
+	try {
+
+		var ccdWithoutNarrative = drTransformDocument(trim, &apos;trim2CCDTransformer&apos;);
+
+		if(ccdWithoutNarrative.trim() == xmlStr 
+				|| ccdWithoutNarrative.trim() == &apos;&apos;){
+			return &apos;&apos;;
+		}
+		
+		var ccdWithNarrative = drTransformDocument(ccdWithoutNarrative, &apos;generateNarrativeTransformer&apos;);
+
+		return ccdWithNarrative;
+		
+	} catch(err) {
+		handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
+		return &apos;error&apos;;
+	} 
+}</string>
+            </entry>
+          </data>
+        </step>
+      </steps>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
       <inboundProtocol>XML</inboundProtocol>
       <outboundProtocol>XML</outboundProtocol>
       <inboundProperties>
@@ -44,56 +169,7 @@
         <property name="template">${message.encodedData}</property>
       </properties>
       <transformer>
-        <steps>
-          <step>
-            <sequenceNumber>0</sequenceNumber>
-            <name>transform</name>
-            <script>var srcDataEle = msg[&apos;sourceData&apos;];
-default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
-
-var trim = srcDataEle[&apos;trim&apos;];
-
-try {
-
-	var ccdWithoutNarrative = drTransformDocument(trim, &apos;trim2CCDTransformer&apos;);
-	var ccdWithNarrative = drTransformDocument(ccdWithoutNarrative, &apos;generateNarrativeTransformer&apos;);
-
-	//add the clinical document to the cacisrequest
-	default xml namespace = &apos;http://cacis.nci.nih.gov&apos;;
-	createSegment(&apos;ClinicalDocument&apos;, msg);
-	msg[&apos;ClinicalDocument&apos;] = new XML(ccdWithNarrative);
-
-} catch(err) {
-	handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
-} 
-return;</script>
-            <type>JavaScript</type>
-            <data class="map">
-              <entry>
-                <string>Script</string>
-                <string>var srcDataEle = msg[&apos;sourceData&apos;];
-default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
-
-var trim = srcDataEle[&apos;trim&apos;];
-
-try {
-
-	var ccdWithoutNarrative = drTransformDocument(trim, &apos;trim2CCDTransformer&apos;);
-	var ccdWithNarrative = drTransformDocument(ccdWithoutNarrative, &apos;generateNarrativeTransformer&apos;);
-
-	//add the clinical document to the cacisrequest
-	default xml namespace = &apos;http://cacis.nci.nih.gov&apos;;
-	createSegment(&apos;ClinicalDocument&apos;, msg);
-	msg[&apos;ClinicalDocument&apos;] = new XML(ccdWithNarrative);
-
-} catch(err) {
-	handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
-} 
-return;</string>
-              </entry>
-            </data>
-          </step>
-        </steps>
+        <steps/>
         <inboundTemplate encoding="base64"></inboundTemplate>
         <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundProtocol>XML</inboundProtocol>

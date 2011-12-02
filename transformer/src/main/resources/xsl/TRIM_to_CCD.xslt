@@ -5,6 +5,7 @@
 	<xsl:import href="ClinicalStagingNote.xslt"/>
 	<xsl:import href="SurgicalStudyVisitNote.xslt"/>
 	<xsl:import href="MedicalStudyVisitNote.xslt"/>
+	<xsl:import href="PCO.xslt"/>
 	
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 	
@@ -47,6 +48,13 @@
 						<xsl:with-param name="studyId" select="$studyId"/>
 					</xsl:call-template>
 				</xsl:when>			
+				
+				<xsl:otherwise>
+					<xsl:call-template name="PCONote">
+						<xsl:with-param name="siteId" select="$siteId"/>
+						<xsl:with-param name="studyId" select="$studyId"/>
+					</xsl:call-template>
+				</xsl:otherwise>	
 				
 			</xsl:choose>			
 	</xsl:template>

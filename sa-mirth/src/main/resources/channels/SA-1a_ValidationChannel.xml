@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1321303969139</time>
+    <time>1322764804824</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -98,7 +98,6 @@ if(patIDExt.toString().trim()==&apos;&apos;){
           <sequenceNumber>2</sequenceNumber>
           <name>validateSourceData</name>
           <script>var srcDataEle = msg[&apos;sourceData&apos;];
-default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 
 //If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
 //sourcedata should contain concatenated &lt;trims&gt; element.
@@ -108,20 +107,31 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 		handleErrorStr(&apos;Document type is Complete, sourceData should contain &lt;trims&gt; element &apos;);
 		return;
 	}
-	for each (trim in trimsEle) {
-		performTrimValidation(trim);
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+	var trimsArr = trimsEle[&apos;trim&apos;];
+	if (trimsEle.length()==0) {
+		handleErrorStr(&apos;Document type is Complete, sourceData &lt;trims&gt; should contain atleast one &lt;trim&gt; element &apos;);
+		return;
+	}
+	for each (trim in trimsArr) {
+		performTrimValidation(doctype, trim);
 	}		
-} else {
+} else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 	var trim = srcDataEle[&apos;trim&apos;];
 	if (trim.length()==0) {
 		handleErrorStr(&apos;sourceData should contain trim element&apos;);
 		return;
 	}
-	performTrimValidation(trim);
+	
+	performTrimValidation(doctype, trim);
+} else {
+	handleErrorStr(&apos;Document type(&apos;+ doctype + &apos;) is unknown &apos;);
+	return;
 }
 
-function performTrimValidation(trimData) {
-	if (! validateTrimDescription(trimData) ){
+function performTrimValidation(doctype, trimData) {
+	if (! validateTrimDescription(doctype, trimData) ){
 		return;
 	}
 	if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
@@ -135,16 +145,27 @@ function performTrimValidation(trimData) {
 }
 
 //Perform check to make sure description of the trim is available
-function validateTrimDescription(trimData) {
+//and if document type is clinical note, check desc is of one of the allowed types
+function validateTrimDescription(doctype, trimData) {
 	var desc = trimData[&apos;description&apos;];
 	if (desc.length() == 0) {
 		handleErrorStr(&apos;description is not available !&apos;);
 		return false;
 	}
-	if (desc.toString().trim()==&apos;&apos;) {
+	var descStr = desc.toString().trim();
+	if (descStr==&apos;&apos;) {
 		handleErrorStr(&apos;description is empty !&apos;);
 		return false;
 	}
+	if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;)) {
+		if( descStr != &apos;Baseline Evaluation Note&apos; 
+			&amp;&amp; descStr != &apos;Clinical Staging&apos;
+			&amp;&amp; descStr != &apos;Study Visit (Medical)&apos;
+			&amp;&amp; descStr != &apos;Surgical Study Visit Note&apos; ) {
+			handleErrorStr(&apos;Unknown description for clinical note trim,&apos; + descStr);
+			return false;	
+		}		
+	}//end of validation for clinical note
 }
 
 //Perform schema validation for SourceData
@@ -169,7 +190,6 @@ function validateTrimAgainstSchematron(trimData) {
             <entry>
               <string>Script</string>
               <string>var srcDataEle = msg[&apos;sourceData&apos;];
-default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 
 //If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
 //sourcedata should contain concatenated &lt;trims&gt; element.
@@ -179,20 +199,31 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 		handleErrorStr(&apos;Document type is Complete, sourceData should contain &lt;trims&gt; element &apos;);
 		return;
 	}
-	for each (trim in trimsEle) {
-		performTrimValidation(trim);
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
+	var trimsArr = trimsEle[&apos;trim&apos;];
+	if (trimsEle.length()==0) {
+		handleErrorStr(&apos;Document type is Complete, sourceData &lt;trims&gt; should contain atleast one &lt;trim&gt; element &apos;);
+		return;
+	}
+	for each (trim in trimsArr) {
+		performTrimValidation(doctype, trim);
 	}		
-} else {
+} else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
+	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 	var trim = srcDataEle[&apos;trim&apos;];
 	if (trim.length()==0) {
 		handleErrorStr(&apos;sourceData should contain trim element&apos;);
 		return;
 	}
-	performTrimValidation(trim);
+	
+	performTrimValidation(doctype, trim);
+} else {
+	handleErrorStr(&apos;Document type(&apos;+ doctype + &apos;) is unknown &apos;);
+	return;
 }
 
-function performTrimValidation(trimData) {
-	if (! validateTrimDescription(trimData) ){
+function performTrimValidation(doctype, trimData) {
+	if (! validateTrimDescription(doctype, trimData) ){
 		return;
 	}
 	if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
@@ -206,16 +237,27 @@ function performTrimValidation(trimData) {
 }
 
 //Perform check to make sure description of the trim is available
-function validateTrimDescription(trimData) {
+//and if document type is clinical note, check desc is of one of the allowed types
+function validateTrimDescription(doctype, trimData) {
 	var desc = trimData[&apos;description&apos;];
 	if (desc.length() == 0) {
 		handleErrorStr(&apos;description is not available !&apos;);
 		return false;
 	}
-	if (desc.toString().trim()==&apos;&apos;) {
+	var descStr = desc.toString().trim();
+	if (descStr==&apos;&apos;) {
 		handleErrorStr(&apos;description is empty !&apos;);
 		return false;
 	}
+	if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;)) {
+		if( descStr != &apos;Baseline Evaluation Note&apos; 
+			&amp;&amp; descStr != &apos;Clinical Staging&apos;
+			&amp;&amp; descStr != &apos;Study Visit (Medical)&apos;
+			&amp;&amp; descStr != &apos;Surgical Study Visit Note&apos; ) {
+			handleErrorStr(&apos;Unknown description for clinical note trim,&apos; + descStr);
+			return false;	
+		}		
+	}//end of validation for clinical note
 }
 
 //Perform schema validation for SourceData

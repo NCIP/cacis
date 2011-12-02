@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1320265576962</time>
+    <time>1322788756370</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -27,6 +27,9 @@ If routing instructions are not part of the message, then default routing instru
 //no need to add the default routingInstructions just return.
 var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
 if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	if(msg.routingInstructions.length()&gt; 0.0) {
+		responseMap.put(&apos;processRoutingInstructions&apos;, ResponseFactory.getFailureResponse(&apos;CaCISError: Request with document type COMPLETE should not have routing instructions!&apos;));
+	}
 	return;
 }
 
@@ -53,6 +56,9 @@ logger.info(&apos;Response Message -- &apos;+ responseMap.get(&apos;processRouti
 //no need to add the default routingInstructions just return.
 var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
 if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	if(msg.routingInstructions.length()&gt; 0.0) {
+		responseMap.put(&apos;processRoutingInstructions&apos;, ResponseFactory.getFailureResponse(&apos;CaCISError: Request with document type COMPLETE should not have routing instructions!&apos;));
+	}
 	return;
 }
 
@@ -4556,6 +4562,13 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
             <name>Process Routing Instructions</name>
             <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
 
+//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
+//do not route the message as per any routingInstructions, even if there is any, just return.
+var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	return;
+}
+
 var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
 
 var responseMsg = &apos;&apos;;
@@ -4606,6 +4619,13 @@ function handleRouteResponse(response, exFrmt) {
               <entry>
                 <string>Script</string>
                 <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
+//do not route the message as per any routingInstructions, even if there is any, just return.
+var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	return;
+}
 
 var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
 
