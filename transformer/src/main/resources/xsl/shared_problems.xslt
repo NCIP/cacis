@@ -1002,37 +1002,39 @@
             </xsl:attribute>
           </low>
         </effectiveTime>
-        <entryRelationship typeCode="SUBJ" inversionInd="false">
-          <observation classCode="OBS" moodCode="EVN">
-            <!-- Problem observation templates -->
-            <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
-            <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
-            <id nullFlavor="NI"/>
-            <code displayName="Finding reported by subject or history provider" code="418799008" codeSystemName="SNOMED-CT"
-              codeSystem="2.16.840.1.113883.6.96">
-              <originalText>Initial symptom at presentation</originalText>
-            </code>
-            <text>
-              <reference>
-                <xsl:attribute name="value">
-                  <xsl:value-of select="generate-id(current())"/>
-                </xsl:attribute>
-              </reference>
-            </text>
-            <statusCode code="completed"/>
-            <effectiveTime>
-              <low>
-                <xsl:attribute name="value">
-                  <xsl:value-of select="/trim:trim/trim:act/trim:effectiveTime/trim:TS/trim:value"/>
-                </xsl:attribute>
-              </low>
-            </effectiveTime>
-            <xsl:call-template name="translateValueSet">
-              <xsl:with-param name="trim_valueSet" select="$trim_entry/trim:value/trim:valueSet/text()"/>
-              <xsl:with-param name="trim_dispNm" select="$trim_entry/trim:value/trim:SETCE/trim:displayName/text()"/>
-            </xsl:call-template>
-          </observation>
-        </entryRelationship>
+        <xsl:for-each select="$trim_entry/trim:value/trim:SETCE">
+          <entryRelationship typeCode="SUBJ" inversionInd="false">
+            <observation classCode="OBS" moodCode="EVN">
+              <!-- Problem observation templates -->
+              <templateId root="2.16.840.1.113883.10.20.1.28" assigningAuthorityName="CCD"/>
+              <templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" assigningAuthorityName="IHE PCC"/>
+              <id nullFlavor="NI"/>
+              <code displayName="Finding reported by subject or history provider" code="418799008" codeSystemName="SNOMED-CT"
+                codeSystem="2.16.840.1.113883.6.96">
+                <originalText>Initial symptom at presentation</originalText>
+              </code>
+              <text>
+                <reference>
+                  <xsl:attribute name="value">
+                    <xsl:value-of select="generate-id(current())"/>
+                  </xsl:attribute>
+                </reference>
+              </text>
+              <statusCode code="completed"/>
+              <effectiveTime>
+                <low>
+                  <xsl:attribute name="value">
+                    <xsl:value-of select="/trim:trim/trim:act/trim:effectiveTime/trim:TS/trim:value"/>
+                  </xsl:attribute>
+                </low>
+              </effectiveTime>
+              <xsl:call-template name="translateValueSet">
+                <xsl:with-param name="trim_valueSet" select="parent::*/trim:valueSet/text()"/>
+                <xsl:with-param name="trim_dispNm" select="current()/trim:displayName/text()"/>
+              </xsl:call-template>
+            </observation>
+          </entryRelationship>
+        </xsl:for-each>
       </act>
     </entry>
   </xsl:template>
