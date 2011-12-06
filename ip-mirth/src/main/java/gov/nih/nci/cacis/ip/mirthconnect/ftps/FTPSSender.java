@@ -91,6 +91,7 @@ public class FTPSSender {
      * Sends Document to FTPS Server.
      * @param file Input Stream.
      * @param ftpAddress the ftp address in which to store the file.
+     * @param extension File extension
      * @throws IOException on I/O error
      * @throws NoSuchProviderException on Provider error
      * @throws KeyStoreException on Keystore error
@@ -98,8 +99,9 @@ public class FTPSSender {
      * @throws CertificateException on certificate error
      * @throws UnrecoverableKeyException if key is not recoverable
      */
-    public void sendDocument(InputStream file, String ftpAddress) throws IOException, NoSuchProviderException,
-            KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+    public void sendDocument(InputStream file, String ftpAddress, String extension) throws IOException,
+            NoSuchProviderException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
+            UnrecoverableKeyException {
         final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
         if (ftpInfo == null) {
             throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
@@ -108,7 +110,7 @@ public class FTPSSender {
         connect(ftpInfo);
 
         ftpsClient.setFileTransferMode(FTPSClient.BLOCK_TRANSFER_MODE);
-        ftpsClient.storeFile("IHEXIPFTP-" + UUID.randomUUID() + ".xml", file);
+        ftpsClient.storeFile("IHEXIPFTP-" + UUID.randomUUID() + extension, file);
 
         disconnect();
     }

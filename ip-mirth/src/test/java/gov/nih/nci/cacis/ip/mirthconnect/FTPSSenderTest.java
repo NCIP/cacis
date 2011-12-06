@@ -90,6 +90,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
 public class FTPSSenderTest {
+    private final String EXTENSION = ".xml";
+
     @Autowired
     private FTPSSender sender;
 
@@ -120,7 +122,7 @@ public class FTPSSenderTest {
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("Sample_SFTP_File.xml").toURI());
         final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, TEST_SERVER);
+        sender.sendDocument(inputStream, TEST_SERVER, EXTENSION);
 
         assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
 
@@ -140,7 +142,7 @@ public class FTPSSenderTest {
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("Sample_SFTP_File.xml").toURI());
         final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, TEST_SERVER);
+        sender.sendDocument(inputStream, TEST_SERVER, EXTENSION);
 
         assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
 
@@ -152,7 +154,7 @@ public class FTPSSenderTest {
         final File inputFile = new File(Thread.currentThread().getContextClassLoader()
                 .getResource("Sample_SFTP_File.xml").toURI());
         final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, "no-such-address");
+        sender.sendDocument(inputStream, "no-such-address", EXTENSION);
     }
 
     private int getNumFiles() throws Exception {
