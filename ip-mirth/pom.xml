@@ -130,6 +130,10 @@
                                         <extraarg>-impl</extraarg>
                                         <extraarg>-verbose</extraarg>
                                     </extraargs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/hl7-mixed-content-binding.xml
+                                        </bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
@@ -138,13 +142,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                        <version>${xerces.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <!-- this plugin call can be removed once jars from the lib folder are added to the CBIIT 3rd party jars repo
@@ -191,7 +188,7 @@
                             </resources>
                         </configuration>
                     </execution>
-                     <execution>
+                    <execution>
                         <id>copy-properties</id>
                         <phase>compile</phase>
                         <goals>
@@ -250,7 +247,7 @@
                                     <version>${project.version}</version>
                                 </artifactItem>
 
-                                 <artifactItem>
+                                <artifactItem>
                                     <groupId>javassist</groupId>
                                     <artifactId>javassist</artifactId>
                                     <version>3.12.0.GA</version>
@@ -573,7 +570,7 @@
                                     <version>${project.version}</version>
                                 </artifactItem>
 
-                                <!--xds authz needs ORM related jars-->
+                                <!--xds authz needs ORM related jars -->
                                 <artifactItem>
                                     <groupId>org.hibernate</groupId>
                                     <artifactId>hibernate-core</artifactId>
@@ -788,7 +785,7 @@
                 <version>2.4.1</version>
                 <configuration>
                     <filesets>
-                        <!--need to remove to use an updated version-->
+                        <!--need to remove to use an updated version -->
                         <fileset>
                             <directory>${mirthConnect.server.dir}/lib/mule</directory>
                             <includes>

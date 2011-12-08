@@ -20,7 +20,7 @@
         <!--WSDL generates a lot of classes. Need to set this low -->
         <test.unit.branchrate>0</test.unit.branchrate>
         <test.unit.linerate>20</test.unit.linerate>
-		
+
     </properties>
 
     <dependencies>
@@ -51,7 +51,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                	<exclude>**/schema/*</exclude>
+                    <exclude>**/schema/*</exclude>
                 </excludes>
                 <filtering>true</filtering>
             </resource>
@@ -96,8 +96,8 @@
                                     <extraargs>
                                         <extraarg>-impl</extraarg>
                                         <extraarg>-verbose</extraarg>
-										<extraarg>-p</extraarg>
-                                       <extraarg>gov.nih.nci.cacis.sa</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>gov.nih.nci.cacis.sa</extraarg>
                                     </extraargs>
                                 </wsdlOption>
                             </wsdlOptions>
@@ -107,13 +107,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                        <version>${xerces.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <plugin>
@@ -378,7 +371,7 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>                    
+                    </plugin>
                 </plugins>
             </build>
         </profile>
