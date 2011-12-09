@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1322789427542</time>
+    <time>1323446607206</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>32</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -37,7 +37,8 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 		if( trnsfrmStr == &apos;error&apos;){
 			break;
 		} else if( trnsfrmStr == &apos;&apos;){
-			continue;
+			handleErrorStr(&apos;Trim to CCD transformation, &apos; + &apos;TRIM is not one of the expected input TRIMs&apos;);
+			break;
 		} else {
 			msg[&apos;ClinicalDocument&apos;][index] = new XML(trnsfrmStr);
 			index++;
@@ -97,7 +98,8 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 		if( trnsfrmStr == &apos;error&apos;){
 			break;
 		} else if( trnsfrmStr == &apos;&apos;){
-			continue;
+			handleErrorStr(&apos;Trim to CCD transformation, &apos; + &apos;TRIM is not one of the expected input TRIMs&apos;);
+			break;
 		} else {
 			msg[&apos;ClinicalDocument&apos;][index] = new XML(trnsfrmStr);
 			index++;
