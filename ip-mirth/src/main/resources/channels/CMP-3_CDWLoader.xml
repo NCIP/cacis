@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1316533601611</time>
+    <time>1323987399997</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">Destination 1</property>
+      <property name="responseValue">None</property>
     </properties>
     <transformer>
       <steps/>
@@ -109,7 +109,7 @@ channelMap.put(&apos;patientId&apos;, patientId);</string>
     <property name="initialState">started</property>
     <property name="max_message_age">-1</property>
     <property name="store_messages">true</property>
-    <property name="synchronous">true</property>
+    <property name="synchronous">false</property>
     <property name="transactional">false</property>
   </properties>
   <preprocessingScript>// Modify the message variable below to pre process data
