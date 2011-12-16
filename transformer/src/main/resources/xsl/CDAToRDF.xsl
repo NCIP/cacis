@@ -1216,143 +1216,144 @@
   </xsl:template>
   <xsl:template mode="_dispatch" match="node()" as="element()">
     <xsl:param name="type" as="xs:string" required="yes"/>
+    <xsl:variable name="trimmedType" select="if (contains($type, ':')) then substring-after($type, ':') else $type"/>
     <xsl:choose>
-      <xsl:when test="$type='AD'">
+      <xsl:when test="$trimmedType='AD'">
         <xsl:apply-templates mode="AD" select="."/>
       </xsl:when>
-      <xsl:when test="$type='ADXP'">
+      <xsl:when test="$trimmedType='ADXP'">
         <xsl:apply-templates mode="ADXP" select="."/>
       </xsl:when>
-      <xsl:when test="$type='BL'">
+      <xsl:when test="$trimmedType='BL'">
         <xsl:apply-templates mode="BL" select="."/>
       </xsl:when>
-      <xsl:when test="$type='CD'">
+      <xsl:when test="$trimmedType='CD'">
         <xsl:apply-templates mode="CD" select="."/>
       </xsl:when>
-      <xsl:when test="$type='CE'">
+      <xsl:when test="$trimmedType='CE'">
         <xsl:apply-templates mode="CE" select="."/>
       </xsl:when>
-      <xsl:when test="$type='CO'">
+      <xsl:when test="$trimmedType='CO'">
         <xsl:apply-templates mode="CO" select="."/>
       </xsl:when>
-      <xsl:when test="$type='CV'">
+      <xsl:when test="$trimmedType='CV'">
         <xsl:apply-templates mode="CV" select="."/>
       </xsl:when>
-      <xsl:when test="$type='CR'">
+      <xsl:when test="$trimmedType='CR'">
         <xsl:apply-templates mode="CR" select="."/>
       </xsl:when>
-      <xsl:when test="$type='CS'">
+      <xsl:when test="$trimmedType='CS'">
         <xsl:apply-templates mode="CS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='ED'">
+      <xsl:when test="$trimmedType='ED'">
         <xsl:apply-templates mode="ED" select="."/>
       </xsl:when>
-      <xsl:when test="$type='EN'">
+      <xsl:when test="$trimmedType='EN'">
         <xsl:apply-templates mode="EN" select="."/>
       </xsl:when>
-      <xsl:when test="$type='ON'">
+      <xsl:when test="$trimmedType='ON'">
         <xsl:apply-templates mode="ON" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PN'">
+      <xsl:when test="$trimmedType='PN'">
         <xsl:apply-templates mode="PN" select="."/>
       </xsl:when>
-      <xsl:when test="$type='ENXP'">
+      <xsl:when test="$trimmedType='ENXP'">
         <xsl:apply-templates mode="ENXP" select="."/>
       </xsl:when>
-      <xsl:when test="$type='II'">
+      <xsl:when test="$trimmedType='II'">
         <xsl:apply-templates mode="II" select="."/>
       </xsl:when>
-      <xsl:when test="$type='INT'">
+      <xsl:when test="$trimmedType='INT'">
         <xsl:apply-templates mode="INT" select="."/>
       </xsl:when>
-      <xsl:when test="$type='MO'">
+      <xsl:when test="$trimmedType='MO'">
         <xsl:apply-templates mode="MO" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PQ'">
+      <xsl:when test="$trimmedType='PQ'">
         <xsl:apply-templates mode="PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PQR'">
+      <xsl:when test="$trimmedType='PQR'">
         <xsl:apply-templates mode="PQR" select="."/>
       </xsl:when>
-      <xsl:when test="$type='REAL'">
+      <xsl:when test="$trimmedType='REAL'">
         <xsl:apply-templates mode="REAL" select="."/>
       </xsl:when>
-      <xsl:when test="$type='SC'">
+      <xsl:when test="$trimmedType='SC'">
         <xsl:apply-templates mode="SC" select="."/>
       </xsl:when>
-      <xsl:when test="$type='ST'">
+      <xsl:when test="$trimmedType='ST'">
         <xsl:apply-templates mode="ST" select="."/>
       </xsl:when>
-      <xsl:when test="$type='TEL'">
+      <xsl:when test="$trimmedType='TEL'">
         <xsl:apply-templates mode="TEL" select="."/>
       </xsl:when>
-      <xsl:when test="$type='TS'">
+      <xsl:when test="$trimmedType='TS'">
         <xsl:apply-templates mode="TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='IVL_TS'">
+      <xsl:when test="$trimmedType='IVL_TS'">
         <xsl:apply-templates mode="IVL_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='IVL_PQ'">
+      <xsl:when test="$trimmedType='IVL_PQ'">
         <xsl:apply-templates mode="IVL_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='IVL_INT'">
+      <xsl:when test="$trimmedType='IVL_INT'">
         <xsl:apply-templates mode="IVL_INT" select="."/>
       </xsl:when>
-      <xsl:when test="$type='IVL_REAL'">
+      <xsl:when test="$trimmedType='IVL_REAL'">
         <xsl:apply-templates mode="IVL_REAL" select="."/>
       </xsl:when>
-      <xsl:when test="$type='IVL_PPD_TS'">
+      <xsl:when test="$trimmedType='IVL_PPD_TS'">
         <xsl:apply-templates mode="IVL_PPD_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='IVL_PPD_PQ'">
+      <xsl:when test="$trimmedType='IVL_PPD_PQ'">
         <xsl:apply-templates mode="IVL_PPD_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PIVL_TS'">
+      <xsl:when test="$trimmedType='PIVL_TS'">
         <xsl:apply-templates mode="PIVL_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PIVL_PPD_TS'">
+      <xsl:when test="$trimmedType='PIVL_PPD_TS'">
         <xsl:apply-templates mode="PIVL_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='EIVL_TS'">
+      <xsl:when test="$trimmedType='EIVL_TS'">
         <xsl:apply-templates mode="EIVL_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='EIVL_PPD_TS'">
+      <xsl:when test="$trimmedType='EIVL_PPD_TS'">
         <xsl:apply-templates mode="EIVL_PPD_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='RTO_PQ_PQ'">
+      <xsl:when test="$trimmedType='RTO_PQ_PQ'">
         <xsl:apply-templates mode="RTO_PQ_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='RTO_MO_PQ'">
+      <xsl:when test="$trimmedType='RTO_MO_PQ'">
         <xsl:apply-templates mode="RTO_MO_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='SLIST_TS'">
+      <xsl:when test="$trimmedType='SLIST_TS'">
         <xsl:apply-templates mode="SLIST_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='GLIST_TS'">
+      <xsl:when test="$trimmedType='GLIST_TS'">
         <xsl:apply-templates mode="GLIST_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='GLIST_PQ'">
+      <xsl:when test="$trimmedType='GLIST_PQ'">
         <xsl:apply-templates mode="GLIST_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='HXIT_PQ'">
+      <xsl:when test="$trimmedType='HXIT_PQ'">
         <xsl:apply-templates mode="HXIT_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='HXIT_CE'">
+      <xsl:when test="$trimmedType='HXIT_CE'">
         <xsl:apply-templates mode="HXIT_CE" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PPD_PQ'">
+      <xsl:when test="$trimmedType='PPD_PQ'">
         <xsl:apply-templates mode="PPD_PQ" select="."/>
       </xsl:when>
-      <xsl:when test="$type='PPD_TS'">
+      <xsl:when test="$trimmedType='PPD_TS'">
         <xsl:apply-templates mode="PPD_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='UVP_TS'">
+      <xsl:when test="$trimmedType='UVP_TS'">
         <xsl:apply-templates mode="UVP_TS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='GTS'">
+      <xsl:when test="$trimmedType='GTS'">
         <xsl:apply-templates mode="GTS" select="."/>
       </xsl:when>
-      <xsl:when test="$type='SXPR_TS'">
+      <xsl:when test="$trimmedType='SXPR_TS'">
         <xsl:apply-templates mode="SXPR_TS" select="."/>
       </xsl:when>
       <xsl:otherwise>
