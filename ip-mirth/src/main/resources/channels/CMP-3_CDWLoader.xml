@@ -5,15 +5,15 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1324057308998</time>
+    <time>1324058264749</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>4</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">None</property>
+      <property name="responseValue">Destination 1</property>
     </properties>
     <transformer>
       <steps/>

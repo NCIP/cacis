@@ -73,6 +73,8 @@ import java.security.cert.CertificateException;
 import java.util.UUID;
 
 import org.apache.commons.net.ftp.FTPSClient;
+import org.hl7.v3.PN;
+import org.hl7.v3.ST;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -106,8 +108,9 @@ public class FTPSSender {
         if (ftpInfo == null) {
             throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
         }
-
-        connect(ftpInfo);
+        PN pn = new PN();
+        ST st = new ST();
+        st.
 
         ftpsClient.setFileTransferMode(FTPSClient.BLOCK_TRANSFER_MODE);
         ftpsClient.storeFile("IHEXIPFTP-" + UUID.randomUUID() + extension, file);
