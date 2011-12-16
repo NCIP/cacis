@@ -233,6 +233,17 @@ public class SendEncryptedMailTest {
         final MimeMessage encMsg = sender.encryptMail(msg, secEmailTo);
         sender.sendMail(encMsg);
     }
+    
+    /**
+     * Failure case for invalid recipient.
+     * @throws MessagingException should not happen
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidRecipient() throws MessagingException {
+        String invalidEmailAddr = secEmailTo + ".invalid";
+        final MimeMessage msg = sender.createMessage(invalidEmailAddr, "Clinical Note", "subj", "inst", "content");
+        final MimeMessage encMsg = sender.encryptMail(msg, invalidEmailAddr);
+    }
 
     /**
      * tests receiving encrypted mail

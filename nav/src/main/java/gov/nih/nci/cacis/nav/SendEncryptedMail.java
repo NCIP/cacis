@@ -198,15 +198,21 @@ public class SendEncryptedMail extends AbstractSendMail {
     }
 
     private Certificate getCert(String keyAlias) throws MessagingException {
+        Certificate result = null;
         try {
-                        
-            return trustStoreRef.getCertificate(keyAlias);
+            result = trustStoreRef.getCertificate(keyAlias);
             // CHECKSTYLE:OFF
         } catch (Exception ex) { // NOPMD
             // CHECKSTYLE:ON
             LOG.error(ERROR_INITALISING_ENCRYPTER, ex);
             throw new MessagingException(ERROR_INITALISING_ENCRYPTER, ex);
         }
+        if (result == null) {
+            throw new IllegalArgumentException(
+              String.format("Could not find any certificate with key '%s' in truststore '%s'.", 
+                            keyAlias, truststore));
+        }
+        return result;
     }
 
     /**
