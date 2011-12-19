@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1323446607206</time>
+    <time>1324056634972</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>10</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -37,17 +37,23 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 		if( trnsfrmStr == &apos;error&apos;){
 			break;
 		} else if( trnsfrmStr == &apos;&apos;){
-			handleErrorStr(&apos;Trim to CCD transformation, &apos; + &apos;TRIM is not one of the expected input TRIMs&apos;);
-			break;
+			continue;
 		} else {
 			msg[&apos;ClinicalDocument&apos;][index] = new XML(trnsfrmStr);
 			index++;
 		}//end of else
 	}//end of for
+	// Throw an error message if all of the transformed trims were empty (no valid trims)
+	if (index == 0) {
+		handleErrorStr(&apos;Trim to CCD transformation, &apos; + &apos;Message does not contain any valid Trims&apos;);
+	}
 } else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
 	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 	var trim = srcDataEle[&apos;trim&apos;];
 	var trnsfrmStr = transformEachTrim(trim);
+	// If an error occurred, an error message has already been added to the response to be
+	// returned to the client. The transformed trim should not be blank as an invalid description would have 
+	// been caught during validation.
 	if( trnsfrmStr == &apos;error&apos; || trnsfrmStr == &apos;&apos;){
 			return;
 		}
@@ -98,17 +104,23 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 		if( trnsfrmStr == &apos;error&apos;){
 			break;
 		} else if( trnsfrmStr == &apos;&apos;){
-			handleErrorStr(&apos;Trim to CCD transformation, &apos; + &apos;TRIM is not one of the expected input TRIMs&apos;);
-			break;
+			continue;
 		} else {
 			msg[&apos;ClinicalDocument&apos;][index] = new XML(trnsfrmStr);
 			index++;
 		}//end of else
 	}//end of for
+	// Throw an error message if all of the transformed trims were empty (no valid trims)
+	if (index == 0) {
+		handleErrorStr(&apos;Trim to CCD transformation, &apos; + &apos;Message does not contain any valid Trims&apos;);
+	}
 } else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
 	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
 	var trim = srcDataEle[&apos;trim&apos;];
 	var trnsfrmStr = transformEachTrim(trim);
+	// If an error occurred, an error message has already been added to the response to be
+	// returned to the client. The transformed trim should not be blank as an invalid description would have 
+	// been caught during validation.
 	if( trnsfrmStr == &apos;error&apos; || trnsfrmStr == &apos;&apos;){
 			return;
 		}
