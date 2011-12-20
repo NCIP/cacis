@@ -36,7 +36,7 @@
 	    or @name='ROS' or @name='responseStatus' or @name='medications' or @name='leftBreastProcedures' or @name='rightBreastProcedures' 
 	    or @name='leftLymphProcedures' or @name='rightLymphProcedures' or @name='breastCancerSurgeries' or @name='xrt' 
 	    or @name='tumorLaterality' or @name='vitalSigns'] [@enabled='true' or not(@enabled)]">
-      <ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/schema/CDA.xsd">
+      <ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 https://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/schema/CDA.xsd">
         <xsl:for-each select="trim:trim/trim:act">
           <xsl:call-template name="pco_cdaHeader">
             <xsl:with-param name="trimAct" select="current()"/>

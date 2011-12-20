@@ -193,7 +193,7 @@
       </xsl:if>
     </DT:ADXP>
   </xsl:template>
-  <xsl:template mode="BL" match="node()" as="element(DT:BL)">
+  <xsl:template mode="BL" match="node()|@*" as="element(DT:BL)">
     <DT:BL>
       <xsl:call-template name="ANY.content"/>
       <xsl:choose>
@@ -313,7 +313,7 @@
       </xsl:for-each>
     </DT:CR>
   </xsl:template>
-  <xsl:template mode="CS" match="node()" as="element(DT:CD)">
+  <xsl:template mode="CS" match="node()|@*" as="element(DT:CD)">
     <xsl:choose>
       <xsl:when test="self::*">
         <DT:CD>
@@ -559,7 +559,7 @@
       </xsl:for-each>
     </DT:II>
   </xsl:template>
-  <xsl:template name="INT" mode="INT" match="node()" as="element(DT:INT)">
+  <xsl:template name="INT" mode="INT" match="node()|@*" as="element(DT:INT)">
     <xsl:param name="value" as="xs:string" required="no" select="''"/>
     <DT:INT>
       <xsl:if test="$value='' and @*">
@@ -637,7 +637,7 @@
       </xsl:for-each>
     </DT:PQR>
   </xsl:template>
-  <xsl:template mode="REAL" match="node()" as="element(DT:REAL)">
+  <xsl:template mode="REAL" match="node()|@*" as="element(DT:REAL)">
     <DT:REAL>
       <xsl:if test="@*">
         <xsl:call-template name="ANY.content"/>
@@ -664,7 +664,7 @@
       <xsl:call-template name="CD.content"/>
     </DT:SC>
   </xsl:template>
-  <xsl:template mode="ST" match="node()" as="element(DT:ST)">
+  <xsl:template mode="ST" match="node()|@*" as="element(DT:ST)">
     <DT:ST>
       <xsl:call-template name="ED.content"/>
     </DT:ST>

@@ -29,7 +29,7 @@
 	<xsl:template match="*|@*|comment()|processing-instruction()|text()">
 		<xsl:if test="local-name()='ClinicalDocument'">
 			<xsl:processing-instruction name="xml-stylesheet">
-				<xsl:text>type="text/xsl" href="http://caehrorg.jira.com/svn/CACIS/trunk/technical_artifacts/xslt/CDA.xsl"</xsl:text>
+				<xsl:text>type="text/xsl" href="https://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl"</xsl:text>
 			</xsl:processing-instruction>
 			<xsl:text>&#10;</xsl:text>
 		</xsl:if>
@@ -1960,7 +1960,7 @@
 		<xsl:param name="asgnEntity"/>
 		<xsl:choose>
 			<xsl:when test="$asgnEntity/cda:assignedPerson/cda:name">
-				<xsl:call-template name="show-name">
+				<xsl:call-template name="show-name-narrative">
 					<xsl:with-param name="name" select="$asgnEntity/cda:assignedPerson/cda:name"/>
 				</xsl:call-template>
 				<xsl:if test="$asgnEntity/cda:representedOrganization/cda:name">
@@ -1978,8 +1978,8 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- show-name  -->
-	<xsl:template name="show-name">
+	<!-- show-name-narrative  -->
+	<xsl:template name="show-name-narrative">
 		<xsl:param name="name"/>
 		<xsl:choose>
 			<xsl:when test="$name/cda:family">
