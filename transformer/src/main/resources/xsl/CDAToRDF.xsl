@@ -1206,7 +1206,9 @@
         </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@nullFlavor">
-        <xsl:call-template name="ANY.content"/>
+        <xsl:element name="{concat('DT:', $typeName)}" namespace="{$dtURL}">
+          <xsl:call-template name="ANY.content"/>
+        </xsl:element>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message select="'Non-null ', @typeName, ' type failed to declare xsi:type.  Ignoring content'"/>
