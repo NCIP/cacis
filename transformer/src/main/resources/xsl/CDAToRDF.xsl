@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:v3="urn:hl7-org:v3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hl7="urn:hl7-org:functions" xmlns:DT="urn:hl7-org:v3/owl/DEFN/UV/DT/1.0#" exclude-result-prefixes="xsi xs v3 hl7">
   <xsl:variable name="dtURL" as="xs:string" select="'urn:hl7-org:v3/owl/DEFN/UV/DT/1.0#'"/>
+  <xsl:variable name="schemaIRI" as="xs:string" select="'http://www.w3.org/2001/XMLSchema#'"/>
   <xsl:template name="datatypeNamespace">
     <xsl:namespace name="DT" select="$dtURL"/>
   </xsl:template>
@@ -198,12 +199,12 @@
       <xsl:call-template name="ANY.content"/>
       <xsl:choose>
         <xsl:when test="@value">
-          <DT:BL.value>
+          <DT:BL.value rdf:datatype="{$schemaIRI}boolean">
             <xsl:value-of select="@value"/>
           </DT:BL.value>
         </xsl:when>
         <xsl:when test="not(@*)">
-          <DT:BL.value>
+          <DT:BL.value rdf:datatype="{$schemaIRI}boolean">
             <xsl:value-of select="."/>
           </DT:BL.value>
         </xsl:when>
@@ -213,7 +214,7 @@
   <xsl:template name="BL" as="element(DT:BL)">
     <xsl:param name="value" as="xs:boolean" required="yes"/>
     <DT:BL>
-      <DT:BL.value>
+      <DT:BL.value rdf:datatype="{$schemaIRI}boolean">
         <xsl:value-of select="$value"/>
       </DT:BL.value>
     </DT:BL>
@@ -567,19 +568,19 @@
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$value!=''">
-          <DT:INT.value>
+          <DT:INT.value rdf:datatype="{$schemaIRI}integer">
             <xsl:value-of select="$value"/>
           </DT:INT.value>
         </xsl:when>
         <xsl:when test="@*">
           <xsl:for-each select="@value">
-            <DT:INT.value>
+            <DT:INT.value rdf:datatype="{$schemaIRI}integer">
               <xsl:value-of select="."/>
             </DT:INT.value>
           </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
-          <DT:INT.value>
+          <DT:INT.value rdf:datatype="{$schemaIRI}integer">
             <xsl:value-of select="."/>
           </DT:INT.value>
         </xsl:otherwise>
@@ -645,13 +646,13 @@
       <xsl:choose>
         <xsl:when test="@*">
           <xsl:for-each select="@value">
-            <DT:REAL.value>
+            <DT:REAL.value rdf:datatype="{$schemaIRI}decimal">
               <xsl:value-of select="."/>
             </DT:REAL.value>
           </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
-          <DT:REAL.value>
+          <DT:REAL.value rdf:datatype="{$schemaIRI}decimal">
             <xsl:value-of select="."/>
           </DT:REAL.value>
         </xsl:otherwise>
