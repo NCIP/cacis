@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326731494721</time>
+    <time>1326738256800</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>5</revision>
+  <revision>7</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -62,6 +62,7 @@ try{
 	if (exchFormat == &apos;CCD&apos;) {
 		cdaDoc = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + cdaDoc;
 	}
+	cdaDoc = Packages.com.mirth.connect.util.XmlUtil.prettyPrint(cdaDoc);
 
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	if (exchFormat == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
@@ -92,6 +93,7 @@ try{
 	if (exchFormat == &apos;CCD&apos;) {
 		cdaDoc = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + cdaDoc;
 	}
+	cdaDoc = Packages.com.mirth.connect.util.XmlUtil.prettyPrint(cdaDoc);
 
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	if (exchFormat == &apos;HL7_V2_CLINICAL_NOTE&apos;) {

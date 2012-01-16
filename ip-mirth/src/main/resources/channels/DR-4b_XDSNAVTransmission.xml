@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326729234725</time>
+    <time>1326737734136</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>18</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -109,6 +109,8 @@ hashMap.put(&apos;docsourceoid&apos;,xdsMetadataSupplier.createDocSourceOID());
 if ($(&apos;exFrmt&apos;) == &apos;CCD&apos;) {
 	channelMap.put(&apos;cdaDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;cdaDoc&apos;));
 }
+
+channelMap.put(&apos;cdaDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;cdaDoc&apos;)));
 
 hashMap.put(&apos;content&apos;,$(&apos;cdaDoc&apos;));
 

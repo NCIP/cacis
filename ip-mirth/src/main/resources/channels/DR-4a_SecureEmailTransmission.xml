@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326727885395</time>
+    <time>1326738679528</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>15</revision>
+  <revision>18</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -56,6 +56,7 @@ try{
 	if ($(&apos;docFormat&apos;) == &apos;CCD&apos;) {
 		channelMap.put(&apos;clinicalDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;clinicalDoc&apos;));
 	}
+	channelMap.put(&apos;clinicalDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;clinicalDoc&apos;)));
 
 	var mimeMsg = encMailSender.createMessage( $(&apos;emailAddress&apos;), cmDocType, subject, instructions, $(&apos;clinicalDoc&apos;));
 
