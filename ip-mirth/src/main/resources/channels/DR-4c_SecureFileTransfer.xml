@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1323205235657</time>
+    <time>1326731494721</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>25</revision>
+  <revision>5</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -58,6 +58,11 @@ try{
 	logger.info(&apos;Sending to FTP: &apos; + address);
 	default xml namespace = &apos;urn:hl7-org:v3&apos;;
 	var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+
+	if (exchFormat == &apos;CCD&apos;) {
+		cdaDoc = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + cdaDoc;
+	}
+
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	if (exchFormat == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
 		ftpsSender.sendDocument(is, address, &apos;.txt&apos;);
@@ -83,6 +88,11 @@ try{
 	logger.info(&apos;Sending to FTP: &apos; + address);
 	default xml namespace = &apos;urn:hl7-org:v3&apos;;
 	var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+
+	if (exchFormat == &apos;CCD&apos;) {
+		cdaDoc = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + cdaDoc;
+	}
+
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	if (exchFormat == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
 		ftpsSender.sendDocument(is, address, &apos;.txt&apos;);
