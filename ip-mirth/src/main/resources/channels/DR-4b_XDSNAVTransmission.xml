@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1318858074478</time>
+    <time>1326729234725</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>8</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -105,6 +105,11 @@ hashMap.put(&apos;docentry&apos;,xdsMetadataSupplier.createDocEntry(messageObjec
 hashMap.put(&apos;submissionset&apos;,xdsMetadataSupplier.createSubmissionSet(messageObject.getEncodedData()));
 hashMap.put(&apos;docoid&apos;,xdsMetadataSupplier.createDocOID());
 hashMap.put(&apos;docsourceoid&apos;,xdsMetadataSupplier.createDocSourceOID());
+
+if ($(&apos;exFrmt&apos;) == &apos;CCD&apos;) {
+	channelMap.put(&apos;cdaDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;cdaDoc&apos;));
+}
+
 hashMap.put(&apos;content&apos;,$(&apos;cdaDoc&apos;));
 
 var docAccMngr = xdsCtx.getBean(&quot;documentAccessManager&quot;);
@@ -161,7 +166,11 @@ var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][
 
 navEmail = navEmail.substring(navEmail.indexOf(&apos;:&apos;)+1, navEmail.length);
 
-channelMap.put(&apos;navEmail&apos;,navEmail);</script>
+channelMap.put(&apos;navEmail&apos;,navEmail);
+
+var exFrmt = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString();
+
+channelMap.put(&apos;exFrmt&apos;,exFrmt);</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
@@ -172,7 +181,11 @@ var navEmail=msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][
 
 navEmail = navEmail.substring(navEmail.indexOf(&apos;:&apos;)+1, navEmail.length);
 
-channelMap.put(&apos;navEmail&apos;,navEmail);</string>
+channelMap.put(&apos;navEmail&apos;,navEmail);
+
+var exFrmt = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString();
+
+channelMap.put(&apos;exFrmt&apos;,exFrmt);</string>
               </entry>
             </data>
           </step>
