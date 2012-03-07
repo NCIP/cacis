@@ -4,21 +4,21 @@
  * NCI employees and 5AM Solutions Inc, SemanticBits LLC, and AgileX Technologies, Inc (collectively 'SubContractors').
  * To the extent government employees are authors, any rights in such works shall be subject to Title 17 of the United
  * States Code, section 105.
- *
+ * 
  * This caEHR Software License (the License) is between NCI and You. You (or Your) shall mean a person or an entity, and
  * all other entities that control, are controlled by, or are under common control with the entity. Control for purposes
- *  of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
- *
+ * of this definition means (i) the direct or indirect power to cause the direction or management of such entity,
+ * 
  * Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: This
  * product includes software developed by the National Cancer Institute and SubContractor parties. If You do not include
  * such end-user documentation, You shall include this acknowledgment in the Software itself, wherever such third-party
  * acknowledgments normally appear.
- *
+ * 
  * You may not use the names "The National Cancer Institute", "NCI", or any SubContractor party to endorse or promote
  * products derived from this Software. This License does not authorize You to use any trademarks, service marks, trade
  * names, logos or product names of either NCI or any of the subcontracted parties, except as required to comply with
  * the terms of this License.
- *
+ * 
  * For sake of clarity, and not by way of limitation, You may incorporate this Software into Your proprietary programs
  * and into any third party proprietary programs. However, if You incorporate the Software into third party proprietary
  * programs, You agree that You are solely responsible for obtaining any permission from such third parties required to
@@ -27,12 +27,12 @@
  * before incorporating the Software into such third party proprietary software programs. In the event that You fail to
  * obtain such permissions, You agree to indemnify NCI for any claims against NCI by such third parties, except to the
  * extent prohibited by law, resulting from Your failure to obtain such permissions.
- *
+ * 
  * For sake of clarity, and not by way of limitation, You may add Your own copyright statement to Your modifications and
  * to the derivative works, and You may provide additional or different license terms and conditions in Your sublicenses
  * of modifications of the Software, or any derivative works of the Software as a whole, provided Your use,
  * reproduction, and distribution of the Work otherwise complies with the conditions stated in this License.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE) ARE DISCLAIMED. IN NO
  * EVENT SHALL THE NATIONAL CANCER INSTITUTE, ANY OF ITS SUBCONTRACTED PARTIES OR THEIR AFFILIATES BE LIABLE FOR ANY
@@ -57,7 +57,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.Binding;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.handler.Handler;
@@ -80,7 +90,7 @@ public class CanonicalModelProcessorTest {
     CanonicalModelProcessor service;
 
     @Before
-    public void init() {
+    public void init() throws JAXBException, ParserConfigurationException {
         MockitoAnnotations.initMocks(this);
         request = new CaCISRequest();
         request.getClinicalDocument().add(dummyClinicalDocument());
@@ -88,7 +98,6 @@ public class CanonicalModelProcessorTest {
         service = new CanonicalModelProcessor(webServiceMessageReceiver);
         when(webServiceMessageReceiver.processData(anyString())).thenReturn("");
     }
-
 
     @Test
     public void acceptCanonical() throws AcceptCanonicalFault {
@@ -98,12 +107,9 @@ public class CanonicalModelProcessorTest {
 
     }
 
-
-
     /**
-     * Service throws exception when it is unable to process
-     * the incoming request
-     *
+     * Service throws exception when it is unable to process the incoming request
+     * 
      * @throws AcceptCanonicalFault fault
      */
     @Test(expected = AcceptCanonicalFault.class)
@@ -132,7 +138,7 @@ public class CanonicalModelProcessorTest {
 
     }
 
-     public static POCDMT000040ClinicalDocument dummyClinicalDocument() {
+    public static Element dummyClinicalDocument() throws JAXBException, ParserConfigurationException {
         II dummyIi = new II();
         dummyIi.setExtension("123");
         dummyIi.setRoot("1.2.3.456");
@@ -140,10 +146,22 @@ public class CanonicalModelProcessorTest {
         POCDMT000040InfrastructureRootTypeId typeId = new POCDMT000040InfrastructureRootTypeId();
         typeId.setRoot("2.16.840.1.113883.1.3");
         typeId.setExtension("123");
-        
+
         doc.setTypeId(typeId);
         doc.setId(dummyIi);
-        return doc;
+
+        JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
+        Marshaller m = context.createMarshaller();
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document domDoc = db.newDocument();
+
+        m.marshal(new JAXBElement(new QName("urn:hl7-org:v3", "POCD_MT000040.ClinicalDocument"),
+                POCDMT000040ClinicalDocument.class, doc), domDoc);
+
+        return domDoc.getDocumentElement();
 
     }
 }
