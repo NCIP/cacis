@@ -105,6 +105,7 @@ function formatErrorStr(errStr) {
 function handleErrorStr(errStr) {
 	var existErr = responseMap.get(&apos;error&apos;);
 	existErr = (existErr==null)?&apos;&apos;:existErr;
+	existErr = Packages.org.apache.commons.lang.StringUtils.remove(existErr, &apos;SUCCESS:&apos;);
 	existErr = existErr + &apos;CaCISError:&apos; + errStr + &apos;!&apos;;
 	responseMap.put(&apos;error&apos;, existErr);
 }</code>
@@ -135,6 +136,11 @@ function handleResponse(resConnectorNm, destArr) {
 			}//end of for
 		} else {
 			res = &apos;Successfully processed!&apos;;
+		}
+		if(Packages.org.apache.commons.lang.StringUtils.contains(res, &apos;CaCISError&apos;)){
+			res = Packages.org.apache.commons.lang.StringUtils.remove(res, &apos;SUCCESS:&apos;);
+			res = Packages.org.apache.commons.lang.StringUtils.remove(res, &apos;!&apos;);
+			res = Packages.org.apache.commons.lang.StringUtils.replace(res, &apos;  &apos;, &apos; &apos;);
 		}
 		responseMap.put(resConnectorNm, res);
 	}
