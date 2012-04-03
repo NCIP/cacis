@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317132891862</time>
+    <time>1333122199953</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4538,10 +4538,11 @@ function processRoute(rec, chNm, recipientType) {
 }
 
 function handleRouteResponse(response, chNm, url) {
-	responseMsg = responseMsg 
+	logger.info(responseMsg 
 			+ &apos;Processed routing for &apos;
 			+ chNm + &apos;, &apos; + url 
-			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;		
+			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;);
+	responseMsg = responseMsg + response.getMessage() + &apos;!&apos;;		
 }</script>
             <type>JavaScript</type>
             <data class="map">
@@ -4588,10 +4589,11 @@ function processRoute(rec, chNm, recipientType) {
 }
 
 function handleRouteResponse(response, chNm, url) {
-	responseMsg = responseMsg 
+	logger.info(responseMsg 
 			+ &apos;Processed routing for &apos;
 			+ chNm + &apos;, &apos; + url 
-			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;		
+			+ &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;);
+	responseMsg = responseMsg + response.getMessage() + &apos;!&apos;;		
 }</string>
               </entry>
             </data>
