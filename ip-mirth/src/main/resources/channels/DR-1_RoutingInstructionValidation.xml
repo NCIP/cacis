@@ -6,15 +6,15 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1322788756370</time>
+    <time>1333397853113</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>3</revision>
+  <revision>40</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
       <property name="DataType">Channel Reader</property>
-      <property name="responseValue">processRoutingInstructions</property>
+      <property name="responseValue">handleResponse</property>
     </properties>
     <transformer>
       <steps>
@@ -36,7 +36,7 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
+	var defaultRoutingInstructionsFile = &apos;C:\\Users\\ajay/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);
@@ -65,7 +65,7 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
+	var defaultRoutingInstructionsFile = &apos;C:\\Users\\ajay/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);
@@ -4553,125 +4553,104 @@ Q0lTUmVxdWVzdD4K</inboundTemplate>
       <properties>
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
-        <property name="script">return;</property>
+        <property name="script">default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+
+var cacisMsgXML = new XML($(&apos;cacisMsg&apos;)); 
+//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
+//do not route the message as per any routingInstructions, even if there is any, just return.
+var doctype = cacisMsgXML[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
+if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
+	return;
+}
+
+var exchDocs = cacisMsgXML[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
+
+var sourceData = cacisMsgXML[&apos;sourceData&apos;];
+default xml namespace=&apos;urn:tolven-org:trim:4.0&apos;;
+var sourceDataXML = new XML(sourceData);
+var noteTypeDescription = sourceDataXML[&apos;trim&apos;][&apos;description&apos;];
+
+
+default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
+var responseMsg = &apos;&apos;;
+
+for each (seg in exchDocs) {
+	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
+
+	var chNm;
+	if (exFrmt == &apos;CCD&apos;) {
+		chNm = &apos;DR-2a_CDACCDTransformation&apos;;
+	}
+	if ((exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) &amp;&amp; (noteTypeDescription == &apos;Clinical Staging&apos;)) {
+		chNm = &apos;DR-2b_HL7v2Transformation&apos;;
+	}
+	if (exFrmt == &apos;RIMITS&apos;) {
+		//TODO: Change channel names  of XSLT_Channel
+		chNm = &apos;DR-2c_RIMITSTransformation&apos;;
+	}
+	if ((exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) &amp;&amp; (noteTypeDescription != &apos;Clinical Staging&apos;)) {
+		logger.error(&apos;##### CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes #####&apos;);
+		responseMap.put(&apos;error&apos;, &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes\&apos;&apos;);		
+		//responseMsg = &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes&apos;;
+		break;
+	}
+
+	var msgToRoute = cacisMsgXML.copy();
+	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
+	processRoute(chNm, msgToRoute, exFrmt);
+}
+
+if (responseMsg == &apos;&apos;) {
+	responseMsg = &apos;Routing not required !&apos;;
+}
+
+responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
+
+function processRoute(channelName, msgToRoute, exFrmt) {
+	var response = null;
+	try{
+		response = router.routeMessage(channelName, msgToRoute, false);
+	}catch(err) {
+		logger.error(&apos;EXCEPTION CAUGHT IN ROUTING INSTRUCTION CHANNEL DESTINATION&apos;);
+		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
+	}
+	handleRouteResponse(response, exFrmt);
+}
+
+function handleRouteResponse(response, exFrmt) {
+	logger.info(responseMsg
+			+ &apos;Processed routing for &apos;
+			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;);
+	responseMsg = responseMsg + response.getMessage() + &apos;!&apos;;
+}</property>
       </properties>
       <transformer>
         <steps>
           <step>
             <sequenceNumber>0</sequenceNumber>
-            <name>Process Routing Instructions</name>
-            <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-
-//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
-//do not route the message as per any routingInstructions, even if there is any, just return.
-var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
-if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
-	return;
-}
-
-var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
-
-var responseMsg = &apos;&apos;;
-
-for each (seg in exchDocs) {
-	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
-
-	var chNm;
-	if (exFrmt == &apos;CCD&apos;) {
-		chNm = &apos;DR-2a_CDACCDTransformation&apos;;
-	}
-	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
-		chNm = &apos;DR-2b_HL7v2Transformation&apos;;
-	}
-	if (exFrmt == &apos;RIMITS&apos;) {
-		//TODO: Change channel names  of XSLT_Channel
-		chNm = &apos;DR-2c_RIMITSTransformation&apos;;
-	}
-
-	var msgToRoute = msg.copy();
-	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
-	processRoute(chNm, msgToRoute, exFrmt);
-}
-
-if (responseMsg == &apos;&apos;) {
-	responseMsg = &apos;Routing not required !&apos;;
-}
-
-responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
-
-function processRoute(channelName, msgToRoute, exFrmt) {
-	var response = null;
-	try{
-		response = router.routeMessage(channelName, msgToRoute, false);
-	}catch(err) {
-		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
-	}
-	handleRouteResponse(response, exFrmt);
-}
-
-function handleRouteResponse(response, exFrmt) {
-	responseMsg = responseMsg
-			+ &apos;Processed routing for &apos;
-			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
-}</script>
-            <type>JavaScript</type>
+            <name>cacisMsg</name>
+            <script>var mapping;try { mapping = msg; }catch (e) { logger.error(e);  mapping = &apos;&apos;;}channelMap.put(&apos;cacisMsg&apos;, validate( mapping , &apos;&apos;, new Array()));</script>
+            <type>Mapper</type>
             <data class="map">
               <entry>
-                <string>Script</string>
-                <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-
-//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
-//do not route the message as per any routingInstructions, even if there is any, just return.
-var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
-if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ){
-	return;
-}
-
-var exchDocs = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;];
-
-var responseMsg = &apos;&apos;;
-
-for each (seg in exchDocs) {
-	var exFrmt = seg[&apos;@exchangeFormat&apos;].toString();
-
-	var chNm;
-	if (exFrmt == &apos;CCD&apos;) {
-		chNm = &apos;DR-2a_CDACCDTransformation&apos;;
-	}
-	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
-		chNm = &apos;DR-2b_HL7v2Transformation&apos;;
-	}
-	if (exFrmt == &apos;RIMITS&apos;) {
-		//TODO: Change channel names  of XSLT_Channel
-		chNm = &apos;DR-2c_RIMITSTransformation&apos;;
-	}
-
-	var msgToRoute = msg.copy();
-	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
-	processRoute(chNm, msgToRoute, exFrmt);
-}
-
-if (responseMsg == &apos;&apos;) {
-	responseMsg = &apos;Routing not required !&apos;;
-}
-
-responseMap.put(&apos;processRoutingInstructions&apos;, responseMsg);
-
-function processRoute(channelName, msgToRoute, exFrmt) {
-	var response = null;
-	try{
-		response = router.routeMessage(channelName, msgToRoute, false);
-	}catch(err) {
-		response = ResponseFactory.getFailureResponse(&apos;CaCISError: &apos; + err.message);
-	}
-	handleRouteResponse(response, exFrmt);
-}
-
-function handleRouteResponse(response, exFrmt) {
-	responseMsg = responseMsg
-			+ &apos;Processed routing for &apos;
-			+ exFrmt + &apos;, with response :&apos; + response.getMessage() + &apos;!&apos;;
-}</string>
+                <string>Variable</string>
+                <string>cacisMsg</string>
+              </entry>
+              <entry>
+                <string>DefaultValue</string>
+                <string></string>
+              </entry>
+              <entry>
+                <string>Mapping</string>
+                <string>msg</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
+              </entry>
+              <entry>
+                <string>isGlobal</string>
+                <string>channel</string>
               </entry>
             </data>
           </step>
@@ -4693,6 +4672,36 @@ UmVxdWVzdD4=</inboundTemplate>
         </inboundProperties>
         <outboundProperties>
           <property name="stripNamespaces">false</property>
+        </outboundProperties>
+      </transformer>
+      <filter>
+        <rules/>
+      </filter>
+      <transportName>JavaScript Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <version>2.1.1.5490</version>
+    </connector>
+    <connector>
+      <name>handleResponse</name>
+      <properties>
+        <property name="DataType">JavaScript Writer</property>
+        <property name="host">sink</property>
+        <property name="script">var destArr = new Array(&quot;processRoutingInstructions&quot;);
+
+handleResponse(&apos;handleResponse&apos;, destArr);
+
+return;</property>
+      </properties>
+      <transformer>
+        <steps/>
+        <inboundProtocol>XML</inboundProtocol>
+        <outboundProtocol>XML</outboundProtocol>
+        <inboundProperties>
+          <property name="stripNamespaces">true</property>
+        </inboundProperties>
+        <outboundProperties>
+          <property name="stripNamespaces">true</property>
         </outboundProperties>
       </transformer>
       <filter>
