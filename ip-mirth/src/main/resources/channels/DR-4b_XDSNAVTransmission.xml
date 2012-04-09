@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326737734136</time>
+    <time>1333987618302</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>18</revision>
+  <revision>23</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -124,16 +124,19 @@ var docId = documentHandler.handleDocument(hashMap);
 logger.info(&quot;Created document in openXDS&quot;);
  
 try{
-    var subjectToDNPath = &apos;${xds.subjectToDNPath}&apos;;
+    var subjectToDNPath = &apos;C:\\Users\\ajay/.cacis/cacis-xds/emailToDNMapping.properties&apos;;
 	var properties = Packages.gov.nih.nci.cacis.common.util.PropertyUtils.loadProperties(subjectToDNPath, true);
 	var subjectDN = properties.getProperty($(&apos;navEmail&apos;));
-
+	if(subjectDN == null){
+		throw &apos;NAV Email Address: &apos;+$(&apos;navEmail&apos;)+&apos; has not been configured.&apos;;		
+	}
     docAccMngr.grantDocumentAccess(docId,subjectDN);
 	logger.info(&quot;Granted access to document to &quot; + subjectDN);
 
 }catch(accerr) {
-	logger.error(&apos;Error giving access to the XDS document.&apos; + accerr.message);
-	responseMap.put(&apos;xdsNavDestination&apos;, &apos;CaCISError: Giving access to the XDS document. &apos; + accerr.message);
+	//logger.error(&apos;Error giving access to the XDS document.&apos; + accerr.message);
+	logger.error(&apos;Error giving access to the XDS document.&apos; + accerr);
+	responseMap.put(&apos;xdsNavDestination&apos;, ResponseFactory.getFailureResponse(&apos;CaCISError: Giving access to the XDS document. &apos; + accerr));
 	return;
 }	
 
@@ -151,8 +154,10 @@ try{
 	cache.removeDocument(docId);
 }catch(navErr) {
 	logger.error(&apos;Error sending NAV &apos; + navErr.message);
-	responseMap.put(&apos;xdsNavDestination&apos;, &apos;CaCISError: Error sending NAV. &apos; + navErr.message);
+	responseMap.put(&apos;xdsNavDestination&apos;, ResponseFactory.getFailureResponse(&apos;CaCISError: Error sending NAV. &apos; + navErr.message));
+	return;
 }
+responseMap.put(&apos;xdsNavDestination&apos;, &apos;SUCCESS&apos;);
 return;
 
 </property>
