@@ -128,11 +128,14 @@ public class SemanticAdapter extends AcceptMessage {
                 throw new AcceptSourceFault("Error marshalling CaCISRequest!");
             }
 
-            final String mcResponse = webServiceMessageReceiver.processData(reqstr);
+            String mcResponse = webServiceMessageReceiver.processData(reqstr);
 
             LOG.info("MC RESPONSE:" + mcResponse);
 
-            if (mcResponse != null && mcResponse.indexOf("Error") > -1) {                
+            if (mcResponse != null
+                    && (mcResponse.indexOf("Error") > -1 || mcResponse.indexOf("Exception") > -1
+                            || mcResponse.indexOf("ERROR") > -1 || mcResponse.indexOf("error") > -1)) {
+                mcResponse = StringUtils.remove(mcResponse, "SUCCESS:");
                 throw new AcceptSourceFault("Error processing Data from Source System: " + mcResponse);
             }
             response.setStatus(ResponseStatusType.SUCCESS);
