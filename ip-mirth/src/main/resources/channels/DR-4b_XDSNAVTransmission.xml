@@ -124,7 +124,7 @@ var docId = documentHandler.handleDocument(hashMap);
 logger.info(&quot;Created document in openXDS&quot;);
  
 try{
-    var subjectToDNPath = &apos;C:\\Users\\ajay/.cacis/cacis-xds/emailToDNMapping.properties&apos;;
+    var subjectToDNPath = &apos;${xds.subjectToDNPath}&apos;;
 	var properties = Packages.gov.nih.nci.cacis.common.util.PropertyUtils.loadProperties(subjectToDNPath, true);
 	var subjectDN = properties.getProperty($(&apos;navEmail&apos;));
 	if(subjectDN == null){
