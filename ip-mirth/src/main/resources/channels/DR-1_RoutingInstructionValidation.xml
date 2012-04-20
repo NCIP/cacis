@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1333397853113</time>
-    <timezone>America/New_York</timezone>
+    <time>1334954739765</time>
+    <timezone>US/Eastern</timezone>
   </lastModified>
-  <revision>40</revision>
+  <revision>9</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4590,9 +4590,10 @@ for each (seg in exchDocs) {
 	}
 	if ((exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) &amp;&amp; (noteTypeDescription != &apos;Clinical Staging&apos;)) {
 		logger.error(&apos;##### CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes #####&apos;);
-		responseMap.put(&apos;error&apos;, &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes\&apos;&apos;);		
-		//responseMsg = &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes&apos;;
-		break;
+		//responseMap.put(&apos;error&apos;, &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes\&apos;&apos;);		
+		var resp = &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes\&apos;&apos;;
+		responseMsg = responseMsg + resp + &apos;!&apos;;
+		continue;
 	}
 
 	var msgToRoute = cacisMsgXML.copy();
