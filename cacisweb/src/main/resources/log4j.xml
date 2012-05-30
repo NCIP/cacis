@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+       <layout class="org.apache.log4j.PatternLayout"> 
+          <param name="ConversionPattern" value="%d %-5p %c.%M:%L - %m%n"/> 
+       </layout> 
+    </appender>
+ 
+    <!-- specify the logging level for loggers from other libraries -->
+    <logger name="com.opensymphony">
+    	<level value="INFO" />
+    </logger>
+
+    <logger name="org.apache.struts2">
+    	 <level value="INFO" />
+    </logger>
+    
+    <logger name="gov.nih.nci">
+    	<level value="DEBUG" />
+    </logger>
+  
+   <!-- for all other loggers log only debug and above log messages -->
+     <root>
+        <priority value="INFO"/> 
+        <appender-ref ref="STDOUT" /> 
+     </root> 
+    
+</log4j:configuration> 

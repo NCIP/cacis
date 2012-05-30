@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.custom.i18n.resources" value="cacisi18n" />
+
+	<package name="basicstruts2" extends="struts-default">
+
+		<interceptors>
+			<interceptor-stack name="appDefaultStack">
+				<interceptor-ref name="defaultStack">
+					<param name="exception.logEnabled">true</param>
+					<param name="exception.logLevel">ERROR</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="appDefaultStack" />
+
+		<global-results>
+			<result name="securityerror">/securityerror.jsp</result>
+			<result name="error">/error.jsp</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping
+				exception="org.apache.struts.register.exceptions.SecurityBreachException"
+				result="securityerror" />
+			<exception-mapping exception="java.lang.Exception"
+				result="error" />
+		</global-exception-mappings>
+
+		<action name="login">
+			<result>/index.jsp</result>
+		</action>
+
+		<action name="secureEmailRecipientAdd" class="gov.nih.nci.cacisweb.action.SecureEmailAddAction"
+			method="execute">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirectAction">secureEmailRecipientList.action
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">secureEmailRecipientList</param>
+				<param name="secureEmailBean.certificateAlias">${secureEmailBean.certificateAlias}</param>
+			</result>
+			<result name="error">/error.jsp</result>
+		</action>
+
+		<action name="secureEmailRecipientList" class="gov.nih.nci.cacisweb.action.SecureEmailAction"
+			method="input">
+			<interceptor-ref name="store">
+				<param name="operationMode">RETRIEVE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/secureEmailRecipient.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+
+		<action name="secureEmailRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureEmailAction"
+			method="delete">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirectAction">secureEmailRecipientList.action
+			</result>
+			<result name="input" type="redirectAction">secureEmailRecipientList.action
+			</result>
+			<result name="error">/error.jsp</result>
+		</action>
+
+		<action name="secureFTPRecipientAdd" class="gov.nih.nci.cacisweb.action.SecureFTPAddAction"
+			method="execute">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirectAction">secureFTPRecipientList.action
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">secureFTPRecipientList</param>
+				<param name="secureFTPBean.certificateAlias">${secureFTPBean.certificateAlias}</param>
+			</result>
+			<result name="error">/error.jsp</result>
+		</action>
+
+		<action name="secureFTPRecipientList" class="gov.nih.nci.cacisweb.action.SecureFTPAction"
+			method="input">
+			<interceptor-ref name="store">
+				<param name="operationMode">RETRIEVE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/secureFTPRecipient.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+		
+		<action name="secureFTPRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureFTPAction"
+			method="delete">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirectAction">secureFTPRecipientList.action
+			</result>
+			<result name="input" type="redirectAction">secureFTPRecipientList.action
+			</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		
+		<action name="secureXDSNAVRecipientAdd" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAddAction"
+			method="execute">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirectAction">secureXDSNAVRecipientList.action
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">secureXDSNAVRecipientList</param>
+				<param name="secureXDSNAVBean.certificateAlias">${secureXDSNAVBean.certificateAlias}</param>
+			</result>
+			<result name="error">/error.jsp</result>
+		</action>
+
+		<action name="secureXDSNAVRecipientList" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAction"
+			method="input">
+			<interceptor-ref name="store">
+				<param name="operationMode">RETRIEVE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/secureXDSNAVRecipient.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+		
+		<action name="secureXDSNAVRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAction"
+			method="delete">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirectAction">secureXDSNAVRecipientList.action
+			</result>
+			<result name="input" type="redirectAction">secureXDSNAVRecipientList.action
+			</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		
+		<action name="cdwUserPermission" class="gov.nih.nci.cacisweb.action.CdwUserSearchAction"
+			method="input">
+			<result name="input">/cdwUserPermission.jsp</result>
+		</action>	
+		
+		<action name="cdwUserAdd"
+			class="gov.nih.nci.cacisweb.action.CdwUserAddAction" method="execute">
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/cdwUserPermission.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+		
+		<action name="cdwUserDelete"
+			class="gov.nih.nci.cacisweb.action.CdwUserDeleteAction" method="execute">
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/cdwUserPermission.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+		
+		<action name="cdwUserPermissionSearch"
+			class="gov.nih.nci.cacisweb.action.CdwUserSearchAction" method="execute">
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/cdwUserPermission.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+		
+		<action name="cdwPermissionAdd" class="gov.nih.nci.cacisweb.action.CdwPermissionAddAction"
+			method="execute">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/cdwUserPermission.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+		
+		<action name="cdwPermissionDelete" class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction"
+			method="delete">
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/cdwUserPermission.jsp</result>
+			<result name="error">/messageAndError.jsp</result>
+		</action>
+	</package>
+
+</struts>

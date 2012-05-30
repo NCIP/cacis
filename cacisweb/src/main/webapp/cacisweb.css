@@ -1,0 +1,399 @@
+.default {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 8px;
+	font-style: normal;
+}
+
+a:link {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+	font-family: Arial, Helvetica;
+	font-size: 11px
+}
+
+a:visited {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+	font-family: Arial, Helvetica;
+	font-size: 11px
+}
+
+a:hover {
+	color: #ffcc00;
+	font-weight: bold;
+	font-family: Arial, Helvetica;
+	font-size: 11px
+}
+/*
+button.tableRowDelete {
+	background-color: #003366;
+	font-family: Arial, Helvetica;
+	font-size: 12px;
+	font-weight: bold;
+	color: #ffffff;
+	height: 25px;
+	width: 70px;
+}
+*/
+
+button.tableRowDelete {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #63b9ee), color-stop(1, #003366) );
+	background:-moz-linear-gradient( center top, #63b9ee 5%, #003366 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#63b9ee', endColorstr='#003366');
+	background-color:#63b9ee;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #3866a3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 12px;
+	text-decoration:none;
+}button.tableRowDelete:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a90101), color-stop(1, #fe1a00) );
+	background:-moz-linear-gradient( center top, #a90101 5%, #fe1a00 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a90101', endColorstr='#fe1a00');
+	background-color:#a90101;
+	border:1px solid #d83526;
+}button.tableRowDelete:active {
+	position:relative;
+	top:1px;
+}
+
+input.formButton {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #63b9ee), color-stop(1, #003366) );
+	background:-moz-linear-gradient( center top, #63b9ee 5%, #003366 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#63b9ee', endColorstr='#003366');
+	background-color:#63b9ee;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #3866a3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 12px;
+	text-decoration:none;
+}input.formButton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #003366), color-stop(1, #63b9ee) );
+	background:-moz-linear-gradient( center top, #003366 5%, #63b9ee 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#003366', endColorstr='#63b9ee');
+	background-color:#003366;
+}input.formButton:active {
+	position:relative;
+	top:1px;
+}
+
+input.formButtonDelete {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #63b9ee), color-stop(1, #003366) );
+	background:-moz-linear-gradient( center top, #63b9ee 5%, #003366 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#63b9ee', endColorstr='#003366');
+	background-color:#63b9ee;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #3866a3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 12px;
+	text-decoration:none;
+}input.formButtonDelete:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a90101), color-stop(1, #fe1a00) );
+	background:-moz-linear-gradient( center top, #a90101 5%, #fe1a00 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a90101', endColorstr='#fe1a00');
+	background-color:#a90101;
+	border:1px solid #d83526;
+}input.formButtonDelete:active {
+	position:relative;
+	top:1px;
+}
+
+
+/*
+button:hover.tableRowDelete {
+	background-color: #A90101;
+	font-family: Arial, Helvetica;
+	font-size: 12px;
+	font-weight: bolder;
+	color: #ffffff;
+	height: 25px;
+	width: 70px;
+}
+*/
+/* styles for links in the top bar */
+.topBarDiv2 a:link {color: #ffffff;}
+.topBarDiv2 a:visited {color: #ffffff;}
+.topBarDiv2 a:active {color: #ffffff;}
+.topBarDiv2 a:hover {color: #ffffff;}
+.topBarDiv2 {color: #ffffff;}
+
+.topBar {
+    background-color: #003366;
+}
+
+.bgtable {
+	border-style: inset;
+	border-color: "#000033";
+	border-top-width: 1px;
+	border-bottom-width: 2px;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	background-color: #F5F5F5;
+}
+
+.menuBody {
+	background: #003366;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	margin-top: 0px;
+	margin-left: 0px;
+}
+
+body.mainframe {
+	padding-top: 0;
+	margin-top: 0;
+	padding-left: 0;
+	margin-left: 0;
+	padding-right: 0;
+	margin-right: 0;
+}
+
+H1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+H1.underlined {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 18px;
+	text-decoration: underline;
+}
+
+.Sheader	{ 
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size: 12px; 
+	font-style: normal; 
+	color: #ffffff; 
+	text-valign: bottom;
+	text-align: left;
+	background-color: #333366;
+}
+
+.table {
+	border-style: inset;
+	border-color: "#000033";
+	border-top-width: 1px;
+	border-bottom-width: 2px;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	border-bottom-style: groove;
+}
+
+table.headerTable {
+	border-spacing: 0;
+	padding: 0;
+	width: 100%;
+	border: 0;
+	background-color: #CCCCCC;
+}
+
+td.headerTable {
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size: 28px; 
+	font-style: normal;
+	font-weight: bold; 
+	color: #006699; 
+	text-align: center;
+	text-valign: bottom;
+	background-color: #ffffff;
+	text-decoration: underline;
+	width: 100%;	
+}
+
+table.listTable {
+	border-spacing: 1px;
+	padding: 0;
+	border-style: inset;
+	border-color: "#000000";
+	border-top-width: 1px;
+	border-bottom-width: 2px;
+	border-left-width: 1px;
+	border-right-width: 2px;
+	background-color: #CCCCCC;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: auto;
+	width: 90%;	
+}
+
+th.listTable {
+	text-align: center;
+	font-weight: bolder;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+td.listTable {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	color: #000033;
+	text-valign: bottom;
+}
+
+tr.listTableWhite {
+	background-color: #FFFFFF;
+	text-indent: 0pt;	
+}
+tr.listTableGrey {
+	background-color: #EDEDED;
+	text-indent: 0pt;
+}
+
+table.formTable {
+	border-spacing: 1px;
+	padding: 0;
+	border-style: inset;
+	border-color: "#000000";
+	border-top-width: 1px;
+	border-bottom-width: 2px;
+	border-left-width: 1px;
+	border-right-width: 2px;
+	background-color: #CCCCCC;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: auto;
+	width: 60%;	
+}
+
+th.formTable {
+	text-align: right;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 25%;
+}
+
+td.formTable {
+	text-align: left;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 75%;
+}
+
+td.formTableHint {
+	text-align: left;
+	font-weight: lighter;	
+	font-size: 12px;
+	font-style: italic;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 75%;
+}
+
+td.formButton {
+	height: 40px;
+	text-align: center;
+}
+
+input.formTable {
+    border: 1px solid #A90101;
+    size: 55;
+}
+
+input:hover.formTable {
+    border: 1px solid #A90101;
+    background: #ffc;
+}
+
+td.formTableList {
+	text-align: center;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 75%;
+}
+
+input.formTableList {	
+    border: 1px solid #A90101;
+}
+
+input:hover.formTableList {
+    border: 1px solid #A90101;
+    background: #ffc;
+}
+
+table.messageTable {
+	border-spacing: 1px;
+	padding: 0;
+	border-style: none;
+	border-color: "#000000";
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	background-color: #aade7c;
+	color: #000000;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 60%;
+} table.messageTable li{ 
+	list-style: none; 
+}
+
+table.errorTable {
+	border-spacing: 1px;
+	padding: 0;
+	border-style: solid;
+	border-color: "#A90101";
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	background-color: #ffffff;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 60%;
+} 
+
+td.navleftLabel {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	color: "ffffff";
+}
+
+
+td.smallTextGrey {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	color: #AAAAAA;
+	text-valign: bottom;
+	text-align: left;
+}
+
