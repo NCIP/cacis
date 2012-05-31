@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -59,17 +60,16 @@ public class CaCISUtil {
      * @return
      * @throws PropertyFileLoadException
      */
-    public static String getProperty(String property, String defaultValue) throws CaCISWebException {
-        File propertiesFile = new File(CaCISWebConstants.COM_PROPERTIES_FILE_LOCATION);
+public static String getProperty(String property, String defaultValue) throws CaCISWebException {
+        
+        URL propsUrl = CaCISUtil.class.getClassLoader().getResource(CaCISWebConstants.COM_PROPERTIES_FILE_LOCATION);
+        File propertiesFile = new File(propsUrl.getPath());
 
         if (properties == null || propertiesFile.lastModified() > lastModified) {
             properties = new Properties();
 
             try {
-                InputStream is = new FileInputStream(propertiesFile);
-
-                properties.load(is);
-                is.close();
+                properties.load(propsUrl.openStream());
             } catch (FileNotFoundException ex) {
                 throw new CaCISWebException(String.format("The properties file %s does not exist or is not readable",
                         propertiesFile.getAbsolutePath()), ex);

@@ -108,9 +108,13 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
         try {
             String graphGroupPrefix = CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_GRAPH_GROUP_URL_PREFIX);
-            String cdwOid = CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_OID);
-            graphGroupID = graphGroupPrefix + cdwOid + "." + cdwPermissionModel.getStudyID() + "/" + cdwOid + "."
-                    + cdwPermissionModel.getSiteID() + "/" + cdwOid + "." + cdwPermissionModel.getPatientID();
+            graphGroupID = graphGroupPrefix
+                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_STUDY_ID_ROOT) + "."
+                    + cdwPermissionModel.getStudyID() + "/"
+                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_SITE_ID_ROOT) + "."
+                    + cdwPermissionModel.getSiteID() + "/"
+                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_PATIENT_ID_ROOT) + "."
+                    + cdwPermissionModel.getPatientID();
 
             pstmt = new LoggableStatement(cacisConnection, query.toString());
             pstmt.setString(1, graphGroupID);

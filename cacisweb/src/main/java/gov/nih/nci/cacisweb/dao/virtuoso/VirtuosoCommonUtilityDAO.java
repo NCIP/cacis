@@ -78,14 +78,11 @@ public class VirtuosoCommonUtilityDAO implements ICommonUtilityDAO {
             // DataSource dataSource = ServiceLocator.getInstance().getDataSourceByName(virtuosoDataSourceString);
             // cacisConnection = dataSource.getConnection();
 
-            String driverName = "virtuoso.jdbc3.Driver";
+            String driverName = CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_DATABASE_VIRTUOSO_DRIVER);
             Class.forName(driverName);
 
             // Create a connection to the database
-            String url = "jdbc:virtuoso://"
-                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_DATABASE_VIRTUOSO_HOST) + ":"
-                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_DATABASE_VIRTUOSO_PORT) + "/";
-            cacisConnection = DriverManager.getConnection(url, CaCISUtil
+           cacisConnection = DriverManager.getConnection(CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_DATABASE_VIRTUOSO_URL), CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_DATABASE_VIRTUOSO_USERNAME), CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_DATABASE_VIRTUOSO_PASSWORD));
         } catch (SQLException sqle) {

@@ -18,9 +18,9 @@ public class CdwUserSearchAction extends ActionSupport {
     private static final long serialVersionUID = 1L;
 
     private CdwUserModel cdwUserBean;
-    
+
     private CdwPermissionModel cdwPermissionBean;
-    
+
     @Override
     public String input() throws Exception {
         log.debug("input() - START");
@@ -34,10 +34,14 @@ public class CdwUserSearchAction extends ActionSupport {
 
         DAOFactory daoFactory = DAOFactory.getDAOFactory();
         ICDWUserPermissionDAO cdwUserPermissionDAO = daoFactory.getCDWUserPermissionDAO();
-        log.debug("Username: "+getCdwUserBean().getUsername());
+        log.debug("Username: " + getCdwUserBean().getUsername());
         cdwUserBean.setUserPermission((ArrayList) cdwUserPermissionDAO.searchUserPermissions(getCdwUserBean()));
-        if(cdwUserBean.getUserPermission().size() == 0){
-            addActionError(getText("cdwUserBean.noPermissions"));            
+        if (cdwUserPermissionDAO.isUserExists(getCdwUserBean())) {
+            if (cdwUserBean.getUserPermission().size() == 0) {
+                addActionError(getText("cdwUserBean.noPermissions"));
+            }
+        } else {
+            addActionError(getText("cdwUserBean.usernameDoesNotExist"));
         }
 
         log.debug("execute() - END");
@@ -52,15 +56,12 @@ public class CdwUserSearchAction extends ActionSupport {
         this.cdwUserBean = cdwUserBean;
     }
 
-    
     public CdwPermissionModel getCdwPermissionBean() {
         return cdwPermissionBean;
     }
 
-    
     public void setCdwPermissionBean(CdwPermissionModel cdwPermissionBean) {
         this.cdwPermissionBean = cdwPermissionBean;
     }
-    
 
 }
