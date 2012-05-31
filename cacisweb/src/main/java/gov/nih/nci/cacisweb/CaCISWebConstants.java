@@ -14,9 +14,10 @@ public class CaCISWebConstants {
     public static final String COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_LOCATION_PROP_NAME = "sec.email.truststore.location.property.name";
     public static final String COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_PASSWORD_PROP_NAME = "sec.email.truststore.password.property.name";
 
-    public static final String COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_LOCATION = "secureftp.recepient.keystore.location";
-    public static final String COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD = "secureftp.recepient.keystore.password";
-    public static final String COM_PROPERTY_NAME_SECFTP_RECEPIENT_CONFIG_FILE_LOCATION = "secureftp.recepient.config.file.location";
+    public static final String COM_PROPERTY_NAME_SECFTP_PROPERTIES_FILE_LOCATION = "sec.ftp.properties.file.location";
+    public static final String COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_LOCATION_PROP_NAME = "sec.ftp.truststore.location.property.name";
+    public static final String COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_PASSWORD_PROP_NAME = "sec.ftp.truststore.password.property.name";
+    public static final String COM_PROPERTY_NAME_SECFTP_CONFIG_FILE_LOCATION = "sec.ftp.config.file.location";
 
     public static final String COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_TRUSTSTORE_LOCATION = "securexdsnav.recepient.truststore.location";
     public static final String COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_TRUSTSTORE_PASSWORD = "securexdsnav.recepient.truststore.password";

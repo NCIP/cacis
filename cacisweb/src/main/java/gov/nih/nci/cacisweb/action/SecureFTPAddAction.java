@@ -30,13 +30,16 @@ public class SecureFTPAddAction extends ActionSupport {
     @Override
     public String execute() throws Exception {
         log.debug("execute() - START");
-        String secureFTPKeystoreLocation = CaCISUtil
-                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_LOCATION);
+        String secureFTPPropertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_PROPERTIES_FILE_LOCATION);
+        String secureFTPKeystoreLocation = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_LOCATION_PROP_NAME));
+        String secureFTPKeystorePassword = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_PASSWORD_PROP_NAME));
         try {
             CaCISUtil caCISUtil = new CaCISUtil();
             KeyStore keystore = caCISUtil.getKeystore(secureFTPKeystoreLocation,
-                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, CaCISUtil
-                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD));
+                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
 
             caCISUtil.releaseKeystore();
 
@@ -49,13 +52,12 @@ public class SecureFTPAddAction extends ActionSupport {
 
             // Save the new keystore contents
             FileOutputStream out = new FileOutputStream(new File(secureFTPKeystoreLocation));
-            keystore.store(out, CaCISUtil.getProperty(
-                    CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD).toCharArray());
+            keystore.store(out, secureFTPKeystorePassword.toCharArray());
             out.close();
 
             // add the new entry to FTP configuration properties file
             PropertiesConfiguration config = new PropertiesConfiguration(CaCISUtil
-                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_CONFIG_FILE_LOCATION));
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_CONFIG_FILE_LOCATION));
             config.setProperty(secureFTPBean.getCertificateAlias(), "");
             config.save();
         } catch (KeystoreInstantiationException kie) {
@@ -74,12 +76,15 @@ public class SecureFTPAddAction extends ActionSupport {
 
     public void validate() {
         try {
-            String secureFTPKeystoreLocation = CaCISUtil
-                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_LOCATION);
+            String secureFTPPropertyFileLocation = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_PROPERTIES_FILE_LOCATION);
+            String secureFTPKeystoreLocation = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                    CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_LOCATION_PROP_NAME));
+            String secureFTPKeystorePassword = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                    CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_PASSWORD_PROP_NAME));
             CaCISUtil caCISUtil = new CaCISUtil();
             KeyStore keystore = caCISUtil.getKeystore(secureFTPKeystoreLocation,
-                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, CaCISUtil
-                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD));
+                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
 
             if (keystore.containsAlias(secureFTPBean.getCertificateAlias())) {
                 log.error(getText("secureFTPBean.duplicateKey"));

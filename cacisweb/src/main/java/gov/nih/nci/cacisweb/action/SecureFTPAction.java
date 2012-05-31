@@ -33,16 +33,18 @@ public class SecureFTPAction extends ActionSupport {
     public String input() throws Exception {
         log.debug("input() - START");
         secureFTPRecepientList = new ArrayList<SecureFTPModel>();
-        String secureFTPKeystoreLocation = CaCISUtil
-                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_LOCATION);
-        String secureFTPKeystorePassword = CaCISUtil
-                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD);
+        String secureFTPPropertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_PROPERTIES_FILE_LOCATION);
+        String secureFTPKeystoreLocation = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_LOCATION_PROP_NAME));
+        String secureFTPKeystorePassword = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_PASSWORD_PROP_NAME));
 
         CaCISUtil caCISUtil = new CaCISUtil();
 
         try {
             caCISUtil.isPropertyFileAndKeystoreInSync(CaCISUtil
-                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_CONFIG_FILE_LOCATION),
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_CONFIG_FILE_LOCATION),
                     secureFTPKeystoreLocation, CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
         } catch (PropFileAndKeystoreOutOfSyncException e) {
             log.error(e.getMessage());
@@ -80,26 +82,28 @@ public class SecureFTPAction extends ActionSupport {
      */
     public String delete() throws Exception {
         log.debug("delete() - START");
-        String secureFTPKeystoreLocation = CaCISUtil
-                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_LOCATION);
+        String secureFTPPropertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_PROPERTIES_FILE_LOCATION);
+        String secureFTPKeystoreLocation = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_LOCATION_PROP_NAME));
+        String secureFTPKeystorePassword = CaCISUtil.getPropertyFromPropertiesFile(secureFTPPropertyFileLocation,
+                CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_PASSWORD_PROP_NAME));
         try {
             CaCISUtil caCISUtil = new CaCISUtil();
             KeyStore keystore = caCISUtil.getKeystore(secureFTPKeystoreLocation,
-                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, CaCISUtil
-                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD));
+                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
             caCISUtil.releaseKeystore();
             // Delete the certificate
             keystore.deleteEntry(secureFTPBean.getCertificateAlias());
 
             // Save the new keystore contents
             FileOutputStream out = new FileOutputStream(new File(secureFTPKeystoreLocation));
-            keystore.store(out, CaCISUtil.getProperty(
-                    CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD).toCharArray());
+            keystore.store(out, secureFTPKeystorePassword.toCharArray());
             out.close();
 
             // delete the entry from FTP configuration properties file
             PropertiesConfiguration config = new PropertiesConfiguration(CaCISUtil
-                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_RECEPIENT_CONFIG_FILE_LOCATION));
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_CONFIG_FILE_LOCATION));
             config.clearProperty(secureFTPBean.getCertificateAlias());
             config.save();
         } catch (KeystoreInstantiationException kie) {
