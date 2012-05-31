@@ -97,8 +97,10 @@
 		<!-- ############################################################################ -->
 		<!-- PROPERTIES THAT ARE NEEDED FOR ADMIN UI -->
 		<!-- ############################################################################ -->
-		<cacis.xds.server.truststore>${cacis.config.home}/certs/cacis-xds-server-truststore.jks</cacis.xds.server.truststore>
-		<cacis.xds.server.truststore.password>cacis1234</cacis.xds.server.truststore.password>
+		<!-- Replace <<TRUSTSTORE_NAME>> and <<TRUSTSTORE_PASSWORD>> with the name of the truststore and password used in 
+			tomcat's server.xml connector -->
+		<cacis.xds.server.truststore>${cacis.config.home}/certs/<<TRUSTSTORE_NAME>>.jks</cacis.xds.server.truststore>
+		<cacis.xds.server.truststore.password><<TRUSTSTORE_PASSWORD>></cacis.xds.server.truststore.password>
 
 		<cdw.graph.group.url.prefix>http://cacis.nci.nih.gov/</cdw.graph.group.url.prefix>
 		<cdw.study.id.root>1.2.3</cdw.study.id.root>
