@@ -5,12 +5,12 @@
 		<param name="fieldname">secureFTPBean.certificateAlias</param>
 		<message key="secureFTPBean.certificateAliasRequired"></message>
 	</validator>
-	<!--<validator type="regex">
+	<validator type="regex">
 		<param name="fieldname">secureFTPBean.certificateAlias</param>
-		<param name="expression"><![CDATA[\d{3}-\d{3}-\d{4}]]></param>
+		<param name="expression"><![CDATA[^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\\-]*[A-Za-z0-9]),[0-9]+,.*?,.*?,.*?]]></param>
 		<message key="secureFTPBean.certificateAliasNotValid"></message>
 	</validator>
-	--><validator type="requiredstring">
+	<validator type="requiredstring">
 		<param name="fieldname">secureFTPBean.certificateFileName</param>
 		<message key="secureFTPBean.certificateRequired"></message>
 	</validator>
