@@ -2,6 +2,7 @@ package gov.nih.nci.cacisweb.action;
 
 import gov.nih.nci.cacisweb.dao.DAOFactory;
 import gov.nih.nci.cacisweb.dao.ICDWUserPermissionDAO;
+import gov.nih.nci.cacisweb.exception.DAOException;
 import gov.nih.nci.cacisweb.model.CdwPermissionModel;
 import gov.nih.nci.cacisweb.model.CdwUserModel;
 
@@ -21,24 +22,34 @@ public class CdwPermissionAddAction extends ActionSupport {
     private CdwPermissionModel cdwPermissionBean;
 
     @Override
-    public String execute() throws Exception {
+    public String execute() {
         log.debug("execute() - START");
         DAOFactory daoFactory = DAOFactory.getDAOFactory();
-        ICDWUserPermissionDAO cdwUserPermissionDAO = daoFactory.getCDWUserPermissionDAO();
-        if (!cdwUserPermissionDAO.isUserExists(getCdwUserBean())) {
-            addActionError(getText("cdwUserBean.usernameDoesNotExist"));
-            return INPUT;
-        }
-        if (cdwUserPermissionDAO.addUserPermission(getCdwUserBean(), getCdwPermissionBean())) {
-            addActionMessage(getText("cdwUserBean.addPermissionSuccessful"));
+        try {
+            ICDWUserPermissionDAO cdwUserPermissionDAO = daoFactory.getCDWUserPermissionDAO();
+            if (!cdwUserPermissionDAO.isUserExists(getCdwUserBean())) {
+                addActionError(getText("cdwUserBean.usernameDoesNotExist"));
+                return INPUT;
+            }
+            if (cdwUserPermissionDAO.addUserPermission(getCdwUserBean(), getCdwPermissionBean())) {
+                addActionMessage(getText("cdwUserBean.addPermissionSuccessful"));
+            }
+        } catch (DAOException e) {
+            if (StringUtils.contains(e.getMessage(), "Non unique primary key")) {
+                addActionMessage(getText("cdwUserBean.permissionAlreadyExists"));
+                return INPUT;
+            } else {
+                addActionError(e.getMessage());
+                return ERROR;
+            }
         }
         log.debug("execute() - END");
         return INPUT;
     }
-    
+
     public void validate() {
-        if(StringUtils.isNotBlank(cdwPermissionBean.getPatientID())){
-            if(StringUtils.isBlank(cdwPermissionBean.getSiteID())){
+        if (StringUtils.isNotBlank(cdwPermissionBean.getPatientID())) {
+            if (StringUtils.isBlank(cdwPermissionBean.getSiteID())) {
                 addActionError(getText("cdwPermissionBean.siteIDRequired"));
             }
         }

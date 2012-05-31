@@ -102,7 +102,7 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
     public boolean addUserPermission(CdwUserModel userModel, CdwPermissionModel cdwPermissionModel) throws DAOException {
         log.debug("addUserPermission(CdwUserModel userModel, CdwPermissionModel cdwPermissionModel) - start");
         StringBuffer query = new StringBuffer();
-        query.append("INSERT INTO RDF_GRAPH_GROUP (RGG_IRI, RGG_IID) VALUES (?, iri_to_id(?))");
+        query.append("SELECT * FROM RDF_GRAPH_GROUP WHERE RGG_IRI=?");
         boolean permissionAdded = true;
         StringBuffer graphGroupID = new StringBuffer();
         try {
@@ -123,11 +123,22 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
 
             pstmt = new LoggableStatement(cacisConnection, query.toString());
             pstmt.setString(1, graphGroupID.toString());
-            pstmt.setString(2, graphGroupID.toString());
             log
-                    .info("INSERT INTO RDF_GRAPH_GROUP SQL in addUser(CDWUserModel cdwUserModel, CdwPermissionModel cdwPermissionModel): "
+                    .info("SELECT FROM RDF_GRAPH_GROUP SQL in addUser(CDWUserModel cdwUserModel, CdwPermissionModel cdwPermissionModel): "
                             + pstmt.toString());
-            pstmt.executeUpdate();
+            rs = pstmt.executeQuery();
+            //insert the graph group only if it is not already present
+            if (!rs.next()) {
+                query = new StringBuffer();
+                query.append("INSERT INTO RDF_GRAPH_GROUP (RGG_IRI, RGG_IID) VALUES (?, iri_to_id(?))");
+                pstmt = new LoggableStatement(cacisConnection, query.toString());
+                pstmt.setString(1, graphGroupID.toString());
+                pstmt.setString(2, graphGroupID.toString());
+                log
+                        .info("INSERT INTO RDF_GRAPH_GROUP SQL in addUser(CDWUserModel cdwUserModel, CdwPermissionModel cdwPermissionModel): "
+                                + pstmt.toString());
+                pstmt.executeUpdate();
+            }
 
             query = new StringBuffer();
             query.append("{call caCIS_GRAPH_GROUP_USER_PERMS_SET (?, ?, 1)}");
