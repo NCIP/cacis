@@ -111,6 +111,9 @@
 		sa.trim.xsd.validation is set to false, Incoming trim WILL NOT be validated against trim4.xsd --> 
 		
 		<sa.trim.xsd.validation>false</sa.trim.xsd.validation>
+
+		<!-- reorganized as part of the Admin UI development -->
+		<xds.subjectToDNPath>${cacis.mc.support.files.dir}/emailToDNMapping.properties</xds.subjectToDNPath> <ftp.mappingFile>${cacis.mc.support.files.dir}/ftpConfig.properties</ftp.mappingFile>
 		
     </properties>
 
