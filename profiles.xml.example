@@ -12,11 +12,15 @@
                 <!-- ############################################################################ -->
                 <!--CUSTOMIZE these for your local environment-->
                 <!-- ############################################################################ -->
-				
-				<!-- Replace <<CATALINA_HOME>> with absolute path to tomcat home location -->
-                <openxds.web.dir><<CATALINA_HOME>>/webapps/openxds-web</openxds.web.dir>
 
-                <!-- Replace <<MIRTH CONNECT HOME>> with absolute path to Mirth Connect install location-->
+		<!-- Replace <<CATALINA_HOME>> with absolute path to tomcat home location -->
+		<catalina.home.dir><<CATALINA_HOME>></catalina.home.dir>
+				
+		<openxds.web.dir>
+			${catalina.home.dir}/webapps/openxds-web
+		</openxds.web.dir>
+				
+		<!-- Replace <<MIRTH CONNECT HOME>> with absolute path to Mirth Connect install location-->
                 <mirthConnect.server.dir><<MIRTH CONNECT HOME>></mirthConnect.server.dir>
 
 				<!-- Replace <<MIRTH CONNECT HOME>> with absolute path to mccommand of Mirth Connect. 
@@ -88,7 +92,18 @@
 						sa.trim.xsd.validation if set to true, Incoming trim will be validated against trim4.xsd
 						sa.trim.xsd.validation is set to false, Incoming trim will NOT be validated against trim4.xsd --> 
 		
-				<sa.trim.xsd.validation>false</sa.trim.xsd.validation>							
+				<sa.trim.xsd.validation>false</sa.trim.xsd.validation>		
+		
+		<!-- ############################################################################ -->
+		<!-- PROPERTIES THAT ARE NEEDED FOR ADMIN UI -->
+		<!-- ############################################################################ -->
+		<cacis.xds.server.truststore>${cacis.config.home}/certs/cacis-xds-server-truststore.jks</cacis.xds.server.truststore>
+		<cacis.xds.server.truststore.password>cacis1234</cacis.xds.server.truststore.password>
+
+		<cdw.graph.group.url.prefix>http://cacis.nci.nih.gov/</cdw.graph.group.url.prefix>
+		<cdw.study.id.root>1.2.3</cdw.study.id.root>
+		<cdw.site.id.root>4.5.6</cdw.site.id.root>
+		<cdw.patient.id.root>7.8.9</cdw.patient.id.root>
 
             </properties>
         </profile>
