@@ -18,6 +18,11 @@ body {
 	margin-right: 0;
 }
 </STYLE>
+<script type="text/javascript">
+	function logout(){
+		alert('<s:text name="navtop.logoutMessage" />');	
+	}
+</script>
 
 </head>
 
@@ -35,7 +40,7 @@ body {
   	<td align="left" valign="middle" class="topBarDiv">
           &nbsp;<A href="welcome.jsp" title="caCIS Administration" target="mainFrame"><s:text name="application.title" /></A>
         </td>
-    <td width="307" height="24" align="right"><a href="welcome.jsp" target="mainFrame"><s:text name="application.home" />&nbsp;</a></td>    
+    <td width="307" height="24" align="right"><a href="welcome.jsp" target="mainFrame"><s:text name="application.home" /></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="logout();" target="mainFrame"><s:text name="application.logout" />&nbsp;</a></td>    
   </tr>
 </table>
 </body>

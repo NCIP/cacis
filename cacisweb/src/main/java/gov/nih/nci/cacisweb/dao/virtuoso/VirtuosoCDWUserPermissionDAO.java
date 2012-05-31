@@ -104,21 +104,26 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
         StringBuffer query = new StringBuffer();
         query.append("INSERT INTO RDF_GRAPH_GROUP (RGG_IRI, RGG_IID) VALUES (?, iri_to_id(?))");
         boolean permissionAdded = true;
-        String graphGroupID = "";
+        StringBuffer graphGroupID = new StringBuffer();
         try {
             String graphGroupPrefix = CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_GRAPH_GROUP_URL_PREFIX);
-            graphGroupID = graphGroupPrefix
+            graphGroupID.append(graphGroupPrefix
                     + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_STUDY_ID_ROOT) + "."
-                    + cdwPermissionModel.getStudyID() + "/"
-                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_SITE_ID_ROOT) + "."
-                    + cdwPermissionModel.getSiteID() + "/"
-                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_PATIENT_ID_ROOT) + "."
-                    + cdwPermissionModel.getPatientID();
+                    + cdwPermissionModel.getStudyID() + "/");
+            if (StringUtils.isNotBlank(cdwPermissionModel.getSiteID())) {
+                graphGroupID.append(CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_SITE_ID_ROOT) + "."
+                        + cdwPermissionModel.getSiteID());
+            }
+            graphGroupID.append("/");
+            if (StringUtils.isNotBlank(cdwPermissionModel.getPatientID())) {
+                graphGroupID.append(CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_PATIENT_ID_ROOT)
+                        + "." + cdwPermissionModel.getPatientID());
+            }
 
             pstmt = new LoggableStatement(cacisConnection, query.toString());
-            pstmt.setString(1, graphGroupID);
-            pstmt.setString(2, graphGroupID);
+            pstmt.setString(1, graphGroupID.toString());
+            pstmt.setString(2, graphGroupID.toString());
             log
                     .info("INSERT INTO RDF_GRAPH_GROUP SQL in addUser(CDWUserModel cdwUserModel, CdwPermissionModel cdwPermissionModel): "
                             + pstmt.toString());
@@ -128,7 +133,7 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
             query.append("{call caCIS_GRAPH_GROUP_USER_PERMS_SET (?, ?, 1)}");
             pstmt = new LoggableStatement(cacisConnection, query.toString());
             pstmt.setString(1, userModel.getUsername());
-            pstmt.setString(2, graphGroupID);
+            pstmt.setString(2, graphGroupID.toString());
             log
                     .info("caCIS_GRAPH_GROUP_USER_PERMS_SET call in addUser(CDWUserModel cdwUserModel, CdwPermissionModel cdwPermissionModel): "
                             + pstmt.toString());
