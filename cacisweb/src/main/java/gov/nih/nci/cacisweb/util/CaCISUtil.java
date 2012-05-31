@@ -21,6 +21,8 @@ import java.security.cert.CertificateException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 
 /**
@@ -60,9 +62,9 @@ public class CaCISUtil {
      * @return
      * @throws PropertyFileLoadException
      */
-public static String getProperty(String property, String defaultValue) throws CaCISWebException {
-        
-        URL propsUrl = CaCISUtil.class.getClassLoader().getResource(CaCISWebConstants.COM_PROPERTIES_FILE_LOCATION);
+    public static String getProperty(String property, String defaultValue) throws CaCISWebException {
+
+        URL propsUrl = CaCISUtil.class.getClassLoader().getResource(CaCISWebConstants.COM_PROPERTIES_FILE_NAME);
         File propertiesFile = new File(propsUrl.getPath());
 
         if (properties == null || propertiesFile.lastModified() > lastModified) {
@@ -83,6 +85,42 @@ public static String getProperty(String property, String defaultValue) throws Ca
         log.debug(property + " = " + properties.getProperty(property, defaultValue));
 
         return properties.getProperty(property, defaultValue);
+    }
+
+    /**
+     * 
+     * @param propertyFileLocation
+     * @param property
+     * @return
+     * @throws CaCISWebException
+     */
+    public static String getPropertyFromPropertiesFile(String propertyFileLocation, String property)
+            throws CaCISWebException {
+        PropertiesConfiguration propertiesConfiguration;
+        try {
+            propertiesConfiguration = new PropertiesConfiguration(propertyFileLocation);
+            String propertyValue = propertiesConfiguration.getString(property);
+            if (propertyValue == null) {
+                log.error(String.format("Property '%s' cannot be read from [%s]. Either the "
+                        + "property / properties file does not exist or the properties file is not readable.",
+                        property, propertyFileLocation));
+                throw new CaCISWebException(String.format("Property '%s' cannot be read from [%s]. Either the "
+                        + "property / properties file does not exist or the properties file is not readable.",
+                        property, propertyFileLocation));
+            }
+            log.debug(property + " = " + propertyValue);
+            return propertyValue;
+        } catch (ConfigurationException e) {
+            log.error(String.format("Property '%s' cannot be read from [%s]. Either the "
+                    + "property / properties file does not exist or the properties file is not readable.", property,
+                    propertyFileLocation)
+                    + e.getMessage());
+            throw new CaCISWebException(String.format("Property '%s' cannot be read from [%s]. Either the "
+                    + "property / properties file does not exist or the properties file is not readable.", property,
+                    propertyFileLocation)
+                    + e.getMessage());
+        }
+
     }
 
     /**
@@ -144,12 +182,12 @@ public static String getProperty(String property, String defaultValue) throws Ca
 
     /**
      * 
-    	 * @param propertyFileLocation
-    	 * @param keyStoreLocation
-    	 * @param keyStoreType
-    	 * @param keyStorePassword
-    	 * @return
-    	 * @throws PropFileAndKeystoreOutOfSyncException
+     * @param propertyFileLocation
+     * @param keyStoreLocation
+     * @param keyStoreType
+     * @param keyStorePassword
+     * @return
+     * @throws PropFileAndKeystoreOutOfSyncException
      */
     public boolean isPropertyFileAndKeystoreInSync(String propertyFileLocation, String keyStoreLocation,
             String keyStoreType, String keyStorePassword) throws PropFileAndKeystoreOutOfSyncException {
@@ -192,7 +230,7 @@ public static String getProperty(String property, String defaultValue) throws Ca
             throw new PropFileAndKeystoreOutOfSyncException(String.format("File [%] cannot be loaded.",
                     propertyFileLocation));
         } catch (KeyStoreException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             throw new PropFileAndKeystoreOutOfSyncException(String.format(
                     "Error verifying the contents inside the key/trust store [%].", keyStoreLocation));
         } catch (KeystoreInstantiationException e) {

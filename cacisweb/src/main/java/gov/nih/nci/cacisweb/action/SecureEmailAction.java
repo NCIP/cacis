@@ -31,13 +31,16 @@ public class SecureEmailAction extends ActionSupport {
     public String input() throws Exception {
         log.debug("input() - START");
         secureEmailRecepientList = new ArrayList<SecureEmailModel>();
-        String secureEmailKeystoreLocation = CaCISUtil
-                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_LOCATION);
+        String secureEmailPropertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_PROPERTIES_FILE_LOCATION);
         try {
             CaCISUtil caCISUtil = new CaCISUtil();
-            KeyStore keystore = caCISUtil.getKeystore(secureEmailKeystoreLocation,
-                    CaCISWebConstants.COM_KEYSTORE_TYPE_PKCS12, CaCISUtil
-                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_PASSWORD));
+            KeyStore keystore = caCISUtil.getKeystore(CaCISUtil.getPropertyFromPropertiesFile(
+                    secureEmailPropertyFileLocation, CaCISUtil
+                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_LOCATION_PROP_NAME)),
+                    CaCISWebConstants.COM_KEYSTORE_TYPE_PKCS12,
+                    CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_PASSWORD_PROP_NAME)));
             // List the aliases
             Enumeration<String> enumeration = keystore.aliases();
             while (enumeration.hasMoreElements()) {
@@ -66,22 +69,28 @@ public class SecureEmailAction extends ActionSupport {
      */
     public String delete() throws Exception {
         log.debug("delete() - START");
-        String secureEmailKeystoreLocation = CaCISUtil
-                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_LOCATION);
+        String secureEmailPropertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_PROPERTIES_FILE_LOCATION);
         try {
             CaCISUtil caCISUtil = new CaCISUtil();
-            KeyStore keystore = caCISUtil.getKeystore(secureEmailKeystoreLocation,
-                    CaCISWebConstants.COM_KEYSTORE_TYPE_PKCS12, CaCISUtil
-                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_PASSWORD));
+            KeyStore keystore = caCISUtil.getKeystore(CaCISUtil.getPropertyFromPropertiesFile(
+                    secureEmailPropertyFileLocation, CaCISUtil
+                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_LOCATION_PROP_NAME)),
+                    CaCISWebConstants.COM_KEYSTORE_TYPE_PKCS12,
+                    CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_PASSWORD_PROP_NAME)));
             caCISUtil.releaseKeystore();
             // Delete the certificate
             keystore.deleteEntry(secureEmailBean.getCertificateAlias());
 
             // Save the new keystore contents
-            FileOutputStream out = new FileOutputStream(new File(secureEmailKeystoreLocation));
-            keystore.store(out, CaCISUtil.getProperty(
-                    CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_PASSWORD).toCharArray());
-            out.close();           
+            FileOutputStream out = new FileOutputStream(new File(CaCISUtil.getPropertyFromPropertiesFile(
+                    secureEmailPropertyFileLocation, CaCISUtil
+                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_LOCATION_PROP_NAME))));
+            keystore.store(out, CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation,
+                    CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_PASSWORD_PROP_NAME))
+                    .toCharArray());
+            out.close();
         } catch (KeystoreInstantiationException kie) {
             log.error(kie.getMessage());
             addActionError(getText("exception.keystoreInstantiation"));
@@ -101,7 +110,7 @@ public class SecureEmailAction extends ActionSupport {
     }
 
     public SecureEmailModel getSecureEmailBean() {
-        return secureEmailBean; 
+        return secureEmailBean;
     }
 
     public void setSecureEmailBean(SecureEmailModel secureEmailBean) {

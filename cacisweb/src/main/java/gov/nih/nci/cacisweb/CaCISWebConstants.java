@@ -3,15 +3,16 @@ package gov.nih.nci.cacisweb;
 public class CaCISWebConstants {
 
     // public static final String COM_PROPERTIES_FILE_LOCATION = "../conf/cacisweb.properties";
-    public static final String COM_PROPERTIES_FILE_LOCATION = "cacisweb.properties";
+    public static final String COM_PROPERTIES_FILE_NAME = "cacisweb.properties";
     public static final String COM_PRIMARY_VIRTUOSO_DATASOURCE_NAME = "java:comp/env/jdbc/virtuosoDS1";
     public static final String COM_ACTION_RESPONSE_DELETE = "delete";
 
     public static final String COM_KEYSTORE_TYPE_PKCS12 = "PKCS12";
     public static final String COM_KEYSTORE_TYPE_JKS = "JKS";
 
-    public static final String COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_LOCATION = "secureemail.recepient.truststore.location";
-    public static final String COM_PROPERTY_NAME_SECEMAIL_RECEPIENT_TRUSTSTORE_PASSWORD = "secureemail.recepient.truststore.password";
+    public static final String COM_PROPERTY_NAME_SECEMAIL_PROPERTIES_FILE_LOCATION = "sec.email.properties.file.location";
+    public static final String COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_LOCATION_PROP_NAME = "sec.email.truststore.location.property.name";
+    public static final String COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_PASSWORD_PROP_NAME = "sec.email.truststore.password.property.name";
 
     public static final String COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_LOCATION = "secureftp.recepient.keystore.location";
     public static final String COM_PROPERTY_NAME_SECFTP_RECEPIENT_KEYSTORE_PASSWORD = "secureftp.recepient.keystore.password";
