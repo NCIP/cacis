@@ -1,5 +1,7 @@
 package gov.nih.nci.cacisweb.action;
 
+import java.util.ArrayList;
+
 import gov.nih.nci.cacisweb.dao.DAOFactory;
 import gov.nih.nci.cacisweb.dao.ICDWUserPermissionDAO;
 import gov.nih.nci.cacisweb.exception.DAOException;
@@ -34,6 +36,9 @@ public class CdwPermissionAddAction extends ActionSupport {
             if (cdwUserPermissionDAO.addUserPermission(getCdwUserBean(), getCdwPermissionBean())) {
                 addActionMessage(getText("cdwUserBean.addPermissionSuccessful"));
             }
+            cdwUserBean.setUserPermission((ArrayList<CdwPermissionModel>) cdwUserPermissionDAO
+                    .searchUserPermissions(getCdwUserBean()));
+            cdwPermissionBean = new CdwPermissionModel();
         } catch (DAOException e) {
             if (StringUtils.contains(e.getMessage(), "Non unique primary key")) {
                 addActionMessage(getText("cdwUserBean.permissionAlreadyExists"));

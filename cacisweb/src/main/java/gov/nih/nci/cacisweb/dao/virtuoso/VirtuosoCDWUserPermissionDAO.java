@@ -94,8 +94,28 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
 
     @Override
     public int deleteUser(CdwUserModel cdwUserModel) throws DAOException {
-        // TODO Auto-generated method stub
-        return 0;
+        log.debug("deleteUser(CdwUserModel cdwUserModel) - start");
+        StringBuffer query = new StringBuffer();
+        query.append("DELETE FROM RDF_GRAPH_USER WHERE RGU_USER_ID = (SELECT U_ID FROM SYS_USERS WHERE U_NAME = ?)");
+        try {
+            pstmt = new LoggableStatement(cacisConnection, query.toString());
+            pstmt.setString(1, cdwUserModel.getUsername());
+            log.info("DELETE FROM RDF_GRAPH_USER SQL in deleteUser(CDWUserModel cdwUserModel): " + pstmt.toString());
+            int rowsDeleted = pstmt.executeUpdate();
+            log.info("No. of permissions deleted: " + rowsDeleted);
+
+            query = new StringBuffer();
+            query.append("DELETE from SYS_USERS where U_NAME = ?");
+            pstmt = new LoggableStatement(cacisConnection, query.toString());
+            pstmt.setString(1, cdwUserModel.getUsername());
+            log.info("DELETE from SYS_USERS SQL in deleteUser(CDWUserModel cdwUserModel): " + pstmt.toString());
+            rowsDeleted = pstmt.executeUpdate();
+            log.info("No of users deleted: " + rowsDeleted);
+            return rowsDeleted;
+        } catch (SQLException sqle) {
+            log.error(sqle.getMessage(), sqle);
+            throw new DAOException(sqle.getMessage());
+        }
     }
 
     @Override
@@ -127,7 +147,7 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
                     .info("SELECT FROM RDF_GRAPH_GROUP SQL in addUser(CDWUserModel cdwUserModel, CdwPermissionModel cdwPermissionModel): "
                             + pstmt.toString());
             rs = pstmt.executeQuery();
-            //insert the graph group only if it is not already present
+            // insert the graph group only if it is not already present
             if (!rs.next()) {
                 query = new StringBuffer();
                 query.append("INSERT INTO RDF_GRAPH_GROUP (RGG_IRI, RGG_IID) VALUES (?, iri_to_id(?))");
@@ -164,8 +184,32 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
 
     @Override
     public int deleteUserPermission(CdwUserModel userModel, CdwPermissionModel cdwPermissionModel) throws DAOException {
-        // TODO Auto-generated method stub
-        return 0;
+        log.debug("deleteUserPermission(CdwUserModel userModel, CdwPermissionModel cdwPermissionModel) - start");
+        StringBuffer query = new StringBuffer();
+        query.append("DELETE FROM RDF_GRAPH_USER WHERE RGU_USER_ID = (SELECT U_ID FROM SYS_USERS WHERE U_NAME = ?) "
+                + "AND RGU_GRAPH_IID = (SELECT RGG_IID from RDF_GRAPH_GROUP where RGG_IRI = ?)");
+
+        try {
+            String graphGroupPrefix = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_GRAPH_GROUP_URL_PREFIX);
+            
+            pstmt = new LoggableStatement(cacisConnection, query.toString());
+            pstmt.setString(1, userModel.getUsername());
+            pstmt.setString(2, graphGroupPrefix + cdwPermissionModel.getStudyID() + "/"
+                    + cdwPermissionModel.getSiteID() + "/" + cdwPermissionModel.getPatientID());
+            log.info("SQL in deleteUserPermission(CdwUserModel userModel, CdwPermissionModel cdwPermissionModel): "
+                    + pstmt.toString());
+            int rowsDeleted = pstmt.executeUpdate();
+            log.info("No. of permissions deleted: " + rowsDeleted);
+
+            return rowsDeleted;
+        } catch (SQLException sqle) {
+            log.error(sqle.getMessage(), sqle);
+            throw new DAOException(sqle.getMessage());
+        } catch (CaCISWebException e) {
+            log.error(e.getMessage(), e);
+            throw new DAOException(e.getMessage());
+        }
     }
 
     @Override

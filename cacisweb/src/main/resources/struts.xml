@@ -173,8 +173,8 @@
 
 		<action name="cdwUserPermissionSearch" class="gov.nih.nci.cacisweb.action.CdwUserSearchAction"
 			method="execute">
-			<interceptor-ref name="store">
-				<param name="operationMode">RETRIEVE</param>
+			<interceptor-ref name="scope">
+				<param name="reset">true</param>
 			</interceptor-ref>
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
@@ -182,23 +182,14 @@
 		</action>
 
 		<action name="cdwPermissionAdd"
-			class="gov.nih.nci.cacisweb.action.CdwPermissionAddAction" method="execute">
-			<interceptor-ref name="store">
-				<param name="operationMode">STORE</param>
-			</interceptor-ref>
+			class="gov.nih.nci.cacisweb.action.CdwPermissionAddAction" method="execute">			
 			<interceptor-ref name="defaultStack" />
-			<result name="input" type="redirectAction">
-				<param name="actionName">cdwUserPermissionSearch</param>
-				<param name="cdwUserBean.username">${cdwUserBean.username}</param>
-			</result>
+			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
 
 		<action name="cdwPermissionDelete"
-			class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction" method="delete">
-			<interceptor-ref name="store">
-				<param name="operationMode">STORE</param>
-			</interceptor-ref>
+			class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction" method="execute">			
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>

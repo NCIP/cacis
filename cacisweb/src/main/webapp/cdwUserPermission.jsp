@@ -66,41 +66,31 @@
 				key="cdwUserBean.addPermissionButton" action="cdwPermissionAdd"
 				cssClass="formButton" /></td>
 		</tr>
-
+		</s:form>
 		<s:iterator status="rowstatus" value="cdwUserBean.userPermission"
 			var="cdwPermissionBean">
-			<s:url action="cdwPermissionDelete" var="deleteLink">
-				<s:param name="cdwUserBean.username">
-					<s:text name="cdwUserBean.username" />
-				</s:param>
-				<s:param name="cdwPermissionBean.studyID">
-					<s:text name="#cdwPermissionBean.studyID" />
-				</s:param>
-				<s:param name="cdwPermissionBean.siteID">
-					<s:text name="#cdwPermissionBean.siteID" />
-				</s:param>
-				<s:param name="cdwPermissionBean.patientID">
-					<s:text name="#cdwPermissionBean.patientID" />
-				</s:param>
-				<s:param name="operationMode">STORE</s:param>
-			</s:url>
-			<tr
-				class='<s:if test="#rowstatus.odd == true ">listTableGrey</s:if><s:else>listTableWhite</s:else>'>
-				<td align="center" width="25%" class="listTable"><s:text
-					name="#cdwPermissionBean.studyID" /></td>
-				<td align="center" width="25%" class="listTable"><s:text
-					name="#cdwPermissionBean.siteID" /></td>
-				<td align="center" width="25%" class="listTable"><s:text
-					name="#cdwPermissionBean.patientID" /></td>
-				<td align="center" width="25%" class="listTable"><a
-					href="${deleteLink}">
-				<button class="tableRowDelete"><s:text
-					name="cdwUserBean.deletePermissionButton" /></button>
-				</a></td>
-			</tr>
+			<s:form theme="simple" method="post" enctype="multipart/form-data">
+				<s:hidden key="cdwUserBean.username"></s:hidden>
+				<input type="hidden" name="cdwPermissionBean.studyID"
+					value='<s:text name="#cdwPermissionBean.studyID" />' />
+				<input type="hidden" name=cdwPermissionBean.siteID
+					value='<s:text name="#cdwPermissionBean.siteID" />' />
+				<input type="hidden" name="cdwPermissionBean.patientID"
+					value='<s:text name="#cdwPermissionBean.patientID" />' />
+				<tr
+					class='<s:if test="#rowstatus.odd == true ">listTableGrey</s:if><s:else>listTableWhite</s:else>'>
+					<td align="center" width="25%" class="listTable"><s:text
+						name="#cdwPermissionBean.studyID" /></td>
+					<td align="center" width="25%" class="listTable"><s:text
+						name="#cdwPermissionBean.siteID" /></td>
+					<td align="center" width="25%" class="listTable"><s:text
+						name="#cdwPermissionBean.patientID" /></td>
+					<td align="center" width="25%" class="listTable"><s:submit
+						key="cdwUserBean.deletePermissionButton"
+						action="cdwPermissionDelete" cssClass="formButtonDelete" /></td>
+				</tr>
+			</s:form>
 		</s:iterator>
 	</table>
-	<s:hidden name="operationMode" value="STORE"></s:hidden>
-</s:form>
 </body>
 </html>

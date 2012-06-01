@@ -1,5 +1,7 @@
 package gov.nih.nci.cacisweb.action;
 
+import java.util.ArrayList;
+
 import gov.nih.nci.cacisweb.dao.DAOFactory;
 import gov.nih.nci.cacisweb.dao.ICDWUserPermissionDAO;
 import gov.nih.nci.cacisweb.model.CdwPermissionModel;
@@ -22,11 +24,15 @@ public class CdwPermissionDeleteAction extends ActionSupport {
     @Override
     public String execute() throws Exception {
         log.debug("execute() - START");
+        log.debug("Study ID: "+cdwPermissionBean.getStudyID());
         DAOFactory daoFactory = DAOFactory.getDAOFactory();
         ICDWUserPermissionDAO cdwUserPermissionDAO = daoFactory.getCDWUserPermissionDAO();
         if (cdwUserPermissionDAO.deleteUserPermission(getCdwUserBean(), getCdwPermissionBean()) > 0) {
             addActionMessage(getText("cdwUserBean.deletePermissionSuccessful"));
         }
+        cdwUserBean.setUserPermission((ArrayList<CdwPermissionModel>) cdwUserPermissionDAO
+                .searchUserPermissions(getCdwUserBean()));        
+        cdwPermissionBean = new CdwPermissionModel();
         log.debug("execute() - END");
         return INPUT;
     }
