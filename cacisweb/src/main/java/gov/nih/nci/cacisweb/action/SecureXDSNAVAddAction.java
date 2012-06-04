@@ -14,6 +14,7 @@ import java.security.KeyStoreException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Properties;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
@@ -55,10 +56,18 @@ public class SecureXDSNAVAddAction extends ActionSupport {
             out.close();
 
             // add the new entry to XDSNAV configuration properties file
-            PropertiesConfiguration config = new PropertiesConfiguration(CaCISUtil
-                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION));
-            config.setProperty(secureXDSNAVBean.getCertificateAlias(), cert.getSubjectDN().getName());
-            config.save();
+//            PropertiesConfiguration config = new PropertiesConfiguration(CaCISUtil
+//                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION));
+//            config.setProperty(secureXDSNAVBean.getCertificateAlias(), cert.getSubjectDN().getName());
+//            config.save();
+            
+            Properties properties = new Properties();
+            properties.load(new FileInputStream(new File(CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION))));
+            properties.setProperty(secureXDSNAVBean.getCertificateAlias(), cert.getSubjectDN().getName());
+            properties.store(new FileOutputStream(new File(CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION))), "");
+            
         } catch (KeystoreInstantiationException kie) {
             log.error(kie.getMessage());
             addActionError(getText("exception.keystoreInstantiation"));
