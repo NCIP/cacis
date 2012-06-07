@@ -198,17 +198,17 @@ public class CaCISUtil {
             configFile.load(is);
             is.close();
             KeyStore keystore = getKeystore(keyStoreLocation, keyStoreType, keyStorePassword);
-            Enumeration<String> keystoreEnumeration = keystore.aliases();
-            while (keystoreEnumeration.hasMoreElements()) {
-                String alias = (String) keystoreEnumeration.nextElement();
-                if (!configFile.containsKey(alias)) {
-                    isInSync = false;
-                    throw new PropFileAndKeystoreOutOfSyncException(String.format(
-                            "Alias [%s] entry in key/trust store [%s] does not exist in the properties file [%s]. "
-                                    + "It is recommended that you manually correct this before proceeding", alias,
-                            keyStoreLocation, propertyFileLocation));
-                }
-            }
+//            Enumeration<String> keystoreEnumeration = keystore.aliases();
+//            while (keystoreEnumeration.hasMoreElements()) {
+//                String alias = (String) keystoreEnumeration.nextElement();
+//                if (!configFile.containsKey(alias)) {
+//                    isInSync = false;
+//                    throw new PropFileAndKeystoreOutOfSyncException(String.format(
+//                            "Alias [%s] entry in key/trust store [%s] does not exist in the properties file [%s]. "
+//                                    + "It is recommended that you manually correct this before proceeding", alias,
+//                            keyStoreLocation, propertyFileLocation));
+//                }
+//            }
 
             Enumeration<Object> propertyEnumeration = configFile.keys();
             while (propertyEnumeration.hasMoreElements()) {

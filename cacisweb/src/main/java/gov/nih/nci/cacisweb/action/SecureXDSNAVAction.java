@@ -7,12 +7,15 @@ import gov.nih.nci.cacisweb.model.SecureXDSNAVModel;
 import gov.nih.nci.cacisweb.util.CaCISUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
@@ -38,12 +41,13 @@ public class SecureXDSNAVAction extends ActionSupport {
                 .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_TRUSTSTORE_LOCATION);
         String secureXDSNAVKeystorePassword = CaCISUtil
                 .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_TRUSTSTORE_PASSWORD);
+        String propertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION);
 
         CaCISUtil caCISUtil = new CaCISUtil();
         try {
             caCISUtil
-                    .isPropertyFileAndKeystoreInSync(CaCISUtil
-                            .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION),
+                    .isPropertyFileAndKeystoreInSync(propertyFileLocation,
                             secureXDSNAVKeystoreLocation, CaCISWebConstants.COM_KEYSTORE_TYPE_JKS,
                             secureXDSNAVKeystorePassword);
         } catch (PropFileAndKeystoreOutOfSyncException e) {
@@ -55,16 +59,36 @@ public class SecureXDSNAVAction extends ActionSupport {
             KeyStore keystore = caCISUtil.getKeystore(secureXDSNAVKeystoreLocation,
                     CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureXDSNAVKeystorePassword);
             // List the aliases
-            Enumeration<String> enumeration = keystore.aliases();
+//            Enumeration<String> enumeration = keystore.aliases();            
+            Properties configFile = new Properties();
+            InputStream is = new FileInputStream(propertyFileLocation);
+            configFile.load(is);
+            is.close();
+            Enumeration<Object> enumeration = configFile.keys();
+//            while (enumeration.hasMoreElements()) {
+//                String alias = (String) enumeration.nextElement();
+//                X509Certificate x509Certificate = (X509Certificate) keystore.getCertificate(alias);
+//                SecureXDSNAVModel secureXDSNAVModel = new SecureXDSNAVModel();
+//                secureXDSNAVModel.setCertificateAlias(alias);
+//                secureXDSNAVModel.setCertificateDN(x509Certificate.getSubjectDN().toString());
+//                secureXDSNAVRecepientList.add(secureXDSNAVModel);
+//                log.debug("Alias: " + alias + " DN: " + x509Certificate.getSubjectDN().getName());
+//            }            
             while (enumeration.hasMoreElements()) {
                 String alias = (String) enumeration.nextElement();
                 X509Certificate x509Certificate = (X509Certificate) keystore.getCertificate(alias);
+                String distinguishedName = "";
+                if(x509Certificate != null){
+                    distinguishedName = x509Certificate.getSubjectDN().toString();
+                }      
+//              String distinguishedName = CaCISUtil.getPropertyFromPropertiesFile(propertyFileLocation, alias);
                 SecureXDSNAVModel secureXDSNAVModel = new SecureXDSNAVModel();
                 secureXDSNAVModel.setCertificateAlias(alias);
-                secureXDSNAVModel.setCertificateDN(x509Certificate.getSubjectDN().toString());
+                secureXDSNAVModel.setCertificateDN(distinguishedName);
                 secureXDSNAVRecepientList.add(secureXDSNAVModel);
-                log.debug("Alias: " + alias + " DN: " + x509Certificate.getSubjectDN().getName());
+                log.debug("Alias: " + alias + " DN: " + distinguishedName);
             }
+            
             caCISUtil.releaseKeystore();
         } catch (KeystoreInstantiationException kie) {
             log.error(kie.getMessage());
