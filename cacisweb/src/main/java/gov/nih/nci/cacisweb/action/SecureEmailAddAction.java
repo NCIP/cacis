@@ -14,6 +14,8 @@ import java.security.KeyStoreException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
+import javax.mail.MessagingException;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -57,6 +59,27 @@ public class SecureEmailAddAction extends ActionSupport {
                     CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_TRUSTSTORE_PASSWORD_PROP_NAME))
                     .toCharArray());
             out.close();
+
+            // send an email to the newly added recepient
+            String host = CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_SENDER_HOST_PROP_NAME));
+            String port = CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_SENDER_PORT_PROP_NAME));
+            
+            String senderEmail = CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_MESSAGE_FROM_PROP_NAME));
+            String senderUser = CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_SENDER_USER_PROP_NAME));
+            String senderPassword = CaCISUtil.getPropertyFromPropertiesFile(secureEmailPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_SENDER_PASSWORD_PROP_NAME));
+            String subject = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_SETUP_NOTIFICATION_SUBJECT_PROP_NAME);
+            String message = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_SETUP_NOTIFICATION_MESSAGE_PROP_NAME);
+
+            caCISUtil.sendEmail(host, port, senderEmail, senderUser, senderPassword, subject, message, secureEmailBean
+                    .getCertificateAlias());
+
         } catch (KeystoreInstantiationException kie) {
             log.error(kie.getMessage());
             addActionError(getText("exception.keystoreInstantiation"));
@@ -64,6 +87,10 @@ public class SecureEmailAddAction extends ActionSupport {
         } catch (CertificateException ce) {
             log.error(CaCISUtil.getStackTrace(ce));
             addActionError(getText("exception.certification"));
+            return INPUT;
+        } catch (MessagingException e) {
+            log.error(CaCISUtil.getStackTrace(e));
+            addActionError(getText("secureEmailBean.emailException"));
             return INPUT;
         }
         addActionMessage(getText("secureEmailBean.addCertificateSuccessful"));

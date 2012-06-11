@@ -16,7 +16,8 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
+import javax.mail.MessagingException;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -56,18 +57,42 @@ public class SecureXDSNAVAddAction extends ActionSupport {
             out.close();
 
             // add the new entry to XDSNAV configuration properties file
-//            PropertiesConfiguration config = new PropertiesConfiguration(CaCISUtil
-//                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION));
-//            config.setProperty(secureXDSNAVBean.getCertificateAlias(), cert.getSubjectDN().getName());
-//            config.save();
-            
+            // PropertiesConfiguration config = new PropertiesConfiguration(CaCISUtil
+            // .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION));
+            // config.setProperty(secureXDSNAVBean.getCertificateAlias(), cert.getSubjectDN().getName());
+            // config.save();
+
             Properties properties = new Properties();
             properties.load(new FileInputStream(new File(CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION))));
             properties.setProperty(secureXDSNAVBean.getCertificateAlias(), cert.getSubjectDN().getName());
             properties.store(new FileOutputStream(new File(CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_RECEPIENT_CONFIG_FILE_LOCATION))), "");
-            
+
+            // send an email to the newly added recepient
+            // note that the same email properties files has xdsnav related properties also
+            String secureXDSNAVPropertyFileLocation = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECEMAIL_PROPERTIES_FILE_LOCATION);
+
+            String host = CaCISUtil.getPropertyFromPropertiesFile(secureXDSNAVPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_SENDER_HOST_PROP_NAME));
+            String port = CaCISUtil.getPropertyFromPropertiesFile(secureXDSNAVPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_SENDER_PORT_PROP_NAME));
+
+            String senderEmail = CaCISUtil.getPropertyFromPropertiesFile(secureXDSNAVPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_MESSAGE_FROM_PROP_NAME));
+            String senderUser = CaCISUtil.getPropertyFromPropertiesFile(secureXDSNAVPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_SENDER_USER_PROP_NAME));
+            String senderPassword = CaCISUtil.getPropertyFromPropertiesFile(secureXDSNAVPropertyFileLocation, CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_SENDER_PASSWORD_PROP_NAME));
+            String subject = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_SETUP_NOTIFICATION_SUBJECT_PROP_NAME);
+            String message = CaCISUtil
+                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECXDSNAV_SETUP_NOTIFICATION_MESSAGE_PROP_NAME);
+
+            caCISUtil.sendEmail(host, port, senderEmail, senderUser, senderPassword, subject, message, secureXDSNAVBean
+                    .getCertificateAlias());
+
         } catch (KeystoreInstantiationException kie) {
             log.error(kie.getMessage());
             addActionError(getText("exception.keystoreInstantiation"));
@@ -75,6 +100,10 @@ public class SecureXDSNAVAddAction extends ActionSupport {
         } catch (CertificateException ce) {
             log.error(CaCISUtil.getStackTrace(ce));
             addActionError(getText("exception.certification"));
+            return INPUT;
+        } catch (MessagingException e) {
+            log.error(CaCISUtil.getStackTrace(e));
+            addActionError(getText("secureXDSNAVBean.emailException"));
             return INPUT;
         }
         addActionMessage(getText("secureXDSNAVBean.addCertificateSuccessful"));

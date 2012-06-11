@@ -21,8 +21,17 @@ import java.security.cert.CertificateException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 /**
@@ -198,17 +207,17 @@ public class CaCISUtil {
             configFile.load(is);
             is.close();
             KeyStore keystore = getKeystore(keyStoreLocation, keyStoreType, keyStorePassword);
-//            Enumeration<String> keystoreEnumeration = keystore.aliases();
-//            while (keystoreEnumeration.hasMoreElements()) {
-//                String alias = (String) keystoreEnumeration.nextElement();
-//                if (!configFile.containsKey(alias)) {
-//                    isInSync = false;
-//                    throw new PropFileAndKeystoreOutOfSyncException(String.format(
-//                            "Alias [%s] entry in key/trust store [%s] does not exist in the properties file [%s]. "
-//                                    + "It is recommended that you manually correct this before proceeding", alias,
-//                            keyStoreLocation, propertyFileLocation));
-//                }
-//            }
+            // Enumeration<String> keystoreEnumeration = keystore.aliases();
+            // while (keystoreEnumeration.hasMoreElements()) {
+            // String alias = (String) keystoreEnumeration.nextElement();
+            // if (!configFile.containsKey(alias)) {
+            // isInSync = false;
+            // throw new PropFileAndKeystoreOutOfSyncException(String.format(
+            // "Alias [%s] entry in key/trust store [%s] does not exist in the properties file [%s]. "
+            // + "It is recommended that you manually correct this before proceeding", alias,
+            // keyStoreLocation, propertyFileLocation));
+            // }
+            // }
 
             Enumeration<Object> propertyEnumeration = configFile.keys();
             while (propertyEnumeration.hasMoreElements()) {
@@ -239,4 +248,66 @@ public class CaCISUtil {
         }
         return isInSync;
     }
+
+    /**
+     * Sends email by setting some of the email properties that are common to Secure Email and XDS/NAV
+     * 
+     * @param host
+     * @param port
+     * @param protocol
+     * @param senderEmail
+     * @param senderUser
+     * @param senderPassword
+     * @param subject
+     * @param message
+     * @param recepientEmail
+     * @throws EmailException
+     */
+    public void sendEmail(String host, String port, String senderEmail, String senderUser, String senderPassword,
+            String subject, String body, String recepientEmail) throws MessagingException {
+        log.debug("sendEmail(String host, String port, String protocol, String senderEmail, String senderUser,"
+                + "String senderPassword, String subject, String message, String recepientEmail) - start");
+
+        final String username = senderUser;
+        final String password = senderPassword;
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(senderEmail));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recepientEmail));
+        message.setSubject(subject);
+        message.setText(body);
+
+        Transport.send(message);
+
+        System.out.println("Done");
+
+        // Email email = new SimpleEmail();
+        // email.setHostName(host);
+        // email.setSmtpPort(port);
+        // // email.setAuthentication(senderUser, senderPassword);
+        // email.setAuthenticator(new DefaultAuthenticator(senderUser, senderPassword));
+        // email.addTo(recepientEmail);
+        // email.setFrom(senderEmail);
+        // email.setSubject(subject);
+        // email.setMsg(message);
+        // //email.setSSL(true);
+        // log.info(String.format("Sending Email to %s, to report successful setup.", recepientEmail));
+        // email.send();
+
+        log.debug("sendEmail(String host, String port, String protocol, String senderEmail, String senderUser,"
+                + "String senderPassword, String subject, String message, String recepientEmail) - end");
+    }
+
 }
