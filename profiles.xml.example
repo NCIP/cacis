@@ -106,6 +106,12 @@
 		<cdw.study.id.root>1.2.3</cdw.study.id.root>
 		<cdw.site.id.root>4.5.6</cdw.site.id.root>
 		<cdw.patient.id.root>7.8.9</cdw.patient.id.root>
+		
+		<sec.email.setup.notification.subject>Secure Email Recepient Setup</sec.email.setup.notification.subject>
+		<sec.email.setup.notification.message>Secure Email setup was successfully completed</sec.email.setup.notification.message>
+		
+		<securexdsnav.setup.notification.subject>XDS / NAV Recepient Setup</securexdsnav.setup.notification.subject>
+		<securexdsnav.setup.notification.message>XDS / NAV setup was successfully completed</securexdsnav.setup.notification.message>
 
             </properties>
         </profile>
