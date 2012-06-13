@@ -129,16 +129,16 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
             String graphGroupPrefix = CaCISUtil
                     .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_GRAPH_GROUP_URL_PREFIX);
             graphGroupID.append(graphGroupPrefix
-                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_STUDY_ID_ROOT) + "."
-                    + cdwPermissionModel.getStudyID() + "/");
+                    + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_STUDY_ID_ROOT)
+                    + cdwPermissionModel.getStudyID());
             if (StringUtils.isNotBlank(cdwPermissionModel.getSiteID())) {
-                graphGroupID.append(CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_SITE_ID_ROOT) + "."
+                graphGroupID.append("/" + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_SITE_ID_ROOT)
                         + cdwPermissionModel.getSiteID());
             }
-            graphGroupID.append("/");
             if (StringUtils.isNotBlank(cdwPermissionModel.getPatientID())) {
-                graphGroupID.append(CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_PATIENT_ID_ROOT)
-                        + "." + cdwPermissionModel.getPatientID());
+                graphGroupID.append("/"
+                        + CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_PATIENT_ID_ROOT)
+                        + cdwPermissionModel.getPatientID());
             }
 
             pstmt = new LoggableStatement(cacisConnection, query.toString());
@@ -190,13 +190,14 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
                 + "AND RGU_GRAPH_IID = (SELECT RGG_IID from RDF_GRAPH_GROUP where RGG_IRI = ?)");
 
         try {
-            String graphGroupPrefix = CaCISUtil
-                    .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_GRAPH_GROUP_URL_PREFIX);
-            
+            // String graphGroupPrefix = CaCISUtil
+            // .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_CDW_GRAPH_GROUP_URL_PREFIX);
+
             pstmt = new LoggableStatement(cacisConnection, query.toString());
             pstmt.setString(1, userModel.getUsername());
-            pstmt.setString(2, graphGroupPrefix + cdwPermissionModel.getStudyID() + "/"
-                    + cdwPermissionModel.getSiteID() + "/" + cdwPermissionModel.getPatientID());
+            // pstmt.setString(2, graphGroupPrefix + cdwPermissionModel.getStudyID() + "/"
+            // + cdwPermissionModel.getSiteID() + "/" + cdwPermissionModel.getPatientID());
+            pstmt.setString(2, cdwPermissionModel.getGraphGroupRGGIRI());
             log.info("SQL in deleteUserPermission(CdwUserModel userModel, CdwPermissionModel cdwPermissionModel): "
                     + pstmt.toString());
             int rowsDeleted = pstmt.executeUpdate();
@@ -206,9 +207,6 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
         } catch (SQLException sqle) {
             log.error(sqle.getMessage(), sqle);
             throw new DAOException(sqle.getMessage());
-        } catch (CaCISWebException e) {
-            log.error(e.getMessage(), e);
-            throw new DAOException(e.getMessage());
         }
     }
 
@@ -227,8 +225,10 @@ public class VirtuosoCDWUserPermissionDAO extends VirtuosoCommonUtilityDAO imple
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                String[] studySitePatientArray = StringUtils.split(rs.getString(1), "/");
+                String graphGroupRGGIRI = rs.getString(1);
+                String[] studySitePatientArray = StringUtils.split(graphGroupRGGIRI, "/");
                 CdwPermissionModel cdwPermissionModel = new CdwPermissionModel();
+                cdwPermissionModel.setGraphGroupRGGIRI(graphGroupRGGIRI);
                 if (studySitePatientArray.length >= 3) {
                     cdwPermissionModel.setStudyID(studySitePatientArray[2]);
                     if (studySitePatientArray.length >= 4) {

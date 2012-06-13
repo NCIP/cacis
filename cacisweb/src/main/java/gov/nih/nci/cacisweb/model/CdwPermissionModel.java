@@ -5,6 +5,7 @@ public class CdwPermissionModel {
     private String studyID = "";
     private String siteID = "";
     private String patientID = "";
+    private String graphGroupRGGIRI = "";
 
     public String getStudyID() {
         return studyID;
@@ -29,5 +30,13 @@ public class CdwPermissionModel {
     public void setPatientID(String patientID) {
         this.patientID = patientID;
     }
+    
+    public String getGraphGroupRGGIRI() {
+        return graphGroupRGGIRI;
+    }
+    
+    public void setGraphGroupRGGIRI(String graphGroupRGGIRI) {
+        this.graphGroupRGGIRI = graphGroupRGGIRI;
+    }    
 
 }

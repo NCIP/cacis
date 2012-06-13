@@ -29,6 +29,8 @@ public class CdwPermissionDeleteAction extends ActionSupport {
         ICDWUserPermissionDAO cdwUserPermissionDAO = daoFactory.getCDWUserPermissionDAO();
         if (cdwUserPermissionDAO.deleteUserPermission(getCdwUserBean(), getCdwPermissionBean()) > 0) {
             addActionMessage(getText("cdwUserBean.deletePermissionSuccessful"));
+        } else {
+            addActionError(getText("cdwUserBean.deletePermissionNotSuccessful"));
         }
         cdwUserBean.setUserPermission((ArrayList<CdwPermissionModel>) cdwUserPermissionDAO
                 .searchUserPermissions(getCdwUserBean()));        

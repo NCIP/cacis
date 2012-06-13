@@ -70,13 +70,9 @@
 		<s:iterator status="rowstatus" value="cdwUserBean.userPermission"
 			var="cdwPermissionBean">
 			<s:form theme="simple" method="post" enctype="multipart/form-data">
-				<s:hidden key="cdwUserBean.username"></s:hidden>
-				<input type="hidden" name="cdwPermissionBean.studyID"
-					value='<s:text name="#cdwPermissionBean.studyID" />' />
-				<input type="hidden" name=cdwPermissionBean.siteID
-					value='<s:text name="#cdwPermissionBean.siteID" />' />
-				<input type="hidden" name="cdwPermissionBean.patientID"
-					value='<s:text name="#cdwPermissionBean.patientID" />' />
+				<s:hidden key="cdwUserBean.username"></s:hidden>				
+				<input type="hidden" name=cdwPermissionBean.graphGroupRGGIRI
+					value='<s:text name="#cdwPermissionBean.graphGroupRGGIRI" />' />
 				<tr
 					class='<s:if test="#rowstatus.odd == true ">listTableGrey</s:if><s:else>listTableWhite</s:else>'>
 					<td align="center" width="25%" class="listTable"><s:text
