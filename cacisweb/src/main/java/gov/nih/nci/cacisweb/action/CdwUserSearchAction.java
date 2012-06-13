@@ -43,6 +43,7 @@ public class CdwUserSearchAction extends ActionSupport {
         } else {
             addActionError(getText("cdwUserBean.usernameDoesNotExist"));
         }
+        cdwUserBean.setPassword("");
 
         log.debug("execute() - END");
         return INPUT;
