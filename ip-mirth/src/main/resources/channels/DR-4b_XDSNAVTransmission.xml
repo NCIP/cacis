@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1333992104055</time>
-    <timezone>America/New_York</timezone>
+    <time>1340012904581</time>
+    <timezone>US/Eastern</timezone>
   </lastModified>
-  <revision>30</revision>
+  <revision>6</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -111,7 +111,7 @@ if ($(&apos;exFrmt&apos;) == &apos;CCD&apos;) {
 }
 
 channelMap.put(&apos;cdaDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;cdaDoc&apos;)));
-
+try{
 hashMap.put(&apos;content&apos;,$(&apos;cdaDoc&apos;));
 
 var docAccMngr = xdsCtx.getBean(&quot;documentAccessManager&quot;);
@@ -123,8 +123,8 @@ var navSender = navContext.getBean(&apos;notificationSender&apos;);
 var docId = documentHandler.handleDocument(hashMap);
 logger.info(&quot;Created document in openXDS&quot;);
  
-try{
-    var subjectToDNPath = &apos;${xds.subjectToDNPath}&apos;;
+//try{
+    var subjectToDNPath = &apos;/local/home/cacisdev/.cacis/cacis-xds/emailToDNMapping.properties&apos;;
 	var properties = Packages.gov.nih.nci.cacis.common.util.PropertyUtils.loadProperties(subjectToDNPath, true);
 	var subjectDN = properties.getProperty($(&apos;navEmail&apos;));
 	if(subjectDN == null){
