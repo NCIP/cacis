@@ -133,14 +133,15 @@ public class CanonicalModelProcessor extends AcceptMessage {
                     && (mcResponse.indexOf("Error") > -1 || mcResponse.indexOf("Exception") > -1
                             || mcResponse.indexOf("ERROR") > -1 || mcResponse.indexOf("error") > -1)) {
                 mcResponse = StringUtils.remove(mcResponse, "SUCCESS:");
-                throw new AcceptCanonicalFault("Error processing Data from Source System: " + mcResponse);
+                throw new AcceptCanonicalFault(StringUtils.substring(mcResponse, StringUtils.lastIndexOf(mcResponse, ':')));
             }
             response.setStatus(ResponseStatusType.SUCCESS);
             return response;
             // CHECKSTYLE:OFF
         } catch (Exception e) {
             // CHECKSTYLE:ON
-            throw new AcceptCanonicalFault("Error processing message!" + e.getMessage(), e);
+            //throw new AcceptCanonicalFault("Error processing message!" + e.getMessage(), e);
+            throw new AcceptCanonicalFault(e.getMessage(), e);
         }
     }
 

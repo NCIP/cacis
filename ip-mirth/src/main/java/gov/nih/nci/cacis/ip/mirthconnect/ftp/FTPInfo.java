@@ -66,14 +66,33 @@ package gov.nih.nci.cacis.ip.mirthconnect.ftp;
  * @since Sep 27, 2011
  */
 public class FTPInfo {
-
+	
+	public static final String FTPS = "ftps";
+	public static final String SFTP = "sftp";
+	
+    private String protocol;
     private String site;
     private int port;
     private String userName;
     private String password;
     private String rootDirectory;
 
+    
+	/**
+     * @return the ftp protocol to be used
+     */    
+    public String getProtocol() {
+		return protocol;
+	}
+
     /**
+     * @param protocol the ftp protocol to set
+     */
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	/**
      * @return the site
      */
     public String getSite() {

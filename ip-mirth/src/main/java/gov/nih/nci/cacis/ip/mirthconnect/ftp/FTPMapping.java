@@ -131,16 +131,17 @@ public final class FTPMapping {
 
     private void addFTPSiteToMap(String ftpInfoStr) {
         final String[] ftpParams = StringUtils.split(ftpInfoStr, ',');
-        if (ftpParams.length != 5) {
+        if (ftpParams.length != 6) {
             throw new ApplicationRuntimeException(
-                    "FTP site properties must be in the form of '<site>,<port>,<user>,<password>,<directory>'");
+                    "FTP site properties must be in the form of '<protocol>,<site>,<port>,<user>,<password>,<directory>'");
         }
         final FTPInfo ftpInfo = new FTPInfo();
-        ftpInfo.setSite(ftpParams[0]);
-        ftpInfo.setPort(Integer.valueOf(ftpParams[1]));
-        ftpInfo.setUserName(ftpParams[2]);
-        ftpInfo.setPassword(ftpParams[3]);
-        ftpInfo.setRootDirectory(ftpParams[4]);
+        ftpInfo.setProtocol(ftpParams[0]);
+        ftpInfo.setSite(ftpParams[1]);
+        ftpInfo.setPort(Integer.valueOf(ftpParams[2]));
+        ftpInfo.setUserName(ftpParams[3]);
+        ftpInfo.setPassword(ftpParams[4]);
+        ftpInfo.setRootDirectory(ftpParams[5]);
 
         ftpInfoMap.put(ftpInfo.getSite(), ftpInfo);
     }

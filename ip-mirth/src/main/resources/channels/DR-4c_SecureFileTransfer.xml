@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326738256800</time>
+    <time>1340371644823</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>7</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -49,7 +49,7 @@
             <sequenceNumber>0</sequenceNumber>
             <name>sendToSFTP</name>
             <script>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
+var ftpSender = globalChannelMap.get(&apos;ftpSender&apos;);
 
 try{
 	var exchFormat = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString();
@@ -66,9 +66,9 @@ try{
 
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	if (exchFormat == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
-		ftpsSender.sendDocument(is, address, &apos;.txt&apos;);
+		ftpSender.sendDocument(is, address, &apos;.txt&apos;);
 	} else {
-		ftpsSender.sendDocument(is, address, &apos;.xml&apos;);
+		ftpSender.sendDocument(is, address, &apos;.xml&apos;);
 	}
 	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
 }catch(err) {
@@ -80,7 +80,7 @@ return;</script>
               <entry>
                 <string>Script</string>
                 <string>default xml namespace=&apos;http://cacis.nci.nih.gov&apos;;
-var ftpsSender = globalChannelMap.get(&apos;ftpsSender&apos;);
+var ftpSender = globalChannelMap.get(&apos;ftpSender&apos;);
 
 try{
 	var exchFormat = msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString();
@@ -97,9 +97,9 @@ try{
 
 	var is = new Packages.java.io.ByteArrayInputStream(new Packages.java.lang.String(cdaDoc).getBytes());
 	if (exchFormat == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
-		ftpsSender.sendDocument(is, address, &apos;.txt&apos;);
+		ftpSender.sendDocument(is, address, &apos;.txt&apos;);
 	} else {
-		ftpsSender.sendDocument(is, address, &apos;.xml&apos;);
+		ftpSender.sendDocument(is, address, &apos;.xml&apos;);
 	}
 	responseMap.put(&apos;sendToSFTP&apos;, &apos;Successfully sent to SFTP!&apos;);
 }catch(err) {
@@ -150,9 +150,9 @@ return;</postprocessingScript>
 var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-ip-mirth.xml&quot;);
 var names = transformerContext.getBeanDefinitionNames();
 
-var ftpsSender = transformerContext.getBean(&quot;sender&quot;);
+var ftpSender = transformerContext.getBean(&quot;sender&quot;);
 
-globalChannelMap.put(&apos;ftpsSender&apos;, ftpsSender);
+globalChannelMap.put(&apos;ftpsSender&apos;, ftpSender);
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data
