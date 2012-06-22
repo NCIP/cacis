@@ -52,7 +52,7 @@ public class SecureFTPAction extends ActionSupport {
             caCISUtil.isPropertyFileAndKeystoreInSync(propertyFileLocation, secureFTPKeystoreLocation,
                     CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
         } catch (PropFileAndKeystoreOutOfSyncException e) {
-            if (StringUtils.contains(e.getMessage(), "ftps")) {
+            if (!StringUtils.contains(e.getMessage(), "sftp")) {
                 log.error(e.getMessage());
                 addActionError(e.getMessage());
             }
