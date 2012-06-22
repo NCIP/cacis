@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -44,49 +45,52 @@ public class SecureFTPAction extends ActionSupport {
                 CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_TRUSTSTORE_PASSWORD_PROP_NAME));
 
         CaCISUtil caCISUtil = new CaCISUtil();
-        String propertyFileLocation = CaCISUtil.getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_CONFIG_FILE_LOCATION);
+        String propertyFileLocation = CaCISUtil
+                .getProperty(CaCISWebConstants.COM_PROPERTY_NAME_SECFTP_CONFIG_FILE_LOCATION);
 
         try {
-            caCISUtil.isPropertyFileAndKeystoreInSync(propertyFileLocation,
-                    secureFTPKeystoreLocation, CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
+            caCISUtil.isPropertyFileAndKeystoreInSync(propertyFileLocation, secureFTPKeystoreLocation,
+                    CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
         } catch (PropFileAndKeystoreOutOfSyncException e) {
-            log.error(e.getMessage());
-            addActionError(e.getMessage());
+            if (StringUtils.contains(e.getMessage(), "ftps")) {
+                log.error(e.getMessage());
+                addActionError(e.getMessage());
+            }
         }
 
         try {
             KeyStore keystore = caCISUtil.getKeystore(secureFTPKeystoreLocation,
                     CaCISWebConstants.COM_KEYSTORE_TYPE_JKS, secureFTPKeystorePassword);
-//            // List the aliases
-//            Enumeration<String> enumeration = keystore.aliases();
+            // // List the aliases
+            // Enumeration<String> enumeration = keystore.aliases();
             Properties configFile = new Properties();
             InputStream is = new FileInputStream(propertyFileLocation);
             configFile.load(is);
             is.close();
             Enumeration<Object> enumeration = configFile.keys();
-//            while (enumeration.hasMoreElements()) {
-//                String alias = (String) enumeration.nextElement();
-//                X509Certificate x509Certificate = (X509Certificate) keystore.getCertificate(alias);
-//                SecureFTPModel secureFTPModel = new SecureFTPModel();
-//                secureFTPModel.setCertificateAlias(alias);
-//                secureFTPModel.setCertificateDN(x509Certificate.getSubjectDN().toString());
-//                secureFTPRecepientList.add(secureFTPModel);
-//                log.debug("Alias: " + alias + " DN: " + x509Certificate.getSubjectDN().getName());
-//            }
+            // while (enumeration.hasMoreElements()) {
+            // String alias = (String) enumeration.nextElement();
+            // X509Certificate x509Certificate = (X509Certificate) keystore.getCertificate(alias);
+            // SecureFTPModel secureFTPModel = new SecureFTPModel();
+            // secureFTPModel.setCertificateAlias(alias);
+            // secureFTPModel.setCertificateDN(x509Certificate.getSubjectDN().toString());
+            // secureFTPRecepientList.add(secureFTPModel);
+            // log.debug("Alias: " + alias + " DN: " + x509Certificate.getSubjectDN().getName());
+            // }
             while (enumeration.hasMoreElements()) {
                 String alias = (String) enumeration.nextElement();
                 X509Certificate x509Certificate = (X509Certificate) keystore.getCertificate(alias);
                 String distinguishedName = "";
-                if(x509Certificate != null){
+                if (x509Certificate != null) {
                     distinguishedName = x509Certificate.getSubjectDN().toString();
-                }                
+                }
                 SecureFTPModel secureFTPModel = new SecureFTPModel();
                 secureFTPModel.setCertificateAlias(alias);
                 secureFTPModel.setCertificateDN(distinguishedName);
                 secureFTPRecepientList.add(secureFTPModel);
                 log.debug("Alias: " + alias + " DN: " + distinguishedName);
             }
-            
+
             caCISUtil.releaseKeystore();
         } catch (KeystoreInstantiationException kie) {
             log.error(kie.getMessage());

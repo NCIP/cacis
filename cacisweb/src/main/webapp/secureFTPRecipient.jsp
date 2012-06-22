@@ -28,7 +28,7 @@
 		</tr>
 		<tr>
 			<th class="formTable">&nbsp;</th>
-			<td class="formTableHint">&nbsp;alias format:&nbsp;host,port,user,password,directory</td>
+			<td class="formTableHint">&nbsp;config format:&nbsp;sftp or ftps,host,port,user,password,directory</td>
 		</tr>
 		<tr>
 			<th class="formTable"><s:text name="secureFTPBean.certificate" /></th>
