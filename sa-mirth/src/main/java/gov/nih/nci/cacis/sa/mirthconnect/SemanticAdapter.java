@@ -136,7 +136,8 @@ public class SemanticAdapter extends AcceptMessage {
                     && (mcResponse.indexOf("Error") > -1 || mcResponse.indexOf("Exception") > -1
                             || mcResponse.indexOf("ERROR") > -1 || mcResponse.indexOf("error") > -1)) {
                 mcResponse = StringUtils.remove(mcResponse, "SUCCESS:");
-                throw new AcceptSourceFault("Error processing Data from Source System: " + mcResponse);
+//                throw new AcceptSourceFault("Error processing Data from Source System: " + mcResponse);
+                throw new AcceptSourceFault(mcResponse);
             }
             response.setStatus(ResponseStatusType.SUCCESS);
             return response;
@@ -144,7 +145,7 @@ public class SemanticAdapter extends AcceptMessage {
         } catch (Exception ex) {
             // CHECKSTYLE:ON
             LOG.error(ex);
-            throw new AcceptSourceFault("Error accepting Data from Source System!" + ex.getMessage(), ex);
+            throw new AcceptSourceFault(ex.getMessage(), ex);
         }
     }
 
