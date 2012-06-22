@@ -62,9 +62,9 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPMapping;
 import gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessorClient;
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
+import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPMapping;
+import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPSSender;
 
 import java.io.IOException;
 

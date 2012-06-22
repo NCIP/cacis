@@ -58,91 +58,91 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect.ftps;
-
-import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
+package gov.nih.nci.cacis.ip.mirthconnect.ftp;
 
 /**
- * Maps ftp site URLs to FTPInfo objects containing information about the ftp site.
+ * Holds information for an FTP site.
  * @author bpickeral
  * @since Sep 27, 2011
  */
-public final class FTPMapping {
+public class FTPInfo {
 
-    private static Map<String, FTPInfo> ftpInfoMap = null;
+    private String site;
+    private int port;
+    private String userName;
+    private String password;
+    private String rootDirectory;
 
-    private  FTPMapping() {
-        // Empty
+    /**
+     * @return the site
+     */
+    public String getSite() {
+        return site;
     }
 
     /**
-     * Constructor.
-     * @param ftpMappingFile name of mapping file
-     * @throws IOException on I/O error
+     * @param site the site to set
      */
-    public FTPMapping(String ftpMappingFile) throws IOException {
-        setupFTPInfoMap(ftpMappingFile);
+    public void setSite(String site) {
+        this.site = site;
     }
 
     /**
-     * Retrieves the FTPInfo object containing information for a particular site.
-     * @param url of the ftp site
-     * @return FTPInfo object
-     * @throws IOException on I/O error
+     * @return the port
      */
-    public FTPInfo getFTPInfo(String url) throws IOException {
-        return ftpInfoMap.get(url);
+    public int getPort() {
+        return port;
     }
 
-    private void setupFTPInfoMap(String ftpMappingFile) throws IOException {
-        final File mappingFile = new File(ftpMappingFile);
-        FileInputStream fis = null;
-        BufferedReader br = null;
-        try {
-            fis = new FileInputStream(mappingFile);
-            br = new BufferedReader(new InputStreamReader(fis));
-
-            ftpInfoMap = new HashMap<String, FTPInfo>();
-            String currLine = br.readLine();
-
-            while (currLine != null) {
-                addFTPSiteToMap(currLine);
-                currLine = br.readLine();
-            }
-        } finally {
-            if (br != null) {
-                br.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
-        }
+    /**
+     * @param port the port to set
+     */
+    public void setPort(int port) {
+        this.port = port;
     }
 
-    private void addFTPSiteToMap(String ftpInfoStr) {
-        final String[] ftpParams = StringUtils.split(ftpInfoStr, ',');
-        if (ftpParams.length != 5) {
-            throw new ApplicationRuntimeException(
-                    "FTP site properties must be in the form of '<site>,<port>,<user>,<password>,<directory>'");
-        }
-        final FTPInfo ftpInfo = new FTPInfo();
-        ftpInfo.setSite(ftpParams[0]);
-        ftpInfo.setPort(Integer.valueOf(ftpParams[1]));
-        ftpInfo.setUserName(ftpParams[2]);
-        ftpInfo.setPassword(ftpParams[3]);
-        ftpInfo.setRootDirectory(ftpParams[4]);
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
 
-        ftpInfoMap.put(ftpInfo.getSite(), ftpInfo);
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    /**
+     * @return the rootDirectory
+     */
+    public String getRootDirectory() {
+        return rootDirectory;
+    }
+
+
+    /**
+     * @param rootDirectory the rootDirectory to set
+     */
+    public void setRootDirectory(String rootDirectory) {
+        this.rootDirectory = rootDirectory;
     }
 
 }
