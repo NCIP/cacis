@@ -62,9 +62,9 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
-import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPMapping;
-import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPSender;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPMapping;
 import gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessorClient;
+import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
 
 import java.io.IOException;
 
@@ -101,7 +101,6 @@ public class IPMirthConfig {
     @Value("${cmp.client.truststore.password}")
     private String cmpTruststorePassword;
 
-
     /**
      * Creates FTPSender.
      *
@@ -109,11 +108,10 @@ public class IPMirthConfig {
      */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public FTPSender sender() {
-        return new FTPSender();
+    public FTPSSender sender() {
+        return new FTPSSender();
     }
 
-    
     /**
      * Creates FTPSClient.
      *
@@ -126,7 +124,7 @@ public class IPMirthConfig {
     }
 
     /**
-     * Creates FTPMapping.
+     * Creates FTPMapp ing.
      * @return FTPMapping
      * @throws IOException on I/O error
      */
