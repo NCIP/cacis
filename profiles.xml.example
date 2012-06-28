@@ -112,6 +112,11 @@
 		
 		<securexdsnav.setup.notification.subject>XDS / NAV Recepient Setup</securexdsnav.setup.notification.subject>
 		<securexdsnav.setup.notification.message>XDS / NAV setup was successfully completed</securexdsnav.setup.notification.message>
+		
+		<!-- ############################################################################ -->
+		<!-- SFTP PROPERTIES -->
+		<!-- ############################################################################ -->
+		<sftp.file.directory>${cacis.config.home}/sftp</sftp.file.directory>
 
             </properties>
         </profile>
