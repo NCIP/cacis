@@ -108,9 +108,9 @@ public class FTPSender {
             throw new ApplicationRuntimeException("No server config exists for address[ " + ftpAddress + " ]");
         }
 
-        if (ftpInfo.getProtocol() == FTPInfo.FTPS) {
+        if (ftpInfo.getProtocol().equalsIgnoreCase(FTPInfo.FTPS)) {
             ftpsSender.sendDocument(file, ftpAddress, extension);
-        } else if (ftpInfo.getProtocol() == FTPInfo.SFTP) {
+        } else if (ftpInfo.getProtocol().equalsIgnoreCase(FTPInfo.SFTP)) {
             sftpSender.sendDocument(file, ftpAddress, extension);
         } else {
             throw new IOException(
