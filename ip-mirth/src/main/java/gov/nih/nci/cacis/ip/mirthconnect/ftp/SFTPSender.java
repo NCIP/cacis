@@ -5,6 +5,7 @@ import gov.nih.nci.cacis.sa.mirthconnect.SemanticAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.FileSystemOptions;
 import org.apache.commons.vfs.Selectors;
 import org.apache.commons.vfs.impl.StandardFileSystemManager;
@@ -30,7 +32,7 @@ public class SFTPSender {
     @Value("${sftp.file.directory}")
     private String sftpFileDirectory;
 
-    public void sendDocument(InputStream file, String ftpAddress, String extension) {
+    public void sendDocument(InputStream file, String ftpAddress, String extension) throws IOException {
 
         LOG.error("SFTP FILE DIRECTORY: " + sftpFileDirectory);
         StandardFileSystemManager standardFileSystemManager = new StandardFileSystemManager();
@@ -74,9 +76,7 @@ public class SFTPSender {
             // TODO uncomment the below line after testing
             // FileUtils.forceDelete(new File(sftpFileDirectory+timestamp+".xml"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+        }finally {
             standardFileSystemManager.close();
         }
     }
