@@ -104,7 +104,7 @@ public class FTPSender {
             UnrecoverableKeyException {
         final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
         if (ftpInfo == null) {
-            throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
+            throw new ApplicationRuntimeException("No server config exists for address[ " + ftpAddress +" ]");
         }
 
         if (ftpInfo.getProtocol() == FTPInfo.FTPS)
