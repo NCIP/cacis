@@ -62,9 +62,9 @@
 package gov.nih.nci.cacis.ip.mirthconnect.config;
 
 
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPMapping;
 import gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessorClient;
-import gov.nih.nci.cacis.ip.mirthconnect.ftps.FTPSSender;
+import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPMapping;
+import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPSender;
 
 import java.io.IOException;
 
@@ -108,8 +108,8 @@ public class IPMirthConfig {
      */
     @Bean
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-    public FTPSSender sender() {
-        return new FTPSSender();
+    public FTPSender sender() {
+        return new FTPSender();
     }
 
     /**

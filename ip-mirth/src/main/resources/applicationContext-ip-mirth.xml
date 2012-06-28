@@ -20,5 +20,6 @@
     <bean class="gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthConfig"/>
     <bean class="gov.nih.nci.cacis.ip.mirthconnect.config.IPMirthPropsConfig"/>
     <bean class="gov.nih.nci.cacis.ip.xds.XdsMetadataConfig"/>
+    <bean class="gov.nih.nci.cacis.ip.mirthconnect.ftp.SFTPSender"/>
 
 </beans>

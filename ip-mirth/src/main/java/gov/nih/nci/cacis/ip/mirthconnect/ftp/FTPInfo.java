@@ -58,110 +58,110 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
-import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPInfo;
-import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPMapping;
-import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPSSender;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.ftpserver.FtpServer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+package gov.nih.nci.cacis.ip.mirthconnect.ftp;
 
 /**
+ * Holds information for an FTP site.
  * @author bpickeral
- * @since Sep 14, 2011
+ * @since Sep 27, 2011
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:applicationContext-ip-mirth-test.xml")
-public class FTPSSenderTest {
-    private final String EXTENSION = ".xml";
+public class FTPInfo {
+	
+	public static final String FTPS = "ftps";
+	public static final String SFTP = "sftp";
+	
+    private String protocol;
+    private String site;
+    private int port;
+    private String userName;
+    private String password;
+    private String rootDirectory;
 
-    @Autowired
-    private FTPSSender sender;
+    
+	/**
+     * @return the ftp protocol to be used
+     */    
+    public String getProtocol() {
+		return protocol;
+	}
 
-    @Autowired
-    private FtpServer server;
+    /**
+     * @param protocol the ftp protocol to set
+     */
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
 
-    @Autowired
-    private FTPMapping ftpMapping;
-
-    private static final String TEST_SERVER = "localhost";
-    private FTPInfo ftpInfo;
-
-    @Before
-    public void before() throws Exception {
-        server.start();
-        ftpInfo = ftpMapping.getFTPInfo(TEST_SERVER);
-    }
-
-    @After
-    public void tearDown() {
-        server.stop();
-    }
-
-    @Test
-    public void sendDocument() throws Exception {
-        final FTPSClient ftpsClient = sender.getFtpsClient();
-        int numFiles = getNumFiles();
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Sample_SFTP_File.xml").toURI());
-        final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, TEST_SERVER, EXTENSION);
-
-        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
-
-        assertEquals(numFiles + 1, getNumFiles());
+	/**
+     * @return the site
+     */
+    public String getSite() {
+        return site;
     }
 
     /**
-     * To test, make sure you create the sub directory under /tmp locally, change the sub-directory in
-     *  ftoConfig.properties to /test/test2 and remove the @Ignore on this test.  Please revert prior to commit.
-     * @throws Exception on error
+     * @param site the site to set
      */
-    @Test
-    @Ignore
-    public void sendDocumentToSubDirectory() throws Exception {
-        final FTPSClient ftpsClient = sender.getFtpsClient();
-        int numFiles = getNumFiles();
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Sample_SFTP_File.xml").toURI());
-        final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, TEST_SERVER, EXTENSION);
-
-        assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
-
-        assertEquals(numFiles + 1, getNumFiles());
+    public void setSite(String site) {
+        this.site = site;
     }
 
-    @Test (expected = ApplicationRuntimeException.class)
-    public void sendException() throws Exception {
-        final File inputFile = new File(Thread.currentThread().getContextClassLoader()
-                .getResource("Sample_SFTP_File.xml").toURI());
-        final InputStream inputStream = new FileInputStream(inputFile);
-        sender.sendDocument(inputStream, "no-such-address", EXTENSION);
+    /**
+     * @return the port
+     */
+    public int getPort() {
+        return port;
     }
 
-    private int getNumFiles() throws Exception {
-        sender.connect(ftpInfo);
-        final FTPSClient ftpsClient = sender.getFtpsClient();
-        int numFiles = ftpsClient.listFiles().length;
-        sender.disconnect();
-        return numFiles;
+    /**
+     * @param port the port to set
+     */
+    public void setPort(int port) {
+        this.port = port;
     }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    /**
+     * @return the rootDirectory
+     */
+    public String getRootDirectory() {
+        return rootDirectory;
+    }
+
+
+    /**
+     * @param rootDirectory the rootDirectory to set
+     */
+    public void setRootDirectory(String rootDirectory) {
+        this.rootDirectory = rootDirectory;
+    }
+
 }

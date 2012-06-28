@@ -58,7 +58,7 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect.ftps;
+package gov.nih.nci.cacis.ip.mirthconnect.ftp;
 
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 

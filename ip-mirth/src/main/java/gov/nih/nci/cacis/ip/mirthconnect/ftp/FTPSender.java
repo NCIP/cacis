@@ -58,91 +58,63 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.cacis.ip.mirthconnect.ftps;
+package gov.nih.nci.cacis.ip.mirthconnect.ftp;
 
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
-import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Maps ftp site URLs to FTPInfo objects containing information about the ftp site.
  * @author bpickeral
- * @since Sep 27, 2011
+ * @since Sep 14, 2011
  */
-public final class FTPMapping {
+public class FTPSender {
 
-    private static Map<String, FTPInfo> ftpInfoMap = null;
+    @Autowired
+    private FTPSSender ftpsSender;    
+    
+    @Autowired
+    private SFTPSender sftpSender;    
 
-    private  FTPMapping() {
-        // Empty
-    }
-
-    /**
-     * Constructor.
-     * @param ftpMappingFile name of mapping file
-     * @throws IOException on I/O error
-     */
-    public FTPMapping(String ftpMappingFile) throws IOException {
-        setupFTPInfoMap(ftpMappingFile);
-    }
+    @Autowired
+    private FTPMapping ftpMapping;
 
     /**
-     * Retrieves the FTPInfo object containing information for a particular site.
-     * @param url of the ftp site
-     * @return FTPInfo object
+     * Sends Document to FTPS Server.
+     * @param file Input Stream.
+     * @param ftpAddress the ftp address in which to store the file.
+     * @param extension File extension
      * @throws IOException on I/O error
+     * @throws NoSuchProviderException on Provider error
+     * @throws KeyStoreException on Keystore error
+     * @throws NoSuchAlgorithmException on algorithm error
+     * @throws CertificateException on certificate error
+     * @throws UnrecoverableKeyException if key is not recoverable
      */
-    public FTPInfo getFTPInfo(String url) throws IOException {
-        return ftpInfoMap.get(url);
-    }
-
-    private void setupFTPInfoMap(String ftpMappingFile) throws IOException {
-        final File mappingFile = new File(ftpMappingFile);
-        FileInputStream fis = null;
-        BufferedReader br = null;
-        try {
-            fis = new FileInputStream(mappingFile);
-            br = new BufferedReader(new InputStreamReader(fis));
-
-            ftpInfoMap = new HashMap<String, FTPInfo>();
-            String currLine = br.readLine();
-
-            while (currLine != null) {
-                addFTPSiteToMap(currLine);
-                currLine = br.readLine();
-            }
-        } finally {
-            if (br != null) {
-                br.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+    public void sendDocument(InputStream file, String ftpAddress, String extension) throws IOException,
+            NoSuchProviderException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
+            UnrecoverableKeyException {
+        final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
+        if (ftpInfo == null) {
+            throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
         }
-    }
 
-    private void addFTPSiteToMap(String ftpInfoStr) {
-        final String[] ftpParams = StringUtils.split(ftpInfoStr, ',');
-        if (ftpParams.length != 5) {
-            throw new ApplicationRuntimeException(
-                    "FTP site properties must be in the form of '<site>,<port>,<user>,<password>,<directory>'");
+        if (ftpInfo.getProtocol() == FTPInfo.FTPS)
+        {
+        	ftpsSender.sendDocument(file, ftpAddress, extension);
         }
-        final FTPInfo ftpInfo = new FTPInfo();
-        ftpInfo.setSite(ftpParams[0]);
-        ftpInfo.setPort(Integer.valueOf(ftpParams[1]));
-        ftpInfo.setUserName(ftpParams[2]);
-        ftpInfo.setPassword(ftpParams[3]);
-        ftpInfo.setRootDirectory(ftpParams[4]);
-
-        ftpInfoMap.put(ftpInfo.getSite(), ftpInfo);
+        else if (ftpInfo.getProtocol() == FTPInfo.SFTP)
+        {
+        	sftpSender.sendDocument(file, ftpAddress, extension);
+        }
     }
 
 }

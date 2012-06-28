@@ -87,6 +87,17 @@
 			<artifactId>ftpserver-core</artifactId>
 			<version>1.0.5</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-vfs</groupId>
+			<artifactId>commons-vfs</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.31</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -62,6 +62,8 @@ package gov.nih.nci.cacis.ip.mirthconnect.ftps;
 
 import static org.junit.Assert.assertEquals;
 import gov.nih.nci.cacis.common.exception.ApplicationRuntimeException;
+import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPInfo;
+import gov.nih.nci.cacis.ip.mirthconnect.ftp.FTPMapping;
 
 import org.junit.Test;
 
