@@ -136,7 +136,7 @@ public final class FTPMapping {
                     "FTP site properties must be in the form of '<site>,<port>,<user>,<password>,<directory>'");
         }
         final FTPInfo ftpInfo = new FTPInfo();
-        ftpInfo.setPassword(ftpParams[0]);
+        ftpInfo.setProtocol(ftpParams[0]);
         ftpInfo.setSite(ftpParams[1]);
         ftpInfo.setPort(Integer.valueOf(ftpParams[2]));
         ftpInfo.setUserName(ftpParams[3]);
