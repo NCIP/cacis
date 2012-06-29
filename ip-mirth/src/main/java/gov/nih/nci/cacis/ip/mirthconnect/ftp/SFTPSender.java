@@ -55,7 +55,8 @@ public class SFTPSender {
             FileObject fileObject = standardFileSystemManager.resolveFile(sftpURI + "/" + fileName, fileSystemOptions);
 
             long timestamp = new Date().getTime();
-            OutputStream out = new FileOutputStream(new File(sftpFileDirectory + timestamp + ".xml"));
+            String tempSftpFile = sftpFileDirectory +"/"+ timestamp + ".xml";
+            OutputStream out = new FileOutputStream(new File(tempSftpFile));
 
             int read = 0;
             byte[] bytes = new byte[1024];
@@ -67,11 +68,11 @@ public class SFTPSender {
             out.flush();
             out.close();
 
-            FileObject localFileObject = standardFileSystemManager.resolveFile(sftpFileDirectory +"/"+ timestamp + ".xml");
+            FileObject localFileObject = standardFileSystemManager.resolveFile(tempSftpFile);
 
             fileObject.copyFrom(localFileObject, Selectors.SELECT_SELF);
 
-            FileUtils.forceDelete(new File(sftpFileDirectory +"/"+ timestamp + ".xml"));
+            FileUtils.forceDelete(new File(tempSftpFile));
 
         } catch (Exception e) {
             throw new ApplicationRuntimeException("Error sending SFTP. " + e.getMessage());
