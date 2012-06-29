@@ -637,7 +637,16 @@
 									<artifactId>aopalliance</artifactId>
 									<version>1.0</version>
 								</artifactItem>
-
+								<artifactItem>
+									<groupId>commons-vfs</groupId>
+									<artifactId>commons-vfs</artifactId>
+									<version>1.0</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.jcraft</groupId>
+									<artifactId>jsch</artifactId>
+									<version>0.1.31</version>
+								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/mc-custom-lib</outputDirectory>
 
@@ -777,18 +786,7 @@
 									<groupId>org.apache.httpcomponents</groupId>
 									<artifactId>httpcore</artifactId>
 									<version>4.1.1</version>
-								</artifactItem>
-
-								<artifactItem>
-									<groupId>commons-vfs</groupId>
-									<artifactId>commons-vfs</artifactId>
-									<version>1.0</version>
-								</artifactItem>
-								<artifactItem>
-									<groupId>com.jcraft</groupId>
-									<artifactId>jsch</artifactId>
-									<version>0.1.31</version>
-								</artifactItem>
+								</artifactItem>							
 
 								<!-- cacis special jars for openxds client - end -->
 							</artifactItems>

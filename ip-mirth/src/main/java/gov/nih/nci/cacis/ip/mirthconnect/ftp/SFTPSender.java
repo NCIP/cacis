@@ -67,15 +67,14 @@ public class SFTPSender {
             out.flush();
             out.close();
 
-            FileObject localFileObject = standardFileSystemManager.resolveFile(sftpFileDirectory + timestamp + ".xml");
+            FileObject localFileObject = standardFileSystemManager.resolveFile(sftpFileDirectory +"/"+ timestamp + ".xml");
 
             fileObject.copyFrom(localFileObject, Selectors.SELECT_SELF);
 
-            // TODO uncomment the below line after testing
-            // FileUtils.forceDelete(new File(sftpFileDirectory+timestamp+".xml"));
+            FileUtils.forceDelete(new File(sftpFileDirectory +"/"+ timestamp + ".xml"));
 
-        } catch (IOException ioe) {
-            throw new ApplicationRuntimeException("Error sending SFTP. " + ioe.getMessage());
+        } catch (Exception e) {
+            throw new ApplicationRuntimeException("Error sending SFTP. " + e.getMessage());
         } finally {
             standardFileSystemManager.close();
         }
