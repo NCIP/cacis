@@ -32,21 +32,19 @@ public class SFTPSender {
     @Value("${sftp.file.directory}")
     private String sftpFileDirectory;
 
-    public void sendDocument(InputStream file, String ftpAddress, String extension) throws IOException {
+    public void sendDocument(InputStream file, String ftpAddress, String extension) {
 
         LOG.error("SFTP FILE DIRECTORY: " + sftpFileDirectory);
         StandardFileSystemManager standardFileSystemManager = new StandardFileSystemManager();
         try {
             final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
             if (ftpInfo == null) {
-                throw new ApplicationRuntimeException("No server config exists for address: " + ftpAddress);
+                throw new ApplicationRuntimeException("No server config exists for address[ " + ftpAddress + " ]");
             }
 
             String sftpURI = "sftp://" + ftpInfo.getUserName() + ":" + ftpInfo.getPassword() + "@" + ftpInfo.getSite()
                     + "/" + ftpInfo.getRootDirectory();
             String fileName = "IHEXIPFTP-" + UUID.randomUUID() + extension;
-
-            
 
             FileSystemOptions fileSystemOptions = new FileSystemOptions();
             SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(fileSystemOptions, "no");
@@ -76,7 +74,9 @@ public class SFTPSender {
             // TODO uncomment the below line after testing
             // FileUtils.forceDelete(new File(sftpFileDirectory+timestamp+".xml"));
 
-        }finally {
+        } catch (IOException ioe) {
+            throw new ApplicationRuntimeException("Error sending SFTP. " + ioe.getMessage());
+        } finally {
             standardFileSystemManager.close();
         }
     }

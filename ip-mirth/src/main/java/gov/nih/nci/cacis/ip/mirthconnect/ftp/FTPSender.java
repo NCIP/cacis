@@ -103,19 +103,23 @@ public class FTPSender {
     public void sendDocument(InputStream file, String ftpAddress, String extension) throws IOException,
             NoSuchProviderException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
             UnrecoverableKeyException {
-        final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
-        if (ftpInfo == null) {
-            throw new ApplicationRuntimeException("No server config exists for address[ " + ftpAddress + " ]");
-        }
+        try {
+            final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
+            if (ftpInfo == null) {
+                throw new ApplicationRuntimeException("No server config exists for address[ " + ftpAddress + " ]");
+            }
 
-        if (ftpInfo.getProtocol().equalsIgnoreCase(FTPInfo.FTPS)) {
-            ftpsSender.sendDocument(file, ftpAddress, extension);
-        } else if (ftpInfo.getProtocol().equalsIgnoreCase(FTPInfo.SFTP)) {
-            sftpSender.sendDocument(file, ftpAddress, extension);
-        } else {
-            throw new IOException(
-                    "The FTP protocol entry in the configuration file has to be 'ftps' or 'sftp'. It is currently configured as [ "
-                            + ftpInfo.getProtocol() + " ]");
+            if (ftpInfo.getProtocol().equalsIgnoreCase(FTPInfo.FTPS)) {
+                ftpsSender.sendDocument(file, ftpAddress, extension);
+            } else if (ftpInfo.getProtocol().equalsIgnoreCase(FTPInfo.SFTP)) {
+                sftpSender.sendDocument(file, ftpAddress, extension);
+            } else {
+                throw new IOException(
+                        "The FTP protocol entry in the configuration file has to be 'ftps' or 'sftp'. It is currently configured as [ "
+                                + ftpInfo.getProtocol() + " ]");
+            }
+        } catch (Exception e) {
+            throw new ApplicationRuntimeException("Error occured during FTP. " + e.getMessage());
         }
     }
 
