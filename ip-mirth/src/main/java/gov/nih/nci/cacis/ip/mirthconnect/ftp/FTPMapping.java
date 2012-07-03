@@ -66,9 +66,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -106,26 +109,41 @@ public final class FTPMapping {
 
     private void setupFTPInfoMap(String ftpMappingFile) throws IOException {
         final File mappingFile = new File(ftpMappingFile);
-        FileInputStream fis = null;
-        BufferedReader br = null;
+        
+        InputStream is = null;
+//        FileInputStream fis = null;
+//        BufferedReader br = null;
         try {
-            fis = new FileInputStream(mappingFile);
-            br = new BufferedReader(new InputStreamReader(fis));
-
+            Properties configFile = new Properties();
+            is = new FileInputStream(ftpMappingFile);
+            configFile.load(is);
+            
             ftpInfoMap = new HashMap<String, FTPInfo>();
-            String currLine = br.readLine();
-
-            while (currLine != null) {
-                addFTPSiteToMap(currLine);
-                currLine = br.readLine();
+            Enumeration<Object> enumeration = configFile.keys();
+            while (enumeration.hasMoreElements()) {
+                addFTPSiteToMap((String) enumeration.nextElement());
             }
+            
+//            fis = new FileInputStream(mappingFile);
+//            br = new BufferedReader(new InputStreamReader(fis));
+//
+//            ftpInfoMap = new HashMap<String, FTPInfo>();
+//            String currLine = br.readLine();
+//
+//            while (currLine != null) {
+//                addFTPSiteToMap(currLine);
+//                currLine = br.readLine();
+//            }
         } finally {
-            if (br != null) {
-                br.close();
+            if (is != null) {
+                is.close();
             }
-            if (fis != null) {
-                fis.close();
-            }
+//            if (br != null) {
+//                br.close();
+//            }
+//            if (fis != null) {
+//                fis.close();
+//            }
         }
     }
 
