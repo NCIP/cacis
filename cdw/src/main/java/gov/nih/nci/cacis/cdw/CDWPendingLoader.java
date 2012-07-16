@@ -88,7 +88,7 @@ public class CDWPendingLoader {
                         .getAbsolutePath(), cdwLoadProcessedDirectory));
                 org.apache.commons.io.FileUtils
                         .moveFileToDirectory(loadFile, new File(cdwLoadProcessedDirectory), true);
-            } catch (CDWLoaderException e) {
+            } catch (Exception e) {
                 LOG.error(e.getMessage());
                 e.printStackTrace();
                 try {
@@ -108,7 +108,7 @@ public class CDWPendingLoader {
                     message.setFrom(new InternetAddress(cdwLoadSenderAddress));
                     message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(cdwLoadRecipientAddress));
                     message.setSubject(cdwLoadNotificationSubject);
-                    message.setText(cdwLoadNotificationMessage + " ["+e.getMessage() +"]");
+                    message.setText(cdwLoadNotificationMessage + " [" + e.getMessage() + "]");
 
                     Transport.send(message);
                     org.apache.commons.io.FileUtils
@@ -118,10 +118,6 @@ public class CDWPendingLoader {
                     LOG.error(e1.getMessage());
                     e1.printStackTrace();
                 }
-            } catch (Exception e) {
-                LOG.error(e.getMessage());
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         }
     }
