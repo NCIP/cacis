@@ -33,8 +33,7 @@ public class SFTPSender {
     private String sftpFileDirectory;
 
     public void sendDocument(InputStream file, String ftpAddress, String extension) {
-
-        LOG.error("SFTP FILE DIRECTORY: " + sftpFileDirectory);
+        
         StandardFileSystemManager standardFileSystemManager = new StandardFileSystemManager();
         try {
             final FTPInfo ftpInfo = ftpMapping.getFTPInfo(ftpAddress);
