@@ -62,6 +62,7 @@
 package gov.nih.nci.cacis.cdw.config;
 
 import gov.nih.nci.cacis.cdw.CDWLoader;
+import gov.nih.nci.cacis.cdw.CDWPendingLoader;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 import gov.nih.nci.cacis.config.TransformerConfig;
 
@@ -86,6 +87,13 @@ public class CDWConfigImpl implements CDWConfig {
     @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
     public CDWLoader loader() {
         return new CDWLoader();
+    }
+    
+    @Override    
+    @Bean
+    @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+    public CDWPendingLoader pendingLoader() {
+        return new CDWPendingLoader();
     }
     
     

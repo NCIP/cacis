@@ -62,6 +62,7 @@
 package gov.nih.nci.cacis.cdw.config;
 
 import gov.nih.nci.cacis.cdw.CDWLoader;
+import gov.nih.nci.cacis.cdw.CDWPendingLoader;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -74,4 +75,10 @@ public interface CDWConfig {
      * @return loader
      */
     CDWLoader loader();
+    
+    /**
+     * CDW Loader
+     * @return loader
+     */
+    CDWPendingLoader pendingLoader();
 }

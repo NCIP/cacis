@@ -63,6 +63,7 @@ package gov.nih.nci.cacis.cdw.config;
 
 
 import gov.nih.nci.cacis.cdw.CDWLoader;
+import gov.nih.nci.cacis.cdw.CDWPendingLoader;
 import gov.nih.nci.cacis.common.util.CommonsPropertyPlaceholderConfigurer;
 import gov.nih.nci.cacis.config.TransformerConfig;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -100,6 +101,12 @@ public class TestMockCDWConfig implements CDWConfig {
         configurer.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
         configurer.setIgnoreUnresolvablePlaceholders(true);
         return configurer;
+    }
+
+    @Override
+    public CDWPendingLoader pendingLoader() {
+        	// TODO Auto-generated method stub
+        return new CDWPendingLoader();
     }
 }
 
