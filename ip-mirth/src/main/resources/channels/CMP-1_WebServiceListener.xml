@@ -6,7 +6,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1318641721126</time>
+    <time>1342461355894</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>2</revision>
@@ -18,7 +18,7 @@
       <property name="port">18081</property>
       <property name="receiverClassName">gov.nih.nci.cacis.ip.mirthconnect.CanonicalModelProcessor</property>
       <property name="receiverPasswords">&lt;list/&gt;</property>
-      <property name="receiverResponseValue">canonicalValidation</property>
+      <property name="receiverResponseValue">cdwLoad</property>
       <property name="receiverServiceName">CanonicalModelProcessor</property>
       <property name="receiverUsernames">&lt;list/&gt;</property>
     </properties>
