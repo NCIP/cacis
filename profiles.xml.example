@@ -117,6 +117,17 @@
 		<!-- SFTP PROPERTIES -->
 		<!-- ############################################################################ -->
 		<sftp.file.directory>${cacis.config.home}/sftp</sftp.file.directory>
+		
+		<!-- ############################################################################-->
+		<!-- CDW ASYNC PROPERTIES -->
+		<!-- ############################################################################-->
+		<cdw.load.job.directory>${cacis.config.home}/cdwLoad/job</cdw.load.job.directory>
+		<cdw.load.pending.directory>${cacis.config.home}/cdwLoad/cdwLoadPending</cdw.load.pending.directory>
+		<cdw.load.processed.directory>${cacis.config.home}/cdwLoad/cdwLoadProcessed</cdw.load.processed.directory>
+		<cdw.load.error.directory>${cacis.config.home}/cdwLoad/cdwLoadError</cdw.load.error.directory>
+		<cdw.load.log.file.location>${cacis.config.home}/cdwLoad/cdwload.log</cdw.load.log.file.location>
+		<cdw.load.notification.subject>CDW Load Error</cdw.load.notification.subject>
+		<cdw.load.notification.message>Error loading CDW document</cdw.load.notification.message>
 
             </properties>
         </profile>
