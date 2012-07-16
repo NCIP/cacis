@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1324058264749</time>
+    <time>1342460571659</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>36</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -38,17 +38,21 @@
     <connector>
       <name>Destination 1</name>
       <properties>
-        <property name="DataType">JavaScript Writer</property>
-        <property name="host">sink</property>
-        <property name="script">
-//load data into CDW
-
-var cdwContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-cacis-cdw.xml&quot;);
-var loader = cdwContext.getBean(&quot;loader&quot;);
-
-loader.load(messageObject.getEncodedData(), loader.generateContext(), $(&apos;studyId&apos;), $(&apos;siteId&apos;), $(&apos;patientId&apos;));
-
-logger.info(&apos;Loading data into CDW&apos;);</property>
+        <property name="DataType">File Writer</property>
+        <property name="FTPAnonymous">1</property>
+        <property name="binary">0</property>
+        <property name="charsetEncoding">DEFAULT_ENCODING</property>
+        <property name="host">${cdw.load.pending.directory}</property>
+        <property name="outputAppend">1</property>
+        <property name="outputPattern">${siteId}@@${studyId}@@${patientId}@@${SYSTIME}.xml</property>
+        <property name="passive">1</property>
+        <property name="password">anonymous</property>
+        <property name="scheme">file</property>
+        <property name="secure">1</property>
+        <property name="template">${XmlUtil.prettyPrint(${message.encodedData})}</property>
+        <property name="timeout">10000</property>
+        <property name="username">anonymous</property>
+        <property name="validateConnections">1</property>
       </properties>
       <transformer>
         <steps>
@@ -95,7 +99,7 @@ channelMap.put(&apos;patientId&apos;, patientId);</string>
       <filter>
         <rules/>
       </filter>
-      <transportName>JavaScript Writer</transportName>
+      <transportName>File Writer</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <version>2.1.1.5490</version>
