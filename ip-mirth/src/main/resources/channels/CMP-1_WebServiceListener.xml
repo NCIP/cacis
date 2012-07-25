@@ -6,10 +6,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1342461355894</time>
+    <time>1343249062966</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>2</revision>
+  <revision>10</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -77,11 +77,18 @@
         <property name="DataType">JavaScript Writer</property>
         <property name="host">sink</property>
         <property name="script">var valdRes = responseMap.get(&apos;canonicalValidation&apos;);
-
-if(valdRes.toString().indexOf(&apos;Error&apos;) &lt; 0 ) { &#xd;	router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);&#xd;} else {&#xd; 	handleErrorStr(&apos;Not sending data to CDW,&apos;+ valdRes);&#xd;}
+try{
+	if(valdRes.toString().indexOf(&apos;Error&apos;) &lt; 0 ) { 
+		router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
+	} else {
+		logger.error(&apos;ERROR MESSAGE RECOGNIZED IN cdwLoad destination&apos;);
+ 		throw valdRes.toString()+ &apos;. Data Not sent for asynchronous CDW load.&apos;;
+	}
+} catch (error){
+	throw &apos;Error writing file for asynchronous CDW load. &apos;+error;
+}
 
 return;
-
 </property>
       </properties>
       <transformer>
