@@ -66,11 +66,12 @@
 				key="cdwUserBean.addPermissionButton" action="cdwPermissionAdd"
 				cssClass="formButton" /></td>
 		</tr>
+		<s:token />
 		</s:form>
 		<s:iterator status="rowstatus" value="cdwUserBean.userPermission"
 			var="cdwPermissionBean">
 			<s:form theme="simple" method="post" enctype="multipart/form-data">
-				<s:hidden key="cdwUserBean.username"></s:hidden>				
+				<s:hidden key="cdwUserBean.username"></s:hidden>
 				<input type="hidden" name=cdwPermissionBean.graphGroupRGGIRI
 					value='<s:text name="#cdwPermissionBean.graphGroupRGGIRI" />' />
 				<tr
@@ -85,6 +86,7 @@
 						key="cdwUserBean.deletePermissionButton"
 						action="cdwPermissionDelete" cssClass="formButtonDelete" /></td>
 				</tr>
+				<s:token />
 			</s:form>
 		</s:iterator>
 	</table>

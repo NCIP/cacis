@@ -100,7 +100,7 @@
 			<result name="input">/secureFTPRecipient.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
-		
+
 		<action name="secureFTPRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureFTPAction"
 			method="delete">
 			<interceptor-ref name="store">
@@ -113,9 +113,9 @@
 			</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
-		<action name="secureXDSNAVRecipientAdd" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAddAction"
-			method="execute">
+
+		<action name="secureXDSNAVRecipientAdd"
+			class="gov.nih.nci.cacisweb.action.SecureXDSNAVAddAction" method="execute">
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
@@ -138,7 +138,7 @@
 			<result name="input">/secureXDSNAVRecipient.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
-		
+
 		<action name="secureXDSNAVRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAction"
 			method="delete">
 			<interceptor-ref name="store">
@@ -151,7 +151,7 @@
 			</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
+
 		<action name="cdwUserPermission" class="gov.nih.nci.cacisweb.action.CdwUserSearchAction"
 			method="input">
 			<result name="input">/cdwUserPermission.jsp</result>
@@ -159,6 +159,7 @@
 
 		<action name="cdwUserAdd" class="gov.nih.nci.cacisweb.action.CdwUserAddAction"
 			method="execute">
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
@@ -166,6 +167,7 @@
 
 		<action name="cdwUserDelete" class="gov.nih.nci.cacisweb.action.CdwUserDeleteAction"
 			method="execute">
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
@@ -182,18 +184,42 @@
 		</action>
 
 		<action name="cdwPermissionAdd"
-			class="gov.nih.nci.cacisweb.action.CdwPermissionAddAction" method="execute">			
+			class="gov.nih.nci.cacisweb.action.CdwPermissionAddAction" method="execute">
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
 
 		<action name="cdwPermissionDelete"
-			class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction" method="execute">			
+			class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction" method="execute">		
+			<interceptor-ref name="tokenSession" />	
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
+
+		<action name="index">
+			<result>/index-struts.jsp</result>
+		</action>
+
+		<action name="hello"
+			class="org.apache.struts.helloworld.action.HelloWorldAction" method="execute">
+			<result name="success">/HelloWorld.jsp</result>
+		</action>
+
+		<action name="register" class="org.apache.struts.register.action.Register"
+			method="execute">
+			<result name="success">/thankyou.jsp</result>
+			<result name="input">/register.jsp</result>
+		</action>
+
+		<action name="registerInput" class="org.apache.struts.register.action.Register"
+			method="input">
+			<result name="input">/register.jsp</result>
+		</action>
+
+
 	</package>
 
 </struts>
