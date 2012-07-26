@@ -55,6 +55,7 @@ public class CDWPendingLoader {
 
     public void loadPendingCDWDocuments(CDWLoader loader) {
         LOG.debug("Pending folder: " + cdwLoadPendingDirectory);
+        LOG.info("SSSSSSS STARTED CDW LOAD SSSSSSSS");
         File pendingFolder = new File(cdwLoadPendingDirectory);
         FilenameFilter loadFileFilter = new FilenameFilter() {
 
@@ -63,6 +64,7 @@ public class CDWPendingLoader {
             }
         };
         String[] loadFileNames = pendingFolder.list(loadFileFilter);
+        LOG.info("Total Files to Load: "+loadFileNames.length);
         for (String fileName : loadFileNames) {
             LOG.info("File Name: " + fileName);
             File loadFile = new File(cdwLoadPendingDirectory + "/" + fileName);
@@ -120,6 +122,7 @@ public class CDWPendingLoader {
                 }
             }
         }
+        LOG.info("EEEEEEE ENDED CDW LOAD EEEEEEE");
     }
 
 }
