@@ -66,8 +66,10 @@ public class CDWPendingLoader {
         String[] loadFileNames = pendingFolder.list(loadFileFilter);
         LOG.info("Total Files to Load: " + loadFileNames.length);
         int filesLoaded = 0;
+        int fileNumber = 0;
         for (String fileName : loadFileNames) {
-            LOG.info("File Name: " + fileName);
+            fileNumber++;
+            LOG.info("Processing File [" + fileNumber + "] " + fileName);
             File loadFile = new File(cdwLoadPendingDirectory + "/" + fileName);
             try {
                 final String[] params = StringUtils.split(fileName, "@@");
@@ -87,8 +89,8 @@ public class CDWPendingLoader {
                 loader
                         .load(FileUtils.getStringFromFile(loadFile), loader.generateContext(), studyId, siteId,
                                 patientId);
-                LOG.info(String.format("Successfully processed file [%s] and moving into [%s]", loadFile
-                        .getAbsolutePath(), cdwLoadProcessedDirectory));
+                LOG.info(String.format("Successfully processed file [%s] [%s] and moving into [%s]", fileNumber,
+                        loadFile.getAbsolutePath(), cdwLoadProcessedDirectory));
                 org.apache.commons.io.FileUtils
                         .moveFileToDirectory(loadFile, new File(cdwLoadProcessedDirectory), true);
                 filesLoaded++;
