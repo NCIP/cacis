@@ -64,7 +64,8 @@ public class CDWPendingLoader {
             }
         };
         String[] loadFileNames = pendingFolder.list(loadFileFilter);
-        LOG.info("Total Files to Load: "+loadFileNames.length);
+        LOG.info("Total Files to Load: " + loadFileNames.length);
+        int filesLoaded = 0;
         for (String fileName : loadFileNames) {
             LOG.info("File Name: " + fileName);
             File loadFile = new File(cdwLoadPendingDirectory + "/" + fileName);
@@ -90,6 +91,7 @@ public class CDWPendingLoader {
                         .getAbsolutePath(), cdwLoadProcessedDirectory));
                 org.apache.commons.io.FileUtils
                         .moveFileToDirectory(loadFile, new File(cdwLoadProcessedDirectory), true);
+                filesLoaded++;
             } catch (Exception e) {
                 LOG.error(e.getMessage());
                 e.printStackTrace();
@@ -122,6 +124,7 @@ public class CDWPendingLoader {
                 }
             }
         }
+        LOG.info("Files Successfully Loaded: " + filesLoaded);
         LOG.info("EEEEEEE ENDED CDW LOAD EEEEEEE");
     }
 
