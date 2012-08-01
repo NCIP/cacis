@@ -133,6 +133,10 @@ public class CanonicalModelProcessor extends AcceptMessage {
                     && (mcResponse.indexOf("Error") > -1 || mcResponse.indexOf("Exception") > -1
                             || mcResponse.indexOf("ERROR") > -1 || mcResponse.indexOf("error") > -1)) {
                 mcResponse = StringUtils.remove(mcResponse, "SUCCESS:");
+                String channelUid = StringUtils.substringBetween(mcResponse, "(", ")");
+                if(channelUid != null){
+                    mcResponse = StringUtils.remove(mcResponse, "("+channelUid+")");
+                }
                 throw new AcceptCanonicalFault(StringUtils.substring(mcResponse, StringUtils.lastIndexOf(mcResponse, ':')));
             }
             response.setStatus(ResponseStatusType.SUCCESS);
