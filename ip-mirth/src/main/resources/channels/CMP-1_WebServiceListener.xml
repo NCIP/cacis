@@ -6,10 +6,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1343249062966</time>
+    <time>1343737528401</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>10</revision>
+  <revision>22</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -84,8 +84,9 @@ try{
 		logger.error(&apos;ERROR MESSAGE RECOGNIZED IN cdwLoad destination&apos;);
  		throw valdRes.toString()+ &apos;. Data Not sent for asynchronous CDW load.&apos;;
 	}
-} catch (error){
-	throw &apos;Error writing file for asynchronous CDW load. &apos;+error;
+} catch (err){
+	throw err;
+	//responseMap.put(&apos;cdwLoad&apos;, err.message);
 }
 
 return;
