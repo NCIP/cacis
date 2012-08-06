@@ -6,10 +6,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1343737528401</time>
+    <time>1344017100984</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>22</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -81,8 +81,8 @@ try{
 	if(valdRes.toString().indexOf(&apos;Error&apos;) &lt; 0 ) { 
 		router.routeMessage(&apos;CMP-3_CDWLoader&apos;, message, true);
 	} else {
-		logger.error(&apos;ERROR MESSAGE RECOGNIZED IN cdwLoad destination&apos;);
- 		throw valdRes.toString()+ &apos;. Data Not sent for asynchronous CDW load.&apos;;
+		logger.info(&apos;Data Not sent for asynchronous CDW load.&apos;);
+ 		throw valdRes.toString();
 	}
 } catch (err){
 	throw err;
