@@ -302,6 +302,22 @@ td.formTable {
 	width: 75%;
 }
 
+th.loginTable {
+	text-align: right;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 50%;
+}
+
+td.loginTable {
+	text-align: left;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 50%;
+}
+
 td.formTableHint {
 	text-align: left;
 	font-weight: lighter;	

@@ -17,28 +17,35 @@
 </table>
 <s:include value="messageAndError.jsp"></s:include>
 
-<s:form action="secureFTPRecipientAdd" theme="simple" method="post" enctype="multipart/form-data">
+<s:form action="secureFTPRecipientAdd" theme="simple" method="post"
+	enctype="multipart/form-data">
 	<table class="formTable">
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text name="secureFTPBean.certificateAlias" /></th>
-			<td><s:textfield key="secureFTPBean.certificateAlias" size="55" cssClass="formTable"/></td>
+			<th class="formTable"><s:text
+				name="secureFTPBean.certificateAlias" /></th>
+			<td><s:textfield key="secureFTPBean.certificateAlias" size="55"
+				cssClass="formTable" /></td>
 		</tr>
 		<tr>
 			<th class="formTable">&nbsp;</th>
-			<td class="formTableHint">&nbsp;config format:&nbsp;sftp or ftps,host,port,user,password,directory</td>
+			<td class="formTableHint">&nbsp;config format:&nbsp;sftp or
+			ftps,host,port,user,password,directory</td>
 		</tr>
 		<tr>
 			<th class="formTable"><s:text name="secureFTPBean.certificate" /></th>
-			<td><s:file key="secureFTPBean.certificate" size="55" cssClass="formTable" /></td>
+			<td><s:file key="secureFTPBean.certificate" size="55"
+				cssClass="formTable" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" class="formButton"><s:submit key="secureFTPBean.addButton" cssClass="formButton"/></td>
+			<td colspan="2" class="formButton"><s:submit
+				key="secureFTPBean.addButton" cssClass="formButton" /></td>
 		</tr>
 	</table>
 	<s:hidden name="operationMode" value="STORE"></s:hidden>
+	<s:token />
 </s:form>
 <table class="listTable">
 	<tr>
@@ -51,24 +58,22 @@
 	</tr>
 	<s:iterator status="rowstatus" value="secureFTPRecepientList"
 		var="secureFTPBean">
-		<s:url action="secureFTPRecipientDelete" var="deleteLink">
-			<s:param name="secureFTPBean.certificateAlias">
-				<s:text name="#secureFTPBean.certificateAlias" />
-			</s:param>
-			<s:param name="operationMode">STORE</s:param>
-		</s:url>
-		<tr
-			class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
-			<td align="left" width="25%" class="listTable"><s:text
-				name="#secureFTPBean.certificateAlias" /></td>
-			<td align="left" width="65%" class="listTable"><s:text
-				name="#secureFTPBean.certificateDN" /></td>
-			<td align="center" width="10%" class="listTable"><a
-				href="${deleteLink}">
-			<button class="tableRowDelete"><s:text
-				name="secureFTPBean.deleteButton" /></button>
-			</a></td>
-		</tr>
+		<s:form theme="simple" method="post" enctype="multipart/form-data">
+			<input type="hidden" name=secureFTPBean.certificateAlias
+				value='<s:text name="#secureFTPBean.certificateAlias" />' />
+			<input type="hidden" name=operationMode value='STORE' />
+			<tr
+				class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
+				<td align="left" width="25%" class="listTable"><s:text
+					name="#secureFTPBean.certificateAlias" /></td>
+				<td align="left" width="65%" class="listTable"><s:text
+					name="#secureFTPBean.certificateDN" /></td>
+				<td align="center" width="10%" class="listTable"><s:submit
+					key="secureFTPBean.deleteButton" action="secureFTPRecipientDelete"
+					cssClass="formButtonDelete" /></td>
+			</tr>
+			<s:token />
+		</s:form>
 	</s:iterator>
 </table>
 </body>

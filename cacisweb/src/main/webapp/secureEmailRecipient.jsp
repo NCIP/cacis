@@ -17,24 +17,30 @@
 </table>
 <s:include value="messageAndError.jsp"></s:include>
 
-<s:form action="secureEmailRecipientAdd" theme="simple" method="post" enctype="multipart/form-data">
+<s:form action="secureEmailRecipientAdd" theme="simple" method="post"
+	enctype="multipart/form-data">
 	<table class="formTable">
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text name="secureEmailBean.certificateAlias" /></th>
-			<td><s:textfield key="secureEmailBean.certificateAlias" size="55" cssClass="formTable"/></td>
+			<th class="formTable"><s:text
+				name="secureEmailBean.certificateAlias" /></th>
+			<td><s:textfield key="secureEmailBean.certificateAlias"
+				size="55" cssClass="formTable" /></td>
 		</tr>
 		<tr>
 			<th class="formTable"><s:text name="secureEmailBean.certificate" /></th>
-			<td><s:file key="secureEmailBean.certificate" size="55" cssClass="formTable" /></td>
+			<td><s:file key="secureEmailBean.certificate" size="55"
+				cssClass="formTable" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" class="formButton"><s:submit key="secureEmailBean.addButton" cssClass="formButton"/></td>
+			<td colspan="2" class="formButton"><s:submit
+				key="secureEmailBean.addButton" cssClass="formButton" /></td>
 		</tr>
 	</table>
 	<s:hidden name="operationMode" value="STORE"></s:hidden>
+	<s:token />
 </s:form>
 <table class="listTable">
 	<tr>
@@ -47,24 +53,23 @@
 	</tr>
 	<s:iterator status="rowstatus" value="secureEmailRecepientList"
 		var="secureEmailBean">
-		<s:url action="secureEmailRecipientDelete" var="deleteLink">
-			<s:param name="secureEmailBean.certificateAlias">
-				<s:text name="#secureEmailBean.certificateAlias" />
-			</s:param>
-			<s:param name="operationMode">STORE</s:param>
-		</s:url>
-		<tr
-			class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
-			<td align="left" width="25%" class="listTable"><s:text
-				name="#secureEmailBean.certificateAlias" /></td>
-			<td align="left" width="65%" class="listTable"><s:text
-				name="#secureEmailBean.certificateDN" /></td>
-			<td align="center" width="10%" class="listTable"><a
-				href="${deleteLink}">
-			<button class="tableRowDelete"><s:text
-				name="secureEmailBean.deleteButton" /></button>
-			</a></td>
-		</tr>
+		<s:form theme="simple" method="post" enctype="multipart/form-data">
+			<input type="hidden" name=secureEmailBean.certificateAlias
+				value='<s:text name="#secureEmailBean.certificateAlias" />' />
+			<input type="hidden" name=operationMode value='STORE' />
+			<tr
+				class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
+				<td align="left" width="25%" class="listTable"><s:text
+					name="#secureEmailBean.certificateAlias" /></td>
+				<td align="left" width="65%" class="listTable"><s:text
+					name="#secureEmailBean.certificateDN" /></td>
+				<td align="center" width="10%" class="listTable"><s:submit
+					key="secureEmailBean.deleteButton"
+					action="secureEmailRecipientDelete" cssClass="formButtonDelete" />
+				</td>
+			</tr>
+			<s:token />
+		</s:form>
 	</s:iterator>
 </table>
 </body>

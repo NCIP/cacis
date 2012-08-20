@@ -12,6 +12,28 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring-security.xml
+		</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<filter>
 		<filter-name>struts2</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
@@ -21,26 +43,21 @@
 		<filter-name>struts2</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<session-config>
+      <session-timeout>${login.session.timeout.minutes}</session-timeout> 
+    </session-config>
 
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Entire caCIS Security UI Web Application</web-resource-name>
-			<url-pattern>/*</url-pattern>
-			<http-method>GET</http-method>
-			<http-method>POST</http-method>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>administrator</role-name>
-		</auth-constraint>
+	<!--
+		<security-constraint> <web-resource-collection>
+		<web-resource-name>Entire caCIS Security UI Web
+		Application</web-resource-name> <url-pattern>/*</url-pattern>
+		<http-method>GET</http-method> <http-method>POST</http-method>
+		</web-resource-collection> <auth-constraint>
+		<role-name>administrator</role-name> </auth-constraint>
 
-		<user-data-constraint>
-			<!--  transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE  -->
-			<transport-guarantee>NONE</transport-guarantee>
-		</user-data-constraint>
-	</security-constraint>
-
-	<login-config>
-		<auth-method>BASIC</auth-method>
-	</login-config>
-
+		<user-data-constraint> <transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint> </security-constraint> <login-config>
+		<auth-method>BASIC</auth-method> </login-config>
+	-->
 </web-app>

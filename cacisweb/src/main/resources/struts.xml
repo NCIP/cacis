@@ -35,6 +35,28 @@
 		</global-exception-mappings>
 
 		<action name="login">
+			<result>/login.jsp</result>
+		</action>
+
+		<action name="loginFailed" class="gov.nih.nci.cacisweb.action.LoginAction"
+			method="loginFailed">
+			<interceptor-ref name="defaultStack" />
+			<result name="success">/login.jsp</result>
+		</action>
+
+		<action name="logout" class="gov.nih.nci.cacisweb.action.LoginAction"
+			method="logoutSuccessful">
+			<interceptor-ref name="defaultStack" />
+			<result name="success">/login.jsp</result>
+		</action>
+
+		<action name="sessionInvalid" class="gov.nih.nci.cacisweb.action.LoginAction"
+			method="sessionInvalid">
+			<interceptor-ref name="defaultStack" />
+			<result name="success">/login.jsp</result>
+		</action>
+
+		<action name="index">
 			<result>/index.jsp</result>
 		</action>
 
@@ -43,6 +65,7 @@
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="success" type="redirectAction">secureEmailRecipientList.action
 			</result>
@@ -68,6 +91,7 @@
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="success" type="redirectAction">secureEmailRecipientList.action
 			</result>
@@ -81,6 +105,7 @@
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="success" type="redirectAction">secureFTPRecipientList.action
 			</result>
@@ -100,12 +125,13 @@
 			<result name="input">/secureFTPRecipient.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
-		
+
 		<action name="secureFTPRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureFTPAction"
 			method="delete">
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="success" type="redirectAction">secureFTPRecipientList.action
 			</result>
@@ -113,12 +139,13 @@
 			</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
-		<action name="secureXDSNAVRecipientAdd" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAddAction"
-			method="execute">
+
+		<action name="secureXDSNAVRecipientAdd"
+			class="gov.nih.nci.cacisweb.action.SecureXDSNAVAddAction" method="execute">
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="success" type="redirectAction">secureXDSNAVRecipientList.action
 			</result>
@@ -138,12 +165,13 @@
 			<result name="input">/secureXDSNAVRecipient.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
 		</action>
-		
+
 		<action name="secureXDSNAVRecipientDelete" class="gov.nih.nci.cacisweb.action.SecureXDSNAVAction"
 			method="delete">
 			<interceptor-ref name="store">
 				<param name="operationMode">STORE</param>
 			</interceptor-ref>
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="success" type="redirectAction">secureXDSNAVRecipientList.action
 			</result>
@@ -151,7 +179,7 @@
 			</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
+
 		<action name="cdwUserPermission" class="gov.nih.nci.cacisweb.action.CdwUserSearchAction"
 			method="input">
 			<result name="input">/cdwUserPermission.jsp</result>
@@ -193,8 +221,8 @@
 		</action>
 
 		<action name="cdwPermissionDelete"
-			class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction" method="execute">		
-			<interceptor-ref name="tokenSession" />	
+			class="gov.nih.nci.cacisweb.action.CdwPermissionDeleteAction" method="execute">
+			<interceptor-ref name="tokenSession" />
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
