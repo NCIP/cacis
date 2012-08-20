@@ -112,6 +112,10 @@
 		
 		<securexdsnav.setup.notification.subject>XDS / NAV Recepient Setup</securexdsnav.setup.notification.subject>
 		<securexdsnav.setup.notification.message>XDS / NAV setup was successfully completed</securexdsnav.setup.notification.message>
+
+		<login.session.timeout.minutes>30</login.session.timeout.minutes>
+		<login.username>cacisadmin</login.username>
+		<login.password>changeme</login.password>
 		
 		<!-- ############################################################################ -->
 		<!-- SFTP PROPERTIES -->
