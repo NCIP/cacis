@@ -18,11 +18,6 @@ body {
 	margin-right: 0;
 }
 </STYLE>
-<script type="text/javascript">
-	function logout(){
-		alert('<s:text name="navtop.logoutMessage" />');	
-	}
-</script>
 
 </head>
 

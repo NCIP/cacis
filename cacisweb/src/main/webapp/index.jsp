@@ -7,24 +7,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <LINK type="text/css" rel="stylesheet" href="cacisweb.css">
 <title><s:text name="application.title" /></title>
-<SCRIPT language="JavaScript">
-	function popup(url) {
-		var newWindow = window
-				.open(
-						url,
-						'popup',
-						'height=200,width=600,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=no,status=yes');
-		newWindow.focus();
-	}
-</SCRIPT>
 </head>
 <frameset rows="50,*" cols="*" frameborder="NO" border="0">
 	<frameset rows="100%,0%" cols="*" frameborder="NO" border="0">
-		<frame src="navTop.jsp" name="topFrame" scrolling="no" noresize>
+		<frame src="navTop.jsp" name="topFrame" title="Top Navigation Frame" scrolling="no" noresize>
 	</frameset>
 	<frameset cols="153,*" frameborder="NO" border="0">
-		<frame src="navLeft.jsp" name="leftFrame" scrolling="auto">
-		<frame src="welcome.jsp" name="mainFrame" scrolling="auto">
+		<frame src="navLeft.jsp" name="leftFrame" title="Left Menu Frame" scrolling="auto">
+		<frame src="welcome.jsp" name="mainFrame" title="Main Content Frame" scrolling="auto">
 	</frameset>
 </frameset>
 <noframes>

@@ -126,7 +126,7 @@ function _writeList() {
       tableString += " onMouseOver='changeColor(\"" + thisCell+"\",\""+highlightColor[this.level]+"\")'";
       tableString += " onMouseOut='changeColor(\"" + thisCell+"\",\""+normalColor[this.level]+"\")'";
       tableString += ">";
-      imageString = "  <IMG BORDER=0 SRC=\""+BaseImg+"true.gif\" NAME=\"_img"+this.lists[i].id+"\" ID=\"_img"+this.lists[i].id+"\">";
+      imageString = "  <IMG BORDER=0 SRC=\""+BaseImg+"true.gif\" title=\"Expand\" NAME=\"_img"+this.lists[i].id+"\" ID=\"_img"+this.lists[i].id+"\">";
 
    // Create two image layers because IE 5.x goes back to server when image is replaced using source.  
       if (!document.layers) {
@@ -135,7 +135,7 @@ function _writeList() {
          imageString = imageString2 +imageString+ "</DIV>";
          imageString += "<DIV ID="+this.layerId[i]+"false ";
          imageString += " STYLE='position:relative;top:-0;left:1;visibility:visible;height:12;width:12'>";
-         imageString += " <IMG BORDER=0 SRC=\""+BaseImg+"false.gif\" NAME=\"_img"+this.lists[i].id+"\" ID=\"_img"+this.lists[i].id+"\">";
+         imageString += " <IMG BORDER=0 SRC=\""+BaseImg+"false.gif\" title=\"Close\" NAME=\"_img"+this.lists[i].id+"\" ID=\"_img"+this.lists[i].id+"\">";
 
          imageString += "</DIV>";
       }
