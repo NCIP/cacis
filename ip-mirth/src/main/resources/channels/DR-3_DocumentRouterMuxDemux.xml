@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1333122199953</time>
+    <time>1347371116933</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>1</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -4513,6 +4513,8 @@ for each (seg in exchDocs) {
 			processRoute(rec, &apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
 		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
 			processRoute(rec, &apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
+		} else if (rec[&apos;llpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(rec, &apos;DR-4d_LLPTransmission&apos;,  &apos;llpAddress&apos;);
 		} else {
 			logger.error(&apos;Recipient type unknown for &apos; + rec.toString());
 		}
@@ -4564,6 +4566,8 @@ for each (seg in exchDocs) {
 			processRoute(rec, &apos;DR-4b_XDSNAVTransmission&apos;, &apos;navEmailAddress&apos;);
 		} else if (rec[&apos;ftpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
 			processRoute(rec, &apos;DR-4c_SecureFileTransfer&apos;,  &apos;ftpAddress&apos;);
+		} else if (rec[&apos;llpAddress&apos;][&apos;@url&apos;].toString().length &gt; 0) {
+			processRoute(rec, &apos;DR-4d_LLPTransmission&apos;,  &apos;llpAddress&apos;);
 		} else {
 			logger.error(&apos;Recipient type unknown for &apos; + rec.toString());
 		}

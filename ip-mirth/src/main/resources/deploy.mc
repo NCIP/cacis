@@ -4,6 +4,7 @@ channel undeploy *
 channel remove ftpAddressChannel
 channel remove DocumentRouter
 channel remove AcceptCanonical_Channel
+channel remove DR-4d_LLPTransmission
 channel remove DR-4c_SecureFileTransfer
 channel remove DR-4b_XDSNAVTransmission
 channel remove DR-4a_SecureEmailTransmission
@@ -22,6 +23,7 @@ importcodetemplates "${build.outputDirectory}/templates/mc-code-templates.xml" f
 import "${build.outputDirectory}/channels/ftpAddressChannel.xml" force
 import "${build.outputDirectory}/channels/DocumentRouter.xml"  force
 import "${build.outputDirectory}/channels/AcceptCanonical_Channel.xml" force
+import "${build.outputDirectory}/channels/DR-4d_LLPTransmission.xml"  force
 import "${build.outputDirectory}/channels/DR-4c_SecureFileTransfer.xml"  force
 import "${build.outputDirectory}/channels/DR-4b_XDSNAVTransmission.xml"  force
 import "${build.outputDirectory}/channels/DR-4a_SecureEmailTransmission.xml"  force
