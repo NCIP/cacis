@@ -19,7 +19,8 @@
         <cacis-pco.transformer.trim2ccd.xsl>TRIM_to_CCD.xslt</cacis-pco.transformer.trim2ccd.xsl>
         <cacis-pco.transformer.xsl.baseClassPath>${userhome.dir}/.cacis/transformer/xsl/</cacis-pco.transformer.xsl.baseClassPath>
         <cacis-pco.transformer.xml2rdf.xsl>xml2rdf3.xsl</cacis-pco.transformer.xml2rdf.xsl>
-        <cacis-pco.transformer.hl7v2.xsl>ClinicalStagingNote_CanonicalToHL7v2.xslt</cacis-pco.transformer.hl7v2.xsl>
+        <!--  <cacis-pco.transformer.hl7v2.xsl>ClinicalStagingNote_CanonicalToHL7v2.xslt</cacis-pco.transformer.hl7v2.xsl> -->
+        <cacis-pco.transformer.hl7v2.xsl>CDA_HTML_to_HL7v2_FT.xslt</cacis-pco.transformer.hl7v2.xsl>
         <cacis-pco.transformer.rimits.xsl>CanonicalToRIMITS.xslt</cacis-pco.transformer.rimits.xsl>
         <cacis-pco.transformer.generate-narrative.xsl>generate-narrative.xslt</cacis-pco.transformer.generate-narrative.xsl>
     </properties>

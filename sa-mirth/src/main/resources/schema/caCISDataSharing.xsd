@@ -38,6 +38,12 @@
                                             </xs:documentation>
                     </xs:annotation>
                   </xs:element>
+                  <xs:element name="llpAddress" type="EmailAddress">
+                    <xs:annotation>
+                      <xs:documentation>Indicates the delivery is to be performed using LLP
+                                            </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
                   <xs:element name="ftpAddress">
                     <xs:annotation>
                       <xs:documentation>Indicates the delivery is to be performed using Secure
