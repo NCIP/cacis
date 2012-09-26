@@ -6,10 +6,10 @@ If routing instructions are not part of the message, then default routing instru
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1334954739765</time>
-    <timezone>US/Eastern</timezone>
+    <time>1348674757693</time>
+    <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>9</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -65,7 +65,7 @@ if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&a
 logger.info(msg.routingInstructions.length());
 
 if(msg.routingInstructions.length() == 0.0) {
-	var defaultRoutingInstructionsFile = &apos;${routing.configfile}&apos;;
+	var defaultRoutingInstructionsFile = &apos;C:\\Users\\ajay/.cacis/cacis-xds/DefaultRoutingInstructions.xml&apos;;
 	var routingInstructionsContent = FileUtil.read(defaultRoutingInstructionsFile);
 	var routInsSeg = new XML(routingInstructionsContent);
 	msg.prependChild(routInsSeg);
@@ -4581,20 +4581,20 @@ for each (seg in exchDocs) {
 	if (exFrmt == &apos;CCD&apos;) {
 		chNm = &apos;DR-2a_CDACCDTransformation&apos;;
 	}
-	if ((exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) &amp;&amp; (noteTypeDescription == &apos;Clinical Staging&apos;)) {
+	if (exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) {
 		chNm = &apos;DR-2b_HL7v2Transformation&apos;;
 	}
 	if (exFrmt == &apos;RIMITS&apos;) {
 		//TODO: Change channel names  of XSLT_Channel
 		chNm = &apos;DR-2c_RIMITSTransformation&apos;;
 	}
-	if ((exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) &amp;&amp; (noteTypeDescription != &apos;Clinical Staging&apos;)) {
+	/*if ((exFrmt == &apos;HL7_V2_CLINICAL_NOTE&apos;) &amp;&amp; (noteTypeDescription != &apos;Clinical Staging&apos;)) {
 		logger.error(&apos;##### CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes #####&apos;);
 		//responseMap.put(&apos;error&apos;, &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes\&apos;&apos;);		
 		var resp = &apos;CaCISError: HL7v2 exchange format is currently supported only for Clinical Staging Notes\&apos;&apos;;
 		responseMsg = responseMsg + resp + &apos;!&apos;;
 		continue;
-	}
+	}*/
 
 	var msgToRoute = cacisMsgXML.copy();
 	msgToRoute[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;]=seg.copy();
