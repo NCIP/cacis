@@ -23,6 +23,7 @@
 
 		<global-results>
 			<result name="securityerror">/securityerror.jsp</result>
+			<result name="invalid.token">/invalidToken.jsp</result>
 			<result name="error">/error.jsp</result>
 		</global-results>
 
@@ -49,7 +50,7 @@
 			<interceptor-ref name="defaultStack" />
 			<result name="success">/login.jsp</result>
 		</action>
-
+		
 		<action name="sessionInvalid" class="gov.nih.nci.cacisweb.action.LoginAction"
 			method="sessionInvalid">
 			<interceptor-ref name="defaultStack" />
@@ -226,7 +227,7 @@
 			<interceptor-ref name="defaultStack" />
 			<result name="input">/cdwUserPermission.jsp</result>
 			<result name="error">/messageAndError.jsp</result>
-		</action>
+		</action>		
 	</package>
 
 </struts>
