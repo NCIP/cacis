@@ -162,6 +162,9 @@ public class SendEncryptedMailTest {
     @Value("${sec.email.sender.pass}")
     private String secEmailPass;
     
+    @Value("${sec.email.temp.zip.location}")
+    private String secEmailTempZipLocation;
+    
     @Autowired
     private SendEncryptedMail sender;
 
@@ -205,7 +208,7 @@ public class SendEncryptedMailTest {
     @Test(expected = KeyStoreException.class)
     public void supplyInvalidTruststore() throws MessagingException, KeyStoreException {
         final SendEncryptedMail ssem = new SendEncryptedMail(new Properties(), secEmailFrom, "invalid truststore",
-                secEmailTrustStorePassword);
+                secEmailTrustStorePassword, secEmailTempZipLocation);
         // shouldnt reach this line
         ssem.encryptMail(null, "");
     }
@@ -219,7 +222,7 @@ public class SendEncryptedMailTest {
      */
     @Test
     public void supplyInvalidCert() throws MessagingException, KeyStoreException {
-        final SendEncryptedMail ssem = new SendEncryptedMail(new Properties(), secEmailFrom);
+        final SendEncryptedMail ssem = new SendEncryptedMail(new Properties(), secEmailFrom, secEmailTempZipLocation);
         assertNull(ssem.encryptMail(null, (Certificate) null));
     }
     
@@ -229,7 +232,7 @@ public class SendEncryptedMailTest {
      */
     @Test
     public void sendToGmail() throws MessagingException {        
-        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content");
+        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content", "metadata");
         final MimeMessage encMsg = sender.encryptMail(msg, secEmailTo);
         sender.sendMail(encMsg);
     }
@@ -241,7 +244,7 @@ public class SendEncryptedMailTest {
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidRecipient() throws MessagingException {
         String invalidEmailAddr = secEmailTo + ".invalid";
-        final MimeMessage msg = sender.createMessage(invalidEmailAddr, "Clinical Note", "subj", "inst", "content");
+        final MimeMessage msg = sender.createMessage(invalidEmailAddr, "Clinical Note", "subj", "inst", "content", "metadata");
         final MimeMessage encMsg = sender.encryptMail(msg, invalidEmailAddr);
     }
 
@@ -261,7 +264,7 @@ public class SendEncryptedMailTest {
             smtpprops.put("mail.smtp.starttls.enable", "true");
 
             final SendEncryptedMail ssem = new SendEncryptedMail(smtpprops, secEmailFrom, LOCALHOST, POP3_PORT, "POP3",
-                    secEmailTrustStoreLocation, secEmailTrustStorePassword);
+                    secEmailTrustStoreLocation, secEmailTrustStorePassword, secEmailTrustStoreLocation);
 
             // use the to email address as the truststore keyalias is the email address
             final MimeMessage encMsg = ssem.encryptMail(msg, secEmailTo);

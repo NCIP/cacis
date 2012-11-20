@@ -159,6 +159,9 @@ public class NAVTestConfig {
 
     @Value("${sec.email.sender.pass}")
     private String secEmailPass;
+    
+    @Value("${sec.email.temp.zip.location}")
+    private String secEmailTempZipLocation;
 
     /**
      * GreenMail Bean.
@@ -253,7 +256,7 @@ public class NAVTestConfig {
         
         final SendEncryptedMail sender = new SendEncryptedMail(props, secEmailFrom, 
                 secEmailHost, secEmailPort, secEmailProtocol, secEmailTrustStoreLocation,
-                secEmailTrustStorePassword);
+                secEmailTrustStorePassword, secEmailTempZipLocation);
         sender.setLoginDetails(secEmailUser, secEmailPass);
 
         return sender;

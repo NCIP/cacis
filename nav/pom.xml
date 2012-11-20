@@ -41,6 +41,7 @@
 		<sec.email.sender.protocol>smtp</sec.email.sender.protocol>
 		<sec.email.sender.user>cacisnavtestuser</sec.email.sender.user>
 		<sec.email.sender.pass>c2c1sn2v</sec.email.sender.pass>
+		<sec.email.temp.zip.location>${sec.email.folder}</sec.email.temp.zip.location>
 
 
     </properties>
@@ -151,6 +152,16 @@
 					        			<include>securemail_ts.p12</include>
 					        			<include>securemailpkcs12.cert</include>
 										<include>cacis-nav.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>                       
+                            <outputDirectory>${sec.email.temp.zip.location}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${build.outputDirectory}</directory>
+                                    <includes>                                       
+										<include>INDEX.HTM</include>
+										<include>README.TXT</include>
                                     </includes>
                                 </resource>
                             </resources>

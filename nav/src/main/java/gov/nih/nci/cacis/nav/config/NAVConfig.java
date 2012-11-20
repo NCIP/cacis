@@ -166,6 +166,9 @@ public class NAVConfig {
 
     @Value("${sec.email.sender.pass}")
     private String secEmailPass;
+    
+    @Value("${sec.email.temp.zip.location}")
+    private String secEmailTempZipLocation;
 
 
     /**
@@ -251,7 +254,7 @@ public class NAVConfig {
         
         final SendEncryptedMail sender = new SendEncryptedMail(props, secEmailFrom, 
                 secEmailHost, secEmailPort, secEmailProtocol, secEmailTrustStoreLocation,
-                secEmailTrustStorePassword);
+                secEmailTrustStorePassword, secEmailTempZipLocation);
         sender.setLoginDetails(secEmailUser, secEmailPass);
 
         return sender;

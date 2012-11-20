@@ -128,6 +128,7 @@ public class TestMail {
     private static final String EMAIL = "cacisnavtestuser@gmail.com";
     private static final String LOGIN = "cacisnavtestuser";
     private static final String PASSWORD = "secret";
+    private static final String TEMP_ZIP_LOCATION = "./";
 
     private static final Logger LOG = Logger.getLogger(TestMail.class);
 
@@ -258,7 +259,7 @@ public class TestMail {
                     keystore, STOREPASS, KEYALIAS);
 
             final SendEncryptedMail sem = new SendEncryptedMail(new Properties(), fromemail, LOCALHOST, POP3_PORT,
-                    "POP3", trustStore, STOREPASS);
+                    "POP3", trustStore, STOREPASS, TEMP_ZIP_LOCATION);
             
             final Properties props = new Properties();
             props.setProperty(MAIL_POP3_PORT_KEY, String.valueOf(POP3_PORT));

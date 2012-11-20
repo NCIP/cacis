@@ -133,8 +133,9 @@ public class SendEncryptedMail extends AbstractSendMail {
     @SuppressWarnings( { "PMD.ExcessiveParameterList" })
     // CHECKSTYLE:OFF
     public SendEncryptedMail(Properties mailProperties, String from, String host,
-            int port, String protocol, String truststore, String storepass) throws MessagingException, KeyStoreException {
+            int port, String protocol, String truststore, String storepass, String secEmailTempZipLocation) throws MessagingException, KeyStoreException {
         super(mailProperties, from, host, port, protocol);
+        super.secEmailTempZipLocation = secEmailTempZipLocation;
         this.truststore = truststore;
         this.storepass = storepass;
 
@@ -152,8 +153,8 @@ public class SendEncryptedMail extends AbstractSendMail {
      * @throws KeyStoreException - exception thrown, if any
      */
     public SendEncryptedMail(Properties mailProperties,String from, 
-            String truststore, String storepass) throws MessagingException, KeyStoreException {
-        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP", truststore, storepass);
+            String truststore, String storepass, String secEmailTempZipLocation) throws MessagingException, KeyStoreException {
+        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP", truststore, storepass, secEmailTempZipLocation);
     }
     
     /**
@@ -168,8 +169,9 @@ public class SendEncryptedMail extends AbstractSendMail {
      * @throws KeyStoreException - exception thrown, if any
      */
     public SendEncryptedMail(Properties mailProperties, String from, String host,
-            int port, String protocol) throws MessagingException, KeyStoreException {
+            int port, String protocol, String secEmailTempZipLocation) throws MessagingException, KeyStoreException {
         super(mailProperties, from, host, port, protocol);
+        super.secEmailTempZipLocation = secEmailTempZipLocation;
         init();
     }
 
@@ -181,8 +183,8 @@ public class SendEncryptedMail extends AbstractSendMail {
      * @throws MessagingException - exception thrown, if any
      * @throws KeyStoreException - exception thrown, if any
      */
-    public SendEncryptedMail(Properties mailProperties,String from) throws MessagingException, KeyStoreException {
-        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP");
+    public SendEncryptedMail(Properties mailProperties,String from, String secEmailTempZipLocation) throws MessagingException, KeyStoreException {
+        this(mailProperties, from, "localhost", SMTP_PORT, "SMTP", secEmailTempZipLocation);
     }
 
     private void init() throws MessagingException, KeyStoreException {
