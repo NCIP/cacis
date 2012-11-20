@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326738679528</time>
+    <time>1353098739185</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>18</revision>
+  <revision>4</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -58,7 +58,12 @@ try{
 	}
 	channelMap.put(&apos;clinicalDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;clinicalDoc&apos;)));
 
-	var mimeMsg = encMailSender.createMessage( $(&apos;emailAddress&apos;), cmDocType, subject, instructions, $(&apos;clinicalDoc&apos;));
+	var ipMirthCtx = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-ip-mirth.xml&apos;);
+	var xdsMetadataSupplier = ipMirthCtx.getBean(&quot;xdsMetadataSupplier&quot;);
+	var metadataXML = xdsMetadataSupplier.createDocEntry(messageObject.getEncodedData());
+	logger.info(&apos;Metadata XML: &apos;+metadataXML);
+
+	var mimeMsg = encMailSender.createMessage( $(&apos;emailAddress&apos;), cmDocType, subject, instructions, $(&apos;clinicalDoc&apos;), metadataXML);
 
 	var sgnMsg = sgndMailSender.signMail(mimeMsg);
 	if( sgnMsg == null ) {
