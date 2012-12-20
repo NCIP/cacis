@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1326738256800</time>
+    <time>1355480821826</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>7</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -57,10 +57,13 @@ try{
 	address = Packages.org.apache.commons.lang.StringUtils.replace(address, &apos;ftp://&apos;, &apos;&apos;);
 	logger.info(&apos;Sending to FTP: &apos; + address);
 	default xml namespace = &apos;urn:hl7-org:v3&apos;;
-	var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+	var cdaDoc;
 
 	if (exchFormat == &apos;CCD&apos;) {
+		cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
 		cdaDoc = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + cdaDoc;
+	} else {
+		cdaDoc = msg[&apos;TransformedDocument&apos;][0];
 	}
 	cdaDoc = Packages.com.mirth.connect.util.XmlUtil.prettyPrint(cdaDoc);
 
@@ -88,10 +91,13 @@ try{
 	address = Packages.org.apache.commons.lang.StringUtils.replace(address, &apos;ftp://&apos;, &apos;&apos;);
 	logger.info(&apos;Sending to FTP: &apos; + address);
 	default xml namespace = &apos;urn:hl7-org:v3&apos;;
-	var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
+	var cdaDoc;
 
 	if (exchFormat == &apos;CCD&apos;) {
+		cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
 		cdaDoc = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + cdaDoc;
+	} else {
+		cdaDoc = msg[&apos;TransformedDocument&apos;][0];
 	}
 	cdaDoc = Packages.com.mirth.connect.util.XmlUtil.prettyPrint(cdaDoc);
 

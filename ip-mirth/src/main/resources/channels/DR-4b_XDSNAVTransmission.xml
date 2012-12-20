@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1340012904581</time>
-    <timezone>US/Eastern</timezone>
+    <time>1355481865671</time>
+    <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -107,12 +107,12 @@ hashMap.put(&apos;docoid&apos;,xdsMetadataSupplier.createDocOID());
 hashMap.put(&apos;docsourceoid&apos;,xdsMetadataSupplier.createDocSourceOID());
 
 if ($(&apos;exFrmt&apos;) == &apos;CCD&apos;) {
-	channelMap.put(&apos;cdaDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;cdaDoc&apos;));
+	channelMap.put(&apos;transformedDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;cdaDoc&apos;));
 }
 
-channelMap.put(&apos;cdaDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;cdaDoc&apos;)));
+channelMap.put(&apos;transformedDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;transformedDoc&apos;)));
 try{
-hashMap.put(&apos;content&apos;,$(&apos;cdaDoc&apos;));
+hashMap.put(&apos;content&apos;,$(&apos;transformedDoc&apos;));
 
 var docAccMngr = xdsCtx.getBean(&quot;documentAccessManager&quot;);
 
@@ -146,7 +146,7 @@ try{
 	docIds.add(docId);
 
 	 var cache =  navSender.getSignatureBuilder().getDocumentResolver().getDocCache();
-     cache.putDocument(docId, $(&apos;cdaDoc&apos;));
+     cache.putDocument(docId, $(&apos;transformedDoc&apos;));
 
 	logger.info(&apos;Will send NAV email to &apos; + $(&apos;navEmail&apos;));
 	navSender.send($(&apos;navEmail&apos;), docIds);
@@ -210,6 +210,13 @@ if(cdaDoc != null) {
   	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
 }
 
+var transformedDoc = msg[&apos;TransformedDocument&apos;][0];
+
+if(transformedDoc != null) {
+	logger.info(&apos;Loading transformed CDA with namespace: urn:hl7-org:v3&apos;);
+  	channelMap.put(&apos;transformedDoc&apos;,transformedDoc.toString());
+}
+
 }catch(err) {
 	logger.error(&apos;XDS Load Failed. Could not extract CDA from message.&apos; + err.message);
 	handleErrorStr(&apos;XDS Load Failed. Could not extract CDA from message. &apos; + err.message);
@@ -228,6 +235,13 @@ var cdaDoc = msg[&apos;ClinicalDocument&apos;][0];
 if(cdaDoc != null) {
 	logger.info(&apos;Loading CDA with namespace: urn:hl7-org:v3&apos;);
   	channelMap.put(&apos;cdaDoc&apos;,cdaDoc.toString());
+}
+
+var transformedDoc = msg[&apos;TransformedDocument&apos;][0];
+
+if(transformedDoc != null) {
+	logger.info(&apos;Loading transformed CDA with namespace: urn:hl7-org:v3&apos;);
+  	channelMap.put(&apos;transformedDoc&apos;,transformedDoc.toString());
 }
 
 }catch(err) {

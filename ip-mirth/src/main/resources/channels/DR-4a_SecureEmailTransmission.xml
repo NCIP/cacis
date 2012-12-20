@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1353098739185</time>
+    <time>1355992967534</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>4</revision>
+  <revision>1</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -54,16 +54,17 @@ try{
 						&apos;PatientId : &apos; + $(&apos;patientId&apos;) + &apos;\n&apos;;
 	
 	if ($(&apos;docFormat&apos;) == &apos;CCD&apos;) {
-		channelMap.put(&apos;clinicalDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;clinicalDoc&apos;));
+		channelMap.put(&apos;transformedDoc&apos;, &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;http://ncisvn.nci.nih.gov/svn/cacis/CACIS/trunk/technical_artifacts/xslt/CDA.xsl&quot;?&gt;\n&apos; + $(&apos;clinicalDoc&apos;));
 	}
-	channelMap.put(&apos;clinicalDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;clinicalDoc&apos;)));
+	channelMap.put(&apos;transformedDoc&apos;, Packages.com.mirth.connect.util.XmlUtil.prettyPrint($(&apos;transformedDoc&apos;)));
 
 	var ipMirthCtx = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&apos;classpath*:applicationContext-ip-mirth.xml&apos;);
 	var xdsMetadataSupplier = ipMirthCtx.getBean(&quot;xdsMetadataSupplier&quot;);
 	var metadataXML = xdsMetadataSupplier.createDocEntry(messageObject.getEncodedData());
 	logger.info(&apos;Metadata XML: &apos;+metadataXML);
+	logger.info(&apos;Title: &apos;+$(&apos;title&apos;));
 
-	var mimeMsg = encMailSender.createMessage( $(&apos;emailAddress&apos;), cmDocType, subject, instructions, $(&apos;clinicalDoc&apos;), metadataXML);
+	var mimeMsg = encMailSender.createMessage( $(&apos;emailAddress&apos;), cmDocType, subject, instructions, $(&apos;transformedDoc&apos;), metadataXML, $(&apos;title&apos;), $(&apos;indexBodyToken&apos;), $(&apos;readmeToken&apos;));
 
 	var sgnMsg = sgndMailSender.signMail(mimeMsg);
 	if( sgnMsg == null ) {
@@ -113,12 +114,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>RegularExpressions</string>
-                <list/>
-              </entry>
-              <entry>
                 <string>Mapping</string>
                 <string>msg[&apos;routingInstructions&apos;][&apos;exchangeDocument&apos;][&apos;@exchangeFormat&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -202,12 +203,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>RegularExpressions</string>
-                <list/>
-              </entry>
-              <entry>
                 <string>Mapping</string>
                 <string>msg[&apos;clinicalMetaData&apos;][&apos;@studyIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@studyIdExtension&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -230,12 +231,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>RegularExpressions</string>
-                <list/>
-              </entry>
-              <entry>
                 <string>Mapping</string>
                 <string>msg[&apos;clinicalMetaData&apos;][&apos;@patientIdRoot&apos;].toString()+ &apos;:&apos;  + msg[&apos;clinicalMetaData&apos;][&apos;@patientIdExtension&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -258,12 +259,12 @@ return;</property>
                 <string></string>
               </entry>
               <entry>
-                <string>RegularExpressions</string>
-                <list/>
-              </entry>
-              <entry>
                 <string>Mapping</string>
                 <string>msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString()</string>
+              </entry>
+              <entry>
+                <string>RegularExpressions</string>
+                <list/>
               </entry>
               <entry>
                 <string>isGlobal</string>
@@ -278,7 +279,10 @@ return;</property>
 
 default xml namespace=&apos;urn:hl7-org:v3&apos;;
 var clinicalDoc = msg[&apos;ClinicalDocument&apos;].toString();
-channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</script>
+logger.info(&apos;Clinical Document: &apos;+clinicalDoc);
+channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);
+var clinicalDoc = msg[&apos;TransformedDocument&apos;].toString();
+channelMap.put(&apos;transformedDoc&apos;,clinicalDoc);</script>
             <type>JavaScript</type>
             <data class="map">
               <entry>
@@ -287,7 +291,88 @@ channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</script>
 
 default xml namespace=&apos;urn:hl7-org:v3&apos;;
 var clinicalDoc = msg[&apos;ClinicalDocument&apos;].toString();
-channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);</string>
+logger.info(&apos;Clinical Document: &apos;+clinicalDoc);
+channelMap.put(&apos;clinicalDoc&apos;,clinicalDoc);
+var clinicalDoc = msg[&apos;TransformedDocument&apos;].toString();
+channelMap.put(&apos;transformedDoc&apos;,clinicalDoc);</string>
+              </entry>
+            </data>
+          </step>
+          <step>
+            <sequenceNumber>8</sequenceNumber>
+            <name>nhinVariables</name>
+            <script>//default xml namespace=&quot;http://cacis.nci.nih.gov&quot;;
+
+var clinicalDocXML = new XML($(&apos;clinicalDoc&apos;));
+var title = clinicalDocXML[&apos;title&apos;].toString();
+channelMap.put(&apos;title&apos;,title);
+
+var indexBodyToken = &apos;&apos;;
+for each (role in msg..patientRole) {
+	var givenNameString = &apos;&apos;;
+	for each (givenName in role..given) {
+		givenNameString = givenName;		
+		break;
+	}
+	indexBodyToken = indexBodyToken + &apos;&lt;h1&gt;&apos; + givenNameString + &apos; &apos;  + role[&apos;patient&apos;][&apos;name&apos;][&apos;family&apos;] + &apos;&lt;/h1&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;MRN: &apos; + role[&apos;id&apos;][&apos;@root&apos;] + &apos;&lt;/p&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;DOB: &apos; + role[&apos;patient&apos;][&apos;birthTime&apos;] + &apos;&lt;/p&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Sex: &apos; + role[&apos;patient&apos;][&apos;raceCode&apos;][&apos;@displayName&apos;] + &apos;&lt;/p&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Address: &apos; + role[&apos;addr&apos;] + &apos;&lt;/p&gt;&apos;;
+}
+indexBodyToken = indexBodyToken + &apos;&lt;h2&gt;Source&lt;/h2&gt;&apos;;
+indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Name: &apos; + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;name&apos;] + &apos;&lt;/p&gt;&apos;;
+indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Address: &apos; + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;addr&apos;] + &apos;&lt;/p&gt;&apos;;
+channelMap.put(&apos;indexBodyToken&apos;,indexBodyToken);
+
+var readmeToken = &apos;&apos;;
+readmeToken = readmeToken + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;name&apos;] + &apos;\n&apos;;
+readmeToken = readmeToken + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;addr&apos;];
+channelMap.put(&apos;readmeToken&apos;,readmeToken);
+
+logger.info(&apos;Index Body Token: &apos; + indexBodyToken);
+logger.info(&apos;Readme Token: &apos; + readmeToken);
+
+//var roleName = &apos;&apos;;
+//for each (</script>
+            <type>JavaScript</type>
+            <data class="map">
+              <entry>
+                <string>Script</string>
+                <string>//default xml namespace=&quot;http://cacis.nci.nih.gov&quot;;
+
+var clinicalDocXML = new XML($(&apos;clinicalDoc&apos;));
+var title = clinicalDocXML[&apos;title&apos;].toString();
+channelMap.put(&apos;title&apos;,title);
+
+var indexBodyToken = &apos;&apos;;
+for each (role in msg..patientRole) {
+	var givenNameString = &apos;&apos;;
+	for each (givenName in role..given) {
+		givenNameString = givenName;		
+		break;
+	}
+	indexBodyToken = indexBodyToken + &apos;&lt;h1&gt;&apos; + givenNameString + &apos; &apos;  + role[&apos;patient&apos;][&apos;name&apos;][&apos;family&apos;] + &apos;&lt;/h1&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;MRN: &apos; + role[&apos;id&apos;][&apos;@root&apos;] + &apos;&lt;/p&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;DOB: &apos; + role[&apos;patient&apos;][&apos;birthTime&apos;] + &apos;&lt;/p&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Sex: &apos; + role[&apos;patient&apos;][&apos;raceCode&apos;][&apos;@displayName&apos;] + &apos;&lt;/p&gt;&apos;;
+	indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Address: &apos; + role[&apos;addr&apos;] + &apos;&lt;/p&gt;&apos;;
+}
+indexBodyToken = indexBodyToken + &apos;&lt;h2&gt;Source&lt;/h2&gt;&apos;;
+indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Name: &apos; + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;name&apos;] + &apos;&lt;/p&gt;&apos;;
+indexBodyToken = indexBodyToken + &apos;&lt;p&gt;Address: &apos; + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;addr&apos;] + &apos;&lt;/p&gt;&apos;;
+channelMap.put(&apos;indexBodyToken&apos;,indexBodyToken);
+
+var readmeToken = &apos;&apos;;
+readmeToken = readmeToken + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;name&apos;] + &apos;\n&apos;;
+readmeToken = readmeToken + clinicalDocXML[&apos;custodian&apos;][&apos;assignedCustodian&apos;][&apos;representedCustodianOrganization&apos;][&apos;addr&apos;];
+channelMap.put(&apos;readmeToken&apos;,readmeToken);
+
+logger.info(&apos;Index Body Token: &apos; + indexBodyToken);
+logger.info(&apos;Readme Token: &apos; + readmeToken);
+
+//var roleName = &apos;&apos;;
+//for each (</string>
               </entry>
             </data>
           </step>

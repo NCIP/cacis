@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1347388541024</time>
+    <time>1355481162830</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>3</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -26,9 +26,9 @@ var cacisMsgXML = new XML(msg);
 
 default xml namespace=&apos;urn:hl7-org:v3&apos;;
 
-var clinicalDocument = cacisMsgXML[&apos;ClinicalDocument&apos;].toString();
+var clinicalDocument = cacisMsgXML[&apos;TransformedDocument&apos;].toString();
 
-channelMap.put(&apos;hl7v2MDMDocument&apos;, clinicalDocument)</script>
+channelMap.put(&apos;hl7v2MDMDocument&apos;, clinicalDocument);</script>
           <type>JavaScript</type>
           <data class="map">
             <entry>
@@ -39,9 +39,9 @@ var cacisMsgXML = new XML(msg);
 
 default xml namespace=&apos;urn:hl7-org:v3&apos;;
 
-var clinicalDocument = cacisMsgXML[&apos;ClinicalDocument&apos;].toString();
+var clinicalDocument = cacisMsgXML[&apos;TransformedDocument&apos;].toString();
 
-channelMap.put(&apos;hl7v2MDMDocument&apos;, clinicalDocument)</string>
+channelMap.put(&apos;hl7v2MDMDocument&apos;, clinicalDocument);</string>
             </entry>
           </data>
         </step>
