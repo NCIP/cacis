@@ -232,7 +232,7 @@ public class SendEncryptedMailTest {
      */
     @Test
     public void sendToGmail() throws MessagingException {        
-        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content", "metadata");
+        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content", "metadata", "title", "indexBodyToken", "readmeToken");
         final MimeMessage encMsg = sender.encryptMail(msg, secEmailTo);
         sender.sendMail(encMsg);
     }
@@ -244,7 +244,7 @@ public class SendEncryptedMailTest {
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidRecipient() throws MessagingException {
         String invalidEmailAddr = secEmailTo + ".invalid";
-        final MimeMessage msg = sender.createMessage(invalidEmailAddr, "Clinical Note", "subj", "inst", "content", "metadata");
+        final MimeMessage msg = sender.createMessage(invalidEmailAddr, "Clinical Note", "subj", "inst", "content", "metadata", "title", "indexBodyToken", "readmeToken");
         final MimeMessage encMsg = sender.encryptMail(msg, invalidEmailAddr);
     }
 

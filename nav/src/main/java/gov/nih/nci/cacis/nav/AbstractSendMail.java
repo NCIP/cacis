@@ -249,7 +249,7 @@ public class AbstractSendMail {
      * @return MimeMessage instance
      */
     public MimeMessage createMessage(String to, String docType, String subject, String instructions, String content,
-            String metadataXMl) {
+            String metadataXMl, String title, String indexBodyToken, String readmeToken) {
         final MimeMessage msg = mailSender.createMimeMessage();
         UUID uniqueID = UUID.randomUUID();
         tempZipFolder = new File(secEmailTempZipLocation + "/" + uniqueID);
@@ -291,10 +291,20 @@ public class AbstractSendMail {
                 throw new ApplicationRuntimeException("Error creating temp folder for NHIN zip file: "
                         + tempZipFolder.getAbsolutePath());
             }
+            
+            String indexFileString = FileUtils.readFileToString(new File(secEmailTempZipLocation + "/INDEX.HTM"));
+            String readmeFileString = FileUtils.readFileToString(new File(secEmailTempZipLocation + "/README.TXT"));
+            
+            indexFileString = StringUtils.replace(indexFileString, "@document_title@", title);
+            indexFileString = StringUtils.replace(indexFileString, "@indexBodyToken@", indexBodyToken);
+            FileUtils.writeStringToFile(new File(tempZipFolder+"/INDEX.HTM"), indexFileString);
+            
+            readmeFileString = StringUtils.replace(readmeFileString, "@readmeToken@", readmeToken);
+            FileUtils.writeStringToFile(new File(tempZipFolder+"/README.TXT"), readmeFileString);
 
             // move template files & replace tokens
-            FileUtils.copyFileToDirectory(new File(secEmailTempZipLocation + "/INDEX.HTM"), tempZipFolder, false);
-            FileUtils.copyFileToDirectory(new File(secEmailTempZipLocation + "/README.TXT"), tempZipFolder, false);
+//            FileUtils.copyFileToDirectory(new File(secEmailTempZipLocation + "/INDEX.HTM"), tempZipFolder, false);
+//            FileUtils.copyFileToDirectory(new File(secEmailTempZipLocation + "/README.TXT"), tempZipFolder, false);
 
             // create sub-directories
             String nhinSubDirectoryPath = tempZipFolder + "/IHE_XDM/SUBSET01";

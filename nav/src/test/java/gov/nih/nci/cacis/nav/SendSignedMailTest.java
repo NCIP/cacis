@@ -215,7 +215,7 @@ public class SendSignedMailTest {
      */
     @Test
     public void sendSignedAndEncryptedMailToGmail() throws MessagingException {        
-        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content", "metadata");
+        final MimeMessage msg = sender.createMessage(secEmailTo, "Clinical Note", "subj", "inst", "content", "metadata", "title", "indexBodyToken", "readmeToken");
         final MimeMessage signedMsg = sender.signMail(msg);
         final MimeMessage encMsg = encSender.encryptMail(signedMsg, secEmailTo);
         sender.sendMail(encMsg);

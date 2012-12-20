@@ -1,24 +1,44 @@
 package gov.nih.nci.cacis.nav;
 
-import static org.junit.Assert.*;
+import java.io.File;
 
-import java.util.Properties;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathFactory;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 public class EmailZipAttachmentTest {
+    
+    private static final Logger LOG = Logger.getLogger(EmailZipAttachmentTest.class.getName());
+
+    /*
+     * @Test public void testCreateMessage() { try { AbstractSendMail abstractSendMail = new AbstractSendMail(new
+     * Properties(), "cacisdevsender@gmail.com", "smtp.gmail.com", 587, "smtp");
+     * abstractSendMail.secEmailTempZipLocation = "C:/Users/ajay/.cacis/nav";
+     * abstractSendMail.createMessage("cacisdevsecureemailrecipient@gmail.com", "CLINICAL_NOTE", "RIMITS",
+     * "Instructions", "<content>sample</content>", "<content>metadata</content>"); } catch (Exception e) {
+     * e.printStackTrace(); } // fail("Not yet implemented"); }
+     */
 
     @Test
-    public void testCreateMessage() {
+    public void testParseClinicalDocument() {
         try {
-            AbstractSendMail abstractSendMail = new AbstractSendMail(new Properties(), "cacisdevsender@gmail.com", "smtp.gmail.com", 587, "smtp");
-            abstractSendMail.secEmailTempZipLocation = "C:/Users/ajay/.cacis/nav";
-            abstractSendMail.createMessage("cacisdevsecureemailrecipient@gmail.com", "CLINICAL_NOTE", "RIMITS",
-                    "Instructions", "<content>sample</content>", "<content>metadata</content>");
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(new File("C:/projects/cacis/misc/Sample_Clinical_Document.xml"));
+                               
+            XPathFactory xpathFactory = XPathFactory.newInstance();
+            XPath xpath = xpathFactory.newXPath();
+            LOG.info(xpath.evaluate("/ClinicalDocument/title", document));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // fail("Not yet implemented");
     }
 
 }
