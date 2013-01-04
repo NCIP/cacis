@@ -108,8 +108,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class AbstractSendMail {
 
     private static final Logger LOG = Logger.getLogger(AbstractSendMail.class);
-    private static final String XML_EXT = ".xml";
-    private static final String TXT_EXT = ".txt";
+    private static final String XML_EXT = ".XML";
+    private static final String TXT_EXT = ".TXT";
 
     /**
      * Keystore type
@@ -335,7 +335,7 @@ public class AbstractSendMail {
             ZipOutputStream zos = new ZipOutputStream( bout );
 //            LOG.info("File List size: "+fileList.size());
             for (String file : fileList) {
-                LOG.info("File Added : " + file);
+                LOG.error("File Added : " + file);
                 ZipEntry ze = new ZipEntry(file);
                 zos.putNextEntry(ze);
                 FileInputStream in = new FileInputStream(tempZipFolder + File.separator + file);
