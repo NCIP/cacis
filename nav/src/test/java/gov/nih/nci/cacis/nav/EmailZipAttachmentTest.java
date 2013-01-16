@@ -25,6 +25,9 @@ public class EmailZipAttachmentTest {
             abstractSendMail.createMessage("cacisdevsecureemailrecipient@gmail.com", "CLINICAL_NOTE", "RIMITS",
                     "HL7_V2_LINICAL_NOTE", "<content>sample</content>", "<content>metadata</content>", "title",
                     "indexbodytoken", "readmetoken");
+            abstractSendMail.createMessage("cacisdevsecureemailrecipient@gmail.com", "CLINICAL_NOTE", "RIMITS",
+                    "HL7_V2_CLINICAL_NOTE", "<content>sample</content>", "<content>metadata</content>", "title",
+                    "indexbodytoken", "readmetoken");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -374,8 +374,10 @@ public class AbstractSendMail {
         } catch (IOException e) {
             LOG.error(e.getMessage());
             throw new ApplicationRuntimeException(e.getMessage());
-        }
-
+        } finally{
+          //reset filelist contents
+            fileList = new ArrayList<String>();
+        }        
         return msg;
     }
 
