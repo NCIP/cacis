@@ -335,7 +335,6 @@ public class AbstractSendMail {
             ZipOutputStream zos = new ZipOutputStream( bout );
 //            LOG.info("File List size: "+fileList.size());
             for (String file : fileList) {
-                LOG.error("File Added : " + file);
                 ZipEntry ze = new ZipEntry(file);
                 zos.putNextEntry(ze);
                 FileInputStream in = new FileInputStream(tempZipFolder + File.separator + file);
