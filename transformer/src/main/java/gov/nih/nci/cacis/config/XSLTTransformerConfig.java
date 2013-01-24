@@ -64,6 +64,7 @@ import gov.nih.nci.cacis.common.util.AnyBasePathURIResolver;
 import gov.nih.nci.cacis.transform.GenerateNarrativeTransformer;
 import gov.nih.nci.cacis.transform.HL7V2Transformer;
 import gov.nih.nci.cacis.transform.RIMITSTransformer;
+import gov.nih.nci.cacis.transform.SourceTransformer;
 import gov.nih.nci.cacis.transform.Trim2CCDTransformer;
 import gov.nih.nci.cacis.transform.XmlToRdfTransformer;
 
@@ -72,6 +73,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -97,9 +100,15 @@ public class XSLTTransformerConfig {
 
     @Value("${cacis-pco.transformer.trim2ccd.xsl}")
     private String trim2CCDXsl;
-    
+
     @Value("${cacis-pco.transformer.generate-narrative.xsl}")
     private String generateNarrativeXsl;
+
+    @Value("${cacis-pco.source.system.baseClassPath}")
+    private String sourceSystemBaseClassPath;
+    
+    @Value("${cacis-pco.source.system.xslt.properties.file}")
+    private String sourceSystemXSLTProperties;
 
     private static final String PROTOTYPE = "prototype";
 
@@ -173,7 +182,28 @@ public class XSLTTransformerConfig {
                 xslUriResolver().resolve(trim2CCDXsl, xslBaseClassPath));
         return new Trim2CCDTransformer(transformer);
     }
-    
+
+    @Bean
+    @Scope(PROTOTYPE)
+    public SourceTransformer sourceTransformer(String sourceSystemIdentifier) throws TransformerException {
+        try {
+            PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration(sourceSystemXSLTProperties);
+            String propertyValue = propertiesConfiguration.getString(sourceSystemIdentifier);
+            if (propertyValue == null) {
+                throw new TransformerException(String.format("Source system '%s' is not configured in [%s]!",
+                        sourceSystemIdentifier, sourceSystemXSLTProperties));
+            }
+            final Transformer transformer = xslTransformerFactory().newTransformer(
+                    xslUriResolver().resolve(propertyValue, sourceSystemBaseClassPath));
+            return new SourceTransformer(transformer);
+        } catch (ConfigurationException e) {
+            throw new TransformerException(String.format("Property '%s' cannot be read from [%s]. Either the "
+                    + "property / properties file does not exist or the properties file is not readable!",
+                    sourceSystemIdentifier, sourceSystemXSLTProperties)
+                    + e);
+        }
+    }
+
     /**
      * Generate Narrative Transformer
      * 
@@ -186,6 +216,6 @@ public class XSLTTransformerConfig {
         final Transformer transformer = xslTransformerFactory().newTransformer(
                 xslUriResolver().resolve(generateNarrativeXsl, xslBaseClassPath));
         return new GenerateNarrativeTransformer(transformer);
-    }    
+    }
 
 }
