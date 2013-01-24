@@ -85,6 +85,18 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="ClinicalMetadata">
+     <xs:attribute name="sourceSystemIdroot" type="UUID" use="required">
+	      <xs:annotation>
+		<xs:documentation>The globally unique identifier for the source system which is transmitting the data.
+		</xs:documentation>
+	      </xs:annotation>
+     </xs:attribute>
+     <xs:attribute name="sourceSystemIdExtension" type="NonEmptyString" use="required">
+	      <xs:annotation>
+		<xs:documentation>The identifier assigned to the individual source messages. The extension is used to uniquely identify the type of message that the source system is transmitting.
+		</xs:documentation>
+	      </xs:annotation>
+    </xs:attribute>
     <xs:attribute name="patientIdRoot" type="UUID" use="required">
       <xs:annotation>
         <xs:documentation>The globally unique identifier for the namespace associated with the identifier for

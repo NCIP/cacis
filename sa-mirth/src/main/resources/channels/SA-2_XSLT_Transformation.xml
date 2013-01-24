@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1324056634972</time>
+    <time>1359003240040</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>10</revision>
+  <revision>15</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -20,7 +20,46 @@
         <step>
           <sequenceNumber>0</sequenceNumber>
           <name>transform</name>
-          <script>var srcDataEle = msg[&apos;sourceData&apos;];
+          <script>try{
+	var sourceIDRoot = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdroot&apos;].toString();
+	var sourceIDExtension = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdExtension&apos;].toString();
+
+	var sourceID = sourceIDRoot+&quot;_&quot;+sourceIDExtension;
+
+	var sourceTransformer = globalChannelMap.get(sourceID);
+	if(sourceTransformer == null){
+		var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
+		var arguments = new Array();
+		arguments[0] = sourceID;
+		sourceTransformer = transformerContext.getBean(&quot;sourceTransformer&quot;, arguments);
+		globalChannelMap.put(arguments[0], sourceTransformer);
+	}
+
+	var xmlStr = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&apos;;
+	var sourceMessage = msg[&apos;sourceData&apos;][&apos;*&apos;].toString();
+	logger.info(&apos;Source Message XML: &apos;+sourceMessage);
+	var ccd = drTransformDocument(sourceMessage, sourceID);
+	if(ccd.trim() == xmlStr || ccd.trim() == &apos;&apos;){
+		ccd = &apos;&apos;;
+	} else {		
+		ccd = drTransformDocument(ccd, &apos;generateNarrativeTransformer&apos;);
+	}
+	if( ccd == &apos;error&apos; || ccd == &apos;&apos;){
+		return;
+	}
+	//add the clinical document to the cacisrequest
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	msg[&apos;ClinicalDocument&apos;] = new XML(ccd);
+
+}catch(err) {	
+	logger.error(err.message);
+	responseMap.put(&apos;error&apos;, &apos;CaCISError: &apos;+err.message+&apos;!&apos;);
+}
+
+
+
+/*
+var srcDataEle = msg[&apos;sourceData&apos;];
 var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
 
 var xmlStr = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&apos;;
@@ -82,12 +121,52 @@ function transformEachTrim(trim) {
 		handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
 		return &apos;error&apos;;
 	} 
-}</script>
+}
+*/</script>
           <type>JavaScript</type>
           <data class="map">
             <entry>
               <string>Script</string>
-              <string>var srcDataEle = msg[&apos;sourceData&apos;];
+              <string>try{
+	var sourceIDRoot = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdroot&apos;].toString();
+	var sourceIDExtension = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdExtension&apos;].toString();
+
+	var sourceID = sourceIDRoot+&quot;_&quot;+sourceIDExtension;
+
+	var sourceTransformer = globalChannelMap.get(sourceID);
+	if(sourceTransformer == null){
+		var transformerContext = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;classpath*:applicationContext-transformer.xml&quot;);
+		var arguments = new Array();
+		arguments[0] = sourceID;
+		sourceTransformer = transformerContext.getBean(&quot;sourceTransformer&quot;, arguments);
+		globalChannelMap.put(arguments[0], sourceTransformer);
+	}
+
+	var xmlStr = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&apos;;
+	var sourceMessage = msg[&apos;sourceData&apos;][&apos;*&apos;].toString();
+	logger.info(&apos;Source Message XML: &apos;+sourceMessage);
+	var ccd = drTransformDocument(sourceMessage, sourceID);
+	if(ccd.trim() == xmlStr || ccd.trim() == &apos;&apos;){
+		ccd = &apos;&apos;;
+	} else {		
+		ccd = drTransformDocument(ccd, &apos;generateNarrativeTransformer&apos;);
+	}
+	if( ccd == &apos;error&apos; || ccd == &apos;&apos;){
+		return;
+	}
+	//add the clinical document to the cacisrequest
+	default xml namespace = &apos;urn:hl7-org:v3&apos;;
+	msg[&apos;ClinicalDocument&apos;] = new XML(ccd);
+
+}catch(err) {	
+	logger.error(err.message);
+	responseMap.put(&apos;error&apos;, &apos;CaCISError: &apos;+err.message+&apos;!&apos;);
+}
+
+
+
+/*
+var srcDataEle = msg[&apos;sourceData&apos;];
 var doctype = msg[&apos;clinicalMetaData&apos;][&apos;@documentType&apos;].toString();
 
 var xmlStr = &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&apos;;
@@ -149,7 +228,8 @@ function transformEachTrim(trim) {
 		handleErrorStr(&apos;Trim to CCD transformation, &apos; + err.message);
 		return &apos;error&apos;;
 	} 
-}</string>
+}
+*/</string>
             </entry>
           </data>
         </step>
