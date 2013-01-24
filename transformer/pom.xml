@@ -24,7 +24,7 @@
         <cacis-pco.transformer.rimits.xsl>CanonicalToRIMITS.xslt</cacis-pco.transformer.rimits.xsl>
         <cacis-pco.transformer.generate-narrative.xsl>generate-narrative.xslt</cacis-pco.transformer.generate-narrative.xsl>
         <cacis-pco.source.system.baseClassPath>${userhome.dir}/.cacis/sourcetransforms/</cacis-pco.source.system.baseClassPath>
-        <cacis-pco.source.system.xslt.properties.file>${cacis-pco.source.system.baseClassPath}/cacis-source-system-xslt.properties</cacis-pco.source.system.xslt.properties.file>
+        <cacis-pco.source.system.xslt.properties.file>${cacis-pco.source.system.baseClassPath}cacis-source-system-xslt.properties</cacis-pco.source.system.xslt.properties.file>
     </properties>
 
     <dependencies>
