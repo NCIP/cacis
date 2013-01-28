@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1359003240040</time>
+    <time>1359397829079</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>15</revision>
+  <revision>16</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -53,7 +53,7 @@
 
 }catch(err) {	
 	logger.error(err.message);
-	responseMap.put(&apos;error&apos;, &apos;CaCISError: &apos;+err.message+&apos;!&apos;);
+	responseMap.put(&apos;error&apos;, &apos;CaCISError: &apos;+Packages.org.apache.commons.lang.StringUtils.substringAfterLast(err.message, &apos;javax.xml.transform.TransformerException:&apos;));
 }
 
 
@@ -160,7 +160,7 @@ function transformEachTrim(trim) {
 
 }catch(err) {	
 	logger.error(err.message);
-	responseMap.put(&apos;error&apos;, &apos;CaCISError: &apos;+err.message+&apos;!&apos;);
+	responseMap.put(&apos;error&apos;, &apos;CaCISError: &apos;+Packages.org.apache.commons.lang.StringUtils.substringAfterLast(err.message, &apos;javax.xml.transform.TransformerException:&apos;));
 }
 
 
