@@ -5,10 +5,10 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1359397829079</time>
+    <time>1359401005238</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>16</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -21,7 +21,7 @@
           <sequenceNumber>0</sequenceNumber>
           <name>transform</name>
           <script>try{
-	var sourceIDRoot = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdroot&apos;].toString();
+	var sourceIDRoot = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdRoot&apos;].toString();
 	var sourceIDExtension = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdExtension&apos;].toString();
 
 	var sourceID = sourceIDRoot+&quot;_&quot;+sourceIDExtension;
@@ -128,7 +128,7 @@ function transformEachTrim(trim) {
             <entry>
               <string>Script</string>
               <string>try{
-	var sourceIDRoot = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdroot&apos;].toString();
+	var sourceIDRoot = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdRoot&apos;].toString();
 	var sourceIDExtension = msg[&apos;clinicalMetaData&apos;][&apos;@sourceSystemIdExtension&apos;].toString();
 
 	var sourceID = sourceIDRoot+&quot;_&quot;+sourceIDExtension;
