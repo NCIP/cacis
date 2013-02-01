@@ -12,10 +12,10 @@ It performs the following validations with the CaCISRequest message from the Sem
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1322764804824</time>
+    <time>1359665034213</time>
     <timezone>America/New_York</timezone>
   </lastModified>
-  <revision>6</revision>
+  <revision>2</revision>
   <sourceConnector>
     <name>sourceConnector</name>
     <properties>
@@ -90,192 +90,6 @@ var patIDExt= cmd[&apos;@patientIdExtension&apos;];
 if(patIDExt.toString().trim()==&apos;&apos;){
 	handleErrorStr(&apos;PatientId Extension is not available&apos;);
 	return;
-}</string>
-            </entry>
-          </data>
-        </step>
-        <step>
-          <sequenceNumber>2</sequenceNumber>
-          <name>validateSourceData</name>
-          <script>var srcDataEle = msg[&apos;sourceData&apos;];
-
-//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
-//sourcedata should contain concatenated &lt;trims&gt; element.
-if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ) {
-	var trimsEle = srcDataEle[&apos;trims&apos;];
-	if (trimsEle.length()==0) {
-		handleErrorStr(&apos;Document type is Complete, sourceData should contain &lt;trims&gt; element &apos;);
-		return;
-	}
-	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
-	var trimsArr = trimsEle[&apos;trim&apos;];
-	if (trimsEle.length()==0) {
-		handleErrorStr(&apos;Document type is Complete, sourceData &lt;trims&gt; should contain atleast one &lt;trim&gt; element &apos;);
-		return;
-	}
-	for each (trim in trimsArr) {
-		performTrimValidation(doctype, trim);
-	}		
-} else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
-	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
-	var trim = srcDataEle[&apos;trim&apos;];
-	if (trim.length()==0) {
-		handleErrorStr(&apos;sourceData should contain trim element&apos;);
-		return;
-	}
-	
-	performTrimValidation(doctype, trim);
-} else {
-	handleErrorStr(&apos;Document type(&apos;+ doctype + &apos;) is unknown &apos;);
-	return;
-}
-
-function performTrimValidation(doctype, trimData) {
-	if (! validateTrimDescription(doctype, trimData) ){
-		return;
-	}
-	if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
-		if (! validateTrimAgainstSchema(trimData) ) {
-			return;
-		}
-	}
-	if(! validateTrimAgainstSchematron(trimData) ){
-		return;
-	}
-}
-
-//Perform check to make sure description of the trim is available
-//and if document type is clinical note, check desc is of one of the allowed types
-function validateTrimDescription(doctype, trimData) {
-	var desc = trimData[&apos;description&apos;];
-	if (desc.length() == 0) {
-		handleErrorStr(&apos;description is not available !&apos;);
-		return false;
-	}
-	var descStr = desc.toString().trim();
-	if (descStr==&apos;&apos;) {
-		handleErrorStr(&apos;description is empty !&apos;);
-		return false;
-	}
-	if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;)) {
-		if( descStr != &apos;Baseline Evaluation Note&apos; 
-			&amp;&amp; descStr != &apos;Clinical Staging&apos;
-			&amp;&amp; descStr != &apos;Study Visit (Medical)&apos;
-			&amp;&amp; descStr != &apos;Surgical Study Visit Note&apos; ) {
-			handleErrorStr(&apos;Unknown description for clinical note trim,&apos; + descStr);
-			return false;	
-		}		
-	}//end of validation for clinical note
-}
-
-//Perform schema validation for SourceData
-function validateTrimAgainstSchema(trimData) {	
-	var sdXsdValidationMsg = xsdValidateSASourceData(trimData.toString());
-	if (sdXsdValidationMsg != null) { 
-		handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
-		return false;
- 	}	
-}
-
-//Perform schematron validation for SourceData
-function validateTrimAgainstSchematron(trimData) {
-	var sdSchValidationMsg = schematronValidateSASourceData(trimData.toString());
-	if (sdSchValidationMsg != null) { 
-		handleErrorStr(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg);
-		return false;
-	}
-}</script>
-          <type>JavaScript</type>
-          <data class="map">
-            <entry>
-              <string>Script</string>
-              <string>var srcDataEle = msg[&apos;sourceData&apos;];
-
-//If clinicalMetaData section contains documentType &apos;COMPLETE&apos;,
-//sourcedata should contain concatenated &lt;trims&gt; element.
-if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;COMPLETE&apos;) ) {
-	var trimsEle = srcDataEle[&apos;trims&apos;];
-	if (trimsEle.length()==0) {
-		handleErrorStr(&apos;Document type is Complete, sourceData should contain &lt;trims&gt; element &apos;);
-		return;
-	}
-	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
-	var trimsArr = trimsEle[&apos;trim&apos;];
-	if (trimsEle.length()==0) {
-		handleErrorStr(&apos;Document type is Complete, sourceData &lt;trims&gt; should contain atleast one &lt;trim&gt; element &apos;);
-		return;
-	}
-	for each (trim in trimsArr) {
-		performTrimValidation(doctype, trim);
-	}		
-} else if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;) ) {
-	default xml namespace = &apos;urn:tolven-org:trim:4.0&apos;;
-	var trim = srcDataEle[&apos;trim&apos;];
-	if (trim.length()==0) {
-		handleErrorStr(&apos;sourceData should contain trim element&apos;);
-		return;
-	}
-	
-	performTrimValidation(doctype, trim);
-} else {
-	handleErrorStr(&apos;Document type(&apos;+ doctype + &apos;) is unknown &apos;);
-	return;
-}
-
-function performTrimValidation(doctype, trimData) {
-	if (! validateTrimDescription(doctype, trimData) ){
-		return;
-	}
-	if(globalChannelMap.get(&apos;sa.trim.xsd.validation&apos;) == &apos;true&apos;){
-		if (! validateTrimAgainstSchema(trimData) ) {
-			return;
-		}
-	}
-	if(! validateTrimAgainstSchematron(trimData) ){
-		return;
-	}
-}
-
-//Perform check to make sure description of the trim is available
-//and if document type is clinical note, check desc is of one of the allowed types
-function validateTrimDescription(doctype, trimData) {
-	var desc = trimData[&apos;description&apos;];
-	if (desc.length() == 0) {
-		handleErrorStr(&apos;description is not available !&apos;);
-		return false;
-	}
-	var descStr = desc.toString().trim();
-	if (descStr==&apos;&apos;) {
-		handleErrorStr(&apos;description is empty !&apos;);
-		return false;
-	}
-	if( Packages.org.apache.commons.lang.StringUtils.equals(doctype,&apos;CLINICAL_NOTE&apos;)) {
-		if( descStr != &apos;Baseline Evaluation Note&apos; 
-			&amp;&amp; descStr != &apos;Clinical Staging&apos;
-			&amp;&amp; descStr != &apos;Study Visit (Medical)&apos;
-			&amp;&amp; descStr != &apos;Surgical Study Visit Note&apos; ) {
-			handleErrorStr(&apos;Unknown description for clinical note trim,&apos; + descStr);
-			return false;	
-		}		
-	}//end of validation for clinical note
-}
-
-//Perform schema validation for SourceData
-function validateTrimAgainstSchema(trimData) {	
-	var sdXsdValidationMsg = xsdValidateSASourceData(trimData.toString());
-	if (sdXsdValidationMsg != null) { 
-		handleErrorStr(&apos;SourceData Schema Validation:&apos; + sdXsdValidationMsg);
-		return false;
- 	}	
-}
-
-//Perform schematron validation for SourceData
-function validateTrimAgainstSchematron(trimData) {
-	var sdSchValidationMsg = schematronValidateSASourceData(trimData.toString());
-	if (sdSchValidationMsg != null) { 
-		handleErrorStr(&apos;SourceData Schematron Validation:&apos; + sdSchValidationMsg);
-		return false;
-	}
 }</string>
             </entry>
           </data>
@@ -411,7 +225,7 @@ return;</postprocessingScript>
 // Validation of Trim (sourcedata section of CaCISRequest) coming in is controlled by the property set here.
 // sa.trim.xsd.validation if set to true, Incoming trim will be validated against trim4.xsd
 // sa.trim.xsd.validation is set to false, Incoming trim will NOT be validated against trim4.xsd  
-globalChannelMap.put(&apos;sa.trim.xsd.validation&apos;,&apos;${sa.trim.xsd.validation}&apos;);
+globalChannelMap.put(&apos;sa.trim.xsd.validation&apos;,&apos;false&apos;);
 
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
