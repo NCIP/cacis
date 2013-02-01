@@ -178,9 +178,9 @@
                 complex type to allow re-defining in derived schemas to reflect canonical or native constraints.
             </xs:documentation>
     </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="xs:anyType"/>
-    </xs:complexContent>
+    <xs:sequence>
+      <xs:any processContents="skip"></xs:any>
+    </xs:sequence>
   </xs:complexType>
   <xs:element name="caCISResponse">
     <xs:annotation>
