@@ -5,7 +5,7 @@
   <enabled>true</enabled>
   <version>2.1.1.5490</version>
   <lastModified>
-    <time>1317228472677</time>
+    <time>1360168988694</time>
     <timezone>America/New_York</timezone>
   </lastModified>
   <revision>3</revision>
@@ -45,12 +45,14 @@
         <property name="script">//Invoke the java client, which in turn, will invoke the IP Canonical Model Processor Service. &#xd;//The Mirth Connect channel for this component should monitor errors and Mirth Connect Alerts should be sent, 
 //in case of errors, to the system administrator.
 
-var cmpWsdlUrl = &apos;${cacis-ip.cmp.service.url}&apos;;
+var cmpWsdlUrl = &apos;http://localhost:18081/services/CanonicalModelProcessor?wsdl&apos;;
 
 try{
 
-	var ctx  = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-ip-mirth.xml&quot;);
-	var client = ctx.getBean(&quot;canonicalModelProcessorClient&quot;);
+	// var ctx  = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-ip-mirth.xml&quot;);
+	// var client = ctx.getBean(&quot;canonicalModelProcessorClient&quot;);
+
+	var client = globalChannelMap.get(&apos;canonicalModelProcessor&apos;);
 
 	logger.info(&quot;Will send message to CMP service at &quot; + cmpWsdlUrl);
 	var caCisRes = client.acceptCanonical(cmpWsdlUrl,messageObject.getEncodedData());
@@ -133,6 +135,12 @@ return message;</preprocessingScript>
 return;</postprocessingScript>
   <deployScript>// This script executes once when the channel is deployed
 // You only have access to the globalMap and globalChannelMap here to persist data
+
+var ctx  = new Packages.org.springframework.context.support.ClassPathXmlApplicationContext(&quot;applicationContext-ip-mirth.xml&quot;);
+var canonicalModelProcessor = ctx.getBean(&quot;canonicalModelProcessorClient&quot;);
+
+globalChannelMap.put(&apos;canonicalModelProcessor&apos;, canonicalModelProcessor);
+
 return;</deployScript>
   <shutdownScript>// This script executes once when the channel is undeployed
 // You only have access to the globalMap and globalChannelMap here to persist data

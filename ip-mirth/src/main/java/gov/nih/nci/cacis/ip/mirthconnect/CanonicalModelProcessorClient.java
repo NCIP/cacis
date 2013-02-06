@@ -36,6 +36,11 @@ public class CanonicalModelProcessorClient {
         this.keyStorePassword = keyStorePassword;
         this.trustStoreLocation = trustStoreLocation;
         this.trustStorePassword = trustStorePassword;
+        
+        System.setProperty("javax.net.ssl.keyStore", keyStoreLocation);
+        System.setProperty("javax.net.ssl.keyStorePassword", keyStorePassword);
+        System.setProperty("javax.net.ssl.trustStore", trustStoreLocation);
+        System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
 
     }
 
@@ -68,10 +73,7 @@ public class CanonicalModelProcessorClient {
                     }
                 });
 
-        System.setProperty("javax.net.ssl.keyStore", keyStoreLocation);
-        System.setProperty("javax.net.ssl.keyStorePassword", keyStorePassword);
-        System.setProperty("javax.net.ssl.trustStore", trustStoreLocation);
-        System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
+        
 
         final JAXBContext ctx = JAXBContext.newInstance(CaCISRequest.class);
         final Unmarshaller unmarshaller = ctx.createUnmarshaller();
