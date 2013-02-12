@@ -189,6 +189,14 @@
                                         <include>cacis-source-system-xslt.properties</include>
                                     </includes>
                                 </resource>
+                                <resource>
+                                    <directory>${build.outputDirectory}/xsl/</directory>
+                                    <includes>
+                                    	<include>TRIM_to_CCD.xslt</include>
+                                        <include>FORCE_PASS_THRU.xslt</include>
+                                        <include>generate-narrative.xslt</include>
+                                    </includes>
+                                </resource>
                             </resources>
                         </configuration>
                     </execution>
