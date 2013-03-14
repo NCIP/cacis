@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 	http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	http://www.springframework.org/schema/security/spring-security-3.1.xsd
+	http://www.springframework.org/schema/context
+   	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
 
 	<http security="none" pattern="/login**" auto-config="true" />
 	<http security="none" pattern="/logout**" auto-config="true" />
@@ -20,7 +24,7 @@
 		<intercept-url pattern="/cdw**" access="ROLE_USER" />
 		<form-login login-page="/login.action"
 			always-use-default-target="true" default-target-url="/index.action"
-			authentication-failure-url="/loginFailed.action" />
+			authentication-failure-handler-ref="authenticationFailureHandler" />
 
 		<logout logout-success-url="/logout.action" />
 
@@ -28,13 +32,49 @@
 
 	</http>
 
+	<beans:bean id="authenticationFailureHandler"
+		class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+		<beans:property name="exceptionMappings">
+			<beans:props>
+				<beans:prop
+					key="org.springframework.security.core.userdetails.UsernameNotFoundException">/loginFailed.action</beans:prop>
+				<beans:prop
+					key="org.springframework.security.authentication.BadCredentialsException">/loginFailed.action</beans:prop>
+				<beans:prop
+					key="org.springframework.security.authentication.CredentialsExpiredException">/loginFailed.action</beans:prop>
+				<beans:prop
+					key="org.springframework.security.authentication.LockedException">/loginFailedLockout.action</beans:prop>
+				<beans:prop
+					key="org.springframework.security.authentication.DisabledException">/loginFailed.action</beans:prop>				
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="cacisUserService" class="gov.nih.nci.cacisweb.user.CacisUserService" />
+
+	<beans:bean id="eventDispatcher" class="gov.nih.nci.cacisweb.user.EventDispatcher" />
+
+	<beans:bean name="loginFailureEventListener"
+		class="gov.nih.nci.cacisweb.user.LoginFailureEventListener">
+		<beans:property name="cacisUserService" ref="cacisUserService" />
+		<beans:property name="eventDispatcher" ref="eventDispatcher" />
+	</beans:bean>
+
+	<beans:bean name="loginSuccessEventListener"
+		class="gov.nih.nci.cacisweb.user.LoginSuccessEventListener">
+		<beans:property name="cacisUserService" ref="cacisUserService" />
+		<beans:property name="eventDispatcher" ref="eventDispatcher" />
+	</beans:bean>
+
 	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="${login.username}" password="${login.password}"
-					authorities="ROLE_USER" />
-			</user-service>
+		<authentication-provider user-service-ref="cacisUserService">
+			<!--
+				<user-service> <user name="cacisadmin" password="changeme"
+				authorities="ROLE_USER" /> </user-service>
+			-->
 		</authentication-provider>
 	</authentication-manager>
+
+	<context:component-scan base-package="gov.nih.nci.cacisweb" />
 
 </beans:beans>

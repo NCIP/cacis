@@ -10,7 +10,7 @@ public class LoginAction extends ActionSupport {
 
     private LoginModel loginBean;
 
-    private static final Logger log = Logger.getLogger(LoginAction.class);
+     private static final Logger log = Logger.getLogger(LoginAction.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -19,6 +19,14 @@ public class LoginAction extends ActionSupport {
         log.error(getText("loginBean.loginFailed"));
         addActionError(getText("loginBean.loginFailed"));
         log.debug("loginFailed() - END");
+        return SUCCESS;
+    }
+    
+    public String loginFailedLockout() {
+        log.debug("loginFailedLockout() - START");
+        log.error(getText("loginBean.loginFailedLockout"));
+        addActionError(getText("loginBean.loginFailedLockout"));
+        log.debug("loginFailedLockout() - END");
         return SUCCESS;
     }
     

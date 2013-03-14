@@ -44,6 +44,12 @@
 			<interceptor-ref name="defaultStack" />
 			<result name="success">/login.jsp</result>
 		</action>
+		
+		<action name="loginFailedLockout" class="gov.nih.nci.cacisweb.action.LoginAction"
+			method="loginFailedLockout">
+			<interceptor-ref name="defaultStack" />
+			<result name="success">/login.jsp</result>
+		</action>
 
 		<action name="logout" class="gov.nih.nci.cacisweb.action.LoginAction"
 			method="logoutSuccessful">

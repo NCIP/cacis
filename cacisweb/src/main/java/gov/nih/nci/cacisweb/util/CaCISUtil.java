@@ -8,6 +8,7 @@ import gov.nih.nci.cacisweb.exception.PropFileAndKeystoreOutOfSyncException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -95,6 +96,38 @@ public class CaCISUtil {
 
         return properties.getProperty(property, defaultValue);
     }
+    
+    /**
+     * 
+     * @param property
+     * @param defaultValue
+     * @return
+     * @throws PropertyFileLoadException
+     */
+    public static void setProperty(String propertyName, String propertyValue) throws CaCISWebException {
+
+        URL propsUrl = CaCISUtil.class.getClassLoader().getResource(CaCISWebConstants.COM_PROPERTIES_FILE_NAME);
+        File propertiesFile = new File(propsUrl.getPath());
+
+        if (properties == null || propertiesFile.lastModified() > lastModified) {
+            properties = new Properties();
+
+            try {
+                properties.load(propsUrl.openStream());
+                properties.setProperty(propertyName, propertyValue);
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(propsUrl.getPath()));
+                properties.store(fileOutputStream, "Updated Property: "+propertyName);
+            } catch (FileNotFoundException ex) {
+                throw new CaCISWebException(String.format("The properties file %s does not exist or is not readable|writable",
+                        propertiesFile.getAbsolutePath()), ex);
+            } catch (IOException ex) {
+                throw new CaCISWebException(String.format(
+                        "An error was encountered while attempting to read|write the properties file %s", propertiesFile
+                                .getAbsolutePath()), ex);
+            }
+        }        
+    }
+
 
     /**
      * 
