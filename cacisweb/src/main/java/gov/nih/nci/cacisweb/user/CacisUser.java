@@ -60,8 +60,13 @@
  */
 package gov.nih.nci.cacisweb.user;
 
-import java.util.Collection;
+import gov.nih.nci.cacisweb.CaCISWebConstants;
 
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -81,16 +86,18 @@ public class CacisUser extends User {
      */
     private short failedLoginAttempts;
 
+    private String lockOutTime;
+
     /**
      * @param username
      * @param password
      * @param authorities
      */
     public CacisUser(String username, String password, boolean accountNonLocked, short failedLoginAttempts,
-            Collection<? extends GrantedAuthority> authorities) {
+            String lockOutTime, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, true, true, true, accountNonLocked, authorities);
         this.failedLoginAttempts = failedLoginAttempts;
-        
+        this.lockOutTime = lockOutTime;
     }
 
     /**
@@ -122,6 +129,18 @@ public class CacisUser extends User {
 
     public void setFailedLoginAttempts(short failedLoginAttempts) {
         this.failedLoginAttempts = failedLoginAttempts;
+    }
+
+    public String getLockOutTime() {
+        if (!isAccountNonLocked() && StringUtils.isBlank(lockOutTime)) {
+            SimpleDateFormat sDateFormat = new SimpleDateFormat(CaCISWebConstants.COM_DATE_FORMAT);
+            return sDateFormat.format(new Date());
+        }
+        return lockOutTime;
+    }
+
+    public void setLockOutTime(String lockOutTime) {
+        this.lockOutTime = lockOutTime;
     }
 
 }

@@ -6,6 +6,7 @@ public class CaCISWebConstants {
     public static final String COM_PROPERTIES_FILE_NAME = "cacisweb.properties";
     public static final String COM_PRIMARY_VIRTUOSO_DATASOURCE_NAME = "java:comp/env/jdbc/virtuosoDS1";
     public static final String COM_ACTION_RESPONSE_DELETE = "delete";
+    public static final String COM_DATE_FORMAT = "yyyyMMddHHmmss";
 
     public static final String COM_KEYSTORE_TYPE_PKCS12 = "PKCS12";
     public static final String COM_KEYSTORE_TYPE_JKS = "JKS";
