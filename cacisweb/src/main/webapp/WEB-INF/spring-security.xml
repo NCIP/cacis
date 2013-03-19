@@ -67,12 +67,7 @@
 	</beans:bean>
 
 	<authentication-manager>
-		<authentication-provider user-service-ref="cacisUserService">
-			<!--
-				<user-service> <user name="cacisadmin" password="changeme"
-				authorities="ROLE_USER" /> </user-service>
-			-->
-		</authentication-provider>
+		<authentication-provider user-service-ref="cacisUserService" />
 	</authentication-manager>
 
 	<context:component-scan base-package="gov.nih.nci.cacisweb" />
