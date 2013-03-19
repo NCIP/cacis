@@ -99,7 +99,7 @@
 		<!-- ############################################################################ -->
 		<!-- Replace <<TRUSTSTORE_NAME>> and <<TRUSTSTORE_PASSWORD>> with the name of the truststore and password used in 
 			tomcat's server.xml connector -->
-		<cacis.xds.server.truststore>${cacis.config.home}/certs/<<TRUSTSTORE_NAME>>.jks</cacis.xds.server.truststore>
+		<cacis.xds.server.truststore>${cacis.config.home}/certs/<<TRUSTSTORE_NAME>></cacis.xds.server.truststore>
 		<cacis.xds.server.truststore.password><<TRUSTSTORE_PASSWORD>></cacis.xds.server.truststore.password>
 
 		<cdw.graph.group.url.prefix>http://cacis.nci.nih.gov/</cdw.graph.group.url.prefix>
