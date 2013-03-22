@@ -10,7 +10,8 @@
 <s:head />
 </head>
 <body class="mainframe">
-<table class="headerTable">
+<a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a>
+<table class="headerTable" summary="layout">
 	<tr>
 		<td class="headerTable"><s:text name="secureEmailBean.title" /></td>
 	</tr>
@@ -19,18 +20,18 @@
 
 <s:form action="secureEmailRecipientAdd" theme="simple" method="post"
 	enctype="multipart/form-data">
-	<table class="formTable">
+	<table class="formTable" summary="layout">
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text
+			<th class="formTable" scope="row"><s:text
 				name="secureEmailBean.certificateAlias" /></th>
 			<td><s:textfield key="secureEmailBean.certificateAlias"
 				size="55" cssClass="formTable" /></td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text name="secureEmailBean.certificate" /></th>
+			<th class="formTable" scope="row"><s:text name="secureEmailBean.certificate" /></th>
 			<td><s:file key="secureEmailBean.certificate" size="55"
 				cssClass="formTable" /></td>
 		</tr>
@@ -44,11 +45,11 @@
 </s:form>
 <table class="listTable">
 	<tr>
-		<th class="listTable" width="25%"><s:text
+		<th class="listTable" width="25%" scope="col"><s:text
 			name="secureEmailBean.certificateAlias" /></th>
-		<th class="listTable" width="65%"><s:text
+		<th class="listTable" width="65%" scope="col"><s:text
 			name="secureEmailBean.certificateDN" /></th>
-		<th class="listTable" width="10%"><s:text
+		<th class="listTable" width="10%" scope="col"><s:text
 			name="secureEmailBean.action" /></th>
 	</tr>
 	<s:iterator status="rowstatus" value="secureEmailRecepientList"
@@ -59,7 +60,7 @@
 			<input type="hidden" name=operationMode value='STORE' />
 			<tr
 				class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
-				<td align="left" width="25%" class="listTable"><s:text
+				<th align="left" width="25%" class="listTable" scope="row"><s:text
 					name="#secureEmailBean.certificateAlias" /></td>
 				<td align="left" width="65%" class="listTable"><s:text
 					name="#secureEmailBean.certificateDN" /></td>

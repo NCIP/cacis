@@ -10,7 +10,7 @@
 <s:head />
 </head>
 <body>
-<table class="errorTable">
+<table class="errorTable" summary="layout">
 	<tr>
 		<td align="left"><s:text name="exception.invalidToken" /></td>
 	</tr>

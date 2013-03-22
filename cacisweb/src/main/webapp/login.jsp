@@ -23,20 +23,21 @@
 -->
 <body style="vertical-align: top;" class="mainframe" onload="loadWindow();">
 <s:include value="banner.jsp"></s:include>
+<a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a>
 <h2 ALIGN="CENTER">caCIS Administration</h2>
 <s:include value="messageAndError.jsp"></s:include>
 
 <form name='f' action="j_spring_security_check" method='POST'>
-<table class="formTable">
+<table class="formTable" summary="layout">
 	<tr>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="loginTable">Username:</th>
+		<th class="loginTable"><label for='j_username'>Username:</label></th>
 		<td class="loginTable"><input type='text' name='j_username' value=''></td>
 	</tr>
 	<tr>
-		<th class="loginTable">Password:</th>
+		<th class="loginTable"><label for='j_password'>Password:</label></th>
 		<td class="loginTable"><input type='password' name='j_password' /></td>
 	</tr>
 	<tr>

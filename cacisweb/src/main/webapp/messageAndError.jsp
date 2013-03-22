@@ -10,7 +10,7 @@
 </head>
 <body>
 <s:if test="hasActionMessages()">
-	<table class="messageTable">
+	<table class="messageTable" summary="layout">
 		<tr>
 			<td align="center"><s:actionmessage /></td>
 		</tr>

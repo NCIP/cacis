@@ -10,6 +10,7 @@
 <s:head />
 </head>
 <body class="mainframe">
+<a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a>
 <table class="headerTable">
 	<tr>
 		<td class="headerTable"><s:text name="cdwUserBean.title" /></td>
@@ -18,17 +19,17 @@
 <s:include value="messageAndError.jsp"></s:include>
 
 <s:form theme="simple" method="post" enctype="multipart/form-data">
-	<table class="formTable">
+	<table class="formTable" summary="layout">
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text name="cdwUserBean.username" /></th>
+			<th class="formTable" scope="row"><s:text name="cdwUserBean.username" /></th>
 			<td><s:textfield key="cdwUserBean.username" size="55"
 				cssClass="formTable" /></td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text name="cdwUserBean.password" /></th>
+			<th class="formTable" scope="row"><s:text name="cdwUserBean.password" /></th>
 			<td><s:textfield key="cdwUserBean.password" size="55"
 				cssClass="formTable" /></td>
 		</tr>
@@ -43,15 +44,15 @@
 		</tr>
 	</table>
 
-	<table class="listTable">
+	<table class="listTable" summary="layout">
 		<tr>
-			<th class="listTable" width="25%"><s:text
+			<th class="listTable" width="25%" scope="col"><s:text
 				name="cdwPermissionBean.studyID" /></th>
-			<th class="listTable" width="25%"><s:text
+			<th class="listTable" width="25%" scope="col"><s:text
 				name="cdwPermissionBean.siteID" /></th>
-			<th class="listTable" width="25%"><s:text
+			<th class="listTable" width="25%" scope="col"><s:text
 				name="cdwPermissionBean.patientID" /></th>
-			<th class="listTable" width="25%"><s:text
+			<th class="listTable" width="25%" scope="col"><s:text
 				name="cdwUserBean.action" /></th>
 		</tr>
 

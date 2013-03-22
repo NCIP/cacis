@@ -12,8 +12,7 @@
 	<frameset rows="100%,0%" cols="*" frameborder="NO" border="0">
 		<frame src="navTop.jsp" name="topFrame" title="Top Navigation Frame" scrolling="no" noresize>
 	</frameset>
-	<frameset cols="153,*" frameborder="NO" border="0">
-		<frame src="navLeft.jsp" name="leftFrame" title="Left Menu Frame" scrolling="auto">
+	<frameset rows="100%,0%" cols="*" frameborder="NO" border="0">
 		<frame src="welcome.jsp" name="mainFrame" title="Main Content Frame" scrolling="auto">
 	</frameset>
 </frameset>

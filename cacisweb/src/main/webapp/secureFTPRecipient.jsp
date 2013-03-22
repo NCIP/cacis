@@ -10,7 +10,8 @@
 <s:head />
 </head>
 <body class="mainframe">
-<table class="headerTable">
+<a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a>
+<table class="headerTable" summary="layout">
 	<tr>
 		<td class="headerTable"><s:text name="secureFTPBean.title" /></td>
 	</tr>
@@ -19,12 +20,12 @@
 
 <s:form action="secureFTPRecipientAdd" theme="simple" method="post"
 	enctype="multipart/form-data">
-	<table class="formTable">
+	<table class="formTable" summary="layout">
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text
+			<th class="formTable" scope="row"><s:text
 				name="secureFTPBean.certificateAlias" /></th>
 			<td><s:textfield key="secureFTPBean.certificateAlias" size="55"
 				cssClass="formTable" /></td>
@@ -35,7 +36,7 @@
 			ftps,host,port,user,password,directory</td>
 		</tr>
 		<tr>
-			<th class="formTable"><s:text name="secureFTPBean.certificate" /></th>
+			<th class="formTable" scope="row"><s:text name="secureFTPBean.certificate" /></th>
 			<td><s:file key="secureFTPBean.certificate" size="55"
 				cssClass="formTable" /></td>
 		</tr>
@@ -49,11 +50,11 @@
 </s:form>
 <table class="listTable">
 	<tr>
-		<th class="listTable" width="25%"><s:text
+		<th class="listTable" width="25%" scope="col"><s:text
 			name="secureFTPBean.certificateAlias" /></th>
-		<th class="listTable" width="65%"><s:text
+		<th class="listTable" width="65%" scope="col"><s:text
 			name="secureFTPBean.certificateDN" /></th>
-		<th class="listTable" width="10%"><s:text
+		<th class="listTable" width="10%" scope="col"><s:text
 			name="secureFTPBean.action" /></th>
 	</tr>
 	<s:iterator status="rowstatus" value="secureFTPRecepientList"
@@ -64,7 +65,7 @@
 			<input type="hidden" name=operationMode value='STORE' />
 			<tr
 				class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
-				<td align="left" width="25%" class="listTable"><s:text
+				<th align="left" width="25%" class="listTable" scope="row"><s:text
 					name="#secureFTPBean.certificateAlias" /></td>
 				<td align="left" width="65%" class="listTable"><s:text
 					name="#secureFTPBean.certificateDN" /></td>

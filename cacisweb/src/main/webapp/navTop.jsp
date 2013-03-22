@@ -24,14 +24,21 @@ body {
 <body style="vertical-align: top;">
 <s:include value="banner.jsp"></s:include>
 <table width="100%" border="0" cellspacing="0" cellpadding="0"
-	class="topBar">
+	class="topBar" summary="layout">
 	<tr class="topBar">
 		<td align="left" valign="middle" class="topBarDiv">&nbsp;<A
-			href="welcome.jsp" title="caCIS Administration" target="mainFrame"><s:text
-			name="application.title" /></A></td>
-		<td width="307" height="24" align="right"><a href="welcome.jsp"
-			target="mainFrame"><s:text name="application.home" /></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a
-			href="j_spring_security_logout" target="_parent"><s:text
+			href="secureEmailRecipientList.action" title="Secure Email Configuration" target="mainFrame"><s:text
+			name="navleft.secureEmail" /></A></td>
+		<td align="left" valign="middle" class="topBarDiv">&nbsp;<A
+			href="secureFTPRecipientList.action" title="Secure FTP Configuration" target="mainFrame"><s:text
+			name="navleft.secureFtp" /></A></td>
+		<td align="left" valign="middle" class="topBarDiv">&nbsp;<A
+			href="secureXDSNAVRecipientList.action" title="Secure XDS NAV Configuration" target="mainFrame"><s:text
+			name="navleft.secureXDSNAV" /></A></td>
+		<td align="left" valign="middle" class="topBarDiv">&nbsp;<A
+			href="cdwUserPermission.action" title="CDW User Permissions" target="mainFrame"><s:text
+			name="navleft.cdwUserPermission" /></A></td>
+		<td width="307" height="24" align="right"><a href="j_spring_security_logout" target="_parent"><s:text
 			name="application.logout" />&nbsp;</a></td>
 	</tr>
 </table>
