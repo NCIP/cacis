@@ -10,7 +10,6 @@
 <s:head />
 </head>
 <body class="mainframe">
-<a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a>
 <table class="headerTable" summary="layout">
 	<tr>
 		<td class="headerTable"><s:text name="secureXDSNAVBean.title" /></td>
