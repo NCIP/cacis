@@ -17,7 +17,7 @@
 	</table>
 </s:if>
 <s:if test="hasActionErrors() || hasFieldErrors()">
-	<table class="errorTable">
+	<table class="errorTable" summary="layout">
 		<tr>
 			<td align="left"><s:actionerror /><s:fielderror /></td>
 		</tr>
