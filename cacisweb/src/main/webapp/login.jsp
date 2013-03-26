@@ -33,12 +33,12 @@
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="loginTable"><label for='j_username'>Username:</label></th>
-		<td class="loginTable"><input type='text' name='j_username' value=''></td>
+		<th class="loginTable"><label for="j_username_id">Username:</label></th>
+		<td class="loginTable"><input type="text" name="j_username" value="" id="j_username_id"></td>
 	</tr>
 	<tr>
-		<th class="loginTable"><label for='j_password'>Password:</label></th>
-		<td class="loginTable"><input type='password' name='j_password' /></td>
+		<th class="loginTable"><label for="j_password_id">Password:</label></th>
+		<td class="loginTable"><input type="password" name="j_password" id="j_password_id"></td>
 	</tr>
 	<tr>
 		<td colspan="2" class="formButton" align="center"><input type="reset" name="reset" value="RESET" class="formButton">&nbsp;&nbsp;&nbsp;<input type="submit" name="submit" value="LOGIN" class="formButton"></td>

@@ -24,8 +24,8 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable" scope="row"><s:text
-				name="secureFTPBean.certificateAlias" /></th>
+			<th class="formTable"><label for="secureFTPRecipientAdd_secureFTPBean_certificateAlias"><s:text
+				name="secureFTPBean.certificateAlias" /></label></th>
 			<td><s:textfield key="secureFTPBean.certificateAlias" size="55"
 				cssClass="formTable" /></td>
 		</tr>
@@ -35,7 +35,7 @@
 			ftps,host,port,user,password,directory</td>
 		</tr>
 		<tr>
-			<th class="formTable" scope="row"><s:text name="secureFTPBean.certificate" /></th>
+			<th class="formTable"><label for="secureFTPRecipientAdd_secureFTPBean_certificate"><s:text name="secureFTPBean.certificate" /></label></th>
 			<td><s:file key="secureFTPBean.certificate" size="55"
 				cssClass="formTable" /></td>
 		</tr>
@@ -65,7 +65,7 @@
 			<tr
 				class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
 				<th align="left" width="25%" class="listTable" scope="row"><s:text
-					name="#secureFTPBean.certificateAlias" /></td>
+					name="#secureFTPBean.certificateAlias" /></th>
 				<td align="left" width="65%" class="listTable"><s:text
 					name="#secureFTPBean.certificateDN" /></td>
 				<td align="center" width="10%" class="listTable"><s:submit

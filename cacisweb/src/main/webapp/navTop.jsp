@@ -42,7 +42,7 @@ body {
 			name="navleft.cdwUserPermission" /></A></td>
 		<td width="307" height="24" align="right"><a href="j_spring_security_logout" target="_parent"><s:text
 			name="application.logout" />&nbsp;</a></td>
-		<a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a>
+		<td><a name="skipLinksAnchor"><img src="images/dotclear.gif" alt="Blank image for skip-links anchor"></a></td>
 	</tr>
 </table>
 </body>

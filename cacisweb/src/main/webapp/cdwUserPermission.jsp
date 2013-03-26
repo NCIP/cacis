@@ -10,7 +10,7 @@
 <s:head />
 </head>
 <body class="mainframe">
-<table class="headerTable">
+<table class="headerTable" summary="layout">
 	<tr>
 		<td class="headerTable"><s:text name="cdwUserBean.title" /></td>
 	</tr>
@@ -23,12 +23,12 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable" scope="row"><s:text name="cdwUserBean.username" /></th>
+			<th class="formTable"><label for="cdwUserPermission_cdwUserBean_username"><s:text name="cdwUserBean.username" /></label></th>
 			<td><s:textfield key="cdwUserBean.username" size="55"
 				cssClass="formTable" /></td>
 		</tr>
 		<tr>
-			<th class="formTable" scope="row"><s:text name="cdwUserBean.password" /></th>
+			<th class="formTable"><label for="cdwUserPermission_cdwUserBean_password"><s:text name="cdwUserBean.password" /></label></th>
 			<td><s:textfield key="cdwUserBean.password" size="55"
 				cssClass="formTable" /></td>
 		</tr>

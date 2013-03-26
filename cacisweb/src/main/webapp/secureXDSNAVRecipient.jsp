@@ -24,14 +24,14 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th class="formTable" scope="row"><s:text
-				name="secureXDSNAVBean.certificateAlias" /></th>
+			<th class="formTable"><label for="secureXDSNAVRecipientAdd_secureXDSNAVBean_certificateAlias"><s:text
+				name="secureXDSNAVBean.certificateAlias" /></label></th>
 			<td><s:textfield key="secureXDSNAVBean.certificateAlias"
 				size="55" cssClass="formTable" /></td>
 		</tr>
 		<tr>
-			<th class="formTable" scope="row"><s:text
-				name="secureXDSNAVBean.certificate" /></th>
+			<th class="formTable"><label for="secureXDSNAVRecipientAdd_secureXDSNAVBean_certificate"><s:text
+				name="secureXDSNAVBean.certificate" /></label></th>
 			<td><s:file key="secureXDSNAVBean.certificate" size="55"
 				cssClass="formTable" /></td>
 		</tr>
@@ -61,7 +61,7 @@
 			<tr
 				class='<s:if test="#rowstatus.odd == true ">listTableWhite</s:if><s:else>listTableGrey</s:else>'>
 				<th align="left" width="25%" class="listTable" scope="row"><s:text
-					name="#secureXDSNAVBean.certificateAlias" /></td>
+					name="#secureXDSNAVBean.certificateAlias" /></th>
 				<td align="left" width="65%" class="listTable"><s:text
 					name="#secureXDSNAVBean.certificateDN" /></td>
 				<td align="center" width="10%" class="listTable"><s:submit
