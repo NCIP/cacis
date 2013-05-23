@@ -1,3 +1,14 @@
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <channel>
   <id>ec2ff52c-69c4-4a6b-b4f5-cd485c3cb30c</id>
   <name>DR-4d_LLPTransmission</name>

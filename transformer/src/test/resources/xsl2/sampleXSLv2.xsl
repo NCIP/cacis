@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xdt="http://www.w3.org/2005/xpath-datatypes">

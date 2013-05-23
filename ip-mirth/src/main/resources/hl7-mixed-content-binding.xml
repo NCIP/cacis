@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <jaxb:bindings
  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
  xmlns:xjc= "http://java.sun.com/xml/ns/jaxb/xjc" jaxb:extensionBindingPrefixes="xjc"

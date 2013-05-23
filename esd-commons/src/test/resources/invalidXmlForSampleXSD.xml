@@ -1,4 +1,15 @@
 <?xml version="1.0"?>
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <x:books xmlns:x="urn:books">
    <book id="bk002">
    	  <title>The Poet's First Poem</title>

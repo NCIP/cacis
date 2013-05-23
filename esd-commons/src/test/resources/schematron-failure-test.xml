@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <caCISRequest xmlns="http://cacis.nci.nih.gov" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cda="urn:hl7-org:v3" userName="user123">
 	<routingInstructions>
 		<exchangeDocument exchangeFormat="HL7_V2_CLINICAL_NOTE">

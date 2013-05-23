@@ -1,3 +1,14 @@
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <channel>
   <id>e1b26470-e7c1-428a-bd98-f7bbdf192c5b</id>
   <name>DR-4c_SecureFileTransfer</name>

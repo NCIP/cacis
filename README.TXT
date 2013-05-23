@@ -1,21 +1,19 @@
+====
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+====
+
 ===================================================================================
-caCIS Enterprise Services Development (ESD)
+caCIS
 ===================================================================================
 
 Please refer to the team wiki for project information:
 https://wiki.nci.nih.gov/display/caEHR
-
-NAV IDE and Build Configuration:
-https://wiki.nci.nih.gov/display/caEHR/NAV+IDE+and+Build+Configuration
-
-Integration Platform IDE Guide:
-https://wiki.nci.nih.gov/display/caEHR/IPF+IDE+Configuration+Guide+and+Sample+Project
-
-Directory Structure:
-
-/pco                  - Source code artifacts
-/docs                 - Project Documentation
-
 
 
 ===================================================================================
@@ -23,9 +21,7 @@ Build and Installation instructions
 ===================================================================================
 
 See https://wiki.nci.nih.gov/display/caEHR/caCIS+Deployment+Guide
-for instructions on building and installing caCIS PCO
-
-
+for instructions on building and installing caCIS Integration Solution
 
 ===================================================================================
 Snapshots Repositories
@@ -72,6 +68,3 @@ This will generate the maven site in ${user.home}/cacis-site
 
 For more information see
 http://maven.apache.org/plugins/maven-site-plugin/usage.html
-
-
-

@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <tns:SubmissionSet xmlns:hl7v2="urn:org:openhealthtools:ihe:common:hl7v2" xmlns:p0="htt//www.w3.org/XML/1998/namespace" xmlns:tns="urn:org:openhealthtools:ihe:xds:metadata" xmlns:xsi="htt//www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:org:openhealthtools:ihe:xds:metadata metadata.xsd urn:org:openhealthtools:ihe:common:hl7v2 ../../../org.openhealthtools.ihe.common.hl7v2/resources/schema/hl7v2_wrapper.xsd htt//www.w3.org/XML/1998/namespace htt//www.w3.org/2001/xml.xsd ">
 
   <contentTypeCode>

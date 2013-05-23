@@ -1,3 +1,14 @@
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <channel>
   <id>0954b5b5-e525-4ca0-912d-11a06987f5da</id>
   <name>SA-4_InvokeIPCMPChannel</name>

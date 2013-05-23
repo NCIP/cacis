@@ -1,3 +1,14 @@
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <channel>
   <id>b7d85e4b-7e60-42b0-bd69-6ed96abdb7bf</id>
   <name>CMP-1_WebServiceListener</name>

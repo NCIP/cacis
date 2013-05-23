@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This XSL has been taken from the xml2rdf3.xsl (XSLT stylesheet to transform XML into RDF/XML). It has been modified to invoke the CDAToRDF.xsl
-      for converting the CDA Clinical Documents to RDF. This xsl takes the baseURI as the parameter for creating an RDF graph of XML for a caCIS request. 
-      
+<!--
 
-    The following are the details of the original xml2rdf3.xsl file.
-     Version             3.0  (2009-05-28)
-     Changes to V2.5     rdf:value for all text, no attribute triples,
-                         order predicates, comments as triples
-     Web page            http://www.gac-grid.org/project-products/Software/XML2RDF.html
-     Usage               xsltproc xml2rdf3.xsl file.xml
-     Author              Frank Breitling (fbreitling at aip.de)
-     Copyright 2009      AstroGrid-D (http://www.gac-grid.org/) 
-   
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
- 
-         http://www.apache.org/licenses/LICENSE-2.0
- 
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License. -->
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xs="http://www.w3.org/TR/2008/REC-xml-20081126#" xmlns:cacis="http://cacis.nci.nih.gov" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:v3="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hl7="urn:hl7-org:functions" xmlns:DT="urn:hl7-org:v3/owl/DEFN/UV/DT/1.0#" exclude-result-prefixes="xsi xs v3 hl7">
 	<xsl:import href="CDAToRDF.xsl"/>
 	<xsl:strip-space elements="*"/>

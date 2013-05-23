@@ -1,3 +1,14 @@
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <channel>
   <id>34c4f801-0031-46fd-8405-3514a5bb95a3</id>
   <name>DR-2b_HL7v2Transformation</name>

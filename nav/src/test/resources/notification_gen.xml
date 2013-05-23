@@ -1,3 +1,14 @@
+<!--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+-->
 <?xml version="1.0" encoding="UTF-8"?><Signature xmlns="http://www.w3.org/2000/09/xmldsig#" Id="226d39c8-e795-4f35-81fa-d86ef4442659"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference Type="http://www.w3.org/2000/09/xmldsig#Manifest" URI="#IHEManifest"><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</DigestValue></Reference></SignedInfo><SignatureValue>ncfok99u1LgGk+we5RTAabSsWvvXz5cdOAc2n3qDTyRotKyTQY8n1CnO3drUVCaokoLC0QUEOqAe
 OwD6ut7gFQZYrVGc0kzeouoh7fuAJGnPig8DSywiGuGmU686Xp2eVi/ieIO71eCu/5lVdm+B7O3e
 xQK7QLgdypnyeYwbLpM=</SignatureValue><KeyInfo><X509Data><X509SubjectName>CN=Nav Test,OU=Test,O=Test,L=Test,ST=Test,C=US</X509SubjectName><X509Certificate>MIICLzCCAZigAwIBAgIETcFObzANBgkqhkiG9w0BAQUFADBcMQswCQYDVQQGEwJVUzENMAsGA1UE

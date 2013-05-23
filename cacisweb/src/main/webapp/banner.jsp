@@ -1,3 +1,14 @@
+<%--
+
+    Copyright Ekagra Software Technologies Ltd.
+    Copyright SAIC, Inc
+    Copyright 5AM Solutions
+    Copyright SemanticBits Technologies
+
+    Distributed under the OSI-approved BSD 3-Clause License.
+    See http://ncip.github.com/cacis/LICENSE.txt for details.
+
+--%>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#A90101" summary="layout" >
   <tr bgcolor="#A90101">
    <td>&nbsp;</td>
