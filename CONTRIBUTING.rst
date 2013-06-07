@@ -23,7 +23,7 @@ Getting Started
 * Submit a ticket for your issue at https://tracker.nci.nih.gov/browse/CACIS,
   assuming one does not already exist.
 
-  - https://tracker.nci.nih.gov/secure/CreateIssue.jspa?pid=10002&issuetype=8
+  - If you do not have an existing account, go to https://tracker.nci.nih.gov/ and click on the Create Account link.
   - Clearly describe the issue including steps to reproduce when it is a bug.
   - Make sure you fill in the earliest version that you know has the issue.
 
