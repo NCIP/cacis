@@ -1,7 +1,6 @@
 Welcome to the caCIS Project!
 =====================================
-
-The Cancer Clinical Information Suite (caCIS) is an Open Source project This repository contains the source code for the NCIP's Clinical Information Suite (caCIS) Project. caCIS is an middleware components that allows source system to transmits clinical data to the recipient systems using different transmission formats as well as protocols.
+The Cancer Clinical Information Suite (caCIS) project contains the middleware components that allow source system to transmit the clinical data to the recipient systems using different transmission formats as well as protocols.
 
 caCIS is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
