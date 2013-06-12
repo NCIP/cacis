@@ -1,4 +1,4 @@
-caCIS (Clinical Information Suite)
+caCIS (Cancer Clinical Information Suite)
 
 Copyright (c) 2010, 5AM Solutions Inc, SemanticBits LLC, AgileX Technologies, Inc,
 and Ekagra Software Technologies Ltd
