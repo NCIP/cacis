@@ -14,7 +14,7 @@ modification, are permitted provided that the following conditions are met:
   and/or other materials provided with the distribution.
 
   Neither the name of the National Cancer Institute nor the names Ekagra Software 
-  Technologies, SAIC, 5AM Solutions, and SemanticBitsof nor the names of its contributors
+  Technologies, 5AM Solutions, AgileX Technologies and SemanticBits nor the names of its contributors
   may be used to endorse or promote products derived from this software
   without specific prior written permission.
 
