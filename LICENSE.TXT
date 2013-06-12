@@ -1,5 +1,5 @@
-Copyright (c) 2010, Ekagra Software Technologies, SAIC, 5AM Solutions
-and SemanticBits
+Copyright (c) 2010, 5AM Solutions Inc, SemanticBits LLC, AgileX Technologies, Inc,
+and Ekagra Software Technologies Ltd
 
 All rights reserved.
 

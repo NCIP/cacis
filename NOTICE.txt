@@ -1,6 +1,7 @@
 caCIS (Clinical Information Suite)
-Copyright (c) 2010, Ekagra Software Technologies, SAIC, 5AM Solutions
-and SemanticBits
+
+Copyright (c) 2010, 5AM Solutions Inc, SemanticBits LLC, AgileX Technologies, Inc,
+and Ekagra Software Technologies Ltd
 
 This project is distributed under the BSD 3-Clause License.
 Please see LICENSE file for details.
