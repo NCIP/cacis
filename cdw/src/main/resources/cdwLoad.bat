@@ -1,8 +1,8 @@
 @REM
-@REM Copyright Ekagra Software Technologies Ltd.
-@REM Copyright SAIC, Inc
-@REM Copyright 5AM Solutions
-@REM Copyright SemanticBits Technologies
+@REM Copyright 5AM Solutions Inc
+@REM Copyright SemanticBits LLC
+@REM Copyright AgileX Technologies, Inc
+@REM Copyright Ekagra Software Technologies Ltd
 @REM
 @REM Distributed under the OSI-approved BSD 3-Clause License.
 @REM See http://ncip.github.com/cacis/LICENSE.txt for details.
