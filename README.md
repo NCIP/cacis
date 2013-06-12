@@ -9,7 +9,7 @@ You will find more details about caCIS in the following links:
 
  * [Community wiki](https://wiki.nci.nih.gov/display/caEHR/caBIG+Clinical+Information+Suite+Project+Wiki)
  * [Issue tracker](https://tracker.nci.nih.gov/browse/CACIS)
- * [Documentation wiki](https://wiki.nci.nih.gov/display/caEHR/Architecture+Artifacts)
+ * [Documentation wiki](https://wiki.nci.nih.gov/x/XoAaAg)
  * [Documentation Git repo](https://github.com/NCIP/cacis-docs)
  * [Development Git repo](https://github.com/NCIP/cacis)
 
